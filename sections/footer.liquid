@@ -1,263 +1,412 @@
-
-
+{% comment %} Soilboy Theme - Yudi {% endcomment %}
 {% liquid
-  if section.settings.background_color != blank
-    render 'contrast-override', background_color: section.settings.background_color, section_id: section.id
-  endif
+  assign el_id = 'site-footer'
+  assign fn = section.id | replace: '-', ''
+  assign ss = section.settings
+  assign sb = section.blocks
 %}
-
-<div
-  class="section-background{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
-></div>
-<div
-  class="section section--{{ section.settings.section_width }}{% if section.settings.background_color != blank %} color-custom-{{ section.id }}{% endif %}"
->
-  {% liquid
-    assign total_blocks = section.blocks.size
-
-    # Grid layout calculations
-    assign grid_columns = total_blocks | at_most: 4
-
-    # Calculate last row counts using modulo arithmetic
-    # last_row_count = (total_blocks - 1) % N + 1
-    assign last_row_count = total_blocks | minus: 1 | modulo: 4 | plus: 1
-    assign tablet_last_row_count = total_blocks | minus: 1 | modulo: 2 | plus: 1
-
-    # Check if there are orphaned elements (single item in last row)
-    assign has_isolated_grid_item_desktop = false
-    assign has_isolated_grid_item_tablet = false
-
-    if total_blocks > 4 and last_row_count == 1
-      assign has_isolated_grid_item_desktop = true
-    endif
-
-    if total_blocks == 5
-      assign has_isolated_grid_item_tablet = true
-    endif
-  %}
-  <div
-    class="
-      footer-content
-      spacing-style
-      {% if has_isolated_grid_item_desktop %}footer-content--isolated-grid-item-desktop{% endif %}
-      {% if has_isolated_grid_item_tablet %}footer-content--isolated-grid-item-tablet{% endif %}
-    "
-    style="
-      {%  render 'spacing-style', settings: section.settings %}
-      --footer-gap: {{ section.settings.gap }}px;
-      --grid-columns: {{ grid_columns }};
-      --last-row-count: {{ last_row_count }};
-      --tablet-last-row-count: {{ tablet_last_row_count }};
-    "
-  >
-    {% content_for 'blocks' %}
+<style>
+  .contact-email,
+  .contact-email::placeholder {
+    color: var(--green);
+  }
+  .sfbr-country .global-select-div {
+    padding-bottom: 0;
+    padding-right: 0;
+  }
+  .sfbr-country .global-select-div .options {
+    width: 150%;
+    top: unset;
+    bottom: calc(100% + 10px);
+  }
+  #site-footer .col-links:before,
+  #site-footer .col-links:after {
+    display: none;
+  }
+</style>
+<footer id="site-footer" class="site-footer bg-background-secondary relative">
+  <div class="relative zi-2 bg-background-secondary">
+    <div class="container">
+      <div class="site-footer-main flex flex-column d-pt-80 d-pb-200 pt-56 pb-56 rowgap-56 d-rowgap-80">
+        <div class="row flex d-flex-row flex-column rowgap-24">
+          <div class="col-12 col-d-6">
+            <div class="site-footer-logo">
+              {%- render 'global-image-wrapper',
+                image: ss.logo,
+                additional_class: '',
+                image_id: 'footer-logo'
+              %}
+            </div>
+            {% if ss.address != blank %}
+            <div class="site-footer-address p2 c-green d-mt-24 mt-20">
+              {{ss.address |  newline_to_br}}
+            </div>
+            {% endif %}
+            {% if ss.opening_hours != blank %}
+            <div class="site-footer-opening-hours p2 c-green d-mt-16 mt-12">
+              {{ss.opening_hours |  newline_to_br}}
+            </div>
+            {% endif %}
+          </div>
+          <div class="col-12 col-d-6">
+            <div class="h4 c-green site-footer-quote no-anim">
+              {{ss.footer_quote}}
+            </div>
+          </div>
+        </div>
+        <div class="row flex d-flex-row flex-column d-rowgap-24 rowgap-56">
+          <div class="col-12 col-d-6">
+            {% form 'customer', class: 'footer-newsletter flex flex-column rowgap-20 d-rowgap-24' %}
+              {% if ss.newsletter_title != blank %}
+                <div class="h4">
+                  {{ ss.newsletter_title }}
+                </div>
+              {% endif %}
+              {% if ss.newsletter_text != blank %}
+                <div class="p1 c-green">
+                  {{ ss.newsletter_text }}
+                </div>
+              {% endif %}
+              <div class="bb-1 b-main flex ai-center pt-8 pb-8">
+                <input
+                  type="text"
+                  class="w-full p2 contact-email"
+                  placeholder="{{ss.newsletter_placeholder}}"
+                  name="contact[email]"
+                >
+                <button class="p2 c-green" type="submit">
+                  {{ ss.newsletter_btn }}
+                </button>
+              </div>
+              {% if form.posted_successfully? %}
+                <p class="p3 tl success-message c-green">{{ 'general.newsletter_form.confirmation' | t }}</p>
+              {% endif %}
+              {%- if form.errors -%}
+                <div class="p3 tl success-message c-green c-red">
+                  {{ form.errors | default_errors }}
+                </div>
+              {%- endif -%}
+            {% endform %}
+          </div>
+          <div class="col-12 col-d-6">
+            <div class="row ml-0 mr-0 flex colgap-16">
+              <div class="col-links col-4 pl-0 pr-0 flex flex-column ai-start rowgap-4">
+                {% for link in ss.link_list_1.links %}
+                  <a href="{{link.url}}" class="p2 c-green">{{link.title}}</a>
+                {% endfor %}
+              </div>
+              <div class="col-links col-4 pl-0 pr-0 flex flex-column ai-start rowgap-4">
+                {% for link in ss.link_list_2.links %}
+                  <a href="{{link.url}}" class="p2 c-green">{{link.title}}</a>
+                {% endfor %}
+              </div>
+              <div class="col-links col-4 pl-0 pr-0 flex flex-column ai-start rowgap-4">
+                {% for link in ss.link_list_3.links %}
+                  <a href="{{link.url}}" class="p2 c-green">{{link.title}}</a>
+                {% endfor %}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="site-footer-copyright-info flex ai-center colgap-12 rowgap-8 pt-16 pb-16 flex-wrap d-pt-24 d-pb-24 bt-1 b-main">
+        <div class="sfbr-country">
+          {% liquid
+            assign current_country = localization.country
+            assign default_label = current_country.name
+            if ss.country_list == 'blocks'
+              for block in sb
+                if block.settings.active
+                  assign default_label = block.settings.title
+                endif
+              endfor
+            endif
+          -%}
+          <div class="flex ai-center cursor pointer">
+            {% comment %} <span class="p3 c-green d-pr-8 pr-6">{{ default_label }}</span>
+            <div class="icon flex ai-center jc-center">
+              {{ settings.icon_select }}
+            </div> {% endcomment %}
+            {%- assign select_id = 'currency-switcher-' | append: section.id -%}
+            {% if ss.country_list == 'markets' %}
+              {% assign loop = 0 %}
+              {% assign values = '' %}
+              {% assign option_values = '' %}
+              {% assign vue_onchange = "changeCountry(this.value,$event)" %}
+              {%- for country in localization.available_countries -%}
+                {% if loop > 0 %}
+                  {% assign values = values | append: ',' %}
+                  {% assign option_values = option_values | append: ',' %}
+                {% endif %}
+                {% assign loop = loop | plus: 1 %}
+                {% assign values = values | append: country.name | append: ' (' | append: country.currency.iso_code | append: ')' %}
+                {% assign option_values = option_values | append: country.currency.iso_code %}
+              {%- endfor -%}
+            {% else %}
+              {% assign loop = 0 %}
+              {% assign values = '' %}
+              {% assign option_values = '' %}
+              {% assign vue_onchange = "window.location.href = this.value" %}
+              {%- for block in sb -%}
+                {% assign bs = block.settings %}
+                {% if bs.url != blank and bs.title != blank %}
+                  {% if loop > 0 %}
+                    {% assign values = values | append: ',' %}
+                    {% assign option_values = option_values | append: ',' %}
+                  {% endif %}
+                  {% assign loop = loop | plus: 1 %}
+                  {% assign values = values | append: bs.title %}
+                  {% assign option_values = option_values | append: bs.url %}
+                {% endif %}
+              {%- endfor -%}
+            {% endif %}
+            {% assign values = values| split: ',' %}
+            {% assign option_values = option_values| split: ',' %}
+            {% assign default_text = default_label %}
+            {%- render 'global-select',
+              default_value: '',
+              default_text: default_text,
+              values: values,
+              option_values: option_values,
+              id: select_id,
+              selected_text_class: 'p3 c-green pr-16',
+              global_select_class: 'global-input',
+              field_name: '',
+              vue_v_model: '',
+              onchange: vue_onchange,
+              label_class: 'p3 c-green'
+            -%}
+          </div>
+          <Teleport to="body">
+            <div id="currency-select-dropdown" class="fixed top-0 left-0 w-full h-full zi-1">
+              <div
+                class="csd-overlay absolute top-0 left-0 h-full w-full zi-2 cursor bg-black opacity-6"
+                @click="toggleCurrencySwitcher($event)"
+              ></div>
+              <div class="container absolute left-0 bottom-0 zi-3 w-full">
+                <div class="csd-box w-full d-p-40 pt-24 pb-28 bg-background-secondary relative">
+                  <div class="container d-pl-0 d-pr-0">
+                    <div
+                      class="cursor absolute top-0 right-0 d-p-24 p-20 csd-close flex ai-center jc-center"
+                      @click="toggleCurrencySwitcher($event)"
+                    >
+                      {{ settings.icon_close }}
+                    </div>
+                    {%- form 'localization', id: 'currency-selector-form-footer', class: 'localization-form' -%}
+                      <input type="hidden" name="country_code" value="">
+                      <div class="csd-title p7 c-green uppercase">{{ ss.country_selector_title }}</div>
+                      <div class="csd-options mt-12 flex flex-column ai-start">
+                        {% if ss.country_list == 'markets' %}
+                          {%- for country in localization.available_countries -%}
+                            <span
+                              @click="changeCountry('{{ country.iso_code }}',$event)"
+                              data-value="{{ country.iso_code }}"
+                              class="csd-option link2 cursor {% if country.iso_code == localization.country.iso_code %} active {% endif %}"
+                            >
+                              {{- country.name }} ({{ country.currency.iso_code }})
+                            </span>
+                          {%- endfor -%}
+                        {% else %}
+                          {%- for block in sb -%}
+                            {% assign bs = block.settings %}
+                            {% if bs.url != blank and bs.title != blank %}
+                              <a
+                                href="{{bs.url}}"
+                                class="csd-option link4 c-green cursor {% if bs.active %} active {% endif %}"
+                              >
+                                {{- bs.title }}
+                              </a>
+                            {% endif %}
+                          {%- endfor -%}
+                        {% endif %}
+                      </div>
+                      <button type="submit" class="btn3 w-full mt-24">{{ ss.country_selector_btn_label }}</button>
+                    {%- endform -%}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </Teleport>
+        </div>
+        <div class="sfbr-text flex ai-center colgap-16">
+          <span class="p3 c-green">{{ss.copy_text}}</span>
+          <span class="p3 c-green">{{ss.designed_text}}</span>
+        </div>
+        {% if ss.link_list_footer_bot != blank %}
+          <div class="sfbr-links flex ai-center colgap-16">
+            {% for link in ss.link_list_footer_bot.links %}
+              <a href="{{link.url}}" target="{{ link_target }}" class="p3 c-green">{{ link.title }}</a>
+            {% endfor %}
+          </div>
+        {% endif %}
+      </div>
+    </div>
   </div>
-</div>
-
-{% stylesheet %}
-  .footer-content {
-    contain: content;
-    content-visibility: auto;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: var(--footer-gap);
-    align-items: start;
-  }
-
-  .footer-content .menu__heading__default {
-    font-weight: var(--font-heading--weight);
-  }
-
-  @media screen and (min-width: 750px) and (max-width: 989px) {
-    .footer-content {
-      grid-template-columns: repeat(min(var(--grid-columns), 3), 1fr);
-      grid-auto-flow: row;
-    }
-
-    .footer-content[style*='--grid-columns: 4'] {
-      grid-template-columns: repeat(2, 1fr);
-    }
-
-    .footer-content--isolated-grid-item-tablet > :last-child {
-      grid-column: 1 / -1;
-    }
-  }
-
-  @media screen and (min-width: 990px) {
-    .footer-content {
-      grid-template-columns: repeat(var(--grid-columns), 1fr);
-    }
-
-    /* Single item centered */
-    .footer-content[style*='--grid-columns: 1'] {
-      justify-items: center;
-    }
-
-    .footer-content--isolated-grid-item-desktop > :last-child {
-      grid-column: 1 / -1;
-    }
-  }
-{% endstylesheet %}
+  <div class="sticky bottom-0 zi-1">
+    <a href="{{ss.sticky_image_link_url}}">
+      {%assign image_id = "footer-sticky-image-" | append: section.id%}
+      {%- render 'global-image-wrapper-responsive',
+          image_id: image_id,
+          desktop_image: ss.image_desktop,
+          mobile_image: ss.image_mobile,
+          additional_class: 'no-bg',
+          load_inside_vue: true
+      %}
+    </a>
+  </div>
+</footer>
 
 {% schema %}
 {
-  "name": "t:names.footer",
-  "class": "section-wrapper",
-  "blocks": [
-    {
-      "type": "_divider"
-    },
-    {
-      "type": "@app"
-    },
-    {
-      "type": "button"
-    },
-    {
-      "type": "follow-on-shop"
-    },
-    {
-      "type": "group"
-    },
-    {
-      "type": "icon"
-    },
-    {
-      "type": "image"
-    },
-    {
-      "type": "menu"
-    },
-    {
-      "type": "payment-icons"
-    },
-    {
-      "type": "text"
-    },
-    {
-      "type": "logo"
-    },
-    {
-      "type": "jumbo-text"
-    },
-    {
-      "type": "social-links"
-    },
-    {
-      "type": "email-signup"
-    }
-  ],
-  "enabled_on": {
-    "groups": ["footer"]
-  },
+  "name": "Footer",
   "settings": [
     {
-      "type": "select",
-      "id": "section_width",
-      "label": "t:settings.width",
-      "options": [
-        {
-          "value": "page-width",
-          "label": "t:options.page"
-        },
-        {
-          "value": "full-width",
-          "label": "t:options.full"
-        }
-      ],
-      "default": "page-width"
+      "type": "image_picker",
+      "id": "logo",
+      "label": "Logo"
     },
     {
-      "type": "range",
-      "id": "gap",
-      "label": "t:settings.gap",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 0
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Sticky Image Mobile"
     },
     {
-      "type": "color",
-      "id": "background_color",
-      "label": "t:settings.background_color",
-      "default": "{{ settings.color_palette.foreground }}"
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Sticky Image Desktop"
+    },
+    {
+      "type": "textarea",
+      "id": "address",
+      "label": "Address"
+    },
+    {
+      "type": "textarea",
+      "id": "opening_hours",
+      "label": "Opening Hours"
+    },
+    {
+      "type": "url",
+      "id": "sticky_image_link_url",
+      "label": "Sticky Image Link Url"
+    },
+    {
+      "type": "html",
+      "id": "footer_quote",
+      "label": "Quote"
     },
     {
       "type": "header",
-      "content": "t:content.padding"
+      "content": "Footer Newsletter"
     },
     {
-      "type": "range",
-      "id": "padding-block-start",
-      "label": "t:settings.top",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 20
+      "type": "text",
+      "id": "newsletter_title",
+      "label": "Newsletter title"
     },
     {
-      "type": "range",
-      "id": "padding-block-end",
-      "label": "t:settings.bottom",
-      "min": 0,
-      "max": 100,
-      "step": 1,
-      "unit": "px",
-      "default": 20
+      "type": "textarea",
+      "id": "newsletter_text",
+      "label": "Newsletter text"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_placeholder",
+      "label": "Newsletter input placeholder"
+    },
+    {
+      "type": "text",
+      "id": "newsletter_btn",
+      "label": "Newsletter button label"
+    },
+    {
+      "type": "header",
+      "content": "Footer Links"
+    },
+    {
+      "type": "link_list",
+      "id": "link_list_1",
+      "label": "Link list 1"
+    },
+    {
+      "type": "link_list",
+      "id": "link_list_2",
+      "label": "Link list 2"
+    },
+    {
+      "type": "link_list",
+      "id": "link_list_3",
+      "label": "Link list 3"
+    },
+    {
+      "type": "link_list",
+      "id": "link_list_footer_bot",
+      "label": "Link list bottom footer"
+    },
+    {
+      "type": "header",
+      "content": "Country selector"
+    },
+    {
+      "type": "select",
+      "id": "country_list",
+      "label": "Take country list from",
+      "options": [
+        { "value": "blocks", "label": "Blocks" },
+        { "value": "markets", "label": "Markets" }
+      ],
+      "default": "markets"
+    },
+    {
+      "type": "text",
+      "id": "country_selector_title",
+      "label": "Country selector title",
+      "default": "shipping to"
+    },
+    {
+      "type": "text",
+      "id": "country_selector_btn_label",
+      "label": "Country selector button label",
+      "default": "confirm"
+    },
+    {
+      "type": "header",
+      "content": "General settings"
+    },
+    {
+      "type": "text",
+      "id": "copy_text",
+      "label": "Copyright by text",
+      "default": "Soilboy © 2025"
+    },
+    {
+      "type": "text",
+      "id": "designed_text",
+      "label": "Designed by text",
+      "default": "Designed by 360&5"
     }
   ],
-  "presets": [
+  "blocks": [
     {
-      "name": "t:names.footer",
-      "category": "t:categories.footer",
-      "settings": {
-        "gap": 20,
-        "padding-block-start": 36,
-        "padding-block-end": 36
-      },
-      "blocks": {
-        "newsletter-group": {
-          "type": "group",
-          "settings": {
-            "content_direction": "column",
-            "vertical_on_mobile": true,
-            "horizontal_alignment": "flex-start",
-            "vertical_alignment": "center",
-            "gap": 6,
-            "width": "fill"
-          },
-          "blocks": {
-            "newsletter-heading": {
-              "type": "text",
-              "settings": {
-                "text": "t:html_defaults.join_our_email_list",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "h3"
-              }
-            },
-            "newsletter-text": {
-              "type": "text",
-              "settings": {
-                "text": "t:html_defaults.get_exclusive_deals_and_early_access_to_new_products",
-                "width": "100%",
-                "alignment": "left",
-                "type_preset": "rte"
-              }
-            }
-          },
-          "block_order": ["newsletter-heading", "newsletter-text"]
+      "type": "country",
+      "name": "Country",
+      "settings": [
+        {
+          "type": "checkbox",
+          "id": "active",
+          "label": "Active"
         },
-        "newsletter-form": {
-          "type": "email-signup",
-          "settings": {
-            "width": "fill"
-          }
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Name"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Url"
         }
-      },
-      "block_order": ["newsletter-group", "newsletter-form"]
+      ]
     }
   ]
 }

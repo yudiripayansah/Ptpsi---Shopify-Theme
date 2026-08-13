@@ -1,0 +1,28 @@
+{%- comment -%}
+Soilboy
+
+"SP 0N. Plant Name" caption used under Installation body images and the
+testimonial image. The number is generated here from a page-wide sequence
+passed in by the caller (see sections/installation-body.liquid), not stored
+on the entry, so credits stay correct if blocks are reordered.
+
+Variables:
+- credit: plant_credit metaobject entry (plant_name)
+- index: Integer. Page-wide sequence number, 1-based. Renders nothing if 0
+  or the credit/plant name is blank.
+{%- endcomment -%}
+{%- liquid
+  assign plant_name = credit.plant_name.value
+-%}
+{% if credit != blank and index > 0 and plant_name != blank %}
+  {% liquid
+    assign index_padded = index
+    if index < 10
+      assign index_padded = '0' | append: index
+    endif
+  %}
+  <div class="flex colgap-16 p4 c-label ipc-caption">
+    <span class="ipc-caption-label">SP {{ index_padded }}.</span>
+    <span>{{ plant_name }}</span>
+  </div>
+{% endif %}

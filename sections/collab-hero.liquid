@@ -1,0 +1,348 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'collab-hero-' | append: section.id
+  assign ss = section.settings
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    {% if ss.bg_color != blank %}
+      background-color: {{ ss.bg_color }};
+    {% endif %}
+  }
+  #{{ el_id }} .chr-row {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  #{{ el_id }} .chr-media img,
+  #{{ el_id }} .chr-media-small img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  #{{ el_id }} .chr-media-small {
+    display: none;
+  }
+  #{{ el_id }} .chr-text {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 24px;
+    width: 100%;
+  }
+  #{{ el_id }} .chr-heading {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    width: 100%;
+  }
+  #{{ el_id }} .chr-button {
+    display: flex;
+    align-items: center;
+    gap: 48px;
+    padding: 12px 24px;
+    width: 100%;
+    text-decoration: none;
+  }
+  #{{ el_id }} .chr-button .label {
+    flex: 1;
+    min-width: 0;
+    text-align: left;
+  }
+  #{{ el_id }} .chr-button .icon,
+  #{{ el_id }} .chr-button .icon svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .chr-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 24px;
+    }
+    #{{ el_id }} .chr-media {
+      width: 40.66%;
+    }
+    #{{ el_id }} .chr-col {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      gap: 120px;
+      width: 49.14%;
+    }
+    #{{ el_id }} .chr-media-small {
+      display: block;
+      width: 31%;
+    }
+    #{{ el_id }} .chr-text {
+      gap: 32px;
+    }
+    #{{ el_id }} .chr-heading {
+      gap: 16px;
+    }
+    #{{ el_id }} .chr-button {
+      width: 330px;
+    }
+  }
+</style>
+
+<div id="{{ el_id }}">
+  <div class="container">
+    <div class="chr-row">
+      {% if ss.image != blank %}
+        <div class="chr-media">
+          {{ ss.image | image_url: width: 1400 | image_tag: loading: 'eager', widths: '400, 600, 800, 1200, 1400', sizes: '(min-width: 1024px) 41vw, 100vw' }}
+        </div>
+      {% endif %}
+      <div class="chr-col">
+        {% if ss.image_small != blank %}
+          <div class="chr-media-small">
+            {{ ss.image_small | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '16vw' }}
+          </div>
+        {% endif %}
+        <div class="chr-text">
+          <div class="chr-heading">
+            {% if ss.label != blank %}
+              <p class="p3 c-label">{{ ss.label }}</p>
+            {% endif %}
+            <{{ ss.title_dom_type | default: 'h1' }} class="{{ ss.title_size | default: 'h2' }} c-green">{{ ss.title }}</{{ ss.title_dom_type | default: 'h1' }}>
+          </div>
+          {% if ss.btn_label != blank %}
+            <a href="{{ ss.btn_url }}" class="chr-button bg-green p2 c-white">
+              <span class="label">{{ ss.btn_label }}</span>
+              <span class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#FFFFFF" stroke-linecap="square"/>
+                </svg>
+              </span>
+            </a>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% schema %}
+{
+  "name": "Collab Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "default": "Collaboration"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Font Size",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "header",
+      "content": "Images"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Main Image",
+      "info": "Portrait crop. The Figma uses roughly 566x787."
+    },
+    {
+      "type": "image_picker",
+      "id": "image_small",
+      "label": "Secondary Image",
+      "info": "Small image at the top right. Hidden on mobile."
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Shop Collection"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button Url"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collab Hero"
+    }
+  ]
+}
+{% endschema %}

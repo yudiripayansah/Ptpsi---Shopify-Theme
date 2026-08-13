@@ -1,0 +1,470 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'split-collection-sticky-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+    #{{ el_id }} {
+        background-color: {{ section.settings.bg_color }};
+        overflow: hidden;
+    }
+    #{{ el_id }} .swiper {
+        overflow: visible;
+    }
+    #{{ el_id }} .shs-button {
+        border: 1px solid var(--green);
+        width: 100%;
+        justify-content: space-between;
+    }
+    #{{ el_id }} .shs-button .icon,
+    #{{ el_id }} .shs-button .icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    #{{ el_id }} .shs-image-description {
+        display: flex;
+        column-gap: 24px;
+    }
+    #{{ el_id }} .shs-image-description .code {
+        min-width: 94px;
+    }
+    #{{ el_id }} .scs-row {
+        flex-direction: column-reverse;
+    }
+    #{{el_id}} .global-video-wrapper video {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+    @media screen and (min-width: 1024px){
+        #{{ el_id }} {
+            overflow: unset;
+        }
+        #{{ el_id }} .shs-button {
+            max-width: 330px;
+        }
+        #{{ el_id }} .shs-button:hover {
+            background-color: var(--green);
+            color: #fff;
+        }
+        #{{ el_id }} .shs-button:hover .icon svg path {
+            stroke: #fff;
+        }
+        #{{ el_id }} .shs-sticky {
+            position: sticky;
+            top: 24px;
+        }
+        #{{ el_id }} .scs-row {
+            flex-direction: row;
+        }
+        #{{ el_id }} .swiper-wrapper {
+            flex-wrap: wrap;
+            column-gap: 24px;
+            row-gap: 40px;
+        }
+        #{{ el_id }} .swiper-slide {
+            width: calc((100% - 24px) / 2);
+        }
+        #{{ el_id }} .shs-image-description {
+            display: flex;
+            column-gap: 24px;
+        }
+        #{{ el_id }} .shs-image-description .code {
+            min-width: 94px;
+        }
+    }
+</style>
+{% if request.visual_preview_mode %}
+    <img src="{{ 'split-collection-sticky-figma.PNG' | asset_url }}" width="100%" height="100%" />
+{% else %}
+    <div id="{{ el_id }}">
+        <div class="container">
+            <div class="row scs-row flex">
+                <div class="col-12 col-d-6 mt-16 d-mt-0 d-pt-40">
+                    <p class="p3 c-label">
+                        {{- section.settings.subtitle -}}
+                    </p>
+                    <{{ section.settings.title_dom_type }} class="{{section.settings.title_size}} c-green mt-12 d-mt-16">
+                        {{- section.settings.title -}}
+                    </{{ section.settings.title_dom_type }}>
+                    <div class="rte p2 c-green mt-12 d-mt-16">
+                        {{- section.settings.text -}}
+                    </div>
+                    {% if ss.btn_label != blank %}
+                        <a href="{{ ss.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 show-m flex mt-24 d-mt-32">
+                            {{ ss.btn_label }}
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                                </svg>
+                            </div>
+                        </a>
+                    {% endif %}
+                    {% if ss.collection != blank %}
+                        <div class="swiper mt-32 d-mt-40">
+                            <div class="swiper-wrapper">
+                                {% for product in ss.collection.products %}
+                                    <div class="swiper-slide {% if forloop.index > 6 %}hide-d{% endif %}">
+                                        {% render 'product-each', product: product %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="col-12 col-d-5 push-d-1">
+                    <div class="shs-sticky">
+                        {% comment %} {%assign image_id = "scs-image-" | append: section.id%}
+                        {%- render 'global-image-wrapper-responsive',
+                            image_id: image_id,
+                            desktop_image: ss.desktop_image,
+                            mobile_image: ss.mobile_image,
+                            additional_class: 'no-bg'
+                        -%} {% endcomment %}
+                        {%- assign video_id = 'scs-video-' | append: section.id -%}
+                        {%- assign video_url_desktop = '' -%}
+                        {%- for vid_source in ss.video_desktop.sources -%}
+                            {%- if vid_source.mime_type == 'video/mp4' -%}
+                            {%- assign video_url_desktop = vid_source.url -%}
+                            {%- endif -%}
+                        {%- endfor -%}
+                        {%- assign video_url_mobile = '' -%}
+                        {%- for vid_source in ss.video_mobile.sources -%}
+                            {%- if vid_source.mime_type == 'video/mp4' -%}
+                            {%- assign video_url_mobile = vid_source.url -%}
+                            {%- endif -%}
+                        {%- endfor -%}
+                        {%- render 'global-video-wrapper-responsive',
+                            desktop_image: ss.desktop_image,
+                            mobile_image: ss.mobile_image,
+                            desktop_video_url: video_url_desktop,
+                            mobile_video_url: video_url_mobile,
+                            video_id: video_id,
+                            autoplay: true,
+                            preload: true,
+                            muted: true,
+                            loop: true,
+                            additional_class: 'font-0'
+                        -%}
+                        <div class="hide-m show-d-flex mt-8 jc-between">
+                            <div class="shs-image-description">
+                                {% if ss.image_label_1 != blank or ss.image_label_2 != blank %}
+                                    {% if ss.image_label_1 != blank %}
+                                        <p class="code p4 c-label">{{ ss.image_label_1 }}</p>
+                                    {% endif %}
+                                    {% if ss.image_label_2 != blank %}
+                                        <p class="name p4 c-label">{{ ss.image_label_2 }}</p>
+                                    {% endif %}
+                                {% endif %}
+                            </div>
+                            {% if ss.link_label != blank %}
+                                <a href="{{ ss.link_url }}" class="p4 underline c-green">
+                                    {{ ss.link_label }}
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% if ss.collection != blank %}
+    <script>
+        function initSwiper{{fn}}(){
+            const el = document.querySelector('#{{ el_id }} .swiper');
+            if (!el) return;
+            if (window.innerWidth < 1024 && !el.swiper) {
+                const swiper{{fn}} = new Swiper('#{{ el_id }} .swiper', {
+                    slidesPerView: 1.2,
+                    spaceBetween: 16,
+                    loop: false,
+                    on: {
+                        init: function () {
+                            $360.lazyLoadInstance.update();
+                        },
+                        slideChange: function () {
+                            $360.lazyLoadInstance.update();
+                        },
+                        resize: function () {
+                            $360.lazyLoadInstance.update();
+                        }
+                    }
+                });
+            } else {
+                if (el.swiper) {
+                    el.swiper.destroy(true, true);
+                }
+            }
+        }
+        document.addEventListener('shopify:section:load', () => {
+            initSwiper{{fn}}()
+        });
+        document.addEventListener('DOMContentLoaded', function () {
+            initSwiper{{fn}}()
+        });
+        window.addEventListener('resize', function () {
+            initSwiper{{fn}}();
+        });
+    </script>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Split Collection Sticky",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "collection",
+            "id": "collection",
+            "label": "Collection highlighted"
+        },
+        {
+            "type": "text",
+            "id": "image_label_1",
+            "label": "Label for image description 1"
+        },
+        {
+            "type": "text",
+            "id": "image_label_2",
+            "label": "Label for image description 2"
+        },
+        {
+            "type": "text",
+            "id": "link_label",
+            "label": "Link label(for image description)"
+        },
+        {
+            "type": "url",
+            "id": "link_url",
+            "label": "Link URL(for image description)"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "Subtitle"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+            "type": "select",
+            "id": "title_dom_type",
+            "label": "Title DOM Type",
+            "options": [
+                {"value":"h1","label":"H1"},
+                {"value":"h2","label":"H2"},
+                {"value":"h3","label":"H3"},
+                {"value":"h4","label":"H4"},
+                {"value":"h5","label":"H5"}
+            ],
+            "default": "h2"
+        },
+        {
+            "type": "select",
+            "id": "title_size",
+            "label": "Title Size",
+            "options": [
+                { "value": "h1", "label": "H1" },
+                { "value": "h2", "label": "H2" },
+                { "value": "h3", "label": "H3" },
+                { "value": "h4", "label": "H4" }
+            ],
+            "default": "h2"
+        },
+        {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text"
+        },
+        {
+            "type": "text",
+            "id": "btn_label",
+            "label": "Button Label"
+        },
+        {
+            "type": "url",
+            "id": "btn_url",
+            "label": "Button Url"
+        },
+        {
+            "type": "image_picker",
+            "id": "mobile_image",
+            "label": "Mobile image"
+        },
+        {
+            "type": "image_picker",
+            "id": "desktop_image",
+            "label": "Desktop image"
+        },
+        {
+            "type": "video",
+            "id": "video_mobile",
+            "label": "Video mobile"
+        },
+        {
+            "type": "video",
+            "id": "video_desktop",
+            "label": "Video desktop"
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Split Collection Sticky",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

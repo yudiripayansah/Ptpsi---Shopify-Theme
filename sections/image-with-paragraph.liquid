@@ -1,0 +1,313 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'image-with-paragraph-' | append: section.id
+  assign ss = section.settings
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .container:after,
+  #{{ el_id }} .container:before {
+    display: none;
+  }
+  #{{ el_id }} .iwp-content {
+    margin-top: 40px;
+  }
+  #{{ el_id }} .iwp-label {
+    display: inline-block;
+    width: 104px;
+    margin-right: 16px;
+    transform: translateY(-4px);
+  }
+  #{{ el_id }} .iwp-button .icon,
+  #{{ el_id }} .iwp-button .icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  #{{ el_id }} .iwp-button .icon svg path {
+    stroke: currentColor;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .iwp-content {
+      margin-top: 60px;
+    }
+    #{{ el_id }} .iwp-label {
+      width: 94px;
+      margin-right: 24px;
+      transform: translateY(-14px);
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'image-with-paragraph-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      {% if ss.desktop_image != blank or ss.mobile_image != blank %}
+        {%- assign image_id = 'iwp-image-' | append: section.id -%}
+        {%- assign preload = false -%}
+        {%- if section.index == 1 -%}
+          {%- assign preload = true -%}
+        {%- endif -%}
+        {%- render 'global-image-wrapper-responsive',
+          image_id: image_id,
+          desktop_image: ss.desktop_image,
+          mobile_image: ss.mobile_image,
+          additional_class: 'no-bg',
+          preload: preload
+        %}
+      {% endif %}
+      <div class="iwp-content">
+        <{{ ss.title_dom_type }} class="{{ ss.title_size }} c-green">
+          {%- if ss.label != blank -%}
+            <span class="p3 no-anim c-label iwp-label">{{ ss.label }}</span>
+          {%- endif -%}
+          {{- ss.title | newline_to_br -}}
+        </{{ ss.title_dom_type }}>
+        {% if ss.button_label != blank %}
+          <a
+            href="{{ ss.button_url }}"
+            class="iwp-button w-full d-max-330 p2 d-mt-32 mt-24 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 {% if ss.button_style == 'outlined' %}b-1 b-green c-green{% else %}bg-green c-white{% endif %}"
+          >
+            {{ ss.button_label }}
+            <span class="icon flex ai-center jc-center">
+              {{ settings.icon_arrow_up_right }}
+            </span>
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Image With Paragraph",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Image (Desktop)",
+      "info": "Wide crop. The Figma uses a 1392 x 350 ratio."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Image (Mobile)",
+      "info": "The Figma uses a 343 x 200 ratio."
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label",
+      "info": "Small label shown inline before the first line of the paragraph."
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Paragraph"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Paragraph DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "div", "label": "Div" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Paragraph Font Size",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" },
+        { "value": "h4", "label": "h4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "options": [
+        { "value": "filled", "label": "Filled (green)" },
+        { "value": "outlined", "label": "Outlined" }
+      ],
+      "default": "filled"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Image With Paragraph"
+    }
+  ]
+}
+{% endschema %}

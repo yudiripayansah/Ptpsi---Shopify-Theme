@@ -1,0 +1,501 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'carousel-jagged-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+    #{{ el_id }} {
+        background-color: {{ section.settings.bg_color }};
+        overflow: hidden;
+    }
+    #{{ el_id }} .shs-button {
+        border: 1px solid var(--green);
+        width: 100%;
+        justify-content: space-between;
+    }
+    #{{ el_id }} .shs-button .icon,
+    #{{ el_id }} .shs-button .icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    #{{ el_id }} .shs-image-description {
+        display: flex;
+        column-gap: 24px;
+    }
+    #{{ el_id }} .shs-image-description .code {
+        min-width: 94px;
+    }
+    #{{ el_id }} .shs-sticky-image {
+        width: 75%;
+    }
+    #{{ el_id }} .swiper {
+        overflow: visible;
+    }
+    #{{ el_id }} .swiper-slide .link {
+        display: flex;
+        justify-content: space-between;
+        column-gap: 20px;
+    }
+    #{{ el_id }} .swiper-slide .link .icon,
+    #{{ el_id }} .swiper-slide .link .icon svg {
+        width: 20px;
+        height: 20px;
+    }
+    @media screen and (min-width: 1024px){
+        #{{ el_id }} .shs-button {
+            max-width: 330px;
+        }
+        #{{ el_id }} .shs-sticky {
+            position: sticky;
+            top: 0;
+        }
+        #{{ el_id }} .jagged-row {
+            margin-right: -20px;
+        }
+        #{{ el_id }} .jagged-right {
+            padding-right: 0;
+            overflow: hidden;
+        }
+        #{{ el_id }} .swiper {
+            padding-right: 20px;
+        }
+        #{{ el_id }} .arrow-container {
+            column-gap: 8px;
+        }
+        #{{ el_id }} .arrow-container * {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+        }
+        #{{ el_id }} .arrow-container svg {
+            width: 12px;
+            height: 10px;
+        }
+        #{{ el_id }} .arrow-container svg path {
+            stroke: var(--green);
+        }
+        #{{ el_id }} .arrow-container .swiper-button-disabled {
+            opacity: 0.5;
+        }
+        #{{ el_id }} .swiper-slide .link {
+            column-gap: 24px;
+        }
+        #{{ el_id }} .swiper-slide .global-image-wrapper {
+            transition: 1s all ease;
+        }
+        #{{ el_id }} .swiper-slide:hover .global-image-wrapper {
+            scale: 1.1;
+        }
+        #{{ el_id }} .shs-button:hover {
+            background-color: var(--green);
+            color: #fff;
+        }
+        #{{ el_id }} .shs-button:hover .icon svg path {
+            stroke: #fff;
+        }
+    }
+    @media screen and (min-width: 1200px){
+        #{{ el_id }} .jagged-row {
+            margin-right: -32px;
+        }
+        #{{ el_id }} .swiper {
+            padding-right: 32px;
+        }
+    }
+</style>
+
+{% if request.visual_preview_mode %}
+    <img src="{{ 'carousel-jagged-figma.PNG' | asset_url }}" width="100%" height="100%" />
+{% else %}
+    <div id="{{ el_id }}">
+        <div class="container">
+            <div class="row show-d-flex jagged-row">
+                <div class="col-12 col-d-3">
+                    <div class="flex d-jc-between h-full flex-column">
+                        <div>
+                            <p class="p3 c-label">
+                                {{- section.settings.subtitle -}}
+                            </p>
+                            <{{ section.settings.title_dom_type }} class="{{section.settings.title_size}} c-green mt-12 d-mt-16">
+                                {{- section.settings.title -}}
+                            </{{ section.settings.title_dom_type }}>
+                            {% if ss.btn_label != blank %}
+                                <a href="{{ ss.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 mt-24 d-mt-32 hide-m show-d-flex">
+                                    {{ ss.btn_label }}
+                                    <div class="icon">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                            <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                                        </svg>
+                                    </div>
+                                </a>
+                            {% endif %}
+                        </div>
+                        <div class="arrow-container hide-m show-d-flex">
+                            <div class="left flex ai-center jc-center">
+                                {{ settings.icon_slide_left }}
+                            </div>
+                            <div class="right flex ai-center jc-center">
+                                {{ settings.icon_slide_right }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-12 jagged-right col-d-8 push-d-1 mt-24 d-mt-0">
+                    {% if sb.size > 0 %}
+                        <div class="swiper">
+                            <div class="swiper-wrapper">
+                                {% for block in sb %}
+                                    <div class="swiper-slide">
+                                        {% if block.settings.url != blank %}
+                                            <a href="{{ block.settings.url }}">
+                                        {% endif %}
+                                            {% if block.settings.desktop_image != blank %}
+                                                {%assign image_id = "carousel-jagged-image-" | append: block.id%}
+                                                <div class="overflow">
+                                                    {%- render 'global-image-wrapper-responsive',
+                                                        image_id: image_id,
+                                                        desktop_image: block.settings.desktop_image,
+                                                        mobile_image: block.settings.mobile_image,
+                                                        additional_class: 'no-bg'
+                                                    %}
+                                                </div>
+                                            {% endif %}
+                                            {% if block.settings.subcaption != blank %}
+                                                <p class="p3 c-label mt-16">{{ block.settings.subcaption }}</p>
+                                            {% endif %}
+                                            {% if block.settings.caption != blank %}
+                                                <div class="p1 c-green link{% if block.settings.subcaption != blank %} mt-4{%else%} mt-12{% endif %}">
+                                                    {{ block.settings.caption }}
+                                                    {% if block.settings.clicon %}
+                                                        <div class="icon">
+                                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                                <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                                                            </svg>
+                                                        </div>
+                                                    {% endif %}
+                                                </div>
+                                            {% endif %}
+                                        {% if block.settings.url != blank %}
+                                            </a>
+                                        {% endif %}
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                    {% if ss.btn_label != blank %}
+                        <a href="{{ ss.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d mt-24 d-mt-32">
+                            {{ ss.btn_label }}
+                            <div class="icon">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                    <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                                </svg>
+                            </div>
+                        </a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+
+<script>
+    function initSwiper{{fn}}(){
+        const swiper{{fn}} = new Swiper('#{{ el_id }} .swiper', {
+            slidesPerView: 1.2,
+            spaceBetween: 16,
+            loop: false,
+            breakpoints: {
+                1024: {
+                    slidesPerView: 2.2,
+                    spaceBetween: 24
+                }
+            },
+            on: {
+                init: function () {
+                    $360.lazyLoadInstance.update();
+                },
+                slideChange: function () {
+                    $360.lazyLoadInstance.update();
+                },
+                resize: function () {
+                    $360.lazyLoadInstance.update();
+                }
+            },
+            navigation: {
+                nextEl: '#{{ el_id }} .arrow-container .right',
+                prevEl: '#{{ el_id }} .arrow-container .left'
+            }
+        });
+    }
+    document.addEventListener('shopify:section:load', () => {
+        initSwiper{{fn}}()
+    });
+    document.addEventListener('DOMContentLoaded', function () {
+        initSwiper{{fn}}()
+    });
+    window.addEventListener('resize', function () {
+        initSwiper{{fn}}();
+    });
+</script>
+
+{% schema %}
+{
+    "name": "Carousel Jagged",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "textarea",
+            "id": "subtitle",
+            "label": "Subtitle"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+            "type": "select",
+            "id": "title_dom_type",
+            "label": "Title DOM Type",
+            "options": [
+                {"value":"h1","label":"H1"},
+                {"value":"h2","label":"H2"},
+                {"value":"h3","label":"H3"},
+                {"value":"h4","label":"H4"},
+                {"value":"h5","label":"H5"}
+            ],
+            "default": "h2"
+        },
+        {
+            "type": "select",
+            "id": "title_size",
+            "label": "Title Size",
+            "options": [
+                { "value": "h1", "label": "H1" },
+                { "value": "h2", "label": "H2" },
+                { "value": "h3", "label": "H3" },
+                { "value": "h4", "label": "H4" }
+            ],
+            "default": "h2"
+        },
+        {
+            "type": "text",
+            "id": "btn_label",
+            "label": "Button Label"
+        },
+        {
+            "type": "url",
+            "id": "btn_url",
+            "label": "Button Url"
+        },
+        {
+            "type": "image_picker",
+            "id": "small_image",
+            "label": "Small image"
+        },
+        {
+            "type": "image_picker",
+            "id": "big_image",
+            "label": "Big image"
+        },
+        {
+            "type": "product",
+            "id": "product_highlighted",
+            "label": "Product highlighted(for image description)"
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "range",
+            "name": "Entry",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "desktop_image",
+                    "label": "Desktop Image"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "mobile_image",
+                    "label": "Mobile Image"
+                },
+                {
+                    "type": "text",
+                    "id": "subcaption",
+                    "label": "Sub Caption"
+                },
+                {
+                    "type": "text",
+                    "id": "caption",
+                    "label": "Caption"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "Link Url"
+                },
+                {
+                    "type": "checkbox",
+                    "id": "clicon",
+                    "label": "Has link Icon",
+                    "default": true
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Carousel Jagged",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,298 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'marquee-logos-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .ml-marquee {
+    width: 100%;
+    overflow: hidden;
+  }
+  #{{ el_id }} .ml-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: ml-scroll-{{ section.id }} {{ ss.duration | default: 30 }}s linear infinite;
+  }
+  #{{ el_id }} .ml-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: {{ ss.gap_m | default: 40 }}px;
+  }
+  #{{ el_id }} .ml-cell img,
+  #{{ el_id }} .ml-cell svg {
+    height: {{ ss.logo_height | default: 36 }}px;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+  }
+  {% if ss.show_bottom_border %}
+    #{{ el_id }} .ml-border {
+      border-bottom: 1px solid var(--green);
+      margin-top: 32px;
+    }
+  {% endif %}
+  @keyframes ml-scroll-{{ section.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* Track holds 4 identical copies of the logo list, so shifting a quarter loops seamlessly */
+      transform: translateX(-25%);
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .ml-cell {
+      margin-right: {{ ss.gap | default: 60 }}px;
+    }
+    {% if ss.show_bottom_border %}
+      #{{ el_id }} .ml-border {
+        margin-top: 40px;
+      }
+    {% endif %}
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'marquee-logos-figma.png' | asset_url }}" width="100%" height="100%">
+{% elsif sb.size > 0 %}
+  <div id="{{ el_id }}">
+    <div class="ml-marquee">
+      <div class="ml-track">
+        {% for i in (1..4) %}
+          {% for block in sb %}
+            {% if block.settings.image != blank %}
+              <div
+                class="ml-cell"
+                {% if i > 1 %}aria-hidden="true"{% endif %}
+                {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
+              >
+                {{ block.settings.image | image_url: height: 200 | image_tag: loading: 'lazy' }}
+              </div>
+            {% endif %}
+          {% endfor %}
+        {% endfor %}
+      </div>
+    </div>
+    {% if ss.show_bottom_border %}
+      <div class="container">
+        <div class="ml-border"></div>
+      </div>
+    {% endif %}
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Marquee Logos",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "number",
+      "id": "duration",
+      "label": "Scroll Duration (seconds)",
+      "default": 30,
+      "info": "Time for one full loop. Lower is faster."
+    },
+    {
+      "type": "number",
+      "id": "logo_height",
+      "label": "Logo Height (px)",
+      "default": 36
+    },
+    {
+      "type": "number",
+      "id": "gap",
+      "label": "Gap Between Logos (Desktop, px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "gap_m",
+      "label": "Gap Between Logos (Mobile, px)",
+      "default": 40
+    },
+    {
+      "type": "checkbox",
+      "id": "show_bottom_border",
+      "label": "Show Bottom Border",
+      "default": false,
+      "info": "Hairline below the logos, to visually connect with the next section."
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo Image",
+          "info": "Upload a PNG with transparent background, or an SVG with width and height defined."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Logos",
+      "blocks": [
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

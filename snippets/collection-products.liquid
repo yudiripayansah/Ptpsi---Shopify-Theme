@@ -1,0 +1,56 @@
+{%- paginate collection.products by settings.collection_number -%}
+	<section class="collection-products">
+		<div class="container" id="collection-products">
+			<div class="collection-info-bar mb-20">
+				<div class="collection-info-count p5">{{ collection.products_count }} {{ collection.products_count | pluralize: 'product', 'products' }}</div>
+				{%- assign sort_by = collection.sort_by | default: collection.default_sort_by -%}
+				{%- case sort_by -%}
+					{%- when 'manual' -%}
+						{%- assign sort_selected_text = 'collections.sorting.relevance' | t -%}
+					{%- when 'price-ascending' -%}
+						{%- assign sort_selected_text = 'collections.sorting.price_ascending' | t -%}
+					{%- when 'price-descending' -%}
+						{%- assign sort_selected_text = 'collections.sorting.price_descending' | t -%}
+					{%- when 'best-selling' -%}
+						{%- assign sort_selected_text = 'collections.sorting.best_selling' | t -%}
+					{%- when 'created-descending' -%}
+						{%- assign sort_selected_text = 'collections.sorting.date_descending' | t -%}
+					{%- else -%}
+						{%- assign sort_selected_text = 'collections.sorting.relevance' | t -%}
+				{%- endcase -%}
+				<div class="global-select-div selected-inline b-1 b-border">
+					<div class="inner relative">
+						<div class="label mr-5">Sort: </div>
+						<div class="text">{{ sort_selected_text }}</div>
+						{{ settings.icon_select }}
+					</div>
+					<ul class="options bl-1 br-1 bb-1 b-border">
+						<li class="option" data-value="manual">{{ 'collections.sorting.relevance' | t }}</li>
+						<li class="option" data-value="price-ascending">{{ 'collections.sorting.price_ascending' | t }}</li>
+						<li class="option" data-value="price-descending">{{ 'collections.sorting.price_descending' | t }}</li>
+						<li class="option" data-value="best-selling">{{ 'collections.sorting.best_selling' | t }}</li>
+						<li class="option" data-value="created-descending">{{ 'collections.sorting.date_descending' | t }}</li>
+					</ul>
+					<select id="sort-by" onchange="sortCollection(this.value)">
+						<option value="manual" {% if sort_by == 'manual' %}selected="selected"{% endif %}>{{ 'collections.sorting.relevance' | t }}</option>
+						<option value="price-ascending" {% if sort_by == 'price-ascending' %}selected="selected"{% endif %}>{{ 'collections.sorting.price_ascending' | t }}</option>
+						<option value="price-descending" {% if sort_by == 'price-descending' %}selected="selected"{% endif %}>{{ 'collections.sorting.price_descending' | t }}</option>
+						<option value="best-selling" {% if sort_by == 'best-selling' %}selected="selected"{% endif %}>{{ 'collections.sorting.best_selling' | t }}</option>
+						<option value="created-descending" {% if sort_by == 'created-descending' %}selected="selected"{% endif %}>{{ 'collections.sorting.date_descending' | t }}</option>
+					</select>
+				</div>
+			</div>
+			{%- render 'collection-products-content' -%}
+			{%- if paginate.pages > 1 -%}
+				<div class="mt-20 mb-20">
+					{%- render 'global-pagination',paginate:paginate -%}
+				</div>
+			{%- endif -%}
+		</div>
+	</section>
+{%- endpaginate -%}
+<script>
+function sortCollection(value) {
+	window.location.href = "{{ collection.url }}?sort_by=" + value;
+}
+</script>

@@ -1,0 +1,87 @@
+{%- comment -%}
+Soilboy
+
+Renders one Installation Media Block: a full-width image, or a pair of
+images (large+small, or side-by-side equal), each with an "SP 0N. Plant
+Name" credit caption.
+
+Layout is inferred primarily from which image fields are filled in (a blank
+Image 2 means full width). The block's own `layout` value is only used to
+tell the two pair variants apart (large+small vs equal) when both images
+are present, matched loosely via `contains` rather than an exact string,
+since the dropdown's real option values weren't confirmed against the live
+store. `ponytail: contains-based guess on `layout`; switch to an exact match
+once the real option values are confirmed.`
+
+Variables:
+- block: installation_media_block metaobject entry
+- credit_index_1: Integer. Page-wide "SP 0N." number for image_1's credit
+- credit_index_2: Integer. Page-wide "SP 0N." number for image_2's credit
+  (0 when image_2 is unused)
+{%- endcomment -%}
+{%- liquid
+  assign image_1 = block.image_1.value
+  assign image_2 = block.image_2.value
+  assign credit_1 = block.credit_1.value
+  assign credit_2 = block.credit_2.value
+  assign layout = block.layout.value | downcase
+  assign is_equal_pair = false
+  if layout contains 'equal'
+    assign is_equal_pair = true
+  endif
+-%}
+{% if image_2 == blank %}
+  <div class="ibm-full">
+    {% if image_1 != blank %}
+      {% assign image_id = 'image-1-' | append: block.id %}
+      {%- render 'global-image-wrapper',
+        image: image_1,
+        additional_class: 'no-bg',
+        image_id: image_id
+      %}
+    {% endif %}
+    {% render 'installation-plant-credit', credit: credit_1, index: credit_index_1 %}
+  </div>
+{% elsif is_equal_pair %}
+  <div class="ibm-pair ibm-pair--equal flex">
+    <div class="ibm-pair-col">
+      {% assign image_id = 'image-1-' | append: block.id %}
+      {%- render 'global-image-wrapper',
+        image: image_1,
+        additional_class: 'no-bg',
+        image_id: image_id
+      %}
+      {% render 'installation-plant-credit', credit: credit_1, index: credit_index_1 %}
+    </div>
+    <div class="ibm-pair-col">
+      {% assign image_id = 'image-2-' | append: block.id %}
+      {%- render 'global-image-wrapper',
+        image: image_2,
+        additional_class: 'no-bg',
+        image_id: image_id
+      %}
+      {% render 'installation-plant-credit', credit: credit_2, index: credit_index_2 %}
+    </div>
+  </div>
+{% else %}
+  <div class="ibm-pair ibm-pair--large-small flex d-jc-between">
+    <div class="ibm-pair-col ibm-pair-col--lg">
+      {% assign image_id = 'image-1-' | append: block.id %}
+      {%- render 'global-image-wrapper',
+        image: image_1,
+        additional_class: 'no-bg',
+        image_id: image_id
+      %}
+      {% render 'installation-plant-credit', credit: credit_1, index: credit_index_1 %}
+    </div>
+    <div class="ibm-pair-col ibm-pair-col--sm d-pt-24">
+      {% assign image_id = 'image-2-' | append: block.id %}
+      {%- render 'global-image-wrapper',
+        image: image_2,
+        additional_class: 'no-bg',
+        image_id: image_id
+      %}
+      {% render 'installation-plant-credit', credit: credit_2, index: credit_index_2 %}
+    </div>
+  </div>
+{% endif %}

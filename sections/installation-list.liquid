@@ -1,0 +1,703 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'installation-list-' | append: section.id
+  assign ss = section.settings
+  render 'section-padding', el_id: el_id, section: section
+  assign mo_type = ss.metaobject_type | default: 'installation'
+  assign cat_type = 'installation_category'
+  assign per_page = ss.items_per_page | default: 9
+  assign default_view = ss.default_view | default: 'grid'
+  assign categories = shop.metaobjects[cat_type].values | sort: 'display_order'
+%}
+
+<style>
+  /* ---- Sticky filter bar ---- */
+  /* `top` is set inline by JS every scroll frame, tracking the header's
+     live bottom edge (see sync() below) rather than a fixed value with its
+     own CSS transition — a separately-eased top can drift out of sync with
+     the header's own reveal animation and briefly overlap it. */
+  #{{ el_id }} .ill-filter {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    z-index: 5;
+    flex-wrap: wrap;
+    row-gap: 12px;
+    background-color: {{ ss.bg_color | default: '#FFF9F2' }};
+    border-bottom: 1px solid var(--main);
+    padding: 16px;
+    transition: all .3s ease;
+  }
+  #{{ el_id }} .ill-filter-pills,
+  #{{ el_id }} .ill-view-toggle {
+    column-gap: 16px;
+    flex-wrap: wrap;
+    row-gap: 8px;
+  }
+  #{{ el_id }} .ill-pill,
+  #{{ el_id }} .ill-view-btn {
+    appearance: none;
+    background: transparent;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    column-gap: 4px;
+    opacity: 0.6;
+  }
+  #{{ el_id }} .ill-pill.is-active,
+  #{{ el_id }} .ill-view-btn.is-active {
+    opacity: 1;
+  }
+  #{{ el_id }} .ill-pill-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 100px;
+    background-color: var(--terracotta, #b35e34);
+    opacity: 0;
+  }
+  #{{ el_id }} .ill-pill.is-active .ill-pill-dot,
+  #{{ el_id }} .ill-view-btn.is-active .ill-pill-dot {
+    opacity: 1;
+  }
+
+  /* ---- Items: grid + list variants both render; wrapper class picks one ---- */
+  /* Hidden until JS has applied the URL's ?category=/?view_mode= state, so a
+     deep link never flashes the wrong filter/view before correcting itself. */
+  #{{ el_id }} .ill-items {
+    visibility: hidden;
+  }
+  #{{ el_id }} .ill-items.ill-ready {
+    visibility: visible;
+  }
+  #{{ el_id }} .ill-list {
+    display: none;
+  }
+  #{{ el_id }} .ill-items.is-list .ill-grid {
+    display: none;
+  }
+  #{{ el_id }} .ill-items.is-list .ill-list {
+    display: block;
+    position: relative;
+  }
+
+  #{{ el_id }} .ill-grid {
+    display: flex;
+    flex-wrap: wrap;
+    column-gap: 24px;
+    row-gap: 32px;
+    padding-top: 40px;
+  }
+  #{{ el_id }} .ill-card,
+  #{{ el_id }} .ill-featured {
+    text-decoration: none;
+  }
+  #{{ el_id }} .ill-card {
+    display: block;
+    width: 100%;
+  }
+  #{{ el_id }} .ill-card-media {
+    aspect-ratio: 448 / 597;
+    overflow: hidden;
+  }
+  #{{ el_id }} .ill-card-img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #{{ el_id }} .ill-card-caption {
+    margin-top: 16px;
+    display: flex;
+    flex-direction: column;
+    row-gap: 4px;
+  }
+
+  #{{ el_id }} .ill-featured {
+    display: flex;
+    flex-direction: column-reverse;
+    row-gap: 24px;
+    width: 100%;
+    margin-bottom: 32px;
+  }
+  #{{ el_id }} .ill-featured-text {
+    row-gap: 16px;
+  }
+  #{{ el_id }} .ill-featured-btn {
+    column-gap: 48px;
+    padding: 12px 24px;
+    border: 1px solid var(--green);
+    width: 100%;
+    max-width: 330px;
+    text-decoration: none;
+  }
+  #{{ el_id }} .ill-featured-media {
+    width: 100%;
+  }
+  #{{ el_id }} .ill-featured-img {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  #{{ el_id }} .ill-list {
+    padding-top: 40px;
+  }
+  #{{ el_id }} .ill-row {
+    display: flex;
+    column-gap: 16px;
+    padding: 20px 0;
+    border-bottom: 1px solid var(--main);
+    text-decoration: none;
+  }
+  #{{ el_id }} .ill-row-year {
+    width: 50px;
+    flex: 0 0 auto;
+  }
+  #{{ el_id }} .ill-row-main {
+    flex: 1 0 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    row-gap: 8px;
+  }
+  #{{ el_id }} .ill-row-title {
+    color: var(--placeholder, #a4a399);
+    transition: color 0.2s ease;
+  }
+  #{{ el_id }} .ill-row-arrow {
+    flex: 0 0 24px;
+  }
+  #{{ el_id }} .ill-row-arrow svg {
+    width: 24px;
+    height: 24px;
+  }
+  #{{ el_id }} .ill-list-preview {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 400px;
+    max-width: 40vw;
+    pointer-events: none;
+    opacity: 0;
+    z-index: 20;
+    transition: opacity 0.15s ease;
+  }
+  #{{ el_id }} .ill-list-preview.is-visible {
+    opacity: 1;
+  }
+  #{{ el_id }} .ill-list-preview-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  @media (hover: hover) {
+    #{{ el_id }} .ill-row:hover .ill-row-title {
+      color: var(--green);
+    }
+    #{{ el_id }} .ill-list:hover .ill-row:not(:hover) {
+      opacity: 0.5;
+    }
+  }
+
+  #{{ el_id }} [data-ill-item].is-hidden,
+  #{{ el_id }} [data-ill-item].is-filtered-out {
+    display: none;
+  }
+
+  #{{ el_id }} .ill-pagination {
+    padding-top: 40px;
+  }
+  #{{ el_id }} .ill-load-more {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--green);
+    padding: 12px 24px;
+    cursor: pointer;
+  }
+
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .ill-filter {
+      flex-wrap: nowrap;
+      padding: 16px 24px;
+    }
+    #{{ el_id }} .ill-card {
+      width: calc(33.333% - 16px);
+    }
+    #{{ el_id }} .ill-featured {
+      flex-direction: row-reverse;
+      align-items: flex-end;
+      justify-content: space-between;
+      column-gap: 24px;
+      row-gap: 0;
+      margin-bottom: 40px;
+    }
+    #{{ el_id }} .ill-featured-text {
+      max-width: 448px;
+    }
+    #{{ el_id }} .ill-featured-media {
+      max-width: 802px;
+    }
+    #{{ el_id }} .ill-row-year {
+      width: 212px;
+    }
+    #{{ el_id }} .ill-row-main {
+      flex-direction: row;
+      align-items: center;
+      column-gap: 24px;
+    }
+  }
+</style>
+
+<div
+  id="{{ el_id }}"
+  data-ill
+  data-default-view="{{ default_view }}"
+  data-per-page="{{ per_page }}"
+>
+  {% render 'installation-list-filter', el_id: el_id, categories: categories %}
+
+  {% paginate shop.metaobjects[mo_type].values by 50 %}
+    {% liquid
+      assign entries = shop.metaobjects[mo_type].values | sort: 'sort_order'
+      assign featured_entry = blank
+      for entry in entries
+        if entry.featured.value and featured_entry == blank
+          assign featured_entry = entry
+        endif
+      endfor
+    %}
+    <div class="container">
+      {% if entries.size == 0 %}
+        {% if request.design_mode %}
+          <p class="p2 c-label">
+            No "{{ mo_type }}" metaobject entries found. Add entries with category, title, year, card_image and cta_url fields in Admin &gt; Content &gt; Metaobjects.
+          </p>
+        {% endif %}
+      {% else %}
+        <div class="ill-items is-{{ default_view }}" data-ill-items>
+          <div class="ill-grid" data-ill-grid>
+            {% if featured_entry != blank %}
+              {% render 'installation-list-item-featured', entry: featured_entry %}
+            {% endif %}
+            {% assign grid_index = 0 %}
+            {% for entry in entries %}
+              {% unless entry == featured_entry %}
+                {% assign grid_hidden = false %}
+                {% if grid_index >= per_page %}
+                  {% assign grid_hidden = true %}
+                {% endif %}
+                {% render 'installation-list-item', entry: entry, mode: 'grid', index: grid_index, is_hidden: grid_hidden %}
+                {% assign grid_index = grid_index | plus: 1 %}
+              {% endunless %}
+            {% endfor %}
+          </div>
+          <div class="ill-list" data-ill-list>
+            <div class="ill-list-preview" aria-hidden="true">
+              <img class="ill-list-preview-img" alt="" width="400" height="533">
+            </div>
+            {% for entry in entries %}
+              {% assign list_hidden = false %}
+              {% if forloop.index0 >= per_page %}
+                {% assign list_hidden = true %}
+              {% endif %}
+              {% render 'installation-list-item', entry: entry, mode: 'list', index: forloop.index0, is_hidden: list_hidden %}
+            {% endfor %}
+          </div>
+        </div>
+        <noscript>
+          <style>
+            #{{ el_id }} .ill-items {
+              visibility: visible;
+            }
+          </style>
+        </noscript>
+        <div class="ill-pagination flex ai-center jc-center">
+          <button type="button" class="ill-load-more p2 c-green" data-ill-load-more>
+            {{ ss.load_more_label | default: 'Load More' }}
+          </button>
+        </div>
+      {% endif %}
+    </div>
+  {% endpaginate %}
+</div>
+
+<script>
+  (function () {
+    var SECTION_ID = '{{ el_id }}';
+    var STORAGE_KEY = 'ill-view-{{ section.id }}';
+
+    function initSticky(root) {
+      var filterEl = root.querySelector('[data-ill-filter]');
+      if (!filterEl) return null;
+
+      var lastScrollY = window.scrollY;
+      filterEl.style.top = '100px';
+
+      function onScroll() {
+        let theHeader = document.querySelector('#shopify-section-header')
+        let header = document.querySelector('.header-con__inner')?.clientHeight
+        var currentScrollY = window.scrollY;
+        var isScrollingDown = currentScrollY > lastScrollY;
+        filterEl.style.top = (isScrollingDown ? 0 : header) + 'px';
+        console.log('is scrolling down', isScrollingDown)
+        lastScrollY = currentScrollY;
+      }
+      onScroll()
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll)
+    }
+
+    function initListHover(root) {
+      if (!window.matchMedia || !window.matchMedia('(hover: hover)').matches) return;
+      var list = root.querySelector('[data-ill-list]');
+      var preview = list ? list.querySelector('.ill-list-preview') : null;
+      var img = preview ? preview.querySelector('img') : null;
+      if (!list || !preview || !img) return;
+
+      function move(e) {
+        preview.style.transform = 'translate(' + (e.clientX + 24) + 'px, ' + (e.clientY + 24) + 'px)';
+      }
+      function over(e) {
+        var row = e.target.closest('.ill-row');
+        var src = row && row.getAttribute('data-preview-src');
+        if (!src) return;
+        img.src = src;
+        preview.classList.add('is-visible');
+      }
+      function out(e) {
+        if (e.target.closest && e.target.closest('.ill-row')) {
+          preview.classList.remove('is-visible');
+        }
+      }
+      list.addEventListener('pointermove', move);
+      list.addEventListener('pointerover', over);
+      list.addEventListener('pointerout', out);
+    }
+
+    function initListing(root) {
+      var itemsEl = root.querySelector('[data-ill-items]');
+      var gridEl = root.querySelector('[data-ill-grid]');
+      var listEl = root.querySelector('[data-ill-list]');
+      var loadMoreBtn = root.querySelector('[data-ill-load-more]');
+      var pills = Array.prototype.slice.call(root.querySelectorAll('[data-ill-pill]'));
+      var viewBtns = Array.prototype.slice.call(root.querySelectorAll('[data-ill-view-btn]'));
+      if (!itemsEl || !gridEl || !listEl) return;
+
+      var perPage = parseInt(root.getAttribute('data-per-page'), 10) || 9;
+      var params = new URLSearchParams(window.location.search);
+      var activeCategory = params.get('category') || '';
+      var activeView =
+        params.get('view_mode') ||
+        (function () {
+          try {
+            return window.localStorage.getItem(STORAGE_KEY);
+          } catch (e) {
+            return null;
+          }
+        })() ||
+        root.getAttribute('data-default-view') ||
+        'grid';
+      var revealCounts = { grid: perPage, list: perPage };
+
+      function updateUrl() {
+        var next = new URLSearchParams(window.location.search);
+        if (activeCategory) {
+          next.set('category', activeCategory);
+        } else {
+          next.delete('category');
+        }
+        next.set('view_mode', activeView);
+        var query = next.toString();
+        var url = window.location.pathname + (query ? '?' + query : '');
+        window.history.replaceState(null, '', url);
+      }
+
+      function applyReveal(container, mode) {
+        var items = Array.prototype.slice.call(container.querySelectorAll('[data-ill-item][data-index]'));
+        var visible = items.filter(function (el) {
+          return !el.classList.contains('is-filtered-out');
+        });
+        visible.forEach(function (el, i) {
+          el.classList.toggle('is-hidden', i >= revealCounts[mode]);
+        });
+        return visible.length;
+      }
+
+      function render() {
+        var allItems = Array.prototype.slice.call(root.querySelectorAll('[data-ill-item]'));
+        allItems.forEach(function (el) {
+          var matches = !activeCategory || el.getAttribute('data-category') === activeCategory;
+          el.classList.toggle('is-filtered-out', !matches);
+        });
+
+        var gridTotal = applyReveal(gridEl, 'grid');
+        var listTotal = applyReveal(listEl, 'list');
+
+        itemsEl.classList.toggle('is-grid', activeView === 'grid');
+        itemsEl.classList.toggle('is-list', activeView === 'list');
+        pills.forEach(function (pill) {
+          pill.classList.toggle('is-active', pill.getAttribute('data-category') === activeCategory);
+        });
+        viewBtns.forEach(function (btn) {
+          btn.classList.toggle('is-active', btn.getAttribute('data-view') === activeView);
+        });
+
+        if (loadMoreBtn) {
+          var total = activeView === 'list' ? listTotal : gridTotal;
+          loadMoreBtn.style.display = revealCounts[activeView] < total ? '' : 'none';
+        }
+      }
+
+      pills.forEach(function (pill) {
+        pill.addEventListener('click', function () {
+          activeCategory = pill.getAttribute('data-category') || '';
+          revealCounts.grid = perPage;
+          revealCounts.list = perPage;
+          render();
+          updateUrl();
+        });
+      });
+
+      viewBtns.forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          activeView = btn.getAttribute('data-view');
+          try {
+            window.localStorage.setItem(STORAGE_KEY, activeView);
+          } catch (e) {}
+          render();
+          updateUrl();
+        });
+      });
+
+      if (loadMoreBtn) {
+        loadMoreBtn.addEventListener('click', function () {
+          revealCounts[activeView] += perPage;
+          render();
+        });
+      }
+
+      render();
+      itemsEl.classList.add('ill-ready');
+    }
+
+    function initIll(root) {
+      if (!root || root.illInited) return;
+      root.illInited = true;
+      initListing(root);
+      initListHover(root);
+      root.illStickyDestroy = initSticky(root);
+    }
+
+    // This script tag sits right after the section's own markup, so by the
+    // time it runs, every element it needs is already in the DOM — no need
+    // to wait for the rest of the page (DOMContentLoaded) to finish parsing.
+    // Waiting for that was the cause of a visible flash of unfiltered /
+    // unpaginated items before the reveal classes were applied.
+    initIll(document.getElementById(SECTION_ID));
+
+    if (window.Shopify && window.Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (event) {
+        var el = event.target.querySelector('[data-ill]');
+        if (el) initIll(el);
+      });
+      document.addEventListener('shopify:section:unload', function (event) {
+        var el = event.target.querySelector('[data-ill]');
+        if (el && el.illStickyDestroy) el.illStickyDestroy();
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Installation List",
+  "class": "bg-background-main",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFF9F2"
+    },
+    {
+      "type": "header",
+      "content": "Installation List"
+    },
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Metaobject Type",
+      "default": "installation",
+      "info": "Entries need category, title, year, card_image and cta_url fields. Manage in Admin > Content > Metaobjects."
+    },
+    {
+      "type": "select",
+      "id": "default_view",
+      "label": "Default View",
+      "options": [
+        { "value": "grid", "label": "Grid" },
+        { "value": "list", "label": "List" }
+      ],
+      "default": "grid",
+      "info": "A visitor's own Grid/List choice is remembered across page loads and overrides this."
+    },
+    {
+      "type": "number",
+      "id": "items_per_page",
+      "label": "Items Per Page",
+      "default": 9,
+      "info": "How many entries show initially and per click of the Load More button."
+    },
+    {
+      "type": "text",
+      "id": "load_more_label",
+      "label": "Load More Label",
+      "default": "Load More"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installation List"
+    }
+  ]
+}
+{% endschema %}

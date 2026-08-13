@@ -1,0 +1,80 @@
+<Teleport to="body">
+  <div class="pdp-oos-popup {{ custom_class }} zi-7 fixed top-0 left-0 w-full h-full flex ai-center jc-center">
+    <div @click="hideOosPopup($event)" class="overlay absolute w-full h-full top-0 left-0 zi-1"></div>
+		<div class="container relative zi-2 d-pl-0 d-pr-0">
+			<div class="content-wrapper zi-2 bg-white d-p-40 p-24">
+				<a @click="hideOosPopup($event)" href="#" rel="nofollow" class="close-icon absolute top-0 right-0 d-p-20 flex ai-center jc-center">
+					{{- settings.icon_close -}}
+				</a>
+				<h2 class="p2 uppercase oos-popup-title">{{ settings.pro_oos_title }}</h2>
+				{%- if settings.pro_oos_desc != blank -%}
+					<p class="p3 mt-8">{{ settings.pro_oos_desc }}</p>
+				{%- endif -%}
+	
+				<div class="form-wrapper d-mt-20 mt-20">
+					<div class="oos-product-title p4 uppercase"></div>
+					<div class="form-group mt-8 pt-8">
+						{% liquid
+							assign values = ''
+							assign option_values = ''
+							assign loop = 1
+							for var in product.variants
+								unless var.available
+									assign opt_1 = var.options[0] | escape
+									assign opt_2 = var.options[1] | escape
+									assign opt_3 = var.options[2] | escape
+									if loop > 1
+										assign values = values | append: ','
+										assign option_values = option_values | append: ','
+									endif
+									if opt_1
+										assign values = values | append: opt_1
+									endif
+									if opt_2
+										if opt_1
+										assign values = values | append: '/'
+										endif
+										assign values = values | append: opt_2
+									endif
+									if opt_3
+										if opt_1 or opt_2
+											assign values = values | append: '/'
+										endif
+										assign values = values | append: opt_3
+									endif
+									assign option_values = option_values | append: var.id
+									assign loop = loop | plus: 1
+								endunless
+							endfor
+							assign values = values | split: ','
+							assign option_values = option_values | split: ','
+						%}
+						<div class="relative">
+							{%- render 'global-select',
+								default_value: option_values[0],
+								default_text: values[0],
+								values: values,
+								option_values: option_values,
+								id: 'oos-variant-id',
+								field_name: 'variant_id',
+								selected_text_class: 'p3',
+								vue_v_model: 'variantId',
+								global_select_class: 'global-input oos-variant-id bb-1 b-border pl-0 pr-0 pt-8 pb-8 label-anim label-anim-select'
+							-%}
+						</div>
+					</div>
+					<div class="form-group mt-8 pt-8">
+						<input type="email" v-model="oosForm.email" name="contact[email]" placeholder="{{ 'contact.form.email' | t }}" class="global-input w-full bb-1 b-border p3 pt-8 pb-8">
+						<div v-if="oosForm.email_error" class="p3 light-300 mt-5 c-red">
+							{{ 'customer.register.error_email' | t }}
+						</div>
+					</div>
+					<a href="#" rel="nofollow" @click="oosSubmit($event)" class="btn1 w-full tc d-mt-24 mt-16 btn-notify">
+						{{- settings.pro_oos_button_label -}}
+					</a>
+					<p v-if="oosForm.success" class="p3 mt-10">{{ settings.pro_oos_success_message }}</p>
+				</div>
+			</div>
+		</div>
+  </div>
+</Teleport>

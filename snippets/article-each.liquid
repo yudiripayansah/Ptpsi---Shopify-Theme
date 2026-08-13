@@ -1,0 +1,23 @@
+{%liquid 
+	assign image = article.image
+	assign acc = false
+	if article.metafields.custom.gird_image != blank
+	assign image = article.metafields.custom.gird_image
+	assign acc = false
+	endif
+%}
+<div class="w-full article-each container" data-image="{{image}}" data-image-metafields="{{article.metafields.custom.gird_image}}">
+	<a href="{{article.url}}">
+		{%- render 'global-image-wrapper', image: image, additional_class: '', acc: acc %}
+	</a>
+	<div class="article-box pt-12 pl-0 d-pl-0 pr-0 d-pr-0 flex ai-start">
+		{%- if article.tags[0] != blank -%}
+			<div class="col-3 pl-0 pr-10">
+				<a href="{{ blog.url }}/tagged/{{ article.tags[0] | handle }}" class="p7 medium-500 c-black">{{ article.tags[0] }}</a>
+			</div>
+		{%- endif -%}
+		<div class="col-9 {% if article.tags[0] != blank %}pl-10{% else %}pl-0{% endif %} pr-0">
+			<a href="{{article.url}}" class="p1 capitalize">{{ article.title }}</a>
+		</div>
+	</div>
+</div>

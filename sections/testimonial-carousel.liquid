@@ -1,0 +1,436 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'testimonial-carousel-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .container:after,
+  #{{ el_id }} .container:before,
+  #{{ el_id }} .row:after,
+  #{{ el_id }} .row:before {
+    display: none;
+  }
+  {% if ss.show_top_border_m %}
+    #{{ el_id }} .tc-border-top {
+      border-top: 1px solid var(--green);
+      margin-bottom: 56px;
+    }
+  {% endif %}
+  #{{ el_id }} .tc-row {
+    display: flex;
+    flex-direction: column;
+  }
+  /* Quote column first on mobile, image below the controls */
+  #{{ el_id }} .tc-main {
+    order: 1;
+    width: 100%;
+  }
+  #{{ el_id }} .tc-media-col {
+    order: 2;
+    margin-top: 56px;
+    display: flex;
+    justify-content: flex-end;
+  }
+  #{{ el_id }} .tc-figures {
+    display: grid;
+    width: 74%;
+  }
+  #{{ el_id }} .tc-figure {
+    grid-area: 1 / 1;
+    opacity: 0;
+    transition: opacity 0.4s ease;
+    pointer-events: none;
+  }
+  #{{ el_id }} .tc-figure.active {
+    opacity: 1;
+    pointer-events: auto;
+  }
+  #{{ el_id }} .tc-caption {
+    margin-top: 8px;
+    column-gap: 16px;
+  }
+  #{{ el_id }} .tc-caption-label {
+    flex: 0 0 50px;
+  }
+  #{{ el_id }} .tc-swiper {
+    overflow: hidden;
+    width: 100%;
+  }
+  #{{ el_id }} .tc-controls {
+    margin-top: 24px;
+  }
+  #{{ el_id }} .tc-arrow {
+    width: 18px;
+    height: 18px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: none;
+    border: 0;
+    padding: 0;
+    cursor: pointer;
+    color: var(--green);
+    transition: opacity 0.3s ease;
+  }
+  #{{ el_id }} .tc-arrow svg {
+    width: 12px;
+    height: 11px;
+  }
+  #{{ el_id }} .tc-arrow svg path {
+    stroke: currentColor;
+  }
+  #{{ el_id }} .tc-arrow.prev svg {
+    transform: scaleX(-1);
+  }
+  #{{ el_id }} .tc-arrow.swiper-button-disabled {
+    opacity: 0.3;
+    pointer-events: none;
+  }
+  @media screen and (min-width: 1024px) {
+    {% if ss.show_top_border_m %}
+      #{{ el_id }} .tc-border-top {
+        border-top: 0;
+        margin-bottom: 0;
+      }
+    {% endif %}
+    {% if ss.show_top_border %}
+      #{{ el_id }} .tc-border-top {
+        border-top: 1px solid var(--green);
+        margin-bottom: 120px;
+      }
+    {% endif %}
+    #{{ el_id }} .tc-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+    }
+    #{{ el_id }} .tc-media-col {
+      order: 1;
+      margin-top: 0;
+      flex: 0 0 330px;
+      display: block;
+    }
+    #{{ el_id }} .tc-figures {
+      width: 100%;
+    }
+    #{{ el_id }} .tc-main {
+      order: 2;
+      max-width: 802px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+    #{{ el_id }} .tc-controls {
+      margin-top: 60px;
+    }
+    #{{ el_id }} .tc-caption {
+      column-gap: 24px;
+    }
+    #{{ el_id }} .tc-caption-label {
+      flex: 0 0 94px;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'testimonial-carousel-figma.png' | asset_url }}" width="100%" height="100%">
+{% elsif sb.size > 0 %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      {% if ss.show_top_border or ss.show_top_border_m %}
+        <div class="tc-border-top"></div>
+      {% endif %}
+      <div class="tc-row">
+        <div class="tc-media-col">
+          <div class="tc-figures">
+            {% for block in sb %}
+              <div class="tc-figure {% if forloop.first %}active{% endif %}">
+                {% if block.settings.image != blank %}
+                  {%- assign image_id = 'tc-image-' | append: section.id | append: '-' | append: block.id -%}
+                  {%- render 'global-image-wrapper', image: block.settings.image, additional_class: 'no-bg', image_id: image_id -%}
+                  {% if block.settings.caption_label != blank or block.settings.caption_text != blank %}
+                    <div class="flex tc-caption p4 c-label">
+                      <div class="tc-caption-label">{{ block.settings.caption_label }}</div>
+                      <div class="tc-caption-text">{{ block.settings.caption_text }}</div>
+                    </div>
+                  {% endif %}
+                {% endif %}
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="tc-main">
+          <div class="swiper tc-swiper">
+            <div class="swiper-wrapper">
+              {% for block in sb %}
+                <div class="swiper-slide" {{ block.shopify_attributes }}>
+                  <div class="h3 no-anim c-green">{{ block.settings.quote | newline_to_br }}</div>
+                  {% if block.settings.author != blank %}
+                    <div class="p3 c-label d-mt-40 mt-20">{{ block.settings.author }}</div>
+                  {% endif %}
+                </div>
+              {% endfor %}
+            </div>
+          </div>
+          <div class="tc-controls flex ai-center jc-between">
+            <div class="flex ai-center colgap-8">
+              <button type="button" class="tc-arrow prev" aria-label="Previous testimonial">
+                <svg width="12" height="11" viewBox="0 0 11.6974 10.4141" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.625 9.70704L11 5.20704L6.625 0.707037M11 5.20704L0.5 5.20704" stroke="#19341E" stroke-linecap="square"/>
+                </svg>
+              </button>
+              <button type="button" class="tc-arrow next" aria-label="Next testimonial">
+                <svg width="12" height="11" viewBox="0 0 11.6974 10.4141" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M6.625 9.70704L11 5.20704L6.625 0.707037M11 5.20704L0.5 5.20704" stroke="#19341E" stroke-linecap="square"/>
+                </svg>
+              </button>
+            </div>
+            <div class="p4 c-label flex colgap-4">
+              <span class="tc-current">01</span>
+              <span>–</span>
+              <span>{% if sb.size < 10 %}0{% endif %}{{ sb.size }}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      var current = document.querySelector('#{{ el_id }} .tc-current');
+      var figures = document.querySelectorAll('#{{ el_id }} .tc-figure');
+      new Swiper('#{{ el_id }} .tc-swiper', {
+        slidesPerView: 1,
+        spaceBetween: 24,
+        autoHeight: true,
+        loop: false,
+        navigation: {
+          nextEl: '#{{ el_id }} .tc-arrow.next',
+          prevEl: '#{{ el_id }} .tc-arrow.prev'
+        },
+        on: {
+          slideChange: function () {
+            var idx = this.realIndex;
+            if (current) current.textContent = String(idx + 1).padStart(2, '0');
+            figures.forEach(function (figure, i) {
+              figure.classList.toggle('active', i === idx);
+            });
+          }
+        }
+      });
+    });
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Testimonial Carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border",
+      "label": "Show Top Border (Desktop)",
+      "default": false,
+      "info": "Hairline above the content, to visually connect with the previous section."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_top_border_m",
+      "label": "Show Top Border (Mobile)",
+      "default": false
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Testimonial",
+      "settings": [
+        {
+          "type": "textarea",
+          "id": "quote",
+          "label": "Quote"
+        },
+        {
+          "type": "text",
+          "id": "author",
+          "label": "Author"
+        },
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Landscape crop. The Figma uses a 3:2 ratio. Fades to the active slide's image."
+        },
+        {
+          "type": "text",
+          "id": "caption_label",
+          "label": "Caption Label"
+        },
+        {
+          "type": "text",
+          "id": "caption_text",
+          "label": "Caption Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonial Carousel",
+      "blocks": [
+        { "type": "entry" },
+        { "type": "entry" }
+      ]
+    }
+  ]
+}
+{% endschema %}

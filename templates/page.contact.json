@@ -1,137 +1,300 @@
 {
+  "wrapper": "div.global-content-top-margin.bg-background-main",
   "sections": {
-    "main": {
-      "type": "main-page",
-      "blocks": {
-        "title": {
-          "type": "text",
-          "name": "t:names.title",
-          "settings": {
-            "text": "<h1>{{ closest.page.title }}<\/h1>",
-            "width": "100%",
-            "max_width": "normal",
-            "alignment": "center",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        },
-        "content": {
-          "type": "text",
-          "name": "t:names.content",
-          "settings": {
-            "text": "{{ closest.page.content }}",
-            "width": "100%",
-            "max_width": "narrow",
-            "alignment": "center",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
-        }
-      },
-      "block_order": [
-        "title",
-        "content"
-      ],
+    "contact_us_JycLVN": {
+      "type": "contact-us",
       "settings": {
-        "content_direction": "column",
-        "gap": 32,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 40,
-        "padding-block-end": 0
+        "bg_color": "#fff9f2",
+        "desktop_image": "shopify:\/\/shop_images\/Frame_09960105-c96c-4b19-8cc9-ba42bf5c40b0.png",
+        "mobile_image": "shopify:\/\/shop_images\/Frame_1_d95c6af5-fed7-4001-95e5-7c27a8d05ae1.png",
+        "title": "Contact Us",
+        "title_size": "h1",
+        "title_dom_type": "h1",
+        "text": "Whether it’s plant care or delivery details, \nour team is ready to guide you with ease.",
+        "product": "master-plant-m",
+        "product_label": "SP 01.",
+        "topic": "Customer Service, Corporate Responsibility, Marketing, Investor Relations, Press, Website Quality, Other",
+        "form_info": "<p>Email us at hello@soilboy.sg or fill out the form. Our lean & green team, will respond between 1-3 business days.<br\/><br\/>Looking for corporate gifts, workshops or installations? Email us at business@soilboy.sg or indicate your project details in the form.<br\/><br\/>Need personalised guidance with your plants or order? Reach out to our PlantCare team for one-on-one support designed around your plants’ needs.<\/p>",
+        "button_label": "Submit",
+        "success_message": "Your message has been sent",
+        "top_padding_m": "30",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "30",
+        "bottom_padding_t": "medium",
+        "top_padding": "50",
+        "bottom_padding": "medium",
+        "top_padding_hd": "",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "",
+        "bottom_padding_hhd": "medium"
       }
     },
-    "form": {
-      "type": "section",
+    "border_7WqJ7a": {
+      "type": "border",
+      "name": "Border",
+      "settings": {
+        "bg_color": "",
+        "b_color": "#304835",
+        "hascon": true
+      }
+    },
+    "about_us_4KdKnU": {
+      "type": "about-us",
       "blocks": {
-        "contact_form_UwiCkQ": {
-          "type": "contact-form",
+        "entry_KUxUHT": {
+          "type": "entry",
           "settings": {
-            "width": "custom",
-            "custom_width": 50,
-            "width_mobile": "custom",
-            "custom_width_mobile": 100,
-            "input_style": "default",
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "submit-button": {
-              "type": "contact-form-submit-button",
-              "static": true,
-              "settings": {
-                "label": "Submit",
-                "style_class": "button",
-                "width": "fit-content",
-                "custom_width": 100,
-                "width_mobile": "fit-content",
-                "custom_width_mobile": 100
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": []
+            "contact_label": "Get Directions",
+            "contact_url": "#"
+          }
         }
       },
       "block_order": [
-        "contact_form_UwiCkQ"
+        "entry_KUxUHT"
       ],
-      "name": "t:names.contact_form",
+      "name": "About Us",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "center",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 32,
-        "section_width": "page-width",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "{{ settings.color_palette.background }}",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 32,
-        "padding-block-end": 84
+        "bg_color": "#fff9f2",
+        "subtitle": "Visit Us",
+        "title": "The Soilboy Experience Store is where nature, design, and craftsmanship meet. Discover curated plants, handcrafted pottery, and objects that celebrate the art of slow living.",
+        "title_dom_type": "h2",
+        "title_size": "h2",
+        "btn_label": "",
+        "btn_url": "",
+        "address": "<p>Soilboy Experience Store<br\/>46 Kim Yam Road, #02-07\/08<br\/>Singapore 239351<\/p>",
+        "details": "<p>Opening Hours:<br\/>Daily: 10am - 7pm<\/p>",
+        "contact_image": "shopify:\/\/shop_images\/Image_a6788b47-5e35-4315-835a-af6ca3f1001c.png",
+        "top_padding_m": "medium",
+        "bottom_padding_m": "small",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "small",
+        "top_padding": "medium",
+        "bottom_padding": "small",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "small",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "small"
+      }
+    },
+    "homepage_banner_eazQ7N": {
+      "type": "homepage-banner",
+      "blocks": {
+        "entry_JfTPnm": {
+          "type": "entry",
+          "settings": {
+            "overlay": false,
+            "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) 100%)",
+            "banner_url": "",
+            "text_color": "white",
+            "text_align": "jc-center tc text-center",
+            "text_align_d": "d-jc-center d-tc d-text-center",
+            "title_v_align": "jc-end relative",
+            "title_v_align_d": "d-jc-end d-relative",
+            "title": "",
+            "title_dom_type": "h1",
+            "title_size": "h1",
+            "text": "",
+            "text_max_width_mobile": 450,
+            "text_max_width_tablet": 450,
+            "text_max_width_desktop": 450,
+            "text_max_width_hd": 450,
+            "text_max_width_fullhd": 450,
+            "button_label_1": "",
+            "button_url_1": "",
+            "button_label_2": "",
+            "button_url_2": "",
+            "link_label": "",
+            "link_url": "",
+            "desktop_image": "shopify:\/\/shop_images\/Image_3.png",
+            "mobile_image": "shopify:\/\/shop_images\/Image_2_952a1af4-19fc-4374-b096-bacdef1c6d29.png",
+            "autoplay": false,
+            "youtube_embed_code": ""
+          }
+        },
+        "entry_K9cdLa": {
+          "type": "entry",
+          "settings": {
+            "overlay": false,
+            "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) 100%)",
+            "banner_url": "",
+            "text_color": "white",
+            "text_align": "jc-center tc text-center",
+            "text_align_d": "d-jc-center d-tc d-text-center",
+            "title_v_align": "jc-end relative",
+            "title_v_align_d": "d-jc-end d-relative",
+            "title": "",
+            "title_dom_type": "h1",
+            "title_size": "h1",
+            "text": "",
+            "text_max_width_mobile": 450,
+            "text_max_width_tablet": 450,
+            "text_max_width_desktop": 450,
+            "text_max_width_hd": 450,
+            "text_max_width_fullhd": 450,
+            "button_label_1": "",
+            "button_url_1": "",
+            "button_label_2": "",
+            "button_url_2": "",
+            "link_label": "",
+            "link_url": "",
+            "desktop_image": "shopify:\/\/shop_images\/Image_3.png",
+            "mobile_image": "shopify:\/\/shop_images\/Image_2_952a1af4-19fc-4374-b096-bacdef1c6d29.png",
+            "autoplay": false,
+            "youtube_embed_code": ""
+          }
+        }
+      },
+      "block_order": [
+        "entry_JfTPnm",
+        "entry_K9cdLa"
+      ],
+      "name": "Homepage Banner",
+      "settings": {
+        "section_id": "",
+        "bg_color": "#fff9f2",
+        "disable_lazyload": false,
+        "text_over_image": false,
+        "enable_parallax": false,
+        "enable_sticky": false,
+        "section_width": "container",
+        "screen_image_height_m": "image",
+        "hbl_title": "",
+        "hbl_label": "",
+        "hbl_url": "",
+        "screen_image_height_t": "image",
+        "screen_image_height_d": "image",
+        "top_padding_hd": "",
+        "bottom_padding_hd": "",
+        "top_padding_hhd": "",
+        "bottom_padding_hhd": ""
+      }
+    },
+    "text_and_links_gMKCMK": {
+      "type": "text-and-links",
+      "blocks": {
+        "entry_J4L6TF": {
+          "type": "entry",
+          "settings": {
+            "label": "Instagram",
+            "url": "#"
+          }
+        },
+        "entry_hMD49D": {
+          "type": "entry",
+          "settings": {
+            "label": "Tiktok",
+            "url": "#"
+          }
+        },
+        "entry_cTBq9h": {
+          "type": "entry",
+          "settings": {
+            "label": "Facebook",
+            "url": "#"
+          }
+        }
+      },
+      "block_order": [
+        "entry_J4L6TF",
+        "entry_hMD49D",
+        "entry_cTBq9h"
+      ],
+      "name": "Text and Links",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title": "Socials"
+      }
+    },
+    "border_Jr7gyt": {
+      "type": "border",
+      "name": "Border",
+      "settings": {
+        "bg_color": "",
+        "b_color": "#304835",
+        "hascon": true
+      }
+    },
+    "pdp_faq_MEaqTW": {
+      "type": "pdp-faq",
+      "blocks": {
+        "entry_VUEhpA": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "<p>What is Lorem Ipsum?<\/p><p><strong>Lorem Ipsum<\/strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<\/p>"
+          }
+        },
+        "entry_Xinqwc": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "<p>What is Lorem Ipsum?<\/p><p><strong>Lorem Ipsum<\/strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<\/p>"
+          }
+        },
+        "entry_DegkxR": {
+          "type": "entry",
+          "settings": {
+            "title": "Sed at elementum odio?",
+            "text": "<p>What is Lorem Ipsum?<\/p><p><strong>Lorem Ipsum<\/strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<\/p>"
+          }
+        },
+        "entry_rLT3hQ": {
+          "type": "entry",
+          "settings": {
+            "title": "In semper tortor pharetra vitae?",
+            "text": "<p>What is Lorem Ipsum?<\/p><p><strong>Lorem Ipsum<\/strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<\/p>"
+          }
+        },
+        "entry_xzWWq3": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "<p>What is Lorem Ipsum?<\/p><p><strong>Lorem Ipsum<\/strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<\/p>"
+          }
+        },
+        "entry_ykFxJX": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "<p>What is Lorem Ipsum?<\/p><p><strong>Lorem Ipsum<\/strong> is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "entry_VUEhpA",
+        "entry_Xinqwc",
+        "entry_DegkxR",
+        "entry_rLT3hQ",
+        "entry_xzWWq3",
+        "entry_ykFxJX"
+      ],
+      "name": "PDP - FAQ",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title": "FAQ",
+        "text": "Got a question?\nWe’re here to help.",
+        "link_label": "View All FAQ",
+        "link_url": "#",
+        "top_padding_m": "medium",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "medium",
+        "top_padding": "medium",
+        "bottom_padding": "medium",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "medium"
       }
     }
   },
   "order": [
-    "main",
-    "form"
+    "contact_us_JycLVN",
+    "border_7WqJ7a",
+    "about_us_4KdKnU",
+    "homepage_banner_eazQ7N",
+    "text_and_links_gMKCMK",
+    "border_Jr7gyt",
+    "pdp_faq_MEaqTW"
   ]
 }

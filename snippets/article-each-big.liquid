@@ -1,0 +1,60 @@
+<div id="article-big-{{ big_article_count }}" class="article-each-big w-full {{margin_class}}">
+    
+    <div class="flex it-wrap d-flex-row flex-column w-full {{ big_class }}">
+        <div class="col-12 col-d-8 col-max-8 pl-0 pr-0 d-pl-8 d-pr-8 max-pl-12 max-pr-12 image-container relative">
+            
+                <a href="{{article.url}}">
+                {% assign image_id = 'featured-article-image-' | append: big_article_count %}
+                {% if ss.desktop_image != blank %}
+                  {% assign desktop_image = ss.desktop_image %}
+                {% else %}
+                  {% assign desktop_image = article.image %}
+                {% endif %}
+                {% if ss.mobile_image != blank %}
+                  {% assign mobile_image = ss.mobile_image %}
+                {% else %}
+                  {% assign mobile_image = article.image %}
+                {% endif %}
+                {% assign preload = '' %}
+                {% if section.index < 4 %}
+                {% assign preload = true %}
+                {% endif %}
+                {%- render 'global-image-wrapper-responsive',
+                    image_id: image_id,
+                    desktop_image: desktop_image,
+                    mobile_image: mobile_image,
+                    preload: preload
+                %}
+                </a>
+        </div>
+        <div class="col-d-4 col-max-4 text-container flex flex-column jc-center ai-center {% if ss.image_position == "right" and ss.image_position_mobile == "follow-desktop" %} pb-16 {% elsif ss.image_position_mobile == "text-first" %}pb-16 {%else%} pt-16 t-pt-20 pb-8{% endif %} d-pb-0 d-pt-0 d-pl-40 d-pr-40 max-pl-80 max-pr-80 hhd-pl-100 hhd-pr-100">
+          <div class="w-full container d-pl-0 d-pr-0 flex flex-wrap jc-start">
+            {%- if article.tags[0] != blank -%}
+              <a class="flex" href="{{ blog.url }}/tagged/{{ article.tags[0] | handle }}">
+                <span class="p7 mb-4">{{ article.tags[0] | handle }}</span>
+              </a>
+            {%- endif -%}
+          </div>
+            
+          <a class="w-full container d-pl-0 d-pr-0" href="{{article.url}}">
+            {%- if article.title != blank -%}
+                <div class="{{ss.text_align}} w-full">
+                
+                <h3 class="p1 capitalize">
+                    {{- article.title | newline_to_br -}}
+                </h3>
+                
+                </div>
+            {%- endif -%}
+            {% if article.excerpt_or_content != blank %}
+              <div class="{{ss.text_align}} mt-8 d-mt-12">
+                  <div class="tc-desc rte p3">
+                      {% comment %} {{ article.excerpt_or_content | newline_to_br | strip_html | truncatewords: 12, '...' }} {% endcomment %}
+                      {{ article.excerpt_or_content | newline_to_br | strip_html }}
+                  </div>
+              </div>
+            {% endif %}
+          </a>
+        </div>
+    </div>
+</div>

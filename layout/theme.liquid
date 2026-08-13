@@ -1,155 +1,325 @@
 <!doctype html>
-<html
-  {% if request.design_mode %}
-    class="shopify-design-mode"
-  {% endif %}
-  lang="{{ request.locale.iso_code }}"
->
+<!--[if IE 9]> <html class="ie9 no-js" lang="{{ shop.locale }}"> <![endif]-->
+<!--[if (gt IE 9)|!(IE)]><!-->
+  <html class="no-js" lang="{{ shop.locale }}"> <!--<![endif]--> 
   <head>
-    {%- if settings.favicon != blank -%}
+    {%- if template == 'list-collections' or template.suffix == 'set' -%}
+      <meta name="robots" content="noindex, nofollow"> 
+    {%- endif -%}
+    
+    <link rel="preconnect" href="//cdn.shopify.com" />
+    <link rel="dns-prefetch" href="//cdn.shopify.com" />
+    <link rel="preconnect" href="//v.shopify.com" />
+    <link rel="dns-prefetch" href="//v.shopify.com" />
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+        
+    <link rel="canonical" href="{{ canonical_url }}">
+    {%- if settings.favicon != blank %}<link
+        rel="shortcut icon"
+        href="{{ settings.favicon | img_url:'100x' }}"
+        type="image/png">{%- endif -%}
+    {%- capture seo_title -%}
+      {{ page_title }}
+      {%- if current_tags -%}
+        {%- assign meta_tags = current_tags | join: ', ' %} &ndash; {{ 'general.meta.tags' | t: tags: meta_tags -}}
+      {%- endif -%}
+      {%- if current_page != 1 -%}
+        &ndash; {{ 'general.meta.page' | t: page: current_page }}
+      {%- endif -%}
+      {%- unless page_title contains shop.name -%}
+        &ndash; {{ shop.name }}
+      {%- endunless -%}
+    {%- endcapture -%}
+    <title>{{ seo_title }}</title>
+    
+    {%- if page_description -%}
+      <meta name="description" content="{{ page_description | escape }}">
+    {%- endif -%}
+    {%- if settings.typography != blank -%}
+      {{ settings.typography }}
+    {%- endif -%}
+    {{ 'style.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'header.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'footer.css' | asset_url | stylesheet_tag: preload: true }}
+    {{ 'style-custom.css' | asset_url | stylesheet_tag: preload: true }}
+
+    <style>
+      /* swatch color metaobject */
+    {%- paginate shop.metaobjects.shopify--color-pattern.values by 250 -%}
+      {%- for color in shop.metaobjects.shopify--color-pattern.values -%}
+          {%- assign color_label = color.label | handleize -%}
+          {%- assign color_color = color.color -%}
+          {%- assign color_image = color.image -%}
+          .swatch-{{ color_label }} .swatch-inner {
+              {%- unless color_color == blank -%} background-color: {{ color_color }} !important;{%- endunless -%}
+              {%- unless color_image == blank -%}background-image: url({{ color_image | image_url }});background-size:contain;{%- endunless -%}
+          }
+      {%- endfor -%}
+    {%- endpaginate -%}
+    </style>
+
+    {%- if request.page_type == "article" or request.page_type == "blog" -%}
       <link
-        rel="icon"
-        type="image/png"
-        href="{{ settings.favicon | image_url: width: 32, height: 32 }}"
-      >
+        rel="preload"
+        href="{{ 'blog.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- elsif request.page_type contains "customers/" or template == 'page.orders' -%}
+      <link
+        rel="preload"
+        href="{{ 'account.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- elsif request.page_type == "cart" -%}
+      <link
+        rel="preload"
+        href="{{ 'cart.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- elsif request.page_type == "collection" or template.suffix == 'collection' or request.page_type == "search"-%}
+      <link
+        rel="preload"
+        href="{{ 'collection.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- elsif request.page_type == "page" -%}
+      <link
+        rel="preload"
+        href="{{ 'page.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- elsif request.page_type == "product" -%}
+      {% liquid
+        assign image_limit = 2
+        for tag in product.tags
+          if tag contains 'layout'
+            assign the_tag = tag | split: ':'
+            case the_tag[1]
+              when '1 Col'
+                assign image_limit = 1
+              when '2 Col'
+                assign image_limit = 2
+              when '1-2 Col'
+                assign image_limit = 1
+            endcase
+          endif
+        endfor
+      %}
+      {% if product.images.size > 0 %}
+        {% for image in product.images limit: image_limit %}
+          {% if image != blank %}
+            <link
+              rel="preload"
+              href="{{ image | image_url: width: 2000 }}"
+              as="image">
+          {% endif %}
+        {% endfor %}
+      {% endif %}
+
+      <link
+        rel="preload"
+        href="{{ 'product.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- elsif request.page_type == "search" -%}
+      <link
+        rel="preload"
+        href="{{ 'search.css' | asset_url }}"
+        as="style"
+        onload="this.onload=null;this.rel='stylesheet'">
+    {%- endif -%}
+    <!-- Begin Recently Viewed Products -->
+    {%- unless request.design_mode -%}
+      {{ 'product-recently-viewed.js' | asset_url | script_tag }} 
+      {% if template contains 'product' %}
+        <script>
+          document.addEventListener("DOMContentLoaded", function() {
+            Shopify.Products.recordRecentlyViewed();
+          });
+        </script> 
+      {% endif %}
+    {%- endunless -%}
+    <!-- End Recently Viewed Products --> 
+
+    <script>
+      var wishlistObj;
+    </script>
+    
+    <link rel="preload" href="{{ 'vendor.min.js' | asset_url }}" as="script">
+    
+    <!-- 1. Preload GSAP (optional, for performance) -->
+    <link rel="preload" href="{{ 'gsap.min.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'SplitText.min.js' | asset_url }}" as="script">
+    <link rel="preload" href="{{ 'ScrollTrigger.min.js' | asset_url }}" as="script">
+
+    <!-- 2. Actually load and execute GSAP -->
+    <script src="{{ 'gsap.min.js' | asset_url }}" defer></script>
+    <!-- 3. Load SplitText AFTER GSAP -->
+    {% comment %} <script src="{{ 'SplitText.min.js' | asset_url }}" defer></script> {% endcomment %}
+    <!-- 3. Load ScrollTrigger AFTER GSAP -->
+    {% comment %} <script src="{{ 'ScrollTrigger.min.js' | asset_url }}" defer></script> {% endcomment %}
+
+    {{ 'vendor.min.js' | asset_url | script_tag }}
+    {{ 'header.js' | asset_url | script_tag }}
+    {{ 'footer.js' | asset_url | script_tag }}
+    {% comment %} {{ 'script-custom.js' | asset_url | script_tag }}
+    {{ 'custom-dl.js' | asset_url | script_tag }} {% endcomment %}
+    
+    {%- render 'social-meta-tags' -%} 
+    {%- render 'json-ld' -%}
+    {{ content_for_header }}
+    
+    <script>
+      $360Shop = {
+        money_with_currency_format: '{{ shop.money_with_currency_format }}'
+      };
+
+      window.routes = {
+        cart_add_url: '{{ routes.cart_add_url }}',
+        cart_change_url: '{{ routes.cart_change_url }}',
+        cart_update_url: '{{ routes.cart_update_url }}',
+        cart_url: '{{ routes.cart_url }}',
+        predictive_search_url: '{{ routes.predictive_search_url }}',
+      };
+
+      const swipers = {};
+    </script>
+
+    {%- if template == 'index' -%}
+      <script type="application/ld+json">
+          {
+              "@context": "https:\/\/schema.org",
+              "@graph": [
+                  {
+                      "@type": "LocalBusiness",
+                      "name": "{{ shop.name }}",
+                      "url": "{{ shop.url }}",
+                      "openingHoursSpecification": [
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Monday"], "opens": "09:00", "closes": "17:00" },
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Tuesday"], "opens": "09:00", "closes": "17:00" },
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Wednesday"], "opens": "09:00", "closes": "17:00" },
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Thursday"], "opens": "09:00", "closes": "17:00" },
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Friday"], "opens": "09:00", "closes": "17:00" },
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Saturday"], "opens": "09:00", "closes": "17:00" },
+                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Sunday"], "opens": "09:00", "closes": "17:00" }
+                      ]
+                  },
+                  {
+                      "@type": "Organization",
+                      "name": "{{ shop.name }}",
+                      "url": "{{ shop.url }}"
+                  },
+                  {
+                      "@type": "WebPage",
+                      "url": "{{ shop.url }}",
+                      "name": "{{ page_title | escape }}",
+                      "description": "{{ page_description | escape }}",
+                      "inLanguage": "{{ localization.language }}"
+                  },
+                  {
+                      "@type": "WebSite",
+                      "url": "{{ shop.url }}",
+                      "name": "{{ shop.name }}",
+                      "description": "{{ page_description | escape }}",
+                      "inLanguage": "{{ localization.language }}",
+                      "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "{{ shop.url }}/search?q={search_term_string}" }, "query-input": "required name=search_term_string" }
+                  }
+              ]
+          }
+      </script>
     {%- endif -%}
 
-    {% comment %}
-      Opt into cross-document (MPA) view transitions and hold first paint until #MainContent
-      parses, so the transition runs consistently.
-      Both are gated on the same settings as the view-transitions.js opt-out switch (see snippets/scripts.liquid).
-    {% endcomment %}
-    {% if settings.transition_to_main_product or settings.page_transition_enabled %}
-      {% style %}
-        @media (prefers-reduced-motion: no-preference) {
-          @view-transition {
-            navigation: auto;
-          }
+    {% if template contains 'article' %}
+      <script type="application/ld+json">
+        {
+          "@context": "http://schema.org",
+          "@type": "Article",
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "{{ canonical_url }}"
+          },
+          "headline": "{{ article.title }}",
+          "image": [
+            "{{ article.image.src | img_url: '800x' }}"
+          ],
+          "datePublished": "{{ article.published_at | date: "%Y-%m-%dT%H:%M:%SZ" }}",
+          "dateModified": "{{ article.updated_at | date: "%Y-%m-%dT%H:%M:%SZ" }}",
+          "author": {
+            "@type": "Person",
+            "name": "{{ article.author }}"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "{{ shop.name }}",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "{{ shop.logo | img_url: '600x600' }}"
+            }
+          },
+          "description": "{{ article.excerpt }}"
         }
-      {% endstyle %}
-      <link
-        rel="expect"
-        href="#MainContent"
-        blocking="render"
-        id="view-transition-render-blocker"
-      >
-    {% endif %}
-
-    {%- render 'meta-tags' -%}
-    {%- render 'stylesheets' -%}
-    {%- render 'fonts' -%}
-    {%- render 'scripts' -%}
-    {%- render 'theme-styles-variables' -%}
-    {%- render 'color-palette' -%}
-
-    {% if request.design_mode %}
-      {%- render 'theme-editor' -%}
-    {% endif %}
-
-    {{ content_for_header }}
-  </head>
-
-  <body class="page-width-{{ settings.page_width }} card-hover-effect-{{ settings.card_hover_effect }}">
-    {% render 'skip-to-content-link', href: '#MainContent', text: 'accessibility.skip_to_text' %}
-
-    {% render 'chat-drawer' %}
-
-    <div class="page-wrapper">
-      <div id="header-group">
-        {% sections 'header-group' %}
-      </div>
-
-      <script>
-        // Inline header height and menu style calculations to prevent layout shift
-        // Note: Updates in calculateHeaderGroupHeight(), updateTransparentHeaderOffset() and setHeaderMenuStyle() utilities.js should be kept in sync with this function
-        (function setHeaderHeighCustomProperties() {
-          /*
-           * Header calculation functions for maintaining CSS variables
-           * Mimic calculateHeaderGroupHeight() in utilities.js
-           */
-          const header = document.querySelector('header-component');
-          const headerGroup = document.querySelector('#header-group');
-          const hasHeaderSection = headerGroup?.querySelector('.header-section');
-
-          if (!header || !headerGroup) return;
-
-          const headerTopRow = header.querySelector('.header__row--top');
-          const headerHeight = header.offsetHeight;
-
-          // Calculate the total height of the header group
-          let headerGroupHeight = 0;
-          const children = headerGroup.children;
-          for (let i = 0; i < children.length; i++) {
-            const element = children[i];
-            if (element === header || !(element instanceof HTMLElement)) continue;
-            headerGroupHeight += element.offsetHeight;
-          }
-
-          // Check for transparent header special case
-          if (header.hasAttribute('transparent') && header.parentElement?.nextElementSibling) {
-            headerGroupHeight += headerHeight;
-          }
-
-          // Set CSS variables
-          document.body.style.setProperty('--header-height', `${headerHeight}px`);
-          document.body.style.setProperty('--header-group-height', `${headerGroupHeight}px`);
-
-          if (headerTopRow) {
-            window.requestAnimationFrame(function () {
-              document.body.style.setProperty('--top-row-height', `${headerTopRow.offsetHeight}px`);
-            });
-          }
-
-          /**
-           * Updates CSS custom properties for transparent header offset calculation
-           * Mimic updateTransparentHeaderOffset() in utilities.js
-           */
-
-          if (!hasHeaderSection || !header?.hasAttribute('transparent')) {
-            document.body.style.setProperty('--transparent-header-offset-boolean', '0');
-            return;
-          }
-
-          const hasImmediateSection = hasHeaderSection.nextElementSibling?.classList.contains('shopify-section');
-
-          const shouldApplyOffset = !hasImmediateSection ? '1' : '0';
-          document.body.style.setProperty('--transparent-header-offset-boolean', shouldApplyOffset);
-        })();
-
-        (function setHeaderMenuStyle() {
-          const headerComponent = document.querySelector('#header-component');
-          if (headerComponent) {
-            const isTouchDevice = 'ontouchstart' in window && navigator.maxTouchPoints > 0;
-            const overflowList = headerComponent?.querySelector('overflow-list');
-            const hasReachedMinimum = overflowList && overflowList.hasAttribute('minimum-reached');
-            headerComponent.dataset.menuStyle = isTouchDevice || hasReachedMinimum ? 'drawer' : 'menu';
-          }
-        })();
       </script>
-
-      <main
-        id="MainContent"
-        class="content-for-layout"
-        role="main"
-        data-page-transition-enabled="{{ settings.page_transition_enabled }}"
-        data-product-transition="{{ settings.transition_to_main_product }}"
-        data-template="{{ template }}"
-      >
-        {{ content_for_layout }}
-      </main>
-
-      <footer>
-        {% sections 'footer-group' %}
-      </footer>
-    </div>
-
-    {% render 'cart-drawer', render_wrapper: true %}
-    {% render 'theme-drawer' %}
-
-    {% render 'search-modal' %}
-
-    {% if settings.quick_add or settings.mobile_quick_add %}
-      {% render 'quick-add-modal' %}
     {% endif %}
-  </body>
+
+    {%- render 'data_layer' -%}
+</head>
+
+  <body class="bg-background-main">
+    {% section 'typography-header' %}
+    {% section 'typography-body' %}
+    {% section 'colors' %}
+    {% section 'buttons' %}
+    {% section 'links' %}
+    {% section 'size-guide' %}
+    {% section 'selection-popup-subscription' %}
+    
+    <div class="page-loading w-full h-full fixed top-0 left-0 bg-white opacity-7 zi-9">&nbsp;</div>
+    {% comment %} <div class="page-overlay header-cart-overlay" onclick="$360.hideHeaderCart()">&nbsp;</div> {% endcomment %}
+    <div class="page-overlay quick-add-overlay" onclick="$360.hideQuickAdd()">&nbsp;</div>
+    <div id="product-each-theme-liquid"></div>
+    {%- section 'header' -%}
+    
+    {% if canonical_url contains "challenge" %}
+      <section class="global-content-top-margin pt-20 t-pt-30 d-pt-50 pb-20 t-pb-30 d-pb-50">
+        <div class="container">
+          {{ content_for_layout }}
+        </div>
+      </section>
+    {% else %}
+      {{ content_for_layout }}
+    {% endif %}
+
+    <!-- back in stock -->
+    {%- render 'back-in-stock-helper' -%}
+    <!-- end back in stock -->
+    {% render 'marketing-consent-popup' %} 
+    {% section 'marquee-text' %}
+    {% section 'footer' %}
+</body>
+
+{% render 'animation-script' %}
+
+{% comment %} <script>
+    /* sliding headers */
+    document.addEventListener('DOMContentLoaded', () => {
+        const headings = document.querySelectorAll('.h1, .h2, .h3, .h4, .h5, .h6');
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                observer.unobserve(entry.target);   // animate only once
+            }
+            });
+        }, {
+            rootMargin: '0px 0px -100px 0px'      // trigger a little early
+        });
+
+        headings.forEach(h => observer.observe(h));
+    });
+</script> {% endcomment %}
+
 </html>

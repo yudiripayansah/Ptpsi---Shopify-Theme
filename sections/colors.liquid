@@ -1,0 +1,54 @@
+<style>
+{%- for block in section.blocks -%}
+.c-{{ block.settings.title | downcase}}{% if block.settings.default %},body,a{% endif %}{color:{{ block.settings.color }};}
+.h-{{ block.settings.title | downcase}}:hover{color:{{ block.settings.color }};}
+.b-{{ block.settings.title | downcase}}{border-color:{{ block.settings.color }};}
+.f-{{ block.settings.title | downcase}} svg{
+  fill:{{ block.settings.color }};
+}
+.pf-{{ block.settings.title | downcase}} svg path {
+  fill:{{ block.settings.color }};
+}
+.s-{{ block.settings.title | downcase}} svg{
+  stroke:{{ block.settings.color }};
+}
+.ps-{{ block.settings.title | downcase}} svg path {
+  stroke:{{ block.settings.color }};
+}
+.bg-{{ block.settings.title | downcase}}{background-color:{{ block.settings.color }};}
+{%- endfor -%}
+</style>
+{% schema %}
+{
+  "name": "Colours",
+  "settings": [
+
+  ],
+  "blocks" : [
+  {
+    "type": "colour",
+    "name": "Colour",
+    "settings": [
+    {
+      "type": "checkbox",
+      "id": "default",
+      "label": "Default color",
+      "info":"If checked, this color will be used as the default color for all text and anchorlinks."
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Name",
+      "info":"All lowercase. You can then use the following CSS classes. color-<name>, background-<name>,border-<name>,fill-<name>"
+    },
+    {
+      "type":"color",
+      "id":"color",
+      "label":"Colour"
+    }
+    ]
+  }
+  ] 
+}
+
+{% endschema %}

@@ -1,0 +1,501 @@
+{%- comment -%}
+IGC - Bismocii on progress
+
+Description:
+Snippet for displaying product card
+
+Variables:
+- product. Object. the product object  
+- disable_hover. Boolean
+{%- endcomment -%}
+{%- assign variant = product.selected_or_first_available_variant -%}
+{%- assign s = product.images | size -%}
+
+{%- if request.page_type == 'collection' -%}
+	{%- assign selected_type = collection.metafields.custom.default_product_type -%}
+	{%- for var in product.variants -%}
+		{%- if var.option1 == selected_type or var.option2 == selected_type or var.option3 == selected_type -%}
+			{%- assign variant = var -%}
+			{%- break -%}
+		{%- endif -%}
+	{%- endfor -%}
+{%- endif -%}
+
+{%if template == 'index'%}
+	{% assign disable_hover = true %}
+{%endif%}
+
+{% assign length = 16 %}
+{% assign chars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ" %}
+{% assign chars_array = chars | split: '' %}
+
+{% assign random_string = '' %}
+{% for i in (1..length) %}
+  {% assign random_index = "now" | date: "%N" | modulo: chars_array.size %}
+  {% assign random_char = chars_array[random_index] %}
+  {% assign random_string = random_string | append: random_char %}
+  {% assign current_time = "now" | date: "%s%N" %}
+  {% assign new_time = current_time | modulo: 1000 %}
+  {% assign new_time_string = new_time | append: current_time %}
+  {% capture time_shift %}{{ new_time_string }}{% endcapture %}
+{% endfor %}
+
+{% comment %} Random String: {{ random_string }} {% endcomment %}
+{%- assign has_color = false -%}
+{%- assign has_other_than_color = false -%}
+{%- for option in product.options_with_values -%}
+	{%- if option.name == 'Colour' or option.name == 'Color' -%}
+		{%- assign has_color = true -%}
+	{%- else -%}
+		{%- if option.name != 'Title' -%}
+			{%- assign has_other_than_color = true -%}
+		{%- endif -%}
+	{%- endif -%}
+{%- endfor -%}
+{%liquid
+	assign color_from_planter = false
+	assign prod_color = product
+	assign planters = product.metafields.custom.planter.value
+	for p in planters
+		assign color_from_planter = true
+		assign prod_color = p
+		assign has_color = true
+		break
+	endfor
+
+	comment
+		Plant cards only: resolve the active colour once (default_active_colour metafield,
+		validated against available planter colours, else first available), then map the
+		plant's OWN media to colours by alt text ("color: Sand" / "Sand"). Swatches resolve
+		to these plant images - never to a planter variant image.
+	endcomment
+	assign selected_color = ''
+	assign selected_color_image_url = ''
+	assign selected_color_media_id = ''
+	assign initial_card_image_url = ''
+	assign plant_color_keys = ''
+	assign plant_color_urls = ''
+	assign plant_color_ids = ''
+	if color_from_planter
+		assign default_color = product.metafields.custom.default_active_colour | strip | downcase
+		assign first_available_color = ''
+		for opt in prod_color.options_with_values
+			if opt.name == 'Colour' or opt.name == 'Color'
+				for val in opt.values
+					assign val_available = false
+					for var in prod_color.variants
+						if var.available
+							if var.option1 == val or var.option2 == val or var.option3 == val
+								assign val_available = true
+								break
+							endif
+						endif
+					endfor
+					if val_available
+						if first_available_color == ''
+							assign first_available_color = val
+						endif
+						if default_color != ''
+							assign val_norm = val | strip | downcase
+							if val_norm == default_color
+								assign selected_color = val
+							endif
+						endif
+					endif
+				endfor
+				break
+			endif
+		endfor
+		if selected_color == ''
+			assign selected_color = first_available_color
+		endif
+		assign selected_color_norm = selected_color | strip | downcase
+
+		for m in product.media
+			if m.media_type == 'image'
+				assign media_color = m.alt | remove: 'color:' | remove: 'Color:' | strip | downcase
+				if media_color != ''
+					assign key_check = '|' | append: plant_color_keys
+					assign key_lookup = '|' | append: media_color | append: '|'
+					unless key_check contains key_lookup
+						assign media_url = m | image_url: width: 1000
+						assign plant_color_keys = plant_color_keys | append: media_color | append: '|'
+						assign plant_color_urls = plant_color_urls | append: media_url | append: '|'
+						assign plant_color_ids = plant_color_ids | append: m.id | append: '|'
+						if media_color == selected_color_norm and selected_color_media_id == ''
+							assign selected_color_media = m
+							assign selected_color_image_url = media_url
+							assign selected_color_media_id = m.id | append: ''
+						endif
+					endunless
+				endif
+			endif
+		endfor
+		assign plant_color_keys = plant_color_keys | remove_last: '|'
+		assign plant_color_urls = plant_color_urls | remove_last: '|'
+		assign plant_color_ids = plant_color_ids | remove_last: '|'
+		assign plant_color_keys_arr = plant_color_keys | split: '|'
+		assign plant_color_urls_arr = plant_color_urls | split: '|'
+		assign plant_color_ids_arr = plant_color_ids | split: '|'
+
+		if selected_color_image_url != ''
+			assign initial_card_image_url = selected_color_image_url
+		elsif product.featured_media
+			assign initial_card_image_url = product.featured_media | image_url: width: 1000
+		endif
+	endif
+%}
+
+<div id="product-card{{ random_string }}" data-string="{{ random_string }}" data-hascolor="{{ has_color }}"{% if color_from_planter %} onmouseenter='$360.productEachPrefetchSwatches(event)' data-committed-image="{{ initial_card_image_url }}"{% endif %} class="product-each {% if fade %}fade{% endif %} {% if s > 1 and true %}with-hover{% endif %} overflow relative">
+	<div class="join-waitlist-universal BIS_trigger" data-product-data="{{ product | json | escape }}"></div>
+	<div class="variant-selected-container" data-variant="{{ variant.id }}" data-option1="" data-option2="" data-option3=""></div>
+
+	<div class="variant-data-container">
+		{% for v in product.variants %}
+			<div class="variant-data-each {% if v.available %}available{% endif %}" data-id="{{v.id}}" data-option1="{{v.option1}}" data-option2="{{v.option2}}" data-option3="{{v.option3}}" data-url="{{ v.url }}"></div>
+		{% endfor %}
+	</div>
+
+	<div class="relative">
+		<a href="{{ product.url }}" class="image-link color-url">
+			<div class="primary">
+				{%- assign image = product.featured_image -%}
+				{%- if variant.featured_image != blank -%}
+					{%- assign image = variant.featured_image -%}
+				{%- endif -%}
+				{% assign image = product.featured_media %}
+				{% comment %} Plants open on the resolved active colour's own image; every other product keeps featured media. {% endcomment %}
+				{%- if color_from_planter and selected_color_media_id != '' -%}
+					{%- assign image = selected_color_media -%}
+				{%- endif -%}
+				{% if image != blank %}
+				{%- render 'global-image-wrapper', image:image, preload: preload_image -%}
+				{% endif %}
+			</div>
+			{%- if s > 1  and true -%}
+				{% assign video_url = blank %}
+				{% for m in product.media %}
+					{% if m.media_type == 'video' %}
+						{% for vid_source in m.sources %}
+							{%- if vid_source.mime_type == 'video/mp4' -%}
+								{%- assign video_url = vid_source.url -%}
+								{% break %}
+							{%- endif -%}
+						{% endfor %}
+						{% break %}
+					{% endif %}
+					{% comment %} <!--{{ m | json }}--> {% endcomment %}
+				{% endfor %}
+				{% if video_url != blank %}
+					<div class="secondary">
+						{%assign id = "product-each-video-" | append: section.id | append: product.id %}
+						{%- render
+							'global-video-wrapper-responsive',
+							desktop_image: image,
+							mobile_image: image,
+							desktop_video_url: video_url,
+							mobile_video_url: video_url,
+							video_id: id,
+							autoplay: true,
+							loop :true,
+							load_inside_vue: false,
+							muted : true
+						-%}
+					</div>
+				{% else %}
+					{%- assign l = product.images[1] -%}
+					<div class="secondary">
+						{% if l != blank %}
+						{%- render 'global-image-wrapper', image: l, preload: preload_image -%}
+						{% endif %}
+					</div>
+				{% endif %}
+			{%- endif -%}
+		</a>
+
+		{% comment %} {%- if settings.pg_enable_labels and settings.pg_tag_1 != blank -%}
+			<div class="pro-tags-container font-0 z-1">
+				{%- for i in (1..10) -%}
+					{%- assign tag = "pg_tag_" | append: i -%}
+					{%- assign bg_color = "pg_tag_bg_" | append: i -%}
+					{%- assign text_color = "pg_tag_color_" | append: i -%}
+
+					{%- if product.tags contains settings[tag] -%}
+						{%- assign tag_text = settings[tag] | split: ':' | last -%}
+						<div class="tag-each p8 uppercase" style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}">{{ tag_text }}</div>
+					{%- endif -%}
+				{%- endfor -%}
+			</div>
+		{%- endif -%} {% endcomment %}
+
+	</div>
+    <div class="details-con relative mt-8">
+		<div class="d-flex d-jc-between">
+			{% comment %} <!--original-container for switch to hovered-container when hover--> {% endcomment %}
+			<div style="flex:1;" class="{% if has_color %}d-pr-24{% endif %}">
+				<div class="flex">
+					<a href="{{ product.url }}" class="p2 c-green title-container color-url" title="{{ product.title | escape }}" style="display: -webkit-box;">
+						{% comment %} {{ product.title }} {% endcomment %}
+						{% assign title_parts = product.title | split: '-' %}
+						{% if title_parts.size > 1 %}
+							{% assign clean_title = title_parts[0] %}
+							{{ clean_title }}
+						{% else %}
+							{{ product.title }}
+						{% endif %}
+						{% unless product.available %}
+								<sup class="p5 c-label pl-2" style="white-space:nowrap;">Sold Out</sup>
+							{% else %}
+								{% assign tags = product.tags | join: ',' | downcase %}
+								{% if tags contains 'new' %}
+									<sup class="p5 c-label pl-2" style="white-space:nowrap;">New</sup>
+								{% endif %}
+						{% endunless %}
+					</a>
+				</div>
+				<div class="price-container tl global-flex flex-wrap ai-center jc-between pt-2">
+					<div class="font-0 c-green">
+						{%- if product.price_varies -%}
+							<span class="p2">{{ 'products.product.from' | t }}&nbsp;</span>
+						{%- endif -%}
+						<span class="p2">S{{ product.price_min | money }}</span>
+
+						{% comment %} {%- if product.price_min < product.compare_at_price_min -%}
+							<span class="p4 c-grey ml-5"><strike>{{ product.compare_at_price_min | money_with_currency }}</strike></span>
+						{%- endif -%} {% endcomment %}
+					</div> 
+				</div>
+			</div>
+			{% unless hide_color_option %}
+				{%- if has_color -%}
+					<div class="color-variant-picker mt-8 d-mt-0">
+						{%- for option in prod_color.options_with_values -%}
+							{% assign index_option = forloop.index %}
+							{%- if option.name == 'Colour' or option.name == 'Color' -%}
+								<div class="swatch-wrapper global-flex flex-wrap ai-center colgap-4">
+									{%- assign current_option = 'option' | append: index -%}
+									{%- assign featured_image = '' -%}
+									
+									{%- assign default_type = '' -%}
+									{%- if request.page_type == 'collection' -%}
+										{%- assign default_type = collection.metafields.custom.default_product_type -%}
+									{%- endif -%}
+									
+									{% comment %} Plant cards: hoist the resolved active colour to the front so it is always one of the 3 rendered swatches. {% endcomment %}
+									{% assign swatch_values = option.values %}
+									{% if color_from_planter and selected_color != '' %}
+										{% assign ordered_values = selected_color %}
+										{% for val in option.values %}
+											{% unless val == selected_color %}
+												{% assign ordered_values = ordered_values | append: '|' | append: val %}
+											{% endunless %}
+										{% endfor %}
+										{% assign swatch_values = ordered_values | split: '|' %}
+									{% endif %}
+
+									{% assign total_color = 0 %}
+									{%- for option in swatch_values -%}
+										{%- assign custom_color = '' -%}
+										{%- assign color_is_available = false -%}
+
+										{%- for var in prod_color.variants -%}
+											{%- if var.option1 == option or var.option2 == option or var.option3 == option -%}
+												{% if var.available %}
+													{% assign color_is_available = true %}
+												{% endif %}
+
+												{%- unless color_from_planter -%}
+													{% comment %} Plant cards never take the planter variant's image - their swatch images come from the plant's own media map. {% endcomment %}
+													{%- if default_type == 'Single' or default_type == 'Pair' -%}
+														{%- if var.option1 == default_type or var.option2 == default_type or var.option3 == default_type -%}
+															{%- assign featured_image = var.featured_image | image_url: width: 1000 -%}
+														{%- endif -%}
+													{%- else -%}
+														{%- assign featured_image = var.featured_image | image_url: width: 1000 -%}
+														{%- assign image_id = var.image.id -%}
+													{%- endif -%}
+												{%- endunless -%}
+												{% if color_from_planter %}
+													{%assign color_url = product.url %}
+												{% else %}
+												{%assign color_url = var.url %}
+												{% endif %}
+												{%- if var.metafields.swatch.image != blank -%}
+													{%- assign image_url = var.metafields.swatch.image | image_url: width: 50 -%}
+													{%- assign custom_color = 'style="background-image:url(' | append: image_url |  append: ');background-size:contain;"' -%}
+												{%- else -%}
+													{%- if var.metafields.swatch.hex != blank -%}
+														{%- assign custom_color = 'style="background-color:' | append: var.metafields.swatch.hex |  append: '" !important' -%}
+													{%- endif -%}
+												{%- endif -%}
+											{%- endif -%}
+										{%- endfor -%}
+
+										{% if color_is_available %}
+											{% assign total_color = total_color | plus: 1 %}
+											{% if color_from_planter %}
+												{%- assign plant_image_url = '' -%}
+												{%- assign plant_media_id = '' -%}
+												{%- assign swatch_norm = option | strip | downcase -%}
+												{%- for key in plant_color_keys_arr -%}
+													{%- if key == swatch_norm -%}
+														{%- assign plant_image_url = plant_color_urls_arr[forloop.index0] -%}
+														{%- assign plant_media_id = plant_color_ids_arr[forloop.index0] -%}
+														{%- break -%}
+													{%- endif -%}
+												{%- endfor -%}
+												{% comment %} Empty data-color-image means "no matching plant image" - JS leaves the card image alone. {% endcomment %}
+												<div onclick='$360.productEachColorPicker(event)' onmouseenter='$360.productEachColorPreview(event)' onmouseleave='$360.productEachColorRestore(event)' class="swatch color-option variant-each-button p-4 swatch-{{ option | handleize }} {% if option == selected_color %} active {% endif %}" data-color-image="{{ plant_image_url }}" data-image-id="{{ plant_media_id }}" data-index="{{ index_option }}" data-value="{{ option }}" data-url="{{ color_url }}">
+													<span class="swatch-inner" {{ custom_color }}></span>
+												</div>
+											{% else %}
+												<div onclick='$360.productEachColorPicker(event,"{{ featured_image }}")' class="swatch color-option variant-each-button p-4 swatch-{{ option | handleize }} {% if total_color == 1 %} active {% endif %} {% unless color_is_available %}disabled{% endunless %}" data-image-id="{{ image_id }}" data-index="{{ index_option }}"  data-value="{{ option }}" data-url="{{ color_url }}">
+													<span class="swatch-inner" {{ custom_color }}></span>
+												</div>
+											{% endif %}
+										{% endif %}
+
+										{% if total_color == 3 %}
+											{% break %}
+										{% endif %}
+									{%- endfor -%}
+									{% if option.values.size > 3 %}
+										{% assign remaining_size = option.values.size | minus: 3 %}
+										<div class="p4 c-green">+{{ remaining_size }}</div>
+									{% endif %}
+
+									{% comment %} this is for showing selected color {% endcomment %}
+									{% comment %} <div class="swatch-label show-m-inline-block variant-each-label p4 mt-8 width-100">{{ option.values[0] }}</div> {% endcomment %}
+								</div>
+							{%- endif -%}
+						{%- endfor -%}
+					</div>
+				{%- endif -%}
+			{% endunless %}
+		</div>
+    </div>
+	{% unless hide_info_label %}
+		{%- if settings.pg_enable_labels -%}
+			<div class="mt-12 labels-con flex">
+				{% assign first = true %}
+				{%- for i in (1..10) -%}
+					{%- assign tag = "pg_tag_" | append: i -%}
+					{%- assign bg_color = "pg_tag_bg_" | append: i -%}
+					{%- assign text_color = "pg_tag_color_" | append: i -%}
+
+					{%- if product.tags contains settings[tag] -%}
+						{%- assign tag_text = settings[tag] | split: ':' | last -%}
+						{% unless first %} <div class="p4 c-label">&nbsp;-&nbsp;</div> {% endunless %}
+						<div class="p4" style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}">{{ tag_text }}</div>
+						{% assign first = false %}
+					{%- endif -%}
+				{%- endfor -%}
+				<div class="p4 c-label">{{ product.metafields.custom.small_label }}</div>
+			</div>
+		{%- endif -%}
+	{% endunless %}
+</div>
+
+{% comment %} {%- assign function_name = random_string | replace: '-', '_' -%}
+{%- assign prefix = random_string | replace: '-', '_' | append: '_prefix' -%}
+<script>
+var {{ prefix }}Init= false;
+var {{ prefix }}Slider = Swiper;
+function sliderInit{{ function_name }}() {
+    //const random_string = '#{{ random_string }}';
+	//console.log("INIT??");
+    if(!{{ prefix }}Init) {
+        {{ prefix }}Init = true;
+		//swipers["{{ prefix }}Slider"] = new Swiper('#slider-{{ random_string }}', {
+		{{ prefix }}Slider = new Swiper('#slider-{{ random_string }}', {
+            {%if section.settings.enable_autoslide%}
+            autoplay: {
+                delay: {{section.settings.delay_autoslide}}
+            },
+            {%endif%}
+            slidesPerView: 1,
+            loop: false,
+            a11y: false,
+			observer: true,  
+       		observeParents: true,
+            navigation: {
+                nextEl: '#product-card{{ random_string }} .swiper-slider-arrow.right',
+                prevEl: '#product-card{{ random_string }} .swiper-slider-arrow.left'
+            },
+			scrollbar: {
+                el: '#product-card{{ random_string }} .swiper-scrollbar',
+				draggable: true,
+            }
+        });
+
+		{% if has_color %}
+		let have_alt = false;
+		let have_var_image = false;
+		document.querySelectorAll(`#product-card{{ random_string }} .swiper-slide`).forEach(function(elem){
+			elem.classList.remove('hide-m');
+			let active_color = document.querySelector(`#product-card{{ random_string }} .swatch.active`).getAttribute('data-value');
+			let this_color = elem.getAttribute('data-alt');
+			let active_image_id = document.querySelector(`#product-card{{ random_string }} .swatch.active`).getAttribute('data-image-id');
+			let this_image_id = elem.getAttribute('data-id');
+			
+			if(this_color == active_color){
+				have_alt = true;
+			}else if(active_image_id == this_image_id){
+				have_var_image = true;
+			}
+		});
+
+		if(have_alt){
+			document.querySelectorAll(`#product-card{{ random_string }} .swiper-slide`).forEach(function(elem){
+				let active_color = document.querySelector(`#product-card{{ random_string }} .swatch.active`).getAttribute('data-value');
+				let this_color = elem.getAttribute('data-alt');
+				
+				if(this_color == active_color){
+				}else{
+					if(elem.classList.contains('is-featured')){
+                        elem.classList.remove('is-featured');    
+                    }else{
+                        elem.classList.add('hide-m');
+                    }
+				}
+			});
+			{{ prefix }}Slider.update();
+		}else if(have_var_image){
+			document.querySelectorAll(`#product-card{{ random_string }} .swiper-slide`).forEach(function(elem){
+				let active_image_id = document.querySelector(`#product-card{{ random_string }} .swatch.active`).getAttribute('data-image-id');
+				let this_image_id = elem.getAttribute('data-id');
+				
+				if(active_image_id == this_image_id){
+				}else{
+					if(elem.classList.contains('is-featured')){
+                        elem.classList.remove('is-featured');    
+                    }else{
+                        elem.classList.add('hide-m');
+                    }
+				}
+			});	
+			{{ prefix }}Slider.update();
+		}
+		{% endif %}
+		
+		/* count images */
+        let total_var_images = document.querySelectorAll(`#product-card{{ random_string }} .swiper-slide.inside-card:not(.hide-m)`).length;
+        const slider_elem = document.querySelector(`#product-card{{ random_string }} .swiper-inside-card`);
+        if(slider_elem != null) {
+            slider_elem.setAttribute('data-image-count',total_var_images);
+        }
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	sliderInit{{ function_name }}();
+});
+{% comment %} var {{ prefix }}Delay = Math.floor(Math.random() * (5000 - 2000 + 1)) + 2000;
+
+setTimeout(function() {
+	sliderInit{{ function_name }}();
+}, {{ prefix }}Delay); {% endcomment %}
+
+document.addEventListener('shopify:section:load', () => { {{ prefix }}Init= false;sliderInit{{ function_name }}() });
+
+</script> {% endcomment %}

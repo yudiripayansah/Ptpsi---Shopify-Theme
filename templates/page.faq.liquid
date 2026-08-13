@@ -1,0 +1,86 @@
+<style>
+  .page-faq .shopify-section {
+    background-color: #fff9f2;
+  }
+  .page-faq-left {
+    position: relative;
+    z-index: 99;
+    transition: 0.3s ease all;
+    z-index: 100;
+  }
+  .page-faq-left {
+    position: sticky;
+  }
+  .page-faq #shopify-section-page-title {
+    z-index: 100;
+  }
+  .page-faq .faq-overlay {
+    z-index: 99;
+  }
+  .page-faq.faq-navigation-contact-link {
+    white-space: nowrap;
+  }
+  .page-faq .faq-navigation-contact-link svg {
+    width: 16px;
+    height: 16px;
+  }
+  .mw-100 {
+    max-width: 100%;
+  }
+  @media screen and (min-width: 1024px) {
+    .page-faq-left {
+      margin-top: -80px;
+    }
+    .page-faq-left.col-faq-modif {
+      min-width: 236px;
+      width: calc(16.6666666667% + 24px);
+      padding-right: 0;
+    }
+    .page-faq-right.push-d-2-faq-modif {
+      left: calc(16.6666666667% - 24px);
+    }
+  }
+</style>
+<div class="page-faq global-content-top-margin bg-background-main">
+  {% comment %} {% section 'page-title' %} {% endcomment %}
+  <div class="row mw-100">
+    <div class="col-12 col-d-11 push-d-1 pt-40 d-pt-80 pb-48 d-pb-80">
+      <div class="container d-pl-0 d-pr-0">
+        <h1 class="h2">Frequently Asked Questions</h1>
+        <div class="hide-d show-m-flex flex-wrap pt-16">
+          <p class="p2 mr-8">Need more help?</p>
+          <a class="p2 underline flex ai-center faq-navigation-contact-link" href="#" rel="nofollow">
+            <span class="mr-4">Contact Us</span>
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M5.36071 4.64051L11.4478 4.64043M11.4478 4.64043L11.4478 10.641M11.4478 4.64043L4.37678 11.7115" stroke="#19341E" stroke-width="0.8" stroke-linecap="square"/>
+            </svg>
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="container">
+    <div class="page-faq-wrap flex d-jc-between d-ai-start flex-wrap">
+      <div class="row d-w-full">
+        <div class="page-faq-left col-faq-modif col-d-2 push-d-1 col-12 d-pt-0 d-pb-80">
+          {% section 'faq-navigation' %}
+        </div>
+        <div class="page-faq-right col-12 col-d-7 push-d-2-faq-modif b-border d-pb-80 pb-40">
+          {% section 'faq-content-1' %}
+          {% section 'faq-content-2' %}
+          {% section 'faq-content-3' %}
+          {% section 'faq-content-4' %}
+          {% section 'faq-content-5' %}
+          {% section 'faq-content-6' %}
+          {% section 'faq-content-7' %}
+          {% section 'faq-content-8' %}
+          {% section 'faq-content-9' %}
+        </div>
+        {% comment %} <Teleport to="body">
+          <div class="page-overlay faq-overlay"></div>
+        </Teleport> {% endcomment %}
+      </div>
+    </div>
+  </div>
+  {% section 'split-showcase' %}
+</div>

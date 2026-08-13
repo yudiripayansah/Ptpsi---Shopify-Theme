@@ -1,0 +1,162 @@
+{%- comment -%}
+  sansandsans
+{%- endcomment -%}
+{%- assign variant = product.selected_or_first_available_variant -%}
+{%- assign s = product.images | size -%}
+
+{% assign length = 16 %}
+{% assign chars = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ' %}
+{% assign chars_array = chars | split: '' %}
+
+{% assign random_string = '' %}
+{% for i in (1..length) %}
+  {% assign random_index = 'now' | date: '%N' | modulo: chars_array.size %}
+  {% assign random_char = chars_array[random_index] %}
+  {% assign random_string = random_string | append: random_char %}
+  {% assign current_time = 'now' | date: '%s%N' %}
+  {% assign new_time = current_time | modulo: 1000 %}
+  {% assign new_time_string = new_time | append: current_time %}
+  {% capture time_shift %}{{ new_time_string }}{% endcapture %}
+{% endfor %}
+
+<div
+  id="product-card{{ random_string }}"
+  data-string="{{ random_string }}"
+  class="product-each wishlist {% if fade %}fade{% endif %} {% if s > 1 and settings.product_card_image_hover %}with-hover{% endif %} overflow relative"
+>
+  <div class="join-waitlist-universal BIS_trigger" data-product-data="{{ product | json | escape }}"></div>
+
+  <div class="relative">
+    <a href="{{ product.url }}" class="image-link">
+      <div id="slider-{{ random_string }}" class="swiper" data-string="{{ random_string }}">
+        <div class="swiper-wrapper inside-card">
+          {%- for image in product.images -%}
+            {% comment %} width 100% to counter init swiper delay {% endcomment %}
+            <div
+              class="swiper-slide inside-card"
+              data-alt="{{ image.alt | remove: 'color:' }}"
+              data-id="{{ image.id }}"
+            >
+              {%- render 'global-image-wrapper', image: image -%}
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="swiper-scrollbar swiper-scrollbar-horizontal"></div>
+        <div class="swiper-slider-arrow left hide-m d-flex ai-center jc-center">{{ settings.icon_slide_left_2 }}</div>
+        <div class="swiper-slider-arrow right hide-m d-flex ai-center jc-center">{{ settings.icon_slide_right_2 }}</div>
+      </div>
+    </a>
+    {%- comment -%} wishlist button {%- endcomment -%}
+    <a
+      href="javascript:void(0)"
+      class="wishlist-handler-p-each swym-button swym-added swym-add-to-wishlist-view-product product_{{product.id}}"
+      data-with-epi="true"
+      data-swaction="addToWishlist"
+      data-product-id="{{product.id | json}}"
+      data-variant-id="{{variant.id}}"
+      data-product-url="{{ shop.url }}{{ product.url }}"
+      data-product-name="{{ product.title }}"
+      data-product-price="{{ product.variants[0].price | money_without_currency }}"
+      data-product-vendor="{{ product.vendor }}"
+      data-product-category="{{ product.collections[0].title }}"
+      data-product-category-2="{{ product.collections[1].title }}"
+      data-product-variant="{{ variant.title }}"
+      data-product-variant-id="{{ variant.id }}"
+    >
+      {{ settings.icon_wishlist }}
+    </a>
+
+    {%- comment -%} product tags {%- endcomment -%}
+    <!-- {{ settings.pg_tag_1 }} -->
+  </div>
+  <div class="details-con relative p-12">
+    <div class="d-flex d-jc-between">
+      {% comment %} <!--original-container for switch to hovered-container when hover--> {% endcomment %}
+      <div style="flex:1;">
+        <a
+          href="{{ product.url }}"
+          class="p4 uppercase title-container"
+          title="{{ product.title | escape }}"
+          style="display: -webkit-box;"
+        >
+          {{- product.title -}}
+        </a>
+        <div class="variants-wrapper relative w-full">
+          {%- for var in product.variants -%}
+            {%- assign show_variant = false -%}
+            {% if var.id == variant.id %}
+              {%- assign show_variant = true -%}
+            {% endif %}
+            {{  }}
+            <div data-variant-id-var="{{ var.id }}" class="relative w-full hide-m">
+              <p class="p3 c-grey">
+                {%- if product.metafields.info.color_name != blank -%}
+                  {{ product.metafields.info.color_name }}
+                {%- endif -%}
+
+                {%- unless var.title contains 'Default Title' -%}
+                  {{ var.title }}
+                {%- endunless -%}
+              </p>
+            </div>
+          {%- endfor -%}
+        </div>
+        <div class="price-container tl global-flex flex-wrap d-ai-center d-jc-between flex-column d-flex-row">
+          <div>
+            {% if product.price < product.compare_at_price %}
+              <span class="p4">{{ product.price | money_with_currency }}</span>
+            {% else %}
+              <span class="p4">{{ product.price | money_with_currency }}</span>
+            {% endif %}
+            {%- if product.price < product.compare_at_price -%}
+              <span class="p4 c-grey ml-4"
+                ><strike>{{ product.compare_at_price | money_with_currency }}</strike></span
+              >
+            {%- endif -%}
+          </div>
+          <div class="price-container-link">
+            <a href="#" rel="nofollow" class="add-to-cart mt-4 d-mt-0 link1">{{ 'products.product.add_to_bag' | t }}</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{%- assign function_name = random_string | replace: '-', '_' -%}
+{%- assign prefix = random_string | replace: '-', '_' | append: '_prefix' -%}
+<script>
+var {{ prefix }}Init= false;
+var {{ prefix }}Slider = Swiper;
+function sliderInit{{ function_name }}() {
+    if(!{{ prefix }}Init) {
+        {{ prefix }}Init = true;
+		{{ prefix }}Slider = new Swiper('#slider-{{ random_string }}', {
+            {%if section.settings.enable_autoslide%}
+            autoplay: {
+                delay: {{section.settings.delay_autoslide}}
+            },
+            {%endif%}
+            slidesPerView: 1,
+            loop: false,
+            a11y: false,
+			observer: true,  
+       		observeParents: true,
+            navigation: {
+                nextEl: '#product-card{{ random_string }} .swiper-slider-arrow.right',
+                prevEl: '#product-card{{ random_string }} .swiper-slider-arrow.left'
+            },
+			scrollbar: {
+                el: '#product-card{{ random_string }} .swiper-scrollbar',
+				draggable: true,
+            }
+        });
+    }
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+	sliderInit{{ function_name }}();
+});
+
+document.addEventListener('shopify:section:load', () => { {{ prefix }}Init= false;sliderInit{{ function_name }}() });
+</script>

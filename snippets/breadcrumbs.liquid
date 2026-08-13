@@ -1,0 +1,254 @@
+{% comment %} Love&Co Theme {% endcomment %}
+{%- comment -%}
+  Description:
+  Snippet for displaying breadcrumbs
+
+  Variables:
+  first_text: String, first breadcrumb text.
+  first_url: String, first breadcrumb url.
+  bg_color: String, the wrapper background color
+{%- endcomment -%}
+
+<style>
+    .breadcrumb .bc-item {
+      line-height: 1;
+    }
+    .breadcrumb .bc-item.text {
+      white-space: nowrap;
+    }
+    .breadcrumb .bc-item.text.last {
+      display: flex;
+      white-space: nowrap;
+      /*overflow: hidden; */
+      -o-text-overflow: ellipsis;
+      text-overflow: ellipsis;
+    }
+    .breadcrumb .bc-item.separator {
+      width: 5px;
+      height: 5px;
+    }
+    .breadcrumb .icon,
+    .breadcrumb .icon svg {
+      display: inline-block;
+      width: 5px;
+      height: 9px;
+    }
+    .breadcrumb .icon {
+      font-size: 0;
+      margin-right: 8px;
+    }
+    .breadcrumb .bc-item a,
+    .breadcrumb .bc-item {
+        /* color: var(--grey); */
+    }
+    .breadcrumb .bc-item.last a,
+    .breadcrumb .bc-item.last {
+        /* color: var(--black); */
+    }
+  </style>
+  <div class="breadcrumb-wrapper pt-16 pb-16 d-pt-20 d-pb-20">
+    {%- if blocks.size > 0 -%}
+      <nav class="breadcrumb flex ai-center jc-start {{ text_align }}" role="navigation" aria-label="breadcrumbs">
+        {%- for block in blocks -%}
+          {%- if forloop.index > 1 -%}
+            <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true">
+              —
+            </span>
+          {%- endif -%}
+          <span class="bc-item text mr-8 flex jc-center ai-center">
+            {% if block.settings.text != blank %}
+              <a
+                href="{{ block.settings.url }}"
+                title="{{ block.settings.text | escape }}"
+                class="{{ class_color }} p4 c-label {% if forloop.last %}last{% endif %}"
+              >
+                {{- block.settings.text -}}
+              </a>
+            {% endif %}
+          </span>
+        {%- endfor -%}
+      </nav>
+    {%- else -%}
+      {% if first_text == blank %}
+        {% assign first_text = 'general.breadcrumbs.home' | t %}
+      {% endif %}
+      {% if first_url == blank %}
+        {% assign first_url = routes.root_url %}
+      {% endif %}
+      <!-- template -->
+      <!-- {{ template }} -->
+      <nav class="breadcrumb flex ai-center jc-start" role="navigation" aria-label="breadcrumbs">
+        {%- unless template contains 'product' -%}
+          {% if template contains 'collection' %}
+            {% if collection.metafields.custom.breadcrumb_level_1_title == blank %}
+              <span class="bc-item text mr-8 flex jc-center ai-center">
+                {% assign link_title = 'Home' %}
+                <a href="{{ first_url }}" title="{{ link_title | escape }}" class="p4 c-label">{{ first_text }}</a>
+              </span>
+            {% endif %}
+          {% else %}
+            <span class="bc-item text mr-8 flex jc-center ai-center">
+              <a href="{{ first_url }}" title="{{ link_title | escape }}" class="p4 c-label">{{ first_text }}</a>
+            </span>
+          {% endif %}
+        {%- endunless -%}
+  
+        {%- if template contains 'page' -%}
+          <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true">
+            —
+          </span>
+          <span class="bc-item text last {{ class_color }} p4 c-label">
+            {{ page.title }}
+          </span>
+        {%- elsif template contains 'product' -%}
+          {%liquid 
+            assign breadcrumbs = ''
+            assign counter = 0
+            for i in (1..1)
+                unless counter == 0
+                  assign breadcrumbs = breadcrumbs | append: ','
+                endunless
+              if forloop.first
+                if product.collections[0] != blank
+                  assign breadcrumbs = breadcrumbs | append: i | append: '|' | append: product.collections[0].title | append: '|' | append: product.collections[0].url
+                else
+                  assign sticky_title = 'collections.general.all' | t
+                  assign breadcrumbs = breadcrumbs | append: i | append: '|' | append: sticky_title | append: '|' | append: routes.root_url | append: 'collections/all'
+                endif
+          
+                assign counter = counter | plus: 1
+              else
+                if product.collections[0] != blank
+                  assign breadcrumbs = breadcrumbs | append: i | append: '|' | append: product.collections[0].title | append: '|' | append: product.collections[0].url
+                endif
+                assign counter = counter | plus: 1
+              endif
+            endfor
+            if breadcrumbs != blank 
+              assign breadcrumbs = breadcrumbs | split: ',' | sort
+            endif
+          %}
+          {% if breadcrumbs != blank %}
+            <div class="flex ai-center">
+              {% if product.metafields.custom.breadcrumb_level_1_title != blank %}
+                {% for i in (1..5) %}
+                  {%- assign custom_title = 'breadcrumb_level_' | append: i | append: '_title' -%}
+                  {%- assign custom_url = 'breadcrumb_level_' | append: i | append: '_url' -%}
+                  <div class="flex ai-center sb-item">
+                    {% if product.metafields.custom[custom_title] != blank %}
+                      {% unless forloop.first %}
+                        <span class="bc-item separator flex jc-center ai-center {{ class_color }} ml-8 mr-8 p4 c-label" aria-hidden="true">
+                          —
+                        </span>
+                      {% endunless %}
+                      {%- assign index_last = i | plus: 1 -%}
+                      {%- assign last_decide = 'breadcrumb_level_' | append: index_last | append: '_title' -%}
+                      {% if product.metafields.custom[custom_url] != blank %}
+                        <a href="{{ product.metafields.custom[custom_url] }}" class="bc-item p4 c-label{% if product.metafields.custom[last_decide] == blank or forloop.last %} last{% endif %}">
+                      {% else %}
+                        <div class="bc-item p4 c-label{% if product.metafields.custom[last_decide] == blank or forloop.last %} last{% endif %}">
+                      {% endif %}
+                      {{ product.metafields.custom[custom_title] }}
+                      {% if product.metafields.custom[custom_url] != blank %}
+                        </a>
+                      {% else %}
+                        </div>
+                      {% endif %}
+                    {% endif %}
+                  </div>
+                {% endfor %}
+              {% else %}
+                {% for breadcrumb in breadcrumbs %}
+                  {% assign b = breadcrumb | split: '|' %}
+                  <div class="flex ai-center sb-item">
+                    <a href="{{b[2]}}" class="bc-item p4 c-label">{{b[1]}}</a>
+                    {% unless forloop.last == true %}
+                      <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true">
+                        —
+                      </span>
+                    {% endunless %}
+                  </div>
+                {% endfor %}
+              {% endif %}
+            </div>
+          {% endif %}
+        {%- elsif template contains 'collection' and collection.handle -%}
+          <!-- collection and handle -->
+          {% if collection.metafields.custom.breadcrumb_level_1_title != blank %}
+            {% for i in (1..5) %}
+              {%- assign custom_title = 'breadcrumb_level_' | append: i | append: '_title' -%}
+              {%- assign custom_url = 'breadcrumb_level_' | append: i | append: '_url' -%}
+              {% if collection.metafields.custom[custom_title] != blank %}
+                {% unless forloop.first %}
+                  <span class="bc-item separator flex jc-center ai-center mr-8 p4 c-label" aria-hidden="true">
+                    —
+                  </span>
+                {% endunless %}
+                {% if collection.metafields.custom[custom_url] != blank %}
+                  <a href="{{ collection.metafields.custom[custom_url] }}" class="bc-item text last {{ class_color }} p4 c-label mr-8">
+                {% else %}
+                  <div class="bc-item text last {{ class_color }} p4 c-label mr-8">
+                {% endif %}
+                {{ collection.metafields.custom[custom_title] }}
+                {% if collection.metafields.custom[custom_url] != blank %}
+                  </a>
+                {% else %}
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            <span class="bc-item separator flex jc-center ai-center mr-8 p4 c-label" aria-hidden="true">
+              —
+            </span>
+            {%- if current_tags -%}
+              {%- capture url -%}/collections/{{ collection.handle }}{%- endcapture -%}
+              {{ collection.title | link_to: url }}
+              <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true">
+                —
+              </span>
+              <span class="bc-item text {{ class_color }} p4 c-label mr-8">
+                {{ current_tags | join: ' + ' }}
+              </span>
+            {%- else -%}
+              <span class="bc-item text last {{ class_color }} p4 c-label">
+                {{ collection.title }}
+              </span>
+            {%- endif -%}
+          {%- endif -%}
+        {%- elsif template == 'blog' -%}
+          <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true"> | </span>
+          {%- if current_tags -%}
+            <a href="{{blog.url}}" class="p4 c-label {{ class_color }} mr-8">{{ blog.title }}</a>
+            <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true">
+              |
+            </span>
+            <span class="bc-item text {{ class_color }} p4 c-label mr-8">
+              {{ current_tags | join: ' + ' }}
+            </span>
+          {%- else -%}
+            <span class="bc-item text last {{ class_color }} p4 c-label">
+              {{ blog.title }}
+            </span>
+          {%- endif -%}
+        {%- elsif template == 'article' -%}
+          <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true"> | </span>
+          {% comment %} {{ blog.title | link_to: blog.url }} {% endcomment %}
+          <a href="{{ blog.url }}" title="{{ blog.title | escape }}" class="p4 c-label mr-8">{{ blog.title }}</a>
+          <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true"> | </span>
+          <span class="bc-item text last {{ class_color }} p4 c-label">
+            {{ article.title }}
+          </span>
+        {%- elsif template == 'cart' -%}
+          <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true"> | </span>
+          <span class="bc-item text last {{ class_color }} p4 c-label"> Cart </span>
+        {%- else -%}
+          <span class="bc-item separator flex jc-center ai-center {{ class_color }} mr-8 p4 c-label" aria-hidden="true"> | </span>
+          <span class="bc-item text last {{ class_color }} p4 c-label">
+            {{ page_title }}
+          </span>
+        {%- endif -%}
+      </nav>
+    {%- endif -%}
+  </div>
+  

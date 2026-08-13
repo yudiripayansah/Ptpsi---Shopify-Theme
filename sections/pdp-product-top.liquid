@@ -1,0 +1,3639 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'pdp-product-top-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+{% assign first_available = product.variants | where: 'available', true | first %}
+{%- assign variant = product.selected_or_first_available_variant -%}
+<style>
+    #{{ el_id }} {
+        overflow: hidden;
+        background: #FFF9F2;
+    }
+    #{{ el_id }} .all-variants-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    #{{ el_id }} .cursor-pointer {
+        cursor: pointer;
+    }
+    #{{ el_id }} .swiper-main {
+        overflow: visible;
+    }
+    #{{ el_id }} .c-red {
+        color: #ac1e15;
+    }
+    #{{ el_id }} .product-form-wrapper {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+    }
+    .pdp-top-atc-sticky-wrapper.active {
+        opacity: 1;
+        visibility: visible;
+    }
+    #{{ el_id }} .icon-zoom {
+        top: 0;
+        left: 0;
+        width: 50px;
+        height: 50px;
+        padding: 16px;
+        z-index: 2;
+        transition: 0.3s ease all;
+    }
+    .swiper-button-disabled {
+        opacity: 0.5;
+    }
+    .pdp-top-atc-sticky-wrapper {
+        opacity: 0;
+        visibility: hidden;
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        z-index: 1000;
+        transition: 0.3s ease all;
+        background: #FFF9F2;
+    }
+    #{{ el_id }} .icon-zoom svg {
+        width: 100%;
+        height: 100%;
+    }
+    #{{ el_id }} .disabled-option {
+        pointer-events: none;
+        opacity: 0.5;
+    }
+    /* --- Out-of-stock (OOS) states, per Figma "PRODUCT PAGE - SOLD OUT" --- */
+    /* OOS text options (Colour, generic options): greyed placeholder + strikethrough. */
+    #{{ el_id }} .pdpb-color.oos p,
+    #{{ el_id }} .pdpb-option.oos p {
+        color: #A4A399;
+        text-decoration: line-through;
+    }
+    /* OOS icon options (Planter, Saucer): dim the pot outline + diagonal slash across it. */
+    #{{ el_id }} .pdpb-planter.oos span svg,
+    #{{ el_id }} .pdpb-saucer.oos span svg {
+        opacity: 0.45;
+    }
+    #{{ el_id }} .pdpb-planter.oos::after,
+    #{{ el_id }} .pdpb-saucer.oos::after {
+        content: '';
+        display: block;
+        position: absolute;
+        left: 12%;
+        right: 12%;
+        top: 50%;
+        height: 1px;
+        background: #19341E;
+        transform: rotate(-45deg);
+        transform-origin: center;
+        pointer-events: none;
+    }
+    /* OOS options are not selectable. */
+    #{{ el_id }} .oos {
+        pointer-events: none;
+    }
+    /* Sold-out CTA: solid grey inactive state (disableButton adds .disabled + "Sold Out"). */
+    #{{ el_id }} .pdp-top-atc.disabled {
+        background: #A4A399;
+    }
+    #{{ el_id }} .row *:before,
+    #{{ el_id }} .row *:after {
+        display: none;
+    }
+
+    #{{ el_id }} .arrow-container,
+    .arrow-container-popup {
+        column-gap: 8px;
+    }
+    #{{ el_id }} .arrow-container .left,
+    #{{ el_id }} .arrow-container .left svg,
+    #{{ el_id }} .arrow-container .right,
+    #{{ el_id }} .arrow-container .right svg,
+    .arrow-container-popup .left,
+    .arrow-container-popup .left svg,
+    .arrow-container-popup .right,
+    .arrow-container-popup .right svg {
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+    }
+    .product-top-slider-popup {
+        position: fixed;
+        background: #FFF9F2;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        z-index: 10000;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.3s ease all;
+    }
+    .product-top-slider-popup.show,
+    .pdp-top-overlay.show {
+        opacity: 1;
+        visibility: visible;
+    }
+    .product-top-slider-popup .swiper,
+    .product-top-slider-popup .swiper .global-image-wrapper,
+    .product-top-slider-popup .swiper img {
+        height: 100%;
+    }
+    .product-top-slider-popup .swiper .global-image-wrapper {
+        padding-bottom: 0 !important;
+    }
+    .product-top-slider-popup .swiper img {
+        object-fit: cover;
+    }
+    .product-top-slider-popup .popup-close {
+        display: flex;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        width: 58px;
+        height: 58px;
+        z-index: 2;
+    }
+    .no-scroll {
+        overflow: hidden;
+        height: 100%;
+    }
+    #{{ el_id }} .pdpb-item {
+        cursor: pointer;
+        transition: 0.3s ease all;
+    }
+    #{{ el_id }} .pdpb-item .icon,
+    #{{ el_id }} .pdpb-item svg {
+        width: 16px;
+        height: 16px;
+    }
+    #{{ el_id }} .pdpb-item.open .icon {
+        transform: rotate(180deg);
+    }
+    #{{ el_id }} .pdpb-item .right {
+        column-gap: 4px;
+    }
+    #{{ el_id }} .pdpb-item.size-guide {
+        cursor: pointer;
+    }
+    .pdp-top-overlay {
+        background: #000000;
+        position: fixed;
+        top: 0;
+        left: 0;
+        background-color:rgba(0, 0, 0, 0.7);
+        z-index: 10000;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: flex-end;
+        opacity: 0;
+        visibility: hidden;
+        transition: 0.3s ease all;
+    }
+    .pdp-top-overlay .pdp-top-overlay-size {
+        background-color: #FFF9F2;
+        width: 100%;
+        height: 100%;
+        padding: 0 16px 20px;
+        overflow-x: auto;
+        transform: translate(100%, 0);
+        transition: 0.5s ease all;
+    }
+    .pdp-top-overlay.show .pdp-top-overlay-size {
+        transform: translate(0, 0);
+    }
+    .pdp-top-overlay-size .size-close,
+    .pdp-top-overlay-size svg {
+        width: 20px;
+        height: 20px;
+        cursor: pointer;
+    }
+    .pdpos-item {
+        width: 100%;
+        column-gap: 16px;
+    }
+    .pdpos-item .image {
+        width: 60px;
+        height: 60px;
+    }
+    #{{ el_id }} .accordion-wrapper {
+        cursor: pointer;
+    }
+    #{{ el_id }} .accordion-wrapper .pdpb-item-content {
+        cursor: default;
+        display: flex;
+        justify-content: flex-end;
+    }
+    #{{ el_id }} .pdpb-planters {
+        gap: 8px 16px;
+        display: flex;
+        justify-content: flex-end;
+        max-width: 332px;
+        flex-wrap: wrap;
+    }
+    #{{ el_id }} .pdpb-list {
+        display: flex;
+        width: 42px;
+        height:42px;
+        padding-left: 6px;
+        padding-right: 6px;
+        cursor: pointer;
+    }
+    #{{ el_id }} .pdpb-list svg {
+        width: 30px;
+        height:auto;
+    }
+    #{{ el_id }} .pdpb-list:hover svg path {
+        fill: #19341E;
+    }
+    #{{ el_id }} .pdpb-list.active svg path {
+        fill: #19341E;
+    }
+    #{{ el_id }} .pdpb-list .absolute {
+        display: none;
+    }
+    #{{ el_id }} .planter-image-holder svg path,
+    #{{ el_id }} .saucer-image-holder svg path {
+        stroke: #19341E;
+    }
+    #{{ el_id }} .planter-image-holder,
+    #{{ el_id }} .planter-image-holder svg {
+        width: 14px;
+        height:  14px;
+    }
+    #{{ el_id }} .product-details-wrapper h4 {
+        visibility: visible;
+    }
+    .pdp-top-sticky-mini {
+        display: none;
+    }
+    .pdp-top-atc span,
+    .pdp-top-atc-dum span {
+        line-height: unset !important;
+    }
+    .pdp-top-atc.disabled {
+        background-color: #A4A399;
+    }
+    #{{ el_id }} .pdpb-color.hidden,
+    #{{ el_id }} .pdpb-gc.hidden {
+        display: none;
+    }
+    #{{ el_id }} .pdpb-color p {
+        cursor: pointer;
+    }
+    #{{ el_id }} .accordion-color {
+        max-height: 150px;
+    }
+    #{{ el_id }} .gc-form-message,
+    #{{ el_id }} .gc-form-date {
+        padding-right: 0;
+    }
+    #{{ el_id }} .gc-form-date {
+        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='17' viewBox='0 0 16 17' fill='none'%3E%3Cpath d='M1.4375 5.25712H14.5625M3.13393 0V1.37159M12.6875 0V1.37142M15.5 3.77142V13.6C15.5 14.9255 14.3807 16 13 16H3C1.61929 16 0.5 14.9255 0.5 13.6V3.77142C0.5 2.44594 1.61929 1.37142 3 1.37142H13C14.3807 1.37142 15.5 2.44594 15.5 3.77142Z' stroke='%2319341E'/%3E%3C/svg%3E");
+        background-repeat: no-repeat;
+        background-position: right 1px;
+        background-size: 16px;
+        color: #19341e;
+    }
+    #{{ el_id }} .gc-form-date::-webkit-calendar-picker-indicator {
+        opacity: 0;     /* hides default icon */
+        cursor: pointer;
+    }
+    @media screen and (max-width: 1023px) {
+        #{{ el_id }} .m-t-pt-26 {
+            padding-top: 26px;
+        }
+    }
+    @media screen and (min-width: 1024px) {
+        #{{ el_id }} {
+            overflow: unset;
+        }
+        #{{ el_id }} .icon-zoom:hover {
+            opacity: 1;
+        }
+        #{{ el_id }} .swiper-main {
+            overflow: hidden;
+        }
+        #{{ el_id }} .icon-zoom svg {
+            width: 100%;
+            height: 100%;
+        }
+        #{{ el_id }} .icon-zoom {
+            transition: none;
+            will-change: transform;
+        }
+        .product-top-slider-popup .popup-close {
+            width: 62px;
+            height: 62px;
+        }
+        .pdp-top-overlay {
+        }
+        .pdp-top-overlay .pdp-top-overlay-size {
+            width: 600px;
+            padding: 0 24px 24px;
+        }
+        .pdpos-items .pdpos-item:nth-child(odd) {
+            width: calc(50% + 10px);
+            padding-right: 20px;
+        }
+        .pdpos-items .pdpos-item:nth-child(even) {
+            width: calc(50% - 10px);
+        }
+        #{{ el_id }} .pdpb-item.accordion {
+            height: 20px;
+        }
+        #{{ el_id }} .pdpb-list .absolute {
+            width: max-content;
+            max-width: 100px;
+            min-width: 100px;
+            color: var(--white);
+            bottom: 57px;
+            left: 50%;
+            {% comment %} left: -34px; {% endcomment %}
+            transform: translateX(-50%);
+        }
+        #{{ el_id }} .pdpb-list:nth-child(6) .absolute,
+        #{{ el_id }} .pdpb-list:last-child .absolute {
+            left: unset;
+            transform: unset;
+            right: 0;
+        }
+        #{{ el_id }} .pdpb-list:hover .absolute {
+            display: block;
+        }
+        #{{ el_id }} .icon-zoom {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 60px;
+            height: 60px;
+            padding: 14px;
+            will-change: transform;
+            z-index: 2;
+            display: none;
+            transform: translate(-9999px, -9999px);
+        }
+        #{{ el_id }} .pdpb-list .absolute:after {
+            content: '';
+            display: block;
+            width: 24px;
+            height: 14px;
+            position: absolute;
+            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='11' viewBox='0 0 21 11' fill='none'%3E%3Cpath d='M10.3926 10.5L0.000271761 0L20.7849 0L10.3926 10.5Z' fill='%23304835'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-size: contain;
+            {% comment %} left: 43px; {% endcomment %}
+            left: 50%;
+            transform: translateX(-50%);
+            bottom: -13px;
+        }
+        #{{ el_id }} .pdpb-list:nth-child(6) .absolute:after,
+        #{{ el_id }} .pdpb-list:last-child .absolute:after {
+            right: 9px;
+            left: unset;
+            transform: unset;
+        }
+        #{{ el_id }} .product-top-slider {
+            position: sticky;
+            top: 0;
+        }
+        .pdp-top-sticky-mini {
+            display: flex;
+            bottom: 24px;
+            right: 24px;
+            position: fixed;
+            z-index: 10;
+            background: #FFF9F2;
+            border: 1px solid #E4D7C8;
+            column-gap: 12px;
+            padding: 12px;
+            align-items: center;
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease all;
+        }
+        .pdp-top-sticky-mini.active {
+            opacity: 1;
+            visibility: visible;
+        }
+        .pdp-top-sticky-mini .ptsm-image {
+            width: 35px;
+        }
+        .pdp-top-sticky-mini a {
+            padding: 12px 24px;
+        }
+        .pdp-top-atc-sticky-wrapper {
+            display: none;
+        }
+    }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'pdp-product-top.PNG' | asset_url }}" width="100%" height="100%">
+{% else %}
+<div id="{{ el_id }}">
+    <div class="container">
+        <div class="row flex flex-wrap m-t-pt-26">
+            <div class="col-12 col-d-8">
+                <div class="product-top-slider">
+                    <div class="swiper swiper-main relative">
+                        <div class="absolute icon-zoom">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                                <path d="M13.7781 10.2219L20 4.00002M20 4.00002L15.4286 4M20 4.00002L19.9999 8.57122M10.2226 13.7778L4.00039 20M4.00039 20L8.57178 20M4.00039 20L4.00045 15.4288M13.7781 13.7778L20 19.9996M20 19.9996L20 15.4283M20 19.9996L15.4287 19.9995M10.2226 10.2226L4.00002 4.00002M4.00002 4.00002L4 8.57131M4.00002 4.00002L8.57133 4.00008" stroke="#19341E" stroke-linecap="round" stroke-linejoin="round"/>
+                            </svg>
+                        </div>
+                        <div class="swiper-wrapper swiper-wrapper-main">
+                            {%- for media in product.media -%}
+                                    {% assign ids = '' %}
+                                    {% for v in product.variants %}
+                                        {% if v.featured_image and v.featured_image.src == media.src %}
+                                            {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
+                                            {% assign ids = ids | append: v.id %}
+                                        {% endif %}
+                                    {% endfor %}
+                                    {% assign slide_planter = '' %}
+                                    {% assign slide_color = '' %}
+                                    {% if media.alt contains 'planter:' %}
+                                        {% assign slide_planter = media.alt | split: 'planter:' | last | split: '|' | first | strip %}
+                                        {% if media.alt contains 'color:' %}
+                                            {% assign slide_color = media.alt | split: 'color:' | last | split: '|' | first | strip %}
+                                        {% endif %}
+                                    {% endif %}
+                                {% if media.media_type == 'image' %}
+                                    <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
+                                    {%- render 'global-image-wrapper',
+                                        image: media,
+                                        preload: true
+                                    -%}
+                                    </div>
+                                {% elsif media.media_type == 'video' %}
+                                    <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
+                                        <div class="video-wrapper">
+                                            {{ media | video_tag: muted: true, controls: false, image_size: '1500x', autoplay: true, loop: true }}
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                        <div class="flex jc-between flex ai-center pt-12">
+                            <p class="p4 c-label js-gallery-count" data-total="{{ product.images.size }}">01 - {% if product.images.size < 10 %}0{% endif %}{{ product.images.size }}</p>
+                            <div class="arrow-container flex ai-center">
+                                <div class="left">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M8.125 4.5L3.75 9M3.75 9L8.125 13.5M3.75 9L14.25 9" stroke="#19341E" stroke-linecap="square"/>
+                                    </svg>
+                                </div>
+                                <div class="right">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                        <path d="M9.875 4.5L14.25 9M14.25 9L9.875 13.5M14.25 9L3.75 9" stroke="#19341E" stroke-linecap="square"/>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+                <div class="col-12 col-d-4 flex flex-column jc-between">
+                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
+                        <form @submit.prevent="addToCartGC($event)" class="product-form-wrapper pdp-top-gift-form" novalidate>
+                    {%- endif -%}
+                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
+                        <div>
+                        <div class="pt-32 d-pt-0">
+                            <h4 class="h4 product-title{% if product.available == true %} available{% endif %}">{{ product.title }}
+                                {% unless product.available %}
+                                    <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
+                                {% else %}
+                                    {% assign tags = product.tags | join: ',' | downcase %}
+                                    {% if tags contains 'new' %}
+                                        <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
+                                    {% endif %}
+                                {% endunless %}
+                            </h4>
+                            <div class="rte p2 mt-12">
+                                {{ product.description }}
+                            </div>
+                            {% if product.metafields.custom.small_label != blank %}
+                                <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
+                            {% endif %}
+                            {%- if settings.pg_enable_labels -%}
+                                <div class="labels-con flex">
+                                    {% assign first = true %}
+                                    {%- for i in (1..10) -%}
+                                        {%- assign tag = "pg_tag_" | append: i -%}
+                                        {%- assign bg_color = "pg_tag_bg_" | append: i -%}
+                                        {%- assign text_color = "pg_tag_color_" | append: i -%}
+
+                                        {%- if product.tags contains settings[tag] -%}
+                                            {%- assign tag_text = settings[tag] | split: ':' | last -%}
+                                            {% unless first %} <div class="p4 c-label mt-16">&nbsp;-&nbsp;</div> {% endunless %}
+                                            <div class="p4 mt-16" style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}">{{ tag_text }}</div>
+                                            {% assign first = false %}
+                                        {%- endif -%}
+                                    {%- endfor -%}
+                                    {% comment %} <div class="p5 c-label">Imported From Japan - Seasonal</div> {% endcomment %}
+                                </div>
+                            {%- endif -%}
+                        </div>
+                        <div class="giftcard-message-wrapper d-mt-32 mt-24 relative w-full">
+                            <div class="form-wrapper">
+                                <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="on">
+                                <div class="form-group pt-8">
+                                    <input
+                                        type="email"
+                                        @change="isValidEmail"
+                                        name="properties[Recipient email]"
+                                        placeholder="{{ 'products.product.recipient_email' | t }}"
+                                        class="global-input bb-1 b-border p2"
+                                    >
+                                    <div class="pt-8">
+                                        <div class="error-message pb-4 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.recipient_email' | t }}</div>
+                                        <p class="p3">Only 1 email per gift card.</p>
+                                    </div>
+                                </div>
+                                <div class="form-group pt-8 mt-12">
+                                    <input
+                                    type="text"
+                                    name="properties[Sender name]"
+                                    placeholder="{{ 'products.product.sender_name' | t }}"
+                                    class="global-input bb-1 b-border p2"
+                                    >
+                                    <div class="error-message mt-8 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.sender_name' | t }}</div>
+                                </div>
+                                <div class="form-group pt-8 mt-12">
+                                    <input
+                                    type="text"
+                                    name="properties[Recipient name]"
+                                    placeholder="{{ 'products.product.recipient_name' | t }}"
+                                    class="global-input bb-1 b-border p2"
+                                    >
+                                    <div class="error-message mt-8 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.recipient_name' | t }}</div>
+                                </div>
+                                <div class="form-group pt-8 mt-12 relative">
+                                    <div class="relative">
+                                        <textarea
+                                            name="properties[Message]"
+                                            placeholder="{{ 'products.product.gift_card_msg' | t }}"
+                                            class="global-input bb-1 b-border block gc-form-message p2"
+                                            rows="3"
+                                            maxlength="200"
+                                            onkeyup="updateCharacterCount(this, 200)"
+                                        ></textarea>
+                                        <div class="absolute bottom-0 right-0 p5 pb-8"><span class="p5 char-count">0</span>/200</div>
+                                    </div>
+                                    <div class="error-message mt-8 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.message' | t }}</div>
+                                </div>
+                                <div class="from-date pt-8 mt-12">
+                                    <div class="from-group">
+                                        <input type="date" name="properties[Send on]" class="global-input p2 bb-1 b-green uppercase gc-form-date c-placeholder">
+                                    </div>
+                                    <div class="p5 mt-8">{{'products.product.send_date_info'|t}}</div>
+                                </div>
+                            </div>
+                        </div>
+                        </div>
+                    {% endif %}
+                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
+                        <input type="hidden" name="id" value="{{ variant.id }}" class="pdp-top-variant-id">
+                        <div class="gift_var_wrapper pt-8 d-pt-0">
+                            <div class="pt-16 pb-16 d-pt-12 d-pb-12 mb-16 d-mb-12 accordion-wrapper bb-1 b-main w-full">
+                                <div class="pdpb-item accordion w-full overflow">
+                                    <div class="pdpb-item-header w-full flex ai-center jc-between">
+                                        <p class="p4 c-label">Card Value</p>
+                                        <div class="flex flex-row ai-center right">
+                                            <p class="p2 gc-title-holder">{{ product.metafields.custom.size_label.value }}</p>
+                                            <div class="icon">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                                    <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+                                                </svg>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="pdpb-item-content">
+                                        <div class="pdpb-planters cursor-pointer pt-4">
+                                            {% for variant in product.variants %}
+                                                <div class="pdpb-gc tr w-full relative pr-20" data-variant-id="{{ variant.id }}" data-variant-title="{{ variant.title }}" onclick="selectGiftVariant(event, true)">
+                                                    <p class="p2">S{{ variant.title }}</p>
+                                                </div>
+                                            {% endfor %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <button onclick="pdpProductTop.addToCartGC(event)" class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center" data-available="false" data-select-options="true">
+                                <span>Add to Cart</span>
+                                <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
+                            </button>
+                        </div>
+                    {% else -%}
+                        <div class="all-variants-wrapper">
+                            <div class="pt-32 d-pt-0">
+                                <{{section.settings.title_dom_type }} class="h4 product-title{% if product.available == true %} available{% endif %}">
+                                    {% comment %} {{ product.title }} {% endcomment %}
+                                    {% assign title_parts = product.title | split: '-' %}
+                                    {% if title_parts.size > 1 %}
+                                        {% assign clean_title = title_parts[0] %}
+                                        {{ clean_title }}
+                                    {% else %}
+                                        {{ product.title }}
+                                    {% endif %}
+                                    {% unless product.available %}
+                                        <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
+                                    {% else %}
+                                        {% assign tags = product.tags | join: ',' | downcase %}
+                                        {% if tags contains 'new' %}
+                                            <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
+                                        {% endif %}
+                                    {% endunless %}
+                                </{{section.settings.title_dom_type }}>
+                                <div class="rte p2 mt-12">
+                                    {{ product.description }}
+                                </div>
+                                {% if product.metafields.custom.small_label != blank %}
+                                    <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
+                                {% endif %}
+                                {%- if settings.pg_enable_labels -%}
+                                    <div class="labels-con flex">
+                                        {% assign first = true %}
+                                        {%- for i in (1..10) -%}
+                                            {%- assign tag = "pg_tag_" | append: i -%}
+                                            {%- assign bg_color = "pg_tag_bg_" | append: i -%}
+                                            {%- assign text_color = "pg_tag_color_" | append: i -%}
+
+                                            {%- if product.tags contains settings[tag] -%}
+                                                {%- assign tag_text = settings[tag] | split: ':' | last -%}
+                                                {% unless first %} <div class="p4 c-label mt-16">&nbsp;-&nbsp;</div> {% endunless %}
+                                                <div class="p4 mt-16" style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}">{{ tag_text }}</div>
+                                                {% assign first = false %}
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                        {% comment %} <div class="p5 c-label">Imported From Japan - Seasonal</div> {% endcomment %}
+                                    </div>
+                                {%- endif -%}
+                            </div>
+                            {%- render 'product-variant-soil', product: product, workshop_note: section.settings.workshop_atc_note -%}
+                        </div>
+                    {%- endif -%}
+                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
+                        </form>
+                    {%- endif -%}
+                </div>
+        </div>
+        <Teleport to="body">
+            <div class="product-top-slider-popup" data-section="{{ el_id }}">
+                <div class="swiper swiper-popup relative overflow">
+                    <div class="popup-close absolute top-0 right-0">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                            <path d="M15.8327 4.16699L4.16602 15.8337M15.8327 15.8337L4.16602 4.16699" stroke="#19341E"/>
+                        </svg>
+                    </div>
+                    <div class="swiper-wrapper">
+                        {%- for media in product.media -%}
+                            {% assign ids = '' %}
+                            {% for v in product.variants %}
+                                {% if v.featured_image and v.featured_image.src == media.src %}
+                                    {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
+                                    {% assign ids = ids | append: v.id %}
+                                {% endif %}
+                            {% endfor %}
+                            {% assign slide_planter = '' %}
+                            {% assign slide_color = '' %}
+                            {% if media.alt contains 'planter:' %}
+                                {% assign slide_planter = media.alt | split: 'planter:' | last | split: '|' | first | strip %}
+                                {% if media.alt contains 'color:' %}
+                                    {% assign slide_color = media.alt | split: 'color:' | last | split: '|' | first | strip %}
+                                {% endif %}
+                            {% endif %}
+                            {% if media.media_type == 'image' %}
+                                <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
+                                {%- render 'global-image-wrapper',
+                                    image: media,
+                                    preload: true
+                                -%}
+                                </div>
+                            {% elsif media.media_type == 'video' %}
+                                <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
+                                    <div class="video-wrapper">
+                                        {{ media | video_tag: controls: false, image_size: '1500x', autoplay: true, loop: true }}
+                                    </div>
+                                </div>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="absolute w-full left-0 bottom-0 z-2">
+                        <div class="container pt-16 pb-16 d-pt-25 d-pb-25">
+                            <div class="flex ai-center jc-between">
+                                <p class="p4 c-label js-gallery-count" data-total="{{ product.images.size }}">01 - {% if product.images.size < 10 %}0{% endif %}{{ product.images.size }}</p>
+                                <div class="arrow-container-popup flex ai-center">
+                                    <div class="left">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M8.125 4.5L3.75 9M3.75 9L8.125 13.5M3.75 9L14.25 9" stroke="#19341E" stroke-linecap="square"/>
+                                        </svg>
+                                    </div>
+                                    <div class="right">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                                            <path d="M9.875 4.5L14.25 9M14.25 9L9.875 13.5M14.25 9L3.75 9" stroke="#19341E" stroke-linecap="square"/>
+                                        </svg>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% assign size_guide_data = shop.metaobjects["size_guide"].values | first %}
+            <div class="pdp-top-overlay">
+                <div class="pdp-top-overlay-size">
+                    <div class="flex flex-column jc-between h-full">
+                    <div>
+                        <div class="pt-20 pb-12 d-pt-16 bb-1 b-main flex jc-between flex-row ai-center">
+                            <p class="p1">{{ size_guide_data.header_title }}</p>
+                            <div class="size-close">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                                    <path d="M15.8337 4.16699L4.16699 15.8337M15.8337 15.8337L4.16699 4.16699" stroke="#19341E"/>
+                                </svg>
+                            </div>
+                        </div>
+                        <div class="pt-16 pb-20 d-pb-0 flex">
+                            {%- assign size_main_alt = size_guide_data.main_image.alt | escape_once -%}
+                            {%- if size_main_alt == blank -%}
+                                {%- assign size_main_alt = size_guide_data.main_image | image_url | split: '/' | last | split: '.jpg' | first | split: '.png' | first | escape_once -%}
+                            {%- endif -%}
+                            <img src="{{ size_guide_data.main_image | image_url }}" alt="{{ size_main_alt }}">
+                        </div>
+                        <div class="pdpos-items flex flex-wrap">
+                            {% for i in (1..6) %}
+                                {% assign title_key = "title_" | append: i %}
+                                {% assign image_key = "image_" | append: i %}
+                                {% assign size_key = "size_" | append: i %}
+                                {% assign tag_key = "tag_" | append: i %}
+                                {% assign description_key = "description_" | append: i %}
+                                {% assign check_tag = true %}
+                                {% if size_guide_data[tag_key] != blank %}
+                                    {% assign check_tag = false %}
+                                    {% for tag in product.tags %}
+                                        {% if tag == size_guide_data[tag_key] %}
+                                            {% assign check_tag = true %}
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endif %}
+                                {% if size_guide_data[title_key] != blank and check_tag == true %}
+                                    <div class="pdpos-item b-main flex pb-16 d-pb-24 d-pt-24{% unless forloop.first %} pt-16{% endunless %}{% unless i > 4 %} bb-1{% endunless %}">
+                                        <div class="image">
+                                            {%- assign size_child_alt_image_obj = size_guide_data[image_key] -%}
+                                            {%- assign size_child_alt = size_child_alt_image_obj.alt | escape_once -%}
+                                            {%- if size_child_alt == blank -%}
+                                                {%- assign size_child_alt = size_child_alt_image_obj | image_url | split: '/' | last | split: '.jpg' | first | split: '.png' | first | escape_once -%}
+                                            {%- endif -%}
+                                            <img src="{{ size_child_alt_image_obj | image_url }}" alt="{{ size_child_alt }}">
+                                        </div>
+                                        <div class="text">
+                                            <p class="p2">{{ size_guide_data[title_key] }}</p>
+                                            <p class="p3 pt-4">{{ size_guide_data[size_key] }}</p>
+                                            <p class="p3">{{ size_guide_data[description_key] }}</p>
+                                        </div>
+                                    </div>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    </div>
+                    <p class="p3">{{ size_guide_data.disclaimer }}</p>
+                </div>
+                </div>
+            </div>
+            <div class="pdp-top-sticky-components">
+            <div class="pdp-top-sticky-mini">
+                <div class="ptsm-image">
+                    {%- render 'global-image-wrapper',
+                        image: product.images[0]
+                    -%}
+                </div>
+                <div>
+                    <p class="p2">{{ product.title }}</p>
+                    <p class="p2 mt-2"><span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span></p>
+                </div>
+                {% if product.variants.size == 1 and product.metafields.custom.planter.value == blank %}
+                    <button onclick="pdpProductTop.submitForm(event)" class="bg-green c-white p2 pt-12 pb-12 pr-24 pl-24 p2">
+                        Add to Cart
+                    </button>
+                {% else %}
+                    <a href="#" rel="nofollow" class="bg-green c-white p2">
+                        Select Options
+                    </a>
+                {% endif %}
+            </div>
+            <div class="pdp-top-atc-sticky-wrapper pt-16 pb-16 pl-16 pr-16 bt-1 b-background">
+                {% if product.gift_card? or product.type == 'Gift Card' %}
+                <button onclick="pdpProductTop.addToCartGC(event)" class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center" data-available="false" data-select-options="true">
+                    <span>Add to Cart</span>
+                    <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
+                </button>
+                {% else %}
+                <button onclick="pdpProductTop.submitForm(event)" class="pdp-top-atc pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white jc-between ai-center hidden{% if product.tags contains 'plants' %} hide-m{% else %} flex{% endif %}">
+                    <span>Add to Cart</span>
+                    <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
+                </button>
+                {% if product.tags contains 'plants' %}
+                <button class="pdp-top-atc-dum pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-center ai-center hidden">
+                    <span>Select Options</span>
+                </button>
+                {% endif %}
+                {% endif %}
+            </div>
+            </div>
+        </Teleport>
+    </div>
+</div>
+{% endif %}
+
+<script>
+
+    let swiper{{fn}} = null;
+    let swiperPop{{fn}} = null;
+
+    const _popupSel = '.product-top-slider-popup[data-section="{{ el_id }}"]';
+
+    function _updateGalleryCount(visibleCount) {
+        const pad = visibleCount < 10 ? '0' : '';
+        const text = `01 - ${pad}${visibleCount}`;
+        document.querySelectorAll('#{{ el_id }} .js-gallery-count').forEach(el => el.textContent = text);
+        const popupCounter = document.querySelector(`${_popupSel} .js-gallery-count`);
+        if (popupCounter) popupCounter.textContent = text;
+    }
+
+    function _resetGalleryCount() {
+        const counter = document.querySelector('#{{ el_id }} .js-gallery-count');
+        const total = counter ? Number(counter.dataset.total) : 0;
+        if (total) _updateGalleryCount(total);
+    }
+
+    // Is this a plant product? On plants the visible "colour" is a planter/saucer colour,
+    // not a real product option, so it must not participate in parent-variant resolution.
+    const PDP_IS_PLANT = {% if product.tags contains 'plants' %}true{% else %}false{% endif %};
+
+    // Normalise a colour name for comparison. Planter and saucer colour lists can differ in
+    // case/whitespace (e.g. "Cream" vs "cream"), so all colour matching is done through this.
+    function pdpNormColor(s) { return (s == null ? '' : String(s)).trim().toLowerCase(); }
+
+    // Resolve the product's parent variant for the current selection across ALL declared
+    // option dimensions. Matches by option INDEX, so it is agnostic to how the options are
+    // named. On non-plant products colour is a real dimension and is included; on plant
+    // products only the generic option selectors constrain the variant.
+    function pdpResolveVariant() {
+        const product = (typeof pdpProductTop !== 'undefined' && pdpProductTop.product) ? pdpProductTop.product : null;
+        if (!product || !product.variants) return null;
+        const optionNames = product.options || [];
+        const idxOf = (name) => optionNames.findIndex(n => (n || '').trim().toLowerCase() === (name || '').trim().toLowerCase());
+
+        // Build the current selection keyed by option index.
+        const selection = {};
+        if (!PDP_IS_PLANT) {
+            const chosenColorEl = document.querySelector('.pdpb-color.hidden p');
+            if (chosenColorEl) {
+                const colorIdx = optionNames.findIndex(n => /^colou?r$/i.test((n || '').trim()));
+                if (colorIdx !== -1) selection[colorIdx] = chosenColorEl.innerHTML.trim();
+            }
+        }
+        document.querySelectorAll('.pdpb-option.active').forEach((btn) => {
+            const idx = idxOf(btn.dataset.optionName);
+            if (idx !== -1) selection[idx] = btn.dataset.optionValue;
+        });
+
+        const keys = Object.keys(selection).map(Number);
+        if (!keys.length) return null; // nothing to resolve yet — leave existing state alone
+        const valueAt = (v, idx) => idx === 0 ? v.option1 : idx === 1 ? v.option2 : idx === 2 ? v.option3 : null;
+
+        const matches = product.variants.filter(v => keys.every(idx => valueAt(v, idx) === selection[idx]));
+        if (!matches.length) return null;
+        // Prefer an available variant when several match a partial selection.
+        return matches.find(v => v.available) || matches[0];
+    }
+
+    // Recompute the plant total = resolved base + planter + saucer price for the current
+    // colour, and store the new base on the price node so downstream recomputes stay correct.
+    function pdpUpdatePlantTotal(basePrice) {
+        const colorEl = document.querySelector('.pdpb-color.hidden p');
+        const colorName = colorEl ? colorEl.innerHTML.trim() : null;
+        let pPrice = 0, sPrice = 0;
+        const activePlanter = document.querySelector('.pdpb-planter.active');
+        const activeSaucer = document.querySelector('.pdpb-saucer.active');
+        if (activePlanter && colorName) {
+            try {
+                const pColors = JSON.parse(atob(activePlanter.dataset.color));
+                const pPrices = (activePlanter.dataset.prices || '').split('|').map(Number);
+                const i = pColors.findIndex(x => pdpNormColor(x) === pdpNormColor(colorName));
+                if (i !== -1) pPrice = pPrices[i] || 0;
+            } catch (e) {}
+        }
+        if (activeSaucer && colorName) {
+            try {
+                const sColors = JSON.parse(atob(activeSaucer.dataset.saucerColor));
+                const sPrices = (activeSaucer.dataset.saucerPrice || '').split('|').map(Number);
+                const i = sColors.findIndex(x => pdpNormColor(x) === pdpNormColor(colorName));
+                if (i !== -1) sPrice = sPrices[i] || 0;
+            } catch (e) {}
+        }
+        document.querySelectorAll('.atc-button-price').forEach((el) => {
+            el.setAttribute('data-price', basePrice);
+            el.innerHTML = `S$${((basePrice + pPrice + sPrice) / 100).toFixed(2)}`;
+        });
+    }
+
+    // Push a resolved variant into the cart form, Vue state and URL. Price handling and the
+    // colour button's data-variant differ by product type:
+    //  - Non-plant: colour button data-variant IS the parent variant id, so keep it in sync;
+    //    for plain variant products (no add-ons) also drive the ATC price.
+    //  - Plant: NEVER touch the colour button (it carries the planter's child variant id);
+    //    just move the parent variant + refresh the total.
+    function pdpApplyResolvedVariant(variant) {
+        if (!variant) return;
+        if (typeof pdpProductTop !== 'undefined') pdpProductTop.variantId = variant.id;
+        const variantInput = document.querySelector('.pdp-top-atc-form .pdp-top-variant-id');
+        if (variantInput) variantInput.value = variant.id;
+        try { history.replaceState({}, '', `?variant=${variant.id}`); } catch (e) {}
+
+        if (PDP_IS_PLANT) {
+            pdpUpdatePlantTotal(Number(variant.price) || 0);
+            return;
+        }
+        const hiddenColor = document.querySelector('.pdpb-color.hidden');
+        if (hiddenColor) hiddenColor.setAttribute('data-variant', variant.id);
+        const hasAddons = document.querySelector('.planter-accordion-wrapper') || document.querySelector('.saucer-accordion-wrapper');
+        if (!hasAddons) {
+            document.querySelectorAll('.atc-button-price').forEach((el) => {
+                el.innerHTML = `S$${((Number(variant.price) || 0) / 100).toFixed(2)}`;
+            });
+        }
+    }
+
+    // Called from every colour/option selection. No-op unless the product renders at least
+    // one generic option selector, so existing single-dimension flows are unaffected.
+    function pdpMaybeResolveVariant() {
+        if (!document.querySelector('.pdpb-option')) return;
+        const resolved = pdpResolveVariant();
+        if (resolved) pdpApplyResolvedVariant(resolved);
+        applyOOS();
+    }
+
+    // --- Out-of-stock (OOS) marking, per Figma "PRODUCT PAGE - SOLD OUT" ---
+    // Toggle a single option button's sold-out state (visual via CSS + non-selectable).
+    function setOOS(el, isAvailable) {
+        if (!el) return;
+        el.classList.toggle('oos', !isAvailable);
+        if (isAvailable) el.removeAttribute('aria-disabled');
+        else el.setAttribute('aria-disabled', 'true');
+    }
+
+    // Is there an available variant with `value` at option index `targetIdx` that is also
+    // consistent with every currently-selected OTHER dimension? Case-insensitive.
+    function pdpComboAvailable(product, targetIdx, value) {
+        if (!product || !product.variants || targetIdx === -1) return true;
+        const optionNames = product.options || [];
+        const idxOf = (name) => optionNames.findIndex(n => (n || '').trim().toLowerCase() === (name || '').trim().toLowerCase());
+        const colorIdx = optionNames.findIndex(n => /^colou?r$/i.test((n || '').trim()));
+        const selection = {};
+        if (!PDP_IS_PLANT && colorIdx !== -1 && colorIdx !== targetIdx) {
+            const c = document.querySelector('.pdpb-color.hidden p');
+            if (c) selection[colorIdx] = c.innerHTML.trim();
+        }
+        document.querySelectorAll('.pdpb-option.active').forEach((b) => {
+            const idx = idxOf(b.dataset.optionName);
+            if (idx !== -1 && idx !== targetIdx) selection[idx] = b.dataset.optionValue;
+        });
+        const valueAt = (v, idx) => idx === 0 ? v.option1 : idx === 1 ? v.option2 : idx === 2 ? v.option3 : null;
+        return product.variants.some((v) => {
+            if (pdpNormColor(valueAt(v, targetIdx)) !== pdpNormColor(value)) return false;
+            for (const k in selection) { if (pdpNormColor(valueAt(v, Number(k))) !== pdpNormColor(selection[k])) return false; }
+            return v.available;
+        });
+    }
+
+    // Recompute the sold-out state of every option button for the current selection.
+    function applyOOS() {
+        const product = (typeof pdpProductTop !== 'undefined' && pdpProductTop.product) ? pdpProductTop.product : null;
+        const optionNames = product ? (product.options || []) : [];
+        const idxOf = (name) => optionNames.findIndex(n => (n || '').trim().toLowerCase() === (name || '').trim().toLowerCase());
+        const colorIdx = optionNames.findIndex(n => /^colou?r$/i.test((n || '').trim()));
+
+        // Generic option values (Maturity/Age/Stage/...): refine against the current tuple.
+        document.querySelectorAll('.pdpb-option').forEach((btn) => {
+            let available = btn.dataset.availability !== 'false';
+            if (product) available = pdpComboAvailable(product, idxOf(btn.dataset.optionName), btn.dataset.optionValue);
+            setOOS(btn, available);
+        });
+
+        // Colour buttons. On plants the list is built with a correct per-combination
+        // data-availability (planter+saucer stock); on non-plants with extra dimensions,
+        // refine against the selected options.
+        document.querySelectorAll('.pdpb-color').forEach((btn) => {
+            let available = btn.dataset.availability !== 'false';
+            if (!PDP_IS_PLANT && product && colorIdx !== -1 && document.querySelector('.pdpb-option')) {
+                const p = btn.querySelector('p');
+                if (p) available = pdpComboAvailable(product, colorIdx, p.innerHTML.trim());
+            }
+            setOOS(btn, available);
+        });
+
+        // Planter / saucer icons: mark fully-out-of-stock ones (slashed).
+        document.querySelectorAll('.pdpb-planter').forEach((btn) => {
+            if ('planterAvailable' in btn.dataset) setOOS(btn, btn.dataset.planterAvailable !== 'false');
+        });
+        document.querySelectorAll('.pdpb-saucer').forEach((btn) => {
+            if ('saucerAvailable' in btn.dataset) setOOS(btn, btn.dataset.saucerAvailable !== 'false');
+        });
+    }
+
+    function slideToPotColor(planterTitle, colorName) {
+        if (!planterTitle || !colorName || typeof swiper{{fn}} === 'undefined' || !swiper{{fn}}) return;
+        const slides = Array.from(document.querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide'));
+
+        const hasMatch = slides.some(s =>
+            (s.getAttribute('data-planter') || '') === planterTitle &&
+            (s.getAttribute('data-color')   || '') === colorName
+        );
+        if (!hasMatch) return;
+
+        let visibleCount = 0;
+        slides.forEach(slide => {
+            const p = slide.getAttribute('data-planter') || '';
+            const c = slide.getAttribute('data-color') || '';
+            const show = !p || (p === planterTitle && c === colorName);
+            slide.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+        });
+        swiper{{fn}}.update();
+
+        // Use Swiper's own slides array after update() so the index is in the right
+        // coordinate space regardless of whether Swiper re-indexes hidden slides.
+        const firstVisibleIdx = Array.from(swiper{{fn}}.slides).findIndex(s => s.style.display !== 'none');
+        if (firstVisibleIdx >= 0) swiper{{fn}}.slideTo(firstVisibleIdx, 0);
+
+        _updateGalleryCount(visibleCount);
+
+        document.querySelectorAll(`${_popupSel} .swiper-slide`).forEach(slide => {
+            const p = slide.getAttribute('data-planter') || '';
+            const c = slide.getAttribute('data-color') || '';
+            slide.style.display = (!p || (p === planterTitle && c === colorName)) ? '' : 'none';
+        });
+        if (typeof swiperPop{{fn}} !== 'undefined' && swiperPop{{fn}}) swiperPop{{fn}}.update();
+    }
+
+    function resetGalleryFilter() {
+        document.querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide').forEach(s => { s.style.display = ''; });
+        document.querySelectorAll(`${_popupSel} .swiper-slide`).forEach(s => { s.style.display = ''; });
+        if (typeof swiper{{fn}} !== 'undefined' && swiper{{fn}}) {
+            swiper{{fn}}.update();
+            swiper{{fn}}.slideTo(0, 0);
+        }
+        if (typeof swiperPop{{fn}} !== 'undefined' && swiperPop{{fn}}) swiperPop{{fn}}.update();
+        if (window.$360 && $360.lazyLoadInstance) $360.lazyLoadInstance.update();
+        _resetGalleryCount();
+    }
+
+    function filterByPlanter(planterTitle) {
+        if (!planterTitle || typeof swiper{{fn}} === 'undefined' || !swiper{{fn}}) return;
+        const slides = Array.from(document.querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide'));
+        const hasAny = slides.some(s => (s.getAttribute('data-planter') || '') === planterTitle);
+        if (!hasAny) { resetGalleryFilter(); return; }
+        let visibleCount = 0;
+        slides.forEach(slide => {
+            const p = slide.getAttribute('data-planter') || '';
+            const show = !p || p === planterTitle;
+            slide.style.display = show ? '' : 'none';
+            if (show) visibleCount++;
+        });
+        swiper{{fn}}.update();
+        // Use Swiper's own slides array so the index matches its internal state after update()
+        const firstVisibleIdx = Array.from(swiper{{fn}}.slides).findIndex(s => s.style.display !== 'none');
+        if (firstVisibleIdx >= 0) swiper{{fn}}.slideTo(firstVisibleIdx, 0);
+        _updateGalleryCount(visibleCount);
+        document.querySelectorAll(`${_popupSel} .swiper-slide`).forEach(slide => {
+            const p = slide.getAttribute('data-planter') || '';
+            slide.style.display = (!p || p === planterTitle) ? '' : 'none';
+        });
+        if (typeof swiperPop{{fn}} !== 'undefined' && swiperPop{{fn}}) swiperPop{{fn}}.update();
+    }
+
+    function initSwiper{{fn}}(){
+        if (!swiper{{fn}}) {
+            swiper{{fn}} = new Swiper('#{{ el_id }} .swiper-main', {
+                slidesPerView: 1.3,
+                spaceBetween: 16,
+                watchSlidesVisibility: true,
+                watchSlidesProgress: true,
+                breakpoints: {
+                    1024: {
+                        slidesPerView: 2,
+                        spaceBetween: 12,
+                    }
+                },
+                loop: false,
+                navigation: {
+                    nextEl: '#{{ el_id }} .arrow-container .right',
+                    prevEl: '#{{ el_id }} .arrow-container .left'
+                },
+                on: {
+                    init: function () {
+                        $360.lazyLoadInstance.update();
+                        document
+                            .querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide video')
+                            .forEach(v => v.pause());
+
+                        if (this.visibleSlides && this.visibleSlides.length) {
+                            this.visibleSlides.forEach(slide => {
+                                slide.querySelectorAll('video').forEach(v => v.play());
+                            });
+                        }
+
+                    },
+                    slideChange: function () {
+                        $360.lazyLoadInstance.update();
+                        document
+                            .querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide video')
+                            .forEach(v => v.pause());
+                        if (this.visibleSlides && this.visibleSlides.length) {
+                        this.visibleSlides.forEach(slide => {
+                            slide.querySelectorAll('video').forEach(video => {
+                                video.play();
+                            });
+                        });
+                        }
+                    },
+                    resize: function () {
+                        $360.lazyLoadInstance.update();
+                    }
+                }
+            });
+        }
+    }
+    
+	/* gift card fields behaviour */
+	{%- if product.gift_card? or product.type == 'Gift Card' -%}
+		function updateCharacterCount(textareaElement, characterLimit) {
+			const currentLength = textareaElement.value.length;
+			const remainingCharacters = characterLimit - currentLength;
+
+			const characterCountElement = document.querySelector(".char-count");
+			if (characterCountElement) {
+				characterCountElement.textContent = currentLength;
+			}
+
+			if (currentLength > characterLimit) {
+				textareaElement.value = textareaElement.value.substring(0, characterLimit);
+			}
+		}
+	{%- endif -%}
+    function initSwiperPop{{fn}}(){
+        if (swiperPop{{fn}}) {
+            swiperPop{{fn}}.destroy(true, true);
+            swiperPop{{fn}} = null;
+        }
+        swiperPop{{fn}} = new Swiper('.swiper-popup', {
+            slidesPerView: 0.7,
+            spaceBetween: 0,
+            freeMode: false,
+            freeModeSticky: false,
+            navigation: {
+                enabled: false
+            },
+            breakpoints: {
+                1024: {
+                    slidesPerView: 2.3,
+                    freeMode: false,
+                    navigation: {
+                        enabled: true,
+                        nextEl: '.arrow-container-popup .right',
+                        prevEl: '.arrow-container-popup .left'
+                    }
+                }
+            },
+            loop: false,
+            on: {
+                init: function () {
+                    $360.lazyLoadInstance.update();
+                },
+                slideChange: function () {
+                    console.log('slide changed');
+                    $360.lazyLoadInstance.update();
+                },
+                resize: function () {
+                    $360.lazyLoadInstance.update();
+                }
+            }
+        });
+    }
+    // Handle gift-card value selection: update UI and select matching variant
+    function selectGiftVariant(e, pushUrlParam) {
+        try {
+            const tgt = (e && e.target) ? (e.target.closest('.pdpb-gc') || e.target) : null;
+            if (!tgt) return;
+            const vid = tgt.getAttribute('data-variant-id') || tgt.dataset.variantId || null;
+            const vtitle = tgt.getAttribute('data-variant-title') || (tgt.querySelector('p') ? tgt.querySelector('p').innerText.trim() : '');
+
+            // UI: mark active
+            document.querySelectorAll('.pdpb-gc').forEach(el => el.classList.remove('hidden'));
+            tgt.classList.add('hidden');
+
+            // Update size/title holder if present
+            const gcHolder = document.querySelector('.gc-title-holder');
+            if (gcHolder) gcHolder.innerHTML = vtitle;
+
+            // Try to find variant in the product JSON and update selection
+            const variants = (window.pdpProductTop && window.pdpProductTop.product && Array.isArray(window.pdpProductTop.product.variants)) ? window.pdpProductTop.product.variants : [];
+            let variant = null;
+            if (vid) variant = variants.find(v => String(v.id) === String(vid));
+            if (!variant && vtitle) variant = variants.find(v => String(v.title) === String(vtitle) || (v.title && v.title.indexOf(vtitle) >= 0));
+            if (variant && window.pdpProductTop) {
+                window.pdpProductTop.variantId = variant.id;
+                window.pdpProductTop.first_load_check = false;
+                // Update any variant input if present
+                const pdp_top_variant_input = document.querySelector('.pdp-top-gift-form .pdp-top-variant-id');
+                if (pdp_top_variant_input) pdp_top_variant_input.value = variant.id;
+
+                // Update price displays
+                const priceElems = document.querySelectorAll('.atc-button-price');
+                priceElems.forEach((el) => {
+                    if (!el) return;
+                    el.innerHTML = `S$${(Number(variant.price) / 100).toFixed(2)}`;
+                });
+
+                // Enable/disable add-to-cart buttons for gift-card context based on availability
+                try {
+                    const atcButtons = document.querySelectorAll('.pdp-top-atc');
+                    atcButtons.forEach((btn) => {
+                        if (!variant.available) {
+                            btn.classList.add('disabled');
+                            btn.setAttribute('disabled', 'true');
+                            btn.setAttribute('data-available', 'false');
+                            btn.querySelector('.atc-title').innerHTML = "Sold Out";
+                        } else {
+                            const productTitle = document.querySelector('.product-title');
+                            if (productTitle && productTitle.classList.contains('available')) {
+                                btn.classList.remove('disabled');
+                                btn.removeAttribute('disabled');
+                                btn.setAttribute('data-available', 'true');
+                                btn.querySelector('.atc-title').innerHTML = "Add to Cart";
+                            }
+                        }
+                    });
+                } catch (errAtc) {
+                    console.warn('Failed to update ATC button state for gift variant', errAtc);
+                }
+
+                // Slide main swiper to this variant's image if possible (use data-variant-ids)
+                setTimeout(() => {
+                    const slides = Array.from(document.querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide'));
+                    let targetIndex = -1;
+                    slides.forEach((slide, idx) => {
+                        const vAttr = slide.getAttribute('data-variant-ids') || '';
+                        if (!vAttr) return;
+                        const ids = vAttr.split('|').map(s => s.trim()).filter(Boolean);
+                        if (ids.indexOf(String(variant.id)) >= 0) targetIndex = idx;
+                    });
+                    if (targetIndex >= 0 && typeof swiper{{fn}} !== 'undefined' && swiper{{fn}}) {
+                        swiper{{fn}}.slideTo(targetIndex);
+                    }
+                }, 80);
+
+                // Update URL with selected variant: push on user actions, replace on programmatic calls
+                try {
+                    let pushUrl = true;
+                    if (typeof pushUrlParam !== 'undefined') {
+                        pushUrl = !!pushUrlParam;
+                    } else if (e && typeof e === 'object' && typeof e.pushUrl !== 'undefined') {
+                        pushUrl = !!e.pushUrl;
+                    } else if (e && typeof e.isTrusted !== 'undefined') {
+                        pushUrl = !!e.isTrusted;
+                    }
+                    const u = new URL(window.location.href);
+                    u.searchParams.set('variant', variant.id);
+                    if (pushUrl && history && history.pushState) {
+                        history.pushState(null, null, u.toString());
+                    } else if (history && history.replaceState) {
+                        history.replaceState(null, null, u.toString());
+                    }
+                } catch (errUrl) {
+                    // non-fatal
+                }
+            }
+        } catch (err) {
+            console.warn('selectGiftVariant failed', err);
+        }
+    }
+    document.addEventListener('shopify:section:load', () => {
+        initSwiper{{fn}}();
+        initSwiperPop{{fn}}();
+    });
+    function initAccordions() {
+        // Helper to recalculate collapsed/expanded heights for all accordions
+        function recalcAccordionHeights() {
+            document.querySelectorAll(".accordion").forEach((item) => {
+                const header = item.querySelector('.pdpb-item-header');
+                const body = item.querySelector('.pdpb-item-content');
+                const hidden = item.querySelector('.pdpb-color');
+                if (!header || !body) return;
+                const collapsedHeight = header.offsetHeight;
+                let expandedHeight;
+                if (item.classList.contains('color-accordion')) {
+                    expandedHeight = header.offsetHeight + body.scrollHeight - (hidden ? hidden.scrollHeight : 0);
+                } else {
+                    expandedHeight = header.offsetHeight + body.scrollHeight;
+                }
+                // store computed heights so we can use them without stale values
+                item.dataset.collapsedHeight = collapsedHeight;
+                item.dataset.expandedHeight = expandedHeight;
+                // set initial height depending on open state
+                if (!item.classList.contains('open')) {
+                    let emptyCheck = item.querySelectorAll(".pdpb-item-content .pdpb-planters .pdpb-color");
+                    let emptyCheckVal = false;
+                    emptyCheck.forEach((empty) => {
+                        if (!empty.classList.contains("hidden")) {
+                            emptyCheckVal = true;
+                        }
+                    });
+                    if (emptyCheckVal) {
+                        item.style.height = collapsedHeight + 'px';
+                        item.style.overflow = 'hidden';
+                    }
+                } else {
+                    item.style.height = expandedHeight + 'px';
+                    item.style.overflow = 'visible';
+                }
+            });
+        }
+        // ensure heights are correct on init
+        recalcAccordionHeights();
+        document.querySelectorAll(".accordion").forEach((item) => {
+            let header = item.querySelector('.pdpb-item-header');
+            let body = item.querySelector('.pdpb-item-content');
+            let hidden = item.querySelector('.pdpb-color');
+            
+            if (!header || !body) return;
+
+            item.closest('.accordion-wrapper').addEventListener('click', (event) => {
+                console.log('accordion click');
+                if (event.target.closest('.pdpb-item-content')) return;
+                // Recalculate heights because header/body may have changed (e.g. planter swap)
+                recalcAccordionHeights();
+                const collapsedHeight = Number(item.dataset.collapsedHeight) || header.offsetHeight;
+                const expandedHeight = Number(item.dataset.expandedHeight) || (header.offsetHeight + body.scrollHeight);
+
+                document.querySelectorAll(".accordion").forEach((itemLow) => {
+                    if (itemLow !== item) {
+                        itemLow.classList.remove('open');
+                        const ch = Number(itemLow.dataset.collapsedHeight) || (itemLow.querySelector('.pdpb-item-header') ? itemLow.querySelector('.pdpb-item-header').offsetHeight : 0);
+                        itemLow.style.height = ch + 'px';
+                        itemLow.style.overflow = 'hidden';
+                    }
+                });
+                let emptyCheck = item.querySelectorAll(".pdpb-item-content .pdpb-planters .pdpb-color");
+                let emptyCheckVal = false;
+                emptyCheck.forEach((empty) => {
+                    if (!empty.classList.contains("hidden")) {
+                        emptyCheckVal = true;
+                    }
+                });
+                if(emptyCheck.length) {
+                    if (emptyCheckVal) {
+                        item.classList.toggle('open');
+                    }
+                } else {
+                    item.classList.toggle('open');
+                }
+
+                if (item.classList.contains('open')) {
+                    item.style.height = expandedHeight + 'px';
+                    if(item.classList.contains('accordion-color')) {
+                        setTimeout(() => {
+                            item.style.overflowY = 'auto';
+                        }, 300);
+                    } else {
+                        setTimeout(() => {
+                            item.style.overflow  = 'visible';
+                        }, 300);
+                    }
+                } else {
+                    item.style.height = collapsedHeight + 'px';
+                    item.style.overflow = 'hidden';
+                }
+            });
+        });
+        function reviseUpdateSaucerList(matching) {
+            if(matching) {
+                // Reset ATC price to base when planter changes (update all price elements)
+                const atcPriceElems = document.querySelectorAll('.atc-button-price');
+                if (atcPriceElems && atcPriceElems.length) {
+                    atcPriceElems.forEach((el) => {
+                        const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                        const basePrice = Number(baseData) || 0;
+                        el.innerHTML = `S$${(basePrice / 100).toFixed(2)}`;
+                    });
+                }
+                let saucerWrapper = document.querySelector('.saucer-accordion-wrapper');
+                if(saucerWrapper){
+                    saucerWrapper.classList.add('disabled-option');
+                }
+                document.querySelector('.saucer-title-holder').innerHTML = 'Matching Saucer included';
+            } else {
+                let saucerWrapper = document.querySelector('.saucer-accordion-wrapper');
+                if(saucerWrapper){
+                    saucerWrapper.classList.remove('disabled-option');
+                }
+                updateSaucerList();
+            }
+        };
+        // Expose helper so other code (planter click) can force a recalculation without rebinding listeners
+        window.recalcAccordionHeights = recalcAccordionHeights;
+        document.querySelectorAll(".pdpb-planter").forEach((planter) => {
+            planter.addEventListener('click', () => {
+                document.querySelectorAll(".pdpb-planter").forEach((planteree) => {
+                    planteree.classList.remove('active');
+                });
+                document.querySelectorAll(".pdpb-saucer").forEach((sauceree) => {
+                    sauceree.classList.remove('active');
+                });
+                planter.classList.add('active');
+                const planterName = planter.querySelector('p').innerHTML;
+                document.querySelector('.planter-title-holder').innerHTML = planterName;
+                filterByPlanter(planterName);
+                const _planterSpan = planter.querySelector('span');
+                document.querySelector('.planter-image-holder').innerHTML = _planterSpan ? _planterSpan.innerHTML : '';
+                const matchingSaucer = planter.dataset.matchingSaucer === 'true';
+                reviseUpdateSaucerList(matchingSaucer);
+                // Disable and reset color section — per Planter→Saucer→Color spec
+                const colorWrapper = document.querySelector('.accordion-color-wrapper');
+                if (colorWrapper) colorWrapper.classList.add('disabled-option');
+                const colorTitleHolder = document.querySelector('.color-title-holder');
+                if (colorTitleHolder) colorTitleHolder.innerHTML = 'Select Color';
+                document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters').innerHTML = '';
+                const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                let planterInitialPrice = Number(planter.getAttribute('initial-price')) || 0;
+                let plantInitialPrice = Number({{ product.price }}) || 0;
+                if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                    atcPriceElemsPlanter.forEach((el) => {
+                        const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                        const basePrice = Number(baseData) || 0;
+                        el.innerHTML = `S$${((plantInitialPrice + planterInitialPrice) / 100).toFixed(2)}`;
+                    });
+                }
+                const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+                if(pdp_top_atc_nodes && pdp_top_atc_nodes.length) {
+                    pdp_top_atc_nodes.forEach((node) => {
+                        node.classList.add('disabled');
+                        node.setAttribute('disabled', true);
+                    });
+                }
+            });  
+        });
+        document.querySelectorAll('.pdpb-gc').forEach((gc) => {
+            gc.addEventListener('click', () => {
+                try {
+                    document.querySelectorAll('.pdpb-gc').forEach(el => el.classList.remove('hidden'));
+                    gc.classList.add('hidden');
+
+                    // Update title holder using data attribute (avoid innerHTML parsing issues)
+                    const gcHolder = document.querySelector('.gc-title-holder');
+                    const title = gc.getAttribute('data-variant-title') || '';
+                    if (gcHolder) {
+                        gcHolder.textContent = title;  // Use textContent instead of innerHTML
+                    }
+
+                    // Resolve variant id and update Vue state
+                    const vid = gc.getAttribute('data-variant-id') || gc.dataset.variantId || null;
+                    if (pdpProductTop && vid) {
+                        pdpProductTop.first_load_check = false;
+                        pdpProductTop.variantId = Number(vid);
+                        const pdp_top_variant_input = document.querySelector('.pdp-top-gift-form .pdp-top-variant-id');
+                        if (pdp_top_variant_input) pdp_top_variant_input.value = vid;
+
+                        // Update price displays from variant data if available
+                        const variants = (pdpProductTop && pdpProductTop.product && Array.isArray(pdpProductTop.product.variants)) ? pdpProductTop.product.variants : [];
+                        const variant = variants.find(v => String(v.id) === String(vid));
+                        if (variant) {
+                            const priceElems = document.querySelectorAll('.atc-button-price');
+                            priceElems.forEach((el) => {
+                                if (!el) return;
+                                el.innerHTML = `S$${(Number(variant.price) / 100).toFixed(2)}`;
+                            });
+                            // Enable/disable add-to-cart buttons for gift-card context based on availability
+                            try {
+                                const atcButtons = document.querySelectorAll('.pdp-top-atc');
+                                atcButtons.forEach((btn) => {
+                                    if (!variant.available) {
+                                        btn.classList.add('disabled');
+                                        btn.setAttribute('disabled', 'true');
+                                        btn.setAttribute('data-available', 'false');
+                                        btn.querySelector('.atc-title').innerHTML = "Sold Out";
+                                    } else {
+                                        const productTitle = document.querySelector('.product-title');
+                                        if (productTitle && productTitle.classList.contains('available')) {
+                                            btn.classList.remove('disabled');
+                                            btn.removeAttribute('disabled');
+                                            btn.setAttribute('data-available', 'true');
+                                            btn.querySelector('.atc-title').innerHTML = "Add to Cart";
+                                        }
+                                    }
+                                });
+                            } catch (errAtc) {
+                                console.warn('Failed to update ATC button state for gift variant', errAtc);
+                            }
+                        }
+
+                        // Slide to matching slide using data-variant-ids
+                        setTimeout(() => {
+                            const slides = Array.from(document.querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide'));
+                            let targetIndex = -1;
+                            slides.forEach((slide, idx) => {
+                                const vAttr = slide.getAttribute('data-variant-ids') || '';
+                                if (!vAttr) return;
+                                const ids = vAttr.split('|').map(s => s.trim()).filter(Boolean);
+                                if (ids.indexOf(String(vid)) >= 0) targetIndex = idx;
+                            });
+                            if (targetIndex >= 0 && typeof swiper{{fn}} !== 'undefined' && swiper{{fn}}) {
+                                swiper{{fn}}.slideTo(targetIndex);
+                            }
+                        }, 80);
+
+                        // Push URL
+                        const u = new URL(window.location.href);
+                        u.searchParams.set('variant', vid);
+                        if (history && history.pushState) history.pushState(null, null, u.toString());
+                    }
+                } catch (err) {
+                    console.warn('pdpb-gc click handler error', err);
+                }
+            });
+        });
+        function updateColorList(planter) {
+            console.log('updateColorList called');
+            const color = JSON.parse(atob(planter.getAttribute('data-color')));
+            const colorVar = planter.getAttribute('data-color-variant').split('|');
+            const avaVar = planter.getAttribute('data-availability').split('|');
+            document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters').innerHTML = '';
+            console.log(color);
+            color.forEach((c, i) => {
+                const colorEl = document.createElement('button');
+                colorEl.className = 'pdpb-color w-full tr relative';
+                if (colorVar[i]) {
+                    colorEl.setAttribute('data-variant', colorVar[i]);
+                }
+                if (avaVar[i]) {
+                    colorEl.setAttribute('data-availability', avaVar[i]);
+                }
+                colorEl.innerHTML = `
+                    <p class="p2 pr-20 c-green">${color[i]}</p>
+                `;
+                document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters').appendChild(colorEl);
+                document.querySelector('.accordion-color-wrapper').classList.remove('disabled-option');
+                const colorTitleHolder = document.querySelector('.color-title-holder');
+                if (colorTitleHolder) {
+                    colorTitleHolder.innerHTML = 'Select Color';
+                }
+            });
+            document.querySelectorAll(".pdpb-color").forEach((color) => {
+                color.addEventListener('click', () => {
+                    console.log('color clicked');
+                    document.querySelectorAll(".pdp-top-atc").forEach((buttonatc) => {
+                        buttonatc.classList.remove('hide-m');
+                        buttonatc.classList.add('flex');
+                    });
+                    const buttonsdum = document.querySelector(".pdp-top-atc-dum");
+                    buttonsdum?.classList.remove('flex');
+                    buttonsdum?.classList.add('hide-m');
+                    document.querySelectorAll(".pdpb-color").forEach((colorItem) => {
+                        colorItem.classList.remove('hidden');
+                    });
+                    color.classList.add('hidden');
+                    pdpProductTop.checkAvailableVariantNew('color');
+                    let containerAccordion = document.querySelector(".accordion-color");
+                    if(document.querySelector('.color-title-holder').innerHTML === 'Select Planter' || document.querySelector('.color-title-holder').innerHTML === 'Select Color') {
+                        containerAccordion.style.height = `${parseInt(containerAccordion.style.height, 10) - 20}px`;
+                    }
+                    document.querySelector('.color-title-holder').innerHTML = color.querySelector('p').innerHTML;
+                    const activePlanterTitle = document.querySelector('.planter-title-holder')?.innerHTML?.trim() || '';
+                    const chosenColor = color.querySelector('p')?.innerHTML?.trim() || '';
+                    slideToPotColor(activePlanterTitle, chosenColor);
+                    {% unless product.tags contains 'plants' %}
+                        let variant = document.querySelector('.pdpb-color.hidden') ? document.querySelector('.pdpb-color.hidden').getAttribute("data-variant") : null;
+                        if(variant) {
+                            history.replaceState({}, '', `?variant=${variant}`);
+                        }
+                    {% endunless %}
+                    const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+
+                    let saucerMap = [];
+                    {% comment %} let saucerChosen = document.querySelector('.pdpb-saucer.active'); {% endcomment %}
+                    let checkColor = color.querySelector('p');
+                    let saucerPrice;
+                    
+
+                    let chosenPlanter = document.querySelector('.pdpb-planter.active');
+                    let matchingSaucer = false;
+                    if(chosenPlanter) {
+                        matchingSaucer = chosenPlanter.dataset.matchingSaucer === 'true';
+                    }
+                    updateSaucerList(color.querySelector('p').innerHTML, matchingSaucer);
+
+                    {% comment %} if (saucerChosen) {
+                        let ids = saucerChosen.dataset.saucerVariant.split('|');
+                        let colors = saucerChosen.dataset.saucerColor.split('|');
+                        let prices = saucerChosen.dataset.saucerPrice.split('|').map(Number);
+
+                        colors.forEach((color, i) => {
+                            saucerMap.push({
+                                color: color,
+                                id: ids[i],
+                                price: prices[i],
+                            });
+                        });
+                        let result = saucerMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                        saucerPrice = Number(result.price) || 0;
+                    } {% endcomment %}
+
+                    let idsPlanter = chosenPlanter.dataset.colorVariant.split('|');
+                    let colorsPlanter = JSON.parse(atob(chosenPlanter.dataset.color));
+                    let pricesPlanter = chosenPlanter.dataset.prices.split('|').map(Number);
+
+                    let planterMap = [];
+
+                    colorsPlanter.forEach((color, i) => {
+                        planterMap.push({
+                            color: color,
+                            id: idsPlanter[i],
+                            price: pricesPlanter[i],
+                        });
+                    });
+                    
+                    let resultPlanter = planterMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                    let planterPrice = Number(resultPlanter.price) || 0;
+
+                    {% comment %} if(saucerChosen) {
+                        const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                        document.querySelector('.saucer-title-holder').innerHTML = `${saucerChosen.querySelector('p').innerHTML} (+S$${(saucerPrice / 100).toFixed(2)})`;
+                        if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                            atcPriceElemsPlanter.forEach((el) => {
+                                const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                const basePrice = Number(baseData) || 0;
+                                el.innerHTML = `S$${((basePrice + planterPrice + saucerPrice) / 100).toFixed(2)}`;
+                            });
+                        }
+                    } else { {% endcomment %}
+                        const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                        if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                            atcPriceElemsPlanter.forEach((el) => {
+                                const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                const basePrice = Number(baseData) || 0;
+                                el.innerHTML = `S$${((basePrice + planterPrice) / 100).toFixed(2)}`;
+                            });
+                        }
+                    {% comment %} } {% endcomment %}
+                    pdpMaybeResolveVariant();
+                });
+            });
+        }
+        function updateColorListNoPlanter(saucer) {
+            console.log('updateColorListNoPlanter called');
+            const color = JSON.parse(atob(saucer.dataset.saucerColor));
+            const colorVar = saucer.getAttribute('data-saucer-variant').split('|');
+            const avaVar = saucer.getAttribute('data-availability').split('|');
+            document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters').innerHTML = '';
+            color.forEach((c, i) => {
+                const colorEl = document.createElement('button');
+                colorEl.className = 'pdpb-color w-full tr relative';
+                if (colorVar[i]) {
+                    colorEl.setAttribute('data-variant', colorVar[i]);
+                }
+                if (avaVar[i]) {
+                    colorEl.setAttribute('data-availability', avaVar[i]);
+                }
+                colorEl.innerHTML = `
+                    <p class="p2 pr-20 c-green">${color[i]}</p>
+                `;
+                document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters').appendChild(colorEl);
+                document.querySelector('.accordion-color-wrapper').classList.remove('disabled-option');
+                const colorTitleHolder = document.querySelector('.color-title-holder');
+                if (colorTitleHolder) {
+                    colorTitleHolder.innerHTML = 'Select Color';
+                }
+            });
+            document.querySelectorAll(".pdpb-color").forEach((color) => {
+                color.addEventListener('click', () => {
+                    console.log('color clicked2');
+                    document.querySelectorAll(".pdp-top-atc").forEach((buttonatc) => {
+                        buttonatc.classList.remove('hide-m');
+                        buttonatc.classList.add('flex');
+                    });
+                    const buttonsdum = document.querySelector(".pdp-top-atc-dum");
+                    buttonsdum?.classList.remove('flex');
+                    buttonsdum?.classList.add('hide-m');
+                    document.querySelectorAll(".pdpb-color").forEach((colorItem) => {
+                        colorItem.classList.remove('hidden');
+                    });
+                    color.classList.add('hidden');
+                    let containerAccordion = document.querySelector(".accordion-color");
+                    if(document.querySelector('.color-title-holder').innerHTML === 'Select a Saucer' || document.querySelector('.color-title-holder').innerHTML === 'Select Color') {
+                        containerAccordion.style.height = `${parseInt(containerAccordion.style.height, 10) - 20}px`;
+                    }
+                    document.querySelector('.color-title-holder').innerHTML = color.querySelector('p').innerHTML;
+                    slideToPotColor(
+                        (document.querySelector('.planter-title-holder')?.innerHTML?.trim() || ''),
+                        (color.querySelector('p')?.innerHTML?.trim() || '')
+                    );
+                    {% unless product.tags contains 'plants' %}
+                        let variant = document.querySelector('.pdpb-color.hidden') ? document.querySelector('.pdpb-color.hidden').getAttribute("data-variant") : null;
+                        if(variant) {
+                            history.replaceState({}, '', `?variant=${variant}`);
+                        }
+                    {% endunless %}
+
+
+                    let saucerMap = [];
+                    let saucerChosen = document.querySelector('.pdpb-saucer.active');
+                    let checkColor = color.querySelector('p');
+                    let saucerPrice;
+
+                    if (saucerChosen) {
+                        let ids = saucerChosen.dataset.saucerVariant.split('|');
+                        let colors = JSON.parse(atob(saucerChosen.dataset.saucerColor))
+                        let prices = saucerChosen.dataset.saucerPrice.split('|').map(Number);
+
+                        colors.forEach((color, i) => {
+                            saucerMap.push({
+                                color: color,
+                                id: ids[i],
+                                price: prices[i],
+                            });
+                        });
+                        let result = saucerMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                        saucerPrice = Number(result.price) || 0;
+                    }
+
+                    {% comment %} let chosenPlanter = document.querySelector('.pdpb-planter.active');
+
+                    let idsPlanter = chosenPlanter.dataset.colorVariant.split('|');
+                    let colorsPlanter = JSON.parse(atob(chosenPlanter.dataset.color));
+                    let pricesPlanter = chosenPlanter.dataset.prices.split('|').map(Number);
+
+                    let planterMap = [];
+
+                    colorsPlanter.forEach((color, i) => {
+                        planterMap.push({
+                            color: color,
+                            id: idsPlanter[i],
+                            price: pricesPlanter[i],
+                        });
+                    });
+                    
+                    let resultPlanter = planterMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                    let planterPrice = Number(resultPlanter.price) || 0; {% endcomment %}
+
+                    const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                    document.querySelector('.saucer-title-holder').innerHTML = `${saucerChosen.querySelector('p').innerHTML} (+S$${(saucerPrice / 100).toFixed(2)})`;
+                    if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                        atcPriceElemsPlanter.forEach((el) => {
+                            const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                            const basePrice = Number(baseData) || 0;
+                            el.innerHTML = `S$${((basePrice + saucerPrice) / 100).toFixed(2)}`;
+                        });
+                    }
+                    pdpProductTop.checkAvailableVariantNew();
+                    pdpMaybeResolveVariant();
+                });
+            });
+        }
+        // Function to update saucer list based on selected planter
+        function updateSaucerList(colorHash, matching) {
+            const saucerContainer = document.querySelector('.saucer-accordion-wrapper .pdpb-item-content .pdpb-planters');
+            const saucerContainerWrapper = document.querySelector('.saucer-accordion-wrapper');
+            if (!saucerContainer) return;
+            
+            // Reset saucer header display
+            const saucerTitleHolder = document.querySelector('.saucer-title-holder');
+            const saucerImageHolder = document.querySelector('.saucer-image-holder');
+            if (saucerTitleHolder) {
+                if(matching) {
+                    saucerTitleHolder.innerHTML = 'Matching Saucer included';
+                } else {
+                    saucerTitleHolder.innerHTML = 'Select Saucer';
+                }
+            }
+            if (saucerImageHolder) {
+                saucerImageHolder.innerHTML = '';
+            }
+            
+            // Remove active state from all saucers
+            document.querySelectorAll(".pdpb-saucer").forEach((saucer) => {
+                saucer.classList.remove('active');
+            });
+
+            // Reset ATC price to base when planter changes (update all price elements)
+            const atcPriceElems = document.querySelectorAll('.atc-button-price');
+            if (atcPriceElems && atcPriceElems.length) {
+                atcPriceElems.forEach((el) => {
+                    const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                    const basePrice = Number(baseData) || 0;
+                    el.innerHTML = `S$${(basePrice / 100).toFixed(2)}`;
+                });
+            }
+
+            // Clear existing saucers
+            saucerContainer.innerHTML = '';
+            
+            // Find the matching planter and get its saucer IDs
+            const allPlanters = document.querySelectorAll('.pdpb-planter');
+            let saucersFound = false;
+            let saucersAdded = 0;
+
+            const saucerHolder = document.querySelector('.saucer-change-holder');
+            if (!saucerHolder) return;
+            console.log(JSON.parse(saucerHolder.textContent));
+            let saucers;
+            try {
+            saucers = JSON.parse(saucerHolder.textContent);
+            } catch (e) {
+            console.error('Invalid saucer JSON', e);
+            return;
+            }
+
+            let productsSaucers = saucers.map(saucer => {
+                let availability = Array.isArray(saucer.variants)
+                ? saucer.variants.map(v => v.available).join('|')
+                : '';
+                let variantIds = Array.isArray(saucer.variants)
+                ? saucer.variants.map(v => v.id).join('|')
+                : '';
+                let colors = Array.isArray(saucer.variants)
+                ? saucer.variants.map(v => v.option1).join('|')
+                : '';
+                let colors64 = Array.isArray(saucer.variants)
+                ? btoa(JSON.stringify(saucer.variants.map(v => v.option1)))
+                : '';
+                let prices = Array.isArray(saucer.variants)
+                ? saucer.variants.map(v => v.price).join('|')
+                : '';
+            return {
+                id: saucer.id,
+                handle: saucer.handle,
+                title: saucer.title,
+                url: saucer.url,
+                colors: colors,
+                colors64: colors64,
+                variantId: variantIds,
+                price: prices,
+                availability: availability
+            };
+            });
+
+            productsSaucers.forEach((saucer) => {
+                console.log(saucer);
+                let matchesColor =
+                    !colorHash || saucer.colors.split('|').includes(colorHash);
+                if (saucer) {
+                    if (!matchesColor) return;
+                    if (fetchSaucerDetails(saucer)) {
+                        saucersAdded++;
+                    }
+                    saucersFound = true;
+                }
+            });
+
+            
+            // Re-initialize saucer click handlers after all saucers are added
+            if (saucersAdded > 0) {
+                saucerContainerWrapper.classList.remove('hide-m');
+                initSaucerHandlers();
+            }
+
+            // Ensure accordion heights are recalculated after DOM changes
+            if (typeof window.recalcAccordionHeights === 'function') {
+                // run on next microtask to ensure DOM updates applied
+                Promise.resolve().then(() => window.recalcAccordionHeights());
+            }
+        }
+        
+        // Global saucer data map (will be populated from Liquid)
+        window.saucerDataMap = window.saucerDataMap || {};
+        
+        // Function to populate saucer element from preloaded data (no client fetch)
+        function fetchSaucerDetails(product) {
+            if (!window.saucerDataMap) {
+                console.warn('Saucer data map not initialized');
+                return false;
+            }
+            console.log('fetchSaucerDetails called for', product.title);
+
+            const saucer = window.saucerDataMap[product.title];
+
+            const saucerEl = document.createElement('button');
+            saucerEl.className = 'pdpb-list pdpb-saucer relative';
+
+            // Use preloaded variantId and price (price stored as integer cents)
+            if (product.variantId) {
+                saucerEl.setAttribute('data-saucer-variant', product.variantId);    
+            }
+            console.log('checksauceragain', product.colors64);
+            if (product.colors64) {
+                saucerEl.setAttribute('data-saucer-color', product.colors64);
+            }
+            if (product.price) {
+                saucerEl.setAttribute('data-saucer-price', product.price);
+            }
+            saucerEl.setAttribute('data-availability', product.availability);
+            
+
+
+            saucerEl.innerHTML = `
+                <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">${product.title}</p>
+                <span class="flex">${saucer.svg}</span>
+            `;
+            document.querySelector('.saucer-accordion-wrapper .pdpb-item-content .pdpb-planters').appendChild(saucerEl);
+            return true;
+        }
+        
+        // Re-initialize saucer click handlers after updating the list
+        function initSaucerHandlers() {
+            document.querySelectorAll(".pdpb-saucer").forEach((saucer) => {
+                // Remove existing listeners to avoid duplicates
+                const newSaucer = saucer.cloneNode(true);
+                saucer.parentNode.replaceChild(newSaucer, saucer);
+                
+                newSaucer.addEventListener('click', () => {
+                    console.log('checksaucer1');
+                    // Check if this saucer was already active before removing classes
+                    const wasActive = newSaucer.classList.contains('active');
+                    
+                    // Remove active class from all saucers
+                    document.querySelectorAll(".pdpb-saucer").forEach((saucerItem) => {
+                        saucerItem.classList.remove('active');
+                    });
+
+                    let ids = newSaucer.dataset.saucerVariant.split('|');
+                    let colors = JSON.parse(atob(newSaucer.dataset.saucerColor));
+                    let prices = newSaucer.dataset.saucerPrice.split('|').map(Number);
+
+                    console.log('testonprice', prices);
+                    console.log('checkthis', newSaucer.dataset.saucerColor, colors);
+
+                    let saucerMap = [];
+
+                    colors.forEach((color, i) => {
+                        console.log('colorcheck', prices[i]);
+                        saucerMap.push({
+                            color: color,
+                            id: ids[i],
+                            price: prices[i],
+                        });
+                    });
+
+                    let chosenPlanter = document.querySelector('.pdpb-planter.active');
+
+                    let idsPlanter = chosenPlanter.dataset.colorVariant.split('|');
+                    let colorsPlanter = JSON.parse(atob(chosenPlanter.dataset.color));
+                    let pricesPlanter = chosenPlanter.dataset.prices.split('|').map(Number);
+
+                    let planterMap = [];
+
+                    colorsPlanter.forEach((color, i) => {
+                        planterMap.push({
+                            color: color,
+                            id: idsPlanter[i],
+                            price: pricesPlanter[i],
+                        });
+                    });
+                    
+                    let checkColor = document.querySelector('.color-title-holder');
+                    let saucerPrice;
+                    let planterPrice;
+                    if(checkColor.innerHTML != 'Select Planter' && checkColor.innerHTML != 'Select Color') {
+                        let result = saucerMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                        saucerPrice = Number(result.price) || 0;
+                        let resultPlanter = planterMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                        planterPrice = Number(resultPlanter.price) || 0;
+                    } else {
+                        saucerPrice = Number(saucerMap[0].price) || 0;
+                        planterPrice = Number(planterMap[0].price) || 0;
+                    }
+                    
+                    if(wasActive){
+                        // Deselect: toggle off
+                        pdpProductTop.checkAvailableVariantNew('sauceroff');
+                        document.querySelector('.saucer-title-holder').innerHTML = 'Select Saucer';
+                        document.querySelector('.saucer-image-holder').innerHTML = '';
+                        // Disable color when saucer is deselected
+                        const colorWrapperDesel = document.querySelector('.accordion-color-wrapper');
+                        if (colorWrapperDesel) colorWrapperDesel.classList.add('disabled-option');
+                        const colorTitleHolderDesel = document.querySelector('.color-title-holder');
+                        if (colorTitleHolderDesel) colorTitleHolderDesel.innerHTML = 'Select Color';
+                        document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters').innerHTML = '';
+                        const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                        if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                            atcPriceElemsPlanter.forEach((el) => {
+                                const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                const basePrice = Number(baseData) || 0;
+                                el.innerHTML = `S$${((basePrice + planterPrice) / 100).toFixed(2)}`;
+                            });
+                        }
+                    } else {
+                        // Select: toggle on
+                        newSaucer.classList.add('active');
+                        pdpProductTop.checkAvailableVariantNew();
+                        document.querySelector('.saucer-title-holder').innerHTML = `${newSaucer.querySelector('p').innerHTML} (+S$${(saucerPrice / 100).toFixed(2)})`;
+                        document.querySelector('.saucer-title-holder').classList.remove('c-placeholder');
+                        document.querySelector('.saucer-image-holder').innerHTML = newSaucer.querySelector('span').innerHTML;
+                        // Update ATC price to include selected saucer for all price elements
+                        const atcPriceElemsSelected = document.querySelectorAll('.atc-button-price');
+                        if (atcPriceElemsSelected && atcPriceElemsSelected.length) {
+                            atcPriceElemsSelected.forEach((el) => {
+                                const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                const basePrice = Number(baseData) || 0;
+                                el.innerHTML = `S$${((basePrice + saucerPrice + planterPrice) / 100).toFixed(2)}`;
+                            });
+                        }
+
+                        // Show only colours offered by BOTH the planter and the saucer (matched,
+                        // compared case-insensitively so "Cream" and "cream" are the same colour).
+                        // If there is no shared colour there is nothing to pick, so disable the
+                        // colour accordion and make Add to Cart clickable directly.
+                        if (chosenPlanter) {
+                            const planterColorNames = JSON.parse(atob(chosenPlanter.dataset.color));
+                            const saucerColorNames = JSON.parse(atob(newSaucer.dataset.saucerColor));
+                            const matchedColors = planterColorNames.filter(c => saucerColorNames.some(s => pdpNormColor(s) === pdpNormColor(c)));
+
+                            const planterColorVariants = chosenPlanter.dataset.colorVariant.split('|');
+                            const planterAvaVars = chosenPlanter.dataset.availability.split('|');
+                            const saucerAvaVars = newSaucer.dataset.availability.split('|');
+
+                            const colorContainer = document.querySelector('.accordion-color .pdpb-item-content .pdpb-planters');
+                            colorContainer.innerHTML = '';
+
+                            matchedColors.forEach((colorName) => {
+                                const planterIdx = planterColorNames.findIndex(x => pdpNormColor(x) === pdpNormColor(colorName));
+                                const saucerIdx = saucerColorNames.findIndex(x => pdpNormColor(x) === pdpNormColor(colorName));
+                                // A matched colour is available only when both the planter and the
+                                // saucer are in stock for it. Otherwise it is shown struck-through.
+                                const planterOk = planterIdx !== -1 && planterAvaVars[planterIdx] === 'true';
+                                const saucerOk = saucerIdx !== -1 && saucerAvaVars[saucerIdx] === 'true';
+                                const colorEl = document.createElement('button');
+                                colorEl.className = 'pdpb-color w-full tr relative';
+                                if (planterIdx !== -1 && planterColorVariants[planterIdx]) {
+                                    colorEl.setAttribute('data-variant', planterColorVariants[planterIdx]);
+                                }
+                                colorEl.setAttribute('data-availability', (planterOk && saucerOk) ? 'true' : 'false');
+                                colorEl.innerHTML = `<p class="p2 pr-20 c-green">${colorName}</p>`;
+                                colorContainer.appendChild(colorEl);
+                            });
+
+                            const colorWrapper = document.querySelector('.accordion-color-wrapper');
+                            const colorTitleHolderSel = document.querySelector('.color-title-holder');
+                            if (matchedColors.length === 0) {
+                                // No shared colour: nothing to select — collapse the colour step
+                                // and let the product be added to cart as-is.
+                                if (colorWrapper) colorWrapper.classList.add('disabled-option');
+                                if (colorTitleHolderSel) colorTitleHolderSel.innerHTML = 'No colour options';
+                                document.querySelectorAll(".pdp-top-atc").forEach((buttonatc) => {
+                                    buttonatc.classList.remove('hide-m');
+                                    buttonatc.classList.add('flex');
+                                });
+                                const buttonsdum = document.querySelector(".pdp-top-atc-dum");
+                                buttonsdum?.classList.remove('flex');
+                                buttonsdum?.classList.add('hide-m');
+                                pdpProductTop.activateButton();
+                            } else {
+                                if (colorWrapper) colorWrapper.classList.remove('disabled-option');
+                                if (colorTitleHolderSel) colorTitleHolderSel.innerHTML = 'Select Color';
+                            }
+
+                            // Mark any sold-out colours (struck through, non-selectable).
+                            applyOOS();
+
+                            // Attach color click handlers for the intersection color buttons
+                            document.querySelectorAll(".pdpb-color").forEach((colorBtn) => {
+                                colorBtn.addEventListener('click', () => {
+                                    document.querySelectorAll(".pdp-top-atc").forEach((buttonatc) => {
+                                        buttonatc.classList.remove('hide-m');
+                                        buttonatc.classList.add('flex');
+                                    });
+                                    const buttonsdum = document.querySelector(".pdp-top-atc-dum");
+                                    buttonsdum?.classList.remove('flex');
+                                    buttonsdum?.classList.add('hide-m');
+                                    document.querySelectorAll(".pdpb-color").forEach((c) => c.classList.remove('hidden'));
+                                    colorBtn.classList.add('hidden');
+                                    pdpProductTop.checkAvailableVariantNew('color');
+                                    let containerAccordion = document.querySelector(".accordion-color");
+                                    if (document.querySelector('.color-title-holder').innerHTML === 'Select Planter' || document.querySelector('.color-title-holder').innerHTML === 'Select Color') {
+                                        containerAccordion.style.height = `${parseInt(containerAccordion.style.height, 10) - 20}px`;
+                                    }
+                                    document.querySelector('.color-title-holder').innerHTML = colorBtn.querySelector('p').innerHTML;
+
+                                    const selectedColorName = colorBtn.querySelector('p').innerHTML;
+                                    slideToPotColor(
+                                        (document.querySelector('.planter-title-holder')?.innerHTML?.trim() || ''),
+                                        selectedColorName.trim()
+                                    );
+                                    const activePlanter = document.querySelector('.pdpb-planter.active');
+                                    const activeSaucer = document.querySelector('.pdpb-saucer.active');
+                                    let pPrice = 0, sPrice = 0;
+
+                                    if (activePlanter) {
+                                        const pColors = JSON.parse(atob(activePlanter.dataset.color));
+                                        const pPrices = activePlanter.dataset.prices.split('|').map(Number);
+                                        const pIdx = pColors.findIndex(x => pdpNormColor(x) === pdpNormColor(selectedColorName));
+                                        if (pIdx !== -1) pPrice = pPrices[pIdx] || 0;
+                                    }
+                                    if (activeSaucer) {
+                                        const sColors = JSON.parse(atob(activeSaucer.dataset.saucerColor));
+                                        const sPrices = activeSaucer.dataset.saucerPrice.split('|').map(Number);
+                                        const sIdx = sColors.findIndex(x => pdpNormColor(x) === pdpNormColor(selectedColorName));
+                                        if (sIdx !== -1) sPrice = sPrices[sIdx] || 0;
+                                    }
+
+                                    const atcPriceElems = document.querySelectorAll('.atc-button-price');
+                                    if (atcPriceElems && atcPriceElems.length) {
+                                        atcPriceElems.forEach((el) => {
+                                            const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                            const basePrice = Number(baseData) || 0;
+                                            el.innerHTML = `S$${((basePrice + pPrice + sPrice) / 100).toFixed(2)}`;
+                                        });
+                                    }
+                                    // checkAvailableVariantNew already handles enable/disable based on availability
+                                    pdpMaybeResolveVariant();
+                                });
+                            });
+
+                            if (typeof recalcAccordionHeights === 'function') recalcAccordionHeights();
+                        }
+                    }
+                });
+            });
+        }
+        let planterCheck = document.querySelector('.planter-accordion-wrapper');
+        document.querySelectorAll(".pdpb-saucer").forEach((newSaucer) => {
+            newSaucer.addEventListener('click', () => {
+                console.log('checksaucer2');
+                if(!planterCheck){
+                    // Check if this saucer was already active before removing classes
+                    const wasActive = newSaucer.classList.contains('active');
+                    
+                    // Remove active class from all saucers
+                    document.querySelectorAll(".pdpb-saucer").forEach((saucerItem) => {
+                        saucerItem.classList.remove('active');
+                    });
+                    let ids = newSaucer.dataset.saucerVariant.split('|');
+                    let colors = JSON.parse(atob(newSaucer.dataset.saucerColor))
+                    let prices = newSaucer.dataset.saucerPrice.split('|').map(Number);
+
+                    let saucerMap = [];
+
+                    console.log(colors);
+
+                    colors.forEach((color, i) => {
+                        saucerMap.push({
+                            color: color,
+                            id: ids[i],
+                            price: prices[i],
+                        });
+                    });
+                    
+                    let checkColor = document.querySelector('.color-title-holder');
+                    let saucerPrice;
+                    let planterPrice;
+                    if(checkColor.innerHTML != 'Select a Saucer' && checkColor.innerHTML != 'Select Color') {
+                        let result = saucerMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                        saucerPrice = Number(result.price) || 0;
+                    } else {
+                        saucerPrice = Number(saucerMap[0].price) || 0;
+                    }
+
+                    updateColorListNoPlanter(newSaucer);
+                    
+                    if(wasActive){
+                        // Deselect: toggle off
+                        pdpProductTop.checkAvailableVariantNew('sauceroff');
+                        document.querySelector('.saucer-title-holder').innerHTML = 'Select Saucer';
+                        document.querySelector('.saucer-image-holder').innerHTML = '';
+                        document.querySelector('.accordion-color-wrapper').classList.add('disabled-option');
+                        const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                        if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                            atcPriceElemsPlanter.forEach((el) => {
+                                const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                const basePrice = Number(baseData) || 0;
+                                el.innerHTML = `S$${((basePrice) / 100).toFixed(2)}`;
+                            });
+                        }
+                    } else {
+                        // Select: toggle on
+                        newSaucer.classList.add('active');
+                        pdpProductTop.checkAvailableVariantNew();
+                        document.querySelector('.saucer-title-holder').innerHTML = `${newSaucer.querySelector('p').innerHTML} (+S$${(saucerPrice / 100).toFixed(2)})`;
+                        document.querySelector('.saucer-title-holder').classList.remove('c-placeholder');
+                        document.querySelector('.saucer-image-holder').innerHTML = newSaucer.querySelector('span').innerHTML;
+                        // Update ATC price to include selected saucer for all price elements
+                        const atcPriceElemsSelected = document.querySelectorAll('.atc-button-price');
+                        if (atcPriceElemsSelected && atcPriceElemsSelected.length) {
+                            atcPriceElemsSelected.forEach((el) => {
+                                const baseData = el.getAttribute('data-price') || el.dataset.price || '';
+                                const basePrice = Number(baseData) || 0;
+                                // const saucerPrice = Number(newSaucer.getAttribute('data-saucer-price')) || 0;
+                                el.innerHTML = `S$${((basePrice + saucerPrice) / 100).toFixed(2)}`;
+                            });
+                        }
+                    }
+                }
+            });
+        });
+        document.querySelectorAll(".pdpb-color").forEach((color) => {
+            color.addEventListener('click', () => {
+                console.log('aaa', color);
+                document.querySelectorAll(".pdp-top-atc").forEach((buttonatc) => {
+                    buttonatc.classList.remove('hide-m');
+                    buttonatc.classList.add('flex');
+                });
+                const buttonsdum = document.querySelector(".pdp-top-atc-dum");
+                buttonsdum?.classList.remove('flex');
+                buttonsdum?.classList.add('hide-m');
+                let containerAccordion = document.querySelector(".accordion-color");
+                if(document.querySelector('.color-title-holder').innerHTML === 'Select Color') {
+                    containerAccordion.style.height = `${parseInt(containerAccordion.style.height, 10) - 20}px`;
+                }
+                document.querySelectorAll(".pdpb-color").forEach((colorItem) => {
+                    colorItem.classList.remove('hidden');
+                });
+                color.classList.add('hidden');
+                document.querySelector('.color-title-holder').innerHTML = color.querySelector('p').innerHTML;
+                slideToPotColor(
+                    (document.querySelector('.planter-title-holder')?.innerHTML?.trim() || ''),
+                    (color.querySelector('p')?.innerHTML?.trim() || '')
+                );
+                pdpProductTop.checkAvailableVariantNew();
+                {% unless product.tags contains 'plants' %}
+                    let variant = document.querySelector('.pdpb-color.hidden') ? document.querySelector('.pdpb-color.hidden').getAttribute("data-variant") : null;
+                    if(variant) {
+                        history.replaceState({}, '', `?variant=${variant}`);
+                    }
+                {% endunless %}
+                {% comment %} if (product.tags contains 'planters' || product.tags contains 'saucers') {
+                    const initialPrice = color.getAttribute('data-color-initial-price') || '';
+                    el.innerHTML = `S$${((initialPrice) / 100).toFixed(2)}`;
+                } {% endcomment %}
+                {% comment %} {% if product.tags contains 'planters' or product.tags contains 'saucers' %} {% endcomment %}
+                    const atcPriceElemsPlanter = document.querySelectorAll('.atc-button-price');
+                    if (atcPriceElemsPlanter && atcPriceElemsPlanter.length) {
+                        atcPriceElemsPlanter.forEach((el) => {
+                            const initialPrice = color.getAttribute('data-color-initial-price') || '';
+                            el.innerHTML = `S$${((initialPrice) / 100).toFixed(2)}`;
+                        });
+                    }
+                {% comment %} {% endif %} {% endcomment %}
+                pdpMaybeResolveVariant();
+            });
+        });
+        // Generic variant-option selection (Maturity/Age/Stage/...). Mirrors the colour
+        // handler and resolves the variant across every selected dimension. Clearing the
+        // active state is scoped to the same option group so options are independent.
+        document.querySelectorAll(".pdpb-option").forEach((optBtn) => {
+            optBtn.addEventListener('click', () => {
+                if (optBtn.classList.contains('oos')) return; // sold-out value: not selectable
+                const optName = optBtn.dataset.optionName;
+                document.querySelectorAll(".pdpb-option").forEach((m) => {
+                    if (m.dataset.optionName === optName) m.classList.remove('active');
+                });
+                optBtn.classList.add('active');
+                const label = optBtn.querySelector('p') ? optBtn.querySelector('p').innerHTML : optBtn.dataset.optionValue;
+                const wrapper = optBtn.closest('.accordion-option-wrapper');
+                const titleHolder = wrapper ? wrapper.querySelector('.option-title-holder') : null;
+                if (titleHolder && label) titleHolder.innerHTML = label;
+                pdpMaybeResolveVariant();
+                pdpProductTop.checkAvailableVariantNew();
+            });
+        });
+        // Pre-load saucer data from metaobjects (include variant id & price so no client fetch required)
+        window.saucerDataMap = {};
+        {% assign saucer_product_variants = settings.saucer_product.variants %}
+        {% paginate shop.metaobjects["saucer"].values by 100 %}
+            {% for saucer in shop.metaobjects["saucer"].values %}
+                window.saucerDataMap['{{ saucer.title }}'] = {
+                    title: {{ saucer.title | json }},
+                    svg: `{{ saucer.svg }}`,
+                    handle: '{{ saucer.system.handle }}',
+                    variantId: {{ saucer.id | default: 'null' }},
+                    price: {{ saucer.price | default: 0 }}
+                };
+            {% endfor %}
+        {% endpaginate %}
+        console.log('saucerDataMap preloaded', window.saucerDataMap);
+    }
+    document.addEventListener('DOMContentLoaded', function () {
+        initSwiper{{fn}}();
+        initSwiperPop{{fn}}();
+        if(screen.width < 1024) {
+            {% comment %} const swiper = swiperPop{{fn}};
+            const nextBtn = document.querySelector('.arrow-container-popup .right');
+            const prevBtn = document.querySelector('.arrow-container-popup .left');
+            swiper.setTransition(400);
+            if (nextBtn && prevBtn) {
+                nextBtn.addEventListener('click', () => {
+                    swiper.setTransition(400);
+                    const maxTranslate = swiper.maxTranslate();
+                    const nextTranslate = swiper.translate - swiper.width;
+
+                    swiper.setTranslate(Math.max(nextTranslate, maxTranslate));
+                    swiper.updateProgress();
+                    swiper.updateActiveIndex();
+                    swiper.updateSlidesClasses();
+                });
+                prevBtn.addEventListener('click', () => {
+                    swiper.setTransition(400);
+                    const minTranslate = swiper.minTranslate();
+                    const prevTranslate = swiper.translate + swiper.width;
+
+                    swiper.setTranslate(Math.min(prevTranslate, minTranslate));
+                    swiper.updateProgress();
+                    swiper.updateActiveIndex();
+                    swiper.updateSlidesClasses();
+                });
+            } {% endcomment %}
+            const swiper = swiperPop{{fn}};
+            const nextBtn = document.querySelector('.arrow-container-popup .right');
+            const prevBtn = document.querySelector('.arrow-container-popup .left');
+
+            swiper.setTransition(400);
+
+            function getSlideWidth() {
+                return swiper.slides[swiper.activeIndex].offsetWidth;
+            }
+
+            if (nextBtn && prevBtn) {
+
+                nextBtn.addEventListener('click', () => {
+                    swiper.setTransition(400);
+
+                    const slideWidth = getSlideWidth();
+                    const viewport = swiper.width;
+                    const cutOffset = slideWidth - viewport;
+
+                    const currentTranslate = swiper.translate;
+                    const targetPartial = -swiper.activeIndex * slideWidth;
+                    const targetFull = targetPartial - cutOffset;
+
+                    // If we're closer to partial → go to full
+                    if (Math.abs(currentTranslate - targetPartial) < Math.abs(currentTranslate - targetFull)) {
+                        swiper.setTranslate(targetFull);
+                    } 
+                    // Else go to next slide (partial)
+                    else {
+                        swiper.slideNext();
+                        return;
+                    }
+
+                    swiper.updateProgress();
+                    swiper.updateActiveIndex();
+                    swiper.updateSlidesClasses();
+                });
+
+                prevBtn.addEventListener('click', () => {
+                    swiper.setTransition(400);
+
+                    const slideWidth = swiper.slides[swiper.activeIndex].offsetWidth;
+                    const viewport = swiper.width;
+                    const cutOffset = slideWidth - viewport;
+
+                    const currentTranslate = swiper.translate;
+                    const index = swiper.activeIndex;
+
+                    const targetPartial = -index * slideWidth;
+                    const targetFull = targetPartial - cutOffset;
+
+                    // If currently closer to partial → go to previous slide FULL
+                    if (Math.abs(currentTranslate - targetPartial) < Math.abs(currentTranslate - targetFull)) {
+                        if (index > 0) {
+                            const prevIndex = index - 1;
+                            const prevSlideWidth = swiper.slides[prevIndex].offsetWidth;
+                            const prevPartial = -prevIndex * prevSlideWidth;
+                            const prevFull = prevPartial - (prevSlideWidth - viewport);
+
+                            swiper.setTranslate(prevFull);
+                            swiper.activeIndex = prevIndex;
+                        }
+                    }
+                    // Else go from full → partial (same slide)
+                    else {
+                        swiper.setTranslate(targetPartial);
+                    }
+
+                    swiper.updateProgress();
+                    swiper.updateActiveIndex();
+                    swiper.updateSlidesClasses();
+                });
+            }
+        }
+        document.querySelector('.pdp-top-atc-dum')?.addEventListener('click', () => {
+            document.querySelector('.all-variants-wrapper')
+            .scrollIntoView({ behavior: 'smooth' });
+        });
+        document.querySelector('.icon-zoom')?.addEventListener('click', function(event) {
+            document.querySelector('.product-top-slider-popup').classList.add('show');
+            document.body.classList.add('no-scroll');
+            swiperPop{{fn}}.slideTo(swiper{{fn}}.activeIndex, 0, false);
+        });
+        document.querySelector('.popup-close')?.addEventListener('click', function(event) {
+            document.querySelector('.product-top-slider-popup').classList.remove('show');
+            document.body.classList.remove('no-scroll');
+        });
+        {% comment %} document.querySelector('.size-guide-trigger')?.addEventListener('click', function(event) {
+            document.querySelector('.pdp-top-overlay').classList.add('show');
+            document.body.classList.add('no-scroll');
+        }); {% endcomment %}
+        document.querySelector('.size-close')?.addEventListener('click', function(event) {
+            document.querySelector('.pdp-top-overlay').classList.remove('show');
+            document.body.classList.remove('no-scroll');
+        });
+        document.querySelector('.pdp-top-overlay')?.addEventListener('click', function(event) {
+            if (event.target.closest('.pdp-top-overlay-size')) return;
+            document.querySelector('.pdp-top-overlay').classList.remove('show');
+            document.body.classList.remove('no-scroll');
+        })
+        {% comment %} if (!document.querySelector('.pdpb-saucer')) {
+            document.querySelector('.saucer-accordion-wrapper')?.classList.add('hide-m');
+        } {% endcomment %}
+
+        initAccordions();
+
+        // Ensure a gift-card value is selected on load (URL variant param preferred; otherwise select first gift-card variant)
+        (function(){
+            try {
+                const urlVid = (new URL(window.location.href)).searchParams.get('variant');
+                let initialVid = null;
+                if (urlVid) {
+                    initialVid = urlVid;
+                } else if (window.pdpProductTop && window.pdpProductTop.variantId) {
+                    initialVid = window.pdpProductTop.variantId;
+                } else {
+                    // fallback to the first available gift-card element on the page
+                    const firstEl = document.querySelector('.pdpb-gc');
+                    if (firstEl) {
+                        initialVid = firstEl.getAttribute('data-variant-id') || firstEl.dataset.variantId || null;
+                    }
+                }
+
+                if (!initialVid) return;
+                const el = document.querySelector(`.pdpb-gc[data-variant-id="${initialVid}"]`) || document.querySelector('.pdpb-gc');
+                if (el) {
+                    // call the same handler to ensure UI + URL update
+                    // pass pushUrl:false so initial programmatic selection doesn't create a history entry
+                    selectGiftVariant({ target: el, pushUrl: false });
+                }
+            } catch (err) {
+                console.warn('initial gift variant select failed', err);
+            }
+        })();
+
+        // Hide currently selected color from the list on load
+        const initialColorTitle = document.querySelector('.color-title-holder');
+        if (initialColorTitle) {
+            const initialColorName = initialColorTitle.innerHTML.trim();
+            document.querySelectorAll(".pdpb-color").forEach((color) => {
+                const colorName = color.querySelector('p').innerHTML.trim();
+                if (colorName === initialColorName) {
+                    color.classList.add('hidden');
+                } else {
+                    color.classList.remove('hidden');
+                }
+            });
+        }
+        
+        // Set initial active planter based on selected variant
+        const initialPlanterTitle = document.querySelector('.planter-title-holder');
+        if (initialPlanterTitle) {
+            const initialPlanterName = initialPlanterTitle.innerHTML.trim();
+            document.querySelectorAll(".pdpb-planter").forEach((planter) => {
+                const planterName = planter.querySelector('p').innerHTML.trim();
+                if (planterName === initialPlanterName) {
+                    planter.classList.add('active');
+                    document.querySelector('.planter-image-holder').innerHTML = planter.querySelector('span').innerHTML;
+                }
+            });
+        }
+
+        // On load: try to slide main swiper to the selected variant's featured image
+        (function(){
+            try {
+                // Prefer active planter's data-saucer-variant attribute
+                const activePlanter = document.querySelector('.pdpb-planter.active') || document.querySelector('.pdpb-planter');
+                let dataVariant = null;
+                if (activePlanter) {
+                    dataVariant = activePlanter.getAttribute('data-saucer-variant') || activePlanter.dataset.saucerVariant || null;
+                }
+
+                // Fallback to Vue-managed variant id if present
+                if (!dataVariant && window.pdpProductTop && window.pdpProductTop.variantId) {
+                    dataVariant = window.pdpProductTop.variantId;
+                }
+
+                if (!dataVariant) return;
+                const vid = Number(dataVariant);
+
+                // Delay slightly to ensure swiper slides are present
+                setTimeout(() => {
+                    const slides = Array.from(document.querySelectorAll('#{{ el_id }} .swiper-main .swiper-slide'));
+                    let targetIndex = -1;
+                    slides.forEach((slide, idx) => {
+                        const vAttr = slide.getAttribute('data-variant-ids') || '';
+                        if (!vAttr) return;
+                        const ids = vAttr.split('|').map(s => s.trim()).filter(Boolean);
+                        if (ids.indexOf(String(vid)) >= 0 || ids.indexOf(vid) >= 0) {
+                            targetIndex = idx;
+                        }
+                    });
+                    if (targetIndex >= 0 && typeof swiper{{fn}} !== 'undefined' && swiper{{fn}}) {
+                        swiper{{fn}}.slideTo(targetIndex);
+                    }
+                }, 300);
+            } catch (e) {
+                console.warn('slideTo on load failed', e);
+            }
+        })();
+        
+        const pdpTopAtcTargets = Array.from(document.querySelectorAll('.pdp-top-atc'));
+
+        {% comment %} window.addEventListener('scroll', () => {
+            // If any pdp-top-atc target has scrolled past the top, show sticky
+            const anyAbove = pdpTopAtcTargets.some((t) => {
+                if (!t) return false;
+                const rect = t.getBoundingClientRect();
+                return rect.top < 0;
+            });
+
+            if (anyAbove) {
+                document.querySelector('.pdp-top-sticky-mini').classList.add('active');
+                document.querySelector('.pdp-top-atc-sticky-wrapper').classList.add('active');
+            } else {
+                document.querySelector('.pdp-top-sticky-mini').classList.remove('active');
+                document.querySelector('.pdp-top-atc-sticky-wrapper').classList.remove('active');
+            }
+        }); {% endcomment %}
+        window.addEventListener('scroll', () => {
+            const targets = document.querySelectorAll('.pdp-top-atc');
+            const footer = document.getElementById('site-footer');
+
+            const anyAbove = Array.from(targets).some((t) => {
+                const rect = t.getBoundingClientRect();
+                return rect.top < 0;
+            });
+
+            const stickyMini = document.querySelector('.pdp-top-sticky-mini');
+            const stickyWrapper = document.querySelector('.pdp-top-atc-sticky-wrapper');
+            const footerRect = footer.getBoundingClientRect();
+            const footerVisible = footerRect.top <= window.innerHeight;
+
+            if (!stickyMini || !stickyWrapper || !footer) return;
+
+            if (anyAbove && !footerVisible) {
+                stickyMini.classList.add('active');
+                stickyWrapper.classList.add('active');
+            } else {
+                stickyMini.classList.remove('active');
+                stickyWrapper.classList.remove('active');
+            }
+        });
+        document.querySelector('.pdp-top-sticky-mini a')?.addEventListener('click', (e) => {
+            e.preventDefault();
+            window.scrollTo({
+                top: 0,
+                behavior: 'smooth'
+            });
+        });
+        if(screen.width > 1023) {
+            const cursorIcon = document.querySelector('.icon-zoom');
+            const hoverZone = document.querySelector('.swiper-main');
+            const excludeEl = document.querySelector('.arrow-container');
+
+            if (!cursorIcon || !hoverZone || !excludeEl) return;
+
+            let mouseX = null;
+            let mouseY = null;
+            let active = false;
+            let initialized = false;
+
+            // Activate helper
+            function activate(e) {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                cursorIcon.style.transform =
+                    `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+
+                cursorIcon.style.display = 'block';
+                document.body.style.cursor = 'none';
+                active = true;
+            }
+
+            // Deactivate helper
+            function deactivate() {
+                active = false;
+                cursorIcon.style.display = 'none';
+                document.body.style.cursor = 'default';
+            }
+
+            // Global mouse tracking
+            document.addEventListener('mousemove', (e) => {
+                mouseX = e.clientX;
+                mouseY = e.clientY;
+
+                // Handle "already inside on load"
+                if (!initialized) {
+                    initialized = true;
+
+                    const rect = hoverZone.getBoundingClientRect();
+                    const inside =
+                        e.clientX >= rect.left &&
+                        e.clientX <= rect.right &&
+                        e.clientY >= rect.top &&
+                        e.clientY <= rect.bottom;
+
+                    if (inside) activate(e);
+                }
+
+                if (!active) return;
+
+                // Exclude zone check
+                const r = excludeEl.getBoundingClientRect();
+                const hoveringExclude =
+                    e.clientX >= r.left &&
+                    e.clientX <= r.right &&
+                    e.clientY >= r.top &&
+                    e.clientY <= r.bottom;
+
+                cursorIcon.style.display = hoveringExclude ? 'none' : 'block';
+            });
+
+            // Hover zone enter / leave
+            hoverZone?.addEventListener('mouseenter', (e) => {
+                activate(e);
+            });
+
+            hoverZone?.addEventListener('mouseleave', () => {
+                deactivate();
+            });
+
+            // Animation loop
+            function animate() {
+                if (active && mouseX !== null && cursorIcon.style.display !== 'none') {
+                    cursorIcon.style.transform =
+                        `translate(${mouseX}px, ${mouseY}px) translate(-50%, -50%)`;
+                }
+                requestAnimationFrame(animate);
+            }
+            animate();
+        }
+    });
+
+    document.addEventListener('click', function (event) {
+        const trigger = event.target.closest('.size-guide-trigger');
+        if (!trigger) return;
+
+        document.querySelector('.pdp-top-overlay')?.classList.add('show');
+        document.body.classList.add('no-scroll');
+    });
+
+    const pdpProductTop = Vue.createApp({
+        delimiters: ['${', '}'],
+        data() {
+            return {
+                selectedGallery: null,
+                product: {{ product | json }},
+                variantId: {{ variant.id }},
+                options: [null, null, null],
+                qty: 1,
+                product_price: 0,
+                product_compare_at_price: 0,
+                total_price: 0,
+                total_price_money: null,
+                on_review: false,
+                active_index: 1,
+                selected_color:"",
+                storeAvailabilityPopup: false,
+                sizeGuidePopup: false,
+                stlPopup: false,
+                indexSize : 1,
+                first_load_check: true,
+                current_size_index: null,
+                swymProductData: null,
+                initialStlBtnTop: 0,
+                oosForm: {
+                    email: null,
+                    email_error: false,
+                    success: false
+                },
+                approx: "",
+                localCurency: ""
+            };
+        },
+        methods: {
+            async getFirstVariant(title) {
+                const res = await fetch(`/search/suggest.json?q=${encodeURIComponent(title)}&resources[type]=product`);
+                const data = await res.json();
+
+                const product = data.resources.results.products[0];
+                if (!product) return null;
+
+                const prodRes = await fetch(`/products/${product.handle}.js`);
+                const prodData = await prodRes.json();
+
+                const v = prodData.variants.find(v => v.available);
+                return v ? v.id : null;
+            },
+            changeUrl(newUrl) {
+                if (typeof history.pushState === 'function') {
+                    history.pushState(null, null, newUrl);
+                }
+            },
+            switchProduct(e) {
+                e.preventDefault();
+                const this_obj = this;
+                const this_color = e.target
+                const product_images_elem = document.querySelector('#{{ el_id }} .swiper-wrapper');
+                const product_images_elem_popup = document.querySelector('.product-top-slider-popup .swiper-popup .swiper-wrapper');
+                const product_variant_wrapper = document.querySelector('#{{ el_id }} .all-variants-wrapper');
+                const product_variant_details = document.querySelector('#{{ el_id }} .product-details-wrapper');
+                const product_variant_details_elem = document.querySelector('#product-individual-content');
+                const product_sticky_components = document.querySelector('.pdp-top-sticky-components');
+
+                const active_swatch = document.querySelector('.product-colors-wrapper .color-swatch-each.active');
+                if(active_swatch != null) {
+                    active_swatch.classList.remove('active');
+                }
+
+                const curr_color = this_color.getAttribute('data-color-name');
+                this_color.classList.add('active');
+
+                const color_label = document.querySelector('.product-colors-wrapper .color-name');
+                if(color_label != null) {
+                    color_label.innerHTML = curr_color;
+                }
+
+                /* remove shop the look popup */
+                const stl_popup = document.querySelector('.pdp-stl-popup');
+                if(stl_popup != null) {
+                    stl_popup.remove();
+                }
+                
+                /* load variant details */
+                const pro_handle = this_color.getAttribute('data-product-handle');
+                axios.get(window.Shopify.routes.root + `products/${pro_handle}?view=swiper-images`)
+                    .then(function(response) {
+                        // Destroy existing swiper instances before replacing DOM
+                        if (typeof swiper{{fn}} !== 'undefined' && swiper{{fn}}) {
+                            try { swiper{{fn}}.destroy(true, true); } catch (err) { console.warn('destroy swiper failed', err); }
+                            swiper{{fn}} = null;
+                        }
+                        if (typeof swiperPop{{fn}} !== 'undefined' && swiperPop{{fn}}) {
+                            try { swiperPop{{fn}}.destroy(true, true); } catch (err) { console.warn('destroy swiperPop failed', err); }
+                            swiperPop{{fn}} = null;
+                        }
+
+                        product_images_elem.innerHTML = "";
+                        product_images_elem_popup.innerHTML = "";
+
+                        const html = document.createRange().createContextualFragment(response.data);
+                        const htmlClone = html.cloneNode(true);
+                        product_images_elem.append(html);
+                        product_images_elem_popup.append(htmlClone);
+
+                        // Re-initialize swipers now that DOM is updated
+                        try { initSwiper{{fn}}(); } catch (err) { console.warn('initSwiper failed', err); }
+                        try { initSwiperPop{{fn}}(); } catch (err) { console.warn('initSwiperPop failed', err); }
+
+                        $360.lazyLoadInstance.update();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+                this_obj.changeUrl(`/products/${pro_handle}`);
+                /* load product images */
+                axios.get(window.Shopify.routes.root + `products/${pro_handle}?view=all-variants`)
+                    .then(function(response) {
+                        product_variant_wrapper.innerHTML = "";
+
+                        const html = document.createRange().createContextualFragment(response.data);
+                        product_variant_wrapper.append(html);
+
+                        initAccordions();
+
+                        $360.lazyLoadInstance.update();
+                        // After dynamically loading the variant HTML, ensure the
+                        // currently-selected color is hidden from the list and
+                        // the planter active state is restored — same logic as
+                        // initial page load.
+                        (function syncLoadedVariantUI(){
+                            const initialColorTitle = document.querySelector('.color-title-holder');
+                            if (initialColorTitle) {
+                                const initialColorName = initialColorTitle.innerHTML.trim();
+                                document.querySelectorAll('.pdpb-color').forEach((color) => {
+                                    const p = color.querySelector('p');
+                                    const colorName = p ? p.innerHTML.trim() : '';
+                                    if (colorName === initialColorName) {
+                                        color.classList.add('hidden');
+                                    } else {
+                                        color.classList.remove('hidden');
+                                    }
+                                });
+                            }
+
+                            const initialPlanterTitle = document.querySelector('.planter-title-holder');
+                            if (initialPlanterTitle) {
+                                const initialPlanterName = initialPlanterTitle.innerHTML.trim();
+                                document.querySelectorAll('.pdpb-planter').forEach((planter) => {
+                                    const p = planter.querySelector('p');
+                                    const planterName = p ? p.innerHTML.trim() : '';
+                                    if (planterName === initialPlanterName) {
+                                        planter.classList.add('active');
+                                        const imgHolder = document.querySelector('.planter-image-holder');
+                                        if (imgHolder) imgHolder.innerHTML = planter.querySelector('span') ? planter.querySelector('span').innerHTML : '';
+                                    } else {
+                                        planter.classList.remove('active');
+                                    }
+                                });
+                            }
+                            // Recompute accordion heights in case content size changed
+                            if (typeof window.recalcAccordionHeights === 'function') {
+                                Promise.resolve().then(() => window.recalcAccordionHeights());
+                            }
+                        })();
+                        let planAvailability = document.querySelector('.title-main').getAttribute('data-availability');
+                        const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+                        if(pdp_top_atc_nodes && pdp_top_atc_nodes.length && planAvailability != null) {
+                            pdp_top_atc_nodes.forEach((node) => {
+                                if(planAvailability === 'false') {
+                                    node.classList.add('disabled');
+                                    node.setAttribute('disabled', true);
+                                    if(node.querySelector('.atc-title')){
+                                        node.querySelector('.atc-title').innerHTML = "Sold Out";
+                                    }
+                                } else {
+                                    {% if product.gift_card? or product.type == 'Gift Card' %}
+                                        const productTitle = document.querySelector('.product-title');
+                                        if (productTitle && productTitle.classList.contains('available')) {
+                                            node.classList.remove('disabled');
+                                            node.removeAttribute('disabled');
+                                            if(node.querySelector('.atc-title')){
+                                                node.querySelector('.atc-title').innerHTML = "Add to Cart";
+                                            }
+                                        }
+                                    {% endif %}
+                                }
+                            });
+                        }
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+                /* load product details */
+                axios.get(window.Shopify.routes.root + `products/${pro_handle}?view=details`)
+                    .then(function(response) {
+                        product_variant_details.innerHTML = "";
+
+                        const html = document.createRange().createContextualFragment(response.data);
+                        product_variant_details.append(html);
+
+                        $360.lazyLoadInstance.update();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+
+                /* load sticky components */
+                axios.get(window.Shopify.routes.root + `products/${pro_handle}?view=sticky-components`)
+                    .then(function(response) {
+                        product_sticky_components.innerHTML = "";
+
+                        const html = document.createRange().createContextualFragment(response.data);
+                        product_sticky_components.append(html);
+
+                        $360.lazyLoadInstance.update();
+                    })
+                    .catch(function(error) {
+                        console.log(error);
+                    });
+                
+                return false;
+            },
+            changeVariantValue(e) {
+                this.first_load_check = false;
+            },
+            formatMoney(num) {
+                return "S$" + (num / 100).toFixed(2);
+            },
+            disableButton(text) {
+                const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+                if(pdp_top_atc_nodes && pdp_top_atc_nodes.length) {
+                    pdp_top_atc_nodes.forEach((node) => {
+                        node.classList.add('disabled');
+                        node.setAttribute('disabled', true);
+                        if(node.querySelector('.atc-title')){
+                            node.querySelector('.atc-title').innerHTML = text;
+                        }
+                    });
+                }
+            },
+            activateButton() {
+                const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+                if(pdp_top_atc_nodes && pdp_top_atc_nodes.length) {
+                    pdp_top_atc_nodes.forEach((node) => {
+                        const productTitle = document.querySelector('.product-title');
+                        if (productTitle && productTitle.classList.contains('available')) {
+                            node.classList.remove('disabled');
+                            node.removeAttribute('disabled');
+                            if(node.querySelector('.atc-title')){
+                                node.querySelector('.atc-title').innerHTML = "Add to Cart";
+                            }
+                        }
+                    });
+                }
+            },
+            checkAvailableVariantNew(trigger){
+                let chosenColor = document.querySelector('.pdpb-color.hidden p');
+                let chosenPlanter = document.querySelector('.pdpb-planter.active');
+                let chosenSaucer = document.querySelector('.pdpb-saucer.active');
+                let planterAvailability = false;
+                let saucerAvailability = false;
+                if(chosenColor) {
+                    if(chosenPlanter){
+                        let idsPlanter = chosenPlanter.dataset.colorVariant.split('|');
+                        let colorsPlanter = JSON.parse(atob(chosenPlanter.dataset.color));
+                        let pricesPlanter = chosenPlanter.dataset.prices.split('|').map(Number);
+                        let availabilityPlanter = chosenPlanter.dataset.availability.split('|');
+
+                        let planterMap = [];
+
+                        colorsPlanter.forEach((color, i) => {
+                            planterMap.push({
+                                color: color,
+                                id: idsPlanter[i],
+                                price: pricesPlanter[i],
+                                availability: availabilityPlanter[i]
+                            });
+                        });
+                        
+                        let resultPlanter = planterMap.find(item => pdpNormColor(item.color) === pdpNormColor(chosenColor.innerHTML));
+                        planterAvailability = resultPlanter?.availability === 'true';
+                        console.log('checkplanteravailability', planterAvailability, resultPlanter);
+                    }
+                    if(chosenSaucer){
+                        let idsSaucer = chosenSaucer.dataset.saucerVariant.split('|');
+                        let colorsSaucer = JSON.parse(atob(chosenSaucer.dataset.saucerColor));
+                        let pricesSaucer = chosenSaucer.dataset.saucerPrice.split('|').map(Number);
+                        let availabilitySaucer = chosenSaucer.dataset.availability.split('|');
+
+                        let saucerMap = [];
+
+                        colorsSaucer.forEach((color, i) => {
+                            saucerMap.push({
+                                color: color,
+                                id: idsSaucer[i],
+                                price: pricesSaucer[i],
+                                availability: availabilitySaucer[i]
+                            });
+                        });
+                        
+                        let resultSaucer = saucerMap.find(item => pdpNormColor(item.color) === pdpNormColor(chosenColor.innerHTML));
+                        saucerAvailability  = resultSaucer?.availability === 'true';
+                        console.log('saucerAvailability', chosenColor.innerHTML, saucerMap);
+                    }
+                    const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+                    let planter_wrapper =  document.querySelector('.planter-accordion-wrapper');
+                    let saucer_wrapper =  document.querySelector('.saucer-accordion-wrapper');
+                    let color_availability =  document.querySelector('.pdpb-color.hidden');
+                    if (planter_wrapper || saucer_wrapper){
+                        if(chosenPlanter) {
+                            console.log('planter availability', chosenPlanter, planterAvailability);
+                            if(!planterAvailability) {
+                                this.disableButton("Sold Out");
+                                return;
+                            } else {
+                                this.activateButton();
+                                if(!saucerAvailability && chosenSaucer) {
+                                    if(trigger !== 'sauceroff' && trigger !== 'changecolor') {
+                                        this.disableButton("Sold Out");
+                                        return;
+                                    }
+                                } else {
+                                    this.activateButton();
+                                }
+                            }
+                        } else if (chosenSaucer) {
+                            if(!saucerAvailability) {
+                                this.activateButton();
+                                if(trigger !== 'sauceroff') {
+                                    this.disableButton("Sold Out");
+                                    return;
+                                }
+                            } else {
+                                this.activateButton();
+                            }
+                        }
+                    } else {
+                        if(color_availability.getAttribute("data-availability") === 'false') {
+                            this.disableButton("Sold Out");
+                            return;
+                        } else {
+                            this.activateButton();
+                        }
+                    }
+                }
+            },
+            addToCartGC(e) {
+                const this_obj = this;
+                e.preventDefault();
+                
+                const atc_button = document.querySelector(`.pdp-top-atc`);
+                let form = document.querySelector(`.pdp-top-gift-form`);
+                    var parentVariantId = form.querySelector('.pdp-top-variant-id') ? form.querySelector('.pdp-top-variant-id').value : null
+                    let properties = {}
+                    let payload = {
+                        qty: 1,
+                        variantId: Number(parentVariantId),
+                        button: atc_button
+                    }
+                    const nonce = new Date().getTime() + Math.floor(Math.random() * 100000);
+                    {% if product.gift_card? or product.type == 'Gift Card' %}
+                        /* get properties */
+                        let msg_email_empty = "{{ 'products.product.please_enter' | t }} {{ 'products.product.recipient_email' | t }}"
+                        let msg_email_invalid = "{{ 'customer.register.error_valid_email' | t }}"
+                        const sender_name_el = document.querySelector('input[name="properties[Sender name]"]');
+                        const recipient_name_el = document.querySelector('input[name="properties[Recipient name]"]');
+                        const recipient_email_el = document.querySelector('input[name="properties[Recipient email]"]');
+                        const message_el = document.querySelector('textarea[name="properties[Message]"]');
+                        const send_date_el = document.querySelector('input[name="properties[Send on]"]');
+                        const sender_name = sender_name_el.value;
+                        const recipient_name = recipient_name_el.value;
+                        const recipient_email = recipient_email_el.value;
+                        const message = message_el.value;
+                        const send_date = send_date_el.value;
+                        let err_sn = sender_name_el.closest('.form-group').querySelector('.error-message')
+                        let err_rn = recipient_name_el.closest('.form-group').querySelector('.error-message')
+                        let err_re = recipient_email_el.closest('.form-group').querySelector('.error-message')
+                        if(sender_name && recipient_name && recipient_email){
+                            if(this.checkEmail(recipient_email)){
+                                err_sn.classList.add('hide-m')
+                                err_rn.classList.add('hide-m')
+                                err_re.innerHTML = msg_email_empty
+                                err_re.classList.add('hide-m')
+                                properties['__shopify_send_gift_card_to_recipient'] = 'on'
+                                properties["Sender name"] = sender_name
+                                properties["Recipient name"] = recipient_name
+                                properties["Recipient email"] = recipient_email
+                                properties["Message"] = message
+                                properties["Send on"] = send_date
+                                properties["_temp_parent_nonce"] = nonce
+                                properties["_is_parent"] = true
+                                properties["_parent_id"] = nonce
+                                payload.properties = properties
+                                $360.addToCart(payload,function() { $360.refreshCartPage();/*initSwiperYmal()*/});
+                            } else {
+                                if(err_sn){
+                                    if(!sender_name){
+                                        err_sn.classList.remove('hide-m')
+                                    } else {
+                                        err_sn.classList.add('hide-m')
+                                    }
+                                }
+                                if(err_rn){
+                                    if(!recipient_name){
+                                        err_rn.classList.remove('hide-m')
+                                    } else {
+                                        err_rn.classList.add('hide-m')
+                                    }
+                                }
+                                err_re.innerHTML = msg_email_invalid
+                                err_re.classList.remove('hide-m')
+                            }
+                        } else {
+                            if(err_sn){
+                                if(!sender_name){
+                                    err_sn.classList.remove('hide-m')
+                                } else {
+                                    err_sn.classList.add('hide-m')
+                                }
+                            }
+                            if(err_rn){
+                                if(!recipient_name){
+                                    err_rn.classList.remove('hide-m')
+                                } else {
+                                    err_rn.classList.add('hide-m')
+                                }
+                            }
+                            if(err_re){
+                                if(!recipient_email){
+                                    err_re.classList.remove('hide-m')
+                                } else {
+                                    if(this.checkEmail(recipient_email)){
+                                        err_re.innerHTML = msg_email_empty
+                                        err_re.classList.add('hide-m')
+                                    } else {
+                                        err_re.innerHTML = msg_email_invalid
+                                        err_re.classList.remove('hide-m')
+                                    }
+                                }
+                            }
+                        }
+                    {% else %}
+                        if(properties) {
+                            payload.properties = properties
+                        }
+                        $360.addToCart(payload,function() { $360.refreshCartPage();/*initSwiperYmal()*/});
+                    {% endif %}
+            },
+            isValidEmail(e) {
+                const elem = e.target
+                const email = elem.value
+                const parent = elem.closest('.form-group');
+                const error_elem = parent.querySelector('.error-message');
+
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                let msg_email_empty = "{{ 'products.product.please_enter' | t }} {{ 'products.product.recipient_email' | t }}"
+                let msg_email_invalid = "{{ 'customer.register.error_valid_email' | t }}"
+                if(!this.checkEmail(email)) {
+                    error_elem.innerHTML = msg_email_invalid
+                    error_elem.classList.remove('hide-m');
+                } else {
+                    error_elem.innerHTML = msg_email_empty
+                    error_elem.classList.add('hide-m')
+                }
+            },
+            checkEmail(email){
+                const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+                console.log(emailRegex.test(email),"test");
+                if(email != '') {
+                    if(emailRegex.test(email)) {
+                        return true;
+                    } else {
+                        return false;
+                    }
+                } else {
+                    return false;
+                }
+            },
+            async submitForm(e) {
+                e.preventDefault();
+                var form = document.querySelector('.pdp-top-atc-form');
+                var button = document.querySelector('.pdp-top-atc');
+                var buttons = document.querySelectorAll('.pdp-top-atc');
+                if(!form) return;
+
+                // var saucerId = document.querySelector('.pdpb-saucer.active') ? document.querySelector('.pdpb-saucer.active').getAttribute("data-saucer-variant") : '';
+                var planterId = document.querySelector('.pdpb-color.hidden') ? document.querySelector('.pdpb-color.hidden').getAttribute("data-variant") : null;
+                // No colour chosen (e.g. planter & saucer share none): fall back to the active
+                // planter's first variant so it can still be added to cart.
+                if (!planterId) {
+                    var _activePlanterForId = document.querySelector('.pdpb-planter.active');
+                    if (_activePlanterForId && _activePlanterForId.dataset.colorVariant) {
+                        planterId = _activePlanterForId.dataset.colorVariant.split('|')[0] || null;
+                    }
+                }
+                var parentVariantId = form.querySelector('.pdp-top-variant-id') ? form.querySelector('.pdp-top-variant-id').value : null;
+                var saucerTitle  = document.querySelector('.saucer-title-holder');
+                {% unless product.tags contains 'plants' %}
+                    parentVariantId = document.querySelector('.pdpb-color.hidden') ? document.querySelector('.pdpb-color.hidden').getAttribute("data-variant") : null;
+                {% endunless %}
+                if(!parentVariantId) { form.submit(); return; }
+
+                // If no saucer selected/resolved, perform normal submit
+                {% comment %} if(!saucerId) {
+                    var button = document.querySelector('.pdp-top-atc');
+                    let prev_text = button.innerHTML;
+                    let payload = {
+                        qty: 1,
+                        variantId: Number(parentVariantId),
+                        button: button
+                    }
+                    $360.addToCart(payload,function() { $360.refreshCartPage();});
+                    return;
+                } {% endcomment %}
+
+                try {
+                    let prev_text = button.innerHTML;
+                    // Create a unique nonce to identify the parent line item in the cart
+                    const nonce = new Date().getTime() + Math.floor(Math.random() * 100000);
+                    buttons.forEach((buttonnode) => {
+                        buttonnode.innerHTML = `<span class="w-full tc">Adding...</span>`;
+                    });
+
+                    // 1) Add parent product with a temporary identifying property
+                    await fetch('/cart/add.js', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            id: Number(parentVariantId),
+                            quantity: 1,
+                            properties: { 
+                                '_temp_parent_nonce': nonce,
+                                '_is_parent': true,
+                                '_parent_id': nonce
+                            }
+                        })
+                    });
+
+                    // 2) Fetch cart and find the newly added parent line item by the nonce
+                    const cartRes = await fetch('/cart.js', { credentials: 'same-origin' });
+                    const cart = await cartRes.json();
+                    const parentLine = cart.items.find(i => i.variant_id == Number(parentVariantId) && i.properties && i.properties._temp_parent_nonce == String(nonce));
+
+                    if(!parentLine) {
+                        // Fallback: try to find most recent matching variant
+                        const fallbackLine = cart.items.slice().reverse().find(i => i.variant_id == Number(parentVariantId));
+                        if(fallbackLine) parentLine = fallbackLine;
+                    }
+
+                    if(!parentLine || !parentLine.key) {
+                        // Could not locate parent line key — fall back to normal submit
+                        form.submit();
+                        return;
+                    }
+
+                    const parentKey = parentLine.key;
+                    let propertiesAddon = {
+                        items: []
+                    };
+                    let chosenPlanter = document.querySelector('.pdpb-planter.active');
+                    let chosenSaucer = document.querySelector('.pdpb-saucer.active');
+                    let chosenColor = document.querySelector('.pdpb-color.hidden');
+                    if(chosenPlanter) {
+                        propertiesAddon.items.push({
+                            id: Number(planterId),
+                            quantity: 1,
+                            parent_line_key: parentKey,
+                            properties: {
+                                '_parent_id': nonce,
+                                'For': "{{ product.title | escape }}"
+                            }
+                        })
+                    }
+                    let planterCheck = document.querySelector('.planter-accordion-wrapper');
+                    if(chosenSaucer) {
+                        if(planterCheck) {
+                            let ids = chosenSaucer.dataset.saucerVariant.split('|');
+                            let colors = JSON.parse(atob(chosenSaucer.dataset.saucerColor));
+                            let prices = chosenSaucer.dataset.saucerPrice.split('|').map(Number);
+                            let checkColor = document.querySelector('.color-title-holder');
+                            let saucerMap = [];
+                            colors.forEach((color, i) => {
+                                saucerMap.push({
+                                    color: color,
+                                    id: ids[i],
+                                    price: prices[i],
+                                });
+                            });
+                            let result = saucerMap.find(item => pdpNormColor(item.color) === pdpNormColor(checkColor.innerHTML));
+                            // Fall back to the saucer's first variant when no colour is chosen/matched.
+                            let saucerId = result ? (Number(result.id) || 0) : (Number(ids[0]) || 0);
+                            propertiesAddon.items.push({
+                                id: Number(saucerId),
+                                quantity: 1,
+                                parent_line_key: parentKey,
+                                properties: {
+                                    '_parent_id': nonce,
+                                    'For': "{{ product.title | escape }}"
+                                }
+                            })
+                        } else {
+                            if(chosenColor) {
+                                propertiesAddon.items.push({
+                                    id: Number(planterId),
+                                    quantity: 1,
+                                    parent_line_key: parentKey,
+                                    properties: {
+                                        '_parent_id': nonce,
+                                        'For': "{{ product.title | escape }}"
+                                    }
+                                })
+                            } else {
+                                var planterIdFirst = document.querySelectorAll('.pdpb-color')[0] ? document.querySelectorAll('.pdpb-color')[0].getAttribute("data-variant") : null;
+                                propertiesAddon.items.push({
+                                    id: Number(planterIdFirst),
+                                    quantity: 1,
+                                    parent_line_key: parentKey,
+                                    properties: {
+                                        '_parent_id': nonce,
+                                        'For': "{{ product.title | escape }}"
+                                    }
+                                })
+                            }
+                        }
+                    }
+                    {% comment %} if(saucerTitle.innerHTML === 'Matching Saucer included') {
+                        propertiesAddon = {
+                            id: Number(planterId),
+                            quantity: 1,
+                            parent_line_key: parentKey
+                        }
+                    } else {
+                        propertiesAddon = {
+                            items: [
+                            {
+                                id: Number(saucerId),
+                                quantity: 1,
+                                parent_line_key: parentKey
+                            },
+                            {
+                                id: Number(planterId),
+                                quantity: 1,
+                                parent_line_key: parentKey
+                            }
+                            ]
+                        }
+                    } {% endcomment %}
+                    // 3) Add saucer as child using parent_line_key (per completePacking pattern)
+                    await fetch('/cart/add.js', {
+                        method: 'POST',
+                        credentials: 'same-origin',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify(propertiesAddon)
+                    });
+                    // 4) Redirect to cart to show both items
+                    $360.showHeaderCart();
+                    buttons.forEach((buttonnode) => {
+                        buttonnode.innerHTML = prev_text;
+                    });
+                    // window.location.href = location.origin + location.pathname + '?drawer=true';
+                } catch(err) {
+                    console.error('submitForm failed, falling back to normal submit', err);
+                    form.submit();
+                }
+            }
+        },
+        mounted() {
+            // Check initial variant availability on page load
+            const initialVariant = this.product.variants.find(v => v.id === this.variantId);
+            const pdp_top_atc_nodes = document.querySelectorAll('.pdp-top-atc');
+            console.log('test this', '{{ variant.available }}');
+            if(pdp_top_atc_nodes && pdp_top_atc_nodes.length && initialVariant != null) {
+                pdp_top_atc_nodes.forEach((node) => {
+                    if(!initialVariant.available) {
+                        node.classList.add('disabled');
+                        node.setAttribute('disabled', true);
+                        if(node.querySelector('.atc-title')){
+                            node.querySelector('.atc-title').innerHTML = "Sold Out";
+                        }
+                    } else {
+                        {% if product.gift_card? or product.type == 'Gift Card' %}
+                            const productTitle = document.querySelector('.product-title');
+                            if (productTitle && productTitle.classList.contains('available')) {
+                                node.classList.remove('disabled');
+                                node.removeAttribute('disabled');
+                                if(node.querySelector('.atc-title')){
+                                    node.querySelector('.atc-title').innerHTML = "Add to Cart";
+                                }
+                            }
+                        {% endif %}
+                    }
+                });
+            }
+            {% unless product.tags contains 'plants' %}
+                const variantava = '{{ variant.id }}';
+                if(variantava) {
+                    history.replaceState({}, '', `?variant=${variantava}`);
+                }
+            {% endunless %}
+        }
+    }).mount('#{{ el_id }}');
+
+    // Initial sold-out pass once the app is mounted: marks statically-rendered colours,
+    // generic option values, and any fully-out-of-stock planters/saucers.
+    try { applyOOS(); } catch (e) {}
+</script>
+
+{% schema %}
+{
+    "name": "PDP - Product Top",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+            "type": "select",
+            "id": "title_dom_type",
+            "label": "Title DOM Type",
+            "options": [
+                {"value":"h1","label":"H1"},
+                {"value":"h2","label":"H2"},
+                {"value":"h3","label":"H3"},
+                {"value":"h4","label":"H4"},
+                {"value":"h5","label":"H5"}
+            ],
+            "default": "h2"
+        },
+        {
+            "type": "select",
+            "id": "title_size",
+            "label": "Title Size",
+            "options": [
+                { "value": "h1", "label": "H1" },
+                { "value": "h2", "label": "H2" },
+                { "value": "h3", "label": "H3" },
+                { "value": "h4", "label": "H4" }
+            ],
+            "default": "h2"
+        },
+        {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text"
+        },
+        {
+            "type": "textarea",
+            "id": "workshop_atc_note",
+            "label": "Workshop note above Add to Cart",
+            "info": "WORKSHOP PRODUCTS ONLY. Shows directly above the Add to Cart button, and only when the product title contains \"Workshop\". Leave blank to hide it. Each new line becomes a new line on the page."
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "entry",
+            "name": "Entry",
+            "settings": [
+                {
+                    "type": "image_picker",
+                    "id": "image",
+                    "label": "Size Image"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Size Title"
+                },
+                {
+                    "type": "text",
+                    "id": "size",
+                    "label": "Size"
+                },
+                {
+                    "type": "textarea",
+                    "id": "description",
+                    "label": "Size Description"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "PDP - Product Top",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

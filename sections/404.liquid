@@ -1,0 +1,340 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'split-hero-accordion-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  .global-content-top-margin {
+    margin-top: 91px;
+  }
+  #{{ el_id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #{{el_id}} .container:after,
+  #{{el_id}} .container:before,
+  #{{el_id}} .row:after,
+  #{{el_id}} .row:before {
+    display: none;
+  }
+  #{{el_id}} .little-span {
+    transform: translateY(-7px);
+    display: inline-block;
+  }
+  @media screen and (min-width: 1024px){
+    #{{el_id}} .little-span {
+        transform: translateY(-14px);
+    }
+    #{{el_id}} .nf-left .icon-active {
+      display: none;
+    }
+    #{{el_id}} .nf-left a:hover .icon-active,
+    #{{el_id}} .nf-left .active .icon-active {
+      display: flex;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ '404.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      <div class="nf-top">
+        <{{ ss.title_dom_type }} class="{{ ss.title_dom_size }} c-green">
+            <span class="p3 no-anim c-label w-full max-70 d-max-90 mr-16 d-mr-24 little-span">404</span>
+          {{ ss.title | newline_to_br }}
+        </{{ ss.title_dom_type }}>
+      </div>
+      <div class="nf-bot flex d-flex-row flex-column ai-start jc-between d-mt-60 mt-32">
+        <div class="nf-left flex flex-column rowgap-12 w-full max-425">
+          {% assign link_counter = 0 %}
+          {% for block in sb %}
+            {% assign bs = block.settings %}
+            {% if bs.link_label != blank %}
+              {% assign link_counter = link_counter | plus: 1 %}
+              <a
+                href="{{bs.link_url}}"
+                class="pb-12 colgap-4 hcel-link flex ai-center d-jc-start jc-between bb-1 b-main {% if link_counter < 2 %}active{% endif %}"
+                data-index="{{forloop.index}}"
+                onmouseover="toggleEmptyProduct{{fn}}(event)"
+              >
+                <div class="flex ai-center colgap-8">
+                  <span class="p4 c-label">
+                    {% if link_counter < 10 %}0{% endif -%}
+                    {{- link_counter }}
+                  </span>
+                  <span class="p1 c-green">
+                    {{ bs.link_label }}
+                  </span>
+                  <span class="icon d-flex hide-m ai-center jc-center ml-4 icon-active">
+                    {{ settings.icon_orange_circle }}
+                  </span>
+                </div>
+                <span class="icon hide-d global-flex ai-center jc-center">
+                  {{ settings.icon_arrow_up_right }}
+                </span>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+        <div class="nf-right w-full max-285 hide-m show-d">
+          {% assign p_counter = 0 %}
+          {% for block in sb %}
+            {% assign bs = block.settings %}
+            {% if bs.product != blank %}
+              {% assign p_counter = p_counter | plus: 1 %}
+              <a href="{{bs.product.url}}" class="{% if p_counter < 2 %}flex{% else %}hide-m{% endif %} flex-column hcep-product" data-index="{{forloop.index}}">
+                {%- render 'global-image-wrapper',
+                  image: bs.product.featured_image,
+                  additional_class: 'no-bg',
+                  image_id: 'product-image-cart-empty'
+                %}
+                <div class="flex ai-start jc-between w-full d-mt-8">
+                  <span class="p4 c-label dont-break">
+                    {{bs.product.metafields.custom.image_code}}
+                  </span>
+                  <span class="p4 c-label tr">
+                    {{bs.product.title}}
+                  </span>
+                </div>
+              </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+<script>
+  function toggleEmptyProduct{{fn}}(e){
+    let target = e.target.closest('.hcel-link') 
+    let idx = target.getAttribute('data-index')
+    let links = document.querySelectorAll('#{{el_id}} .hcel-link')
+    let products = document.querySelectorAll('#{{el_id}} .hcep-product')
+    let product = document.querySelector(`#{{el_id}} .hcep-product[data-index="${idx}"]`) 
+    products.forEach((item) => {
+      item.classList.add('hide-m')
+      item.classList.remove('flex')
+    })
+    links.forEach((item) => {
+      item.classList.remove('active')
+    })
+    product.classList.remove('hide-m')
+    product.classList.add('flex')
+    target.classList.add('active')
+  }
+</script>
+{% schema %}
+{
+  "name": "404",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_size",
+      "label": "Title Font Size",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" },
+        { "value": "h4", "label": "h4" },
+        { "value": "h5", "label": "h5" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Links and Products",
+      "settings": [
+        {
+          "type": "product",
+          "id": "product",
+          "label": "Product"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link Label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "404",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

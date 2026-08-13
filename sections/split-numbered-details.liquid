@@ -1,0 +1,546 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'split-numbered-details-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .container:after,
+  #{{ el_id }} .container:before,
+  #{{ el_id }} .row:after,
+  #{{ el_id }} .row:before {
+    display: none;
+  }
+  #{{ el_id }} .snd-row {
+    display: flex;
+    flex-direction: column;
+  }
+  #{{ el_id }} .snd-row > div {
+    float: none;
+  }
+  #{{ el_id }} .snd-media-col {
+    margin-top: 32px;
+  }
+  #{{ el_id }} .snd-caption {
+    margin-top: 8px;
+    column-gap: 16px;
+  }
+  #{{ el_id }} .snd-caption-label {
+    flex: 0 0 50px;
+  }
+  #{{ el_id }} .snd-label {
+    margin-bottom: 16px;
+  }
+  #{{ el_id }} .snd-num {
+    flex: 0 0 16px;
+  }
+  #{{ el_id }} .snd-item-head {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  #{{ el_id }} .snd-dot {
+    width: 8px;
+    height: 8px;
+    margin-left: 8px;
+    border-radius: 100px;
+    background-color: {{ ss.dot_color }};
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #{{ el_id }} .snd-item.active .snd-dot {
+    opacity: 1;
+  }
+  /* Mobile: each entry opens as an accordion below its row */
+  #{{ el_id }} .snd-item-body {
+    display: grid;
+    grid-template-rows: 0fr;
+    transition: grid-template-rows 0.3s ease;
+  }
+  #{{ el_id }} .snd-item.active .snd-item-body {
+    grid-template-rows: 1fr;
+  }
+  #{{ el_id }} .snd-item-body > div {
+    overflow: hidden;
+  }
+  #{{ el_id }} .snd-item-body-inner {
+    padding-top: 4px;
+    padding-bottom: 20px;
+  }
+  #{{ el_id }} .snd-details {
+    display: none;
+  }
+  #{{ el_id }} .snd-button .icon,
+  #{{ el_id }} .snd-button .icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  #{{ el_id }} .snd-button .icon svg path {
+    stroke: currentColor;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .snd-row {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+    }
+    /* Mobile always stacks text above image, so the text column is first in
+       the DOM. On desktop the order setting decides which side it sits on. */
+    #{{ el_id }} .snd-row.snd-image-first .snd-media-col {
+      order: 1;
+    }
+    #{{ el_id }} .snd-row.snd-image-first .snd-content {
+      order: 2;
+    }
+    #{{ el_id }} .snd-row.snd-text-first .snd-content {
+      order: 1;
+    }
+    #{{ el_id }} .snd-row.snd-text-first .snd-media-col {
+      order: 2;
+    }
+    #{{ el_id }} .snd-content {
+      padding-top: 40px;
+    }
+    #{{ el_id }} .snd-media-col {
+      margin-top: 0;
+      padding-top: 24px;
+    }
+    #{{ el_id }} .snd-caption {
+      column-gap: 24px;
+    }
+    #{{ el_id }} .snd-caption-label {
+      flex: 0 0 94px;
+    }
+    #{{ el_id }} .snd-item.active .snd-dot,
+    #{{ el_id }} .snd-item-head:hover .snd-dot {
+      opacity: 1;
+    }
+    #{{ el_id }} .snd-item-body {
+      display: none;
+    }
+    /* Desktop: all entry texts stack in one area and fade to the hovered one */
+    #{{ el_id }} .snd-details {
+      display: grid;
+      margin-top: 28px;
+    }
+    #{{ el_id }} .snd-detail {
+      grid-area: 1 / 1;
+      opacity: 0;
+      transition: opacity 0.3s ease;
+      pointer-events: none;
+    }
+    #{{ el_id }} .snd-detail.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'split-numbered-details-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      <div class="row snd-row {% if ss.image_position == 'image_first' %}snd-image-first{% else %}snd-text-first{% endif %}">
+        <div class="col-12 col-d-4 snd-content">
+          {% if ss.label != blank %}
+            <p class="p3 c-label snd-label">{{ ss.label }}</p>
+          {% endif %}
+          {% if ss.title != blank %}
+            <{{ ss.title_dom_type }} class="{{ ss.title_size }} c-green">
+              {{- ss.title -}}
+            </{{ ss.title_dom_type }}>
+          {% endif %}
+          <div class="snd-list d-mt-40 mt-32">
+            {% assign entry_counter = 0 %}
+            {% for block in sb %}
+              {% assign bs = block.settings %}
+              {% if bs.title != blank %}
+                {% assign entry_counter = entry_counter | plus: 1 %}
+                <div
+                  class="snd-item bb-1 b-main {% if entry_counter == 1 %}active{% endif %}"
+                  data-index="{{ entry_counter }}"
+                  {{ block.shopify_attributes }}
+                >
+                  <div
+                    class="snd-item-head flex ai-center colgap-4 cursor"
+                    onmouseenter="sndActivate{{ fn }}(event)"
+                    onclick="sndToggle{{ fn }}(event)"
+                  >
+                    <span class="p4 c-label snd-num">
+                      {%- if entry_counter < 10 %}0{% endif -%}
+                      {{- entry_counter -}}
+                    </span>
+                    <span class="p1 c-green">{{ bs.title }}</span>
+                    <span class="snd-dot"></span>
+                  </div>
+                  <div class="snd-item-body hide-d">
+                    <div>
+                      <div class="snd-item-body-inner p2 c-green">{{ bs.text | newline_to_br }}</div>
+                    </div>
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          <div class="snd-details">
+            {% assign entry_counter = 0 %}
+            {% for block in sb %}
+              {% assign bs = block.settings %}
+              {% if bs.title != blank %}
+                {% assign entry_counter = entry_counter | plus: 1 %}
+                <div class="snd-detail p2 c-green {% if entry_counter == 1 %}active{% endif %}" data-index="{{ entry_counter }}">
+                  {{ bs.text | newline_to_br }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+          {% if ss.button_label != blank %}
+            <a
+              href="{{ ss.button_url }}"
+              class="snd-button w-full d-max-330 p2 d-mt-32 mt-24 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 {% if ss.button_style == 'filled' %}bg-green c-white{% else %}b-1 b-green c-green{% endif %}"
+            >
+              {{ ss.button_label }}
+              <span class="icon flex ai-center jc-center">
+                {{ settings.icon_arrow_up_right }}
+              </span>
+            </a>
+          {% endif %}
+        </div>
+        <div class="col-12 col-d-5 snd-media-col">
+          {% assign image_id = 'snd-image-' | append: section.id %}
+          {% if ss.desktop_image != blank and ss.mobile_image != blank %}
+            {%- render 'global-image-wrapper-responsive',
+              image_id: image_id,
+              desktop_image: ss.desktop_image,
+              mobile_image: ss.mobile_image,
+              additional_class: 'no-bg'
+            -%}
+          {% elsif ss.desktop_image != blank %}
+            {%- render 'global-image-wrapper', image: ss.desktop_image, additional_class: 'no-bg' -%}
+          {% elsif ss.mobile_image != blank %}
+            {%- render 'global-image-wrapper', image: ss.mobile_image, additional_class: 'no-bg' -%}
+          {% endif %}
+          {% if ss.caption_label != blank or ss.caption_text != blank %}
+            <div class="flex snd-caption p4 c-label">
+              <div class="snd-caption-label">{{ ss.caption_label }}</div>
+              <div class="snd-caption-text">{{ ss.caption_text }}</div>
+            </div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    function sndSetActive{{ fn }}(idx) {
+      document.querySelectorAll('#{{ el_id }} .snd-item').forEach(function (item) {
+        item.classList.toggle('active', item.getAttribute('data-index') === idx);
+      });
+      document.querySelectorAll('#{{ el_id }} .snd-detail').forEach(function (detail) {
+        detail.classList.toggle('active', detail.getAttribute('data-index') === idx);
+      });
+    }
+    function sndActivate{{ fn }}(e) {
+      if (!window.matchMedia('(min-width: 1024px)').matches) return;
+      var idx = e.target.closest('.snd-item').getAttribute('data-index');
+      sndSetActive{{ fn }}(idx);
+    }
+    function sndToggle{{ fn }}(e) {
+      if (window.matchMedia('(min-width: 1024px)').matches) return;
+      var item = e.target.closest('.snd-item');
+      if (item.classList.contains('active')) {
+        item.classList.remove('active');
+        return;
+      }
+      sndSetActive{{ fn }}(item.getAttribute('data-index'));
+    }
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Split Numbered Details",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "select",
+      "id": "image_position",
+      "label": "Image Position (Desktop)",
+      "info": "On mobile the text always sits above the image.",
+      "options": [
+        { "value": "image_first", "label": "Image first (left)" },
+        { "value": "text_first", "label": "Text first (left)" }
+      ],
+      "default": "image_first"
+    },
+    {
+      "type": "text",
+      "id": "label",
+      "label": "Label"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Font Size",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" },
+        { "value": "h4", "label": "h4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "color",
+      "id": "dot_color",
+      "label": "Active Dot Color",
+      "default": "#B35E34",
+      "info": "Dot shown next to the hovered (desktop) or opened (mobile) entry."
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Image (Desktop)",
+      "info": "Portrait crop. The Figma uses a 536 x 745 ratio."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Image (Mobile)",
+      "info": "Landscape crop. The Figma uses a 3:2 ratio."
+    },
+    {
+      "type": "text",
+      "id": "caption_label",
+      "label": "Caption Label"
+    },
+    {
+      "type": "text",
+      "id": "caption_text",
+      "label": "Caption Text"
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "select",
+      "id": "button_style",
+      "label": "Button Style",
+      "options": [
+        { "value": "outlined", "label": "Outlined" },
+        { "value": "filled", "label": "Filled (green)" }
+      ],
+      "default": "outlined"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Detail Text",
+          "info": "Shown below the list on desktop (fades to the hovered entry) and inside the accordion on mobile."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Numbered Details",
+      "blocks": [
+        { "type": "entry" },
+        { "type": "entry" },
+        { "type": "entry" }
+      ]
+    }
+  ]
+}
+{% endschema %}

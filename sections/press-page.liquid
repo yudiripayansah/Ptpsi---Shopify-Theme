@@ -1,0 +1,529 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'press-page-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+  assign mo_type = ss.metaobject_type | default: 'press'
+  assign per_load = ss.items_per_load | default: 9
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .pp-header {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding-bottom: 40px;
+  }
+  #{{ el_id }} .pp-desc p {
+    margin: 0;
+  }
+  #{{ el_id }} .pp-desc a {
+    text-decoration: underline;
+  }
+  #{{ el_id }} .pp-marquee {
+    width: 100%;
+    overflow: hidden;
+  }
+  #{{ el_id }} .pp-track {
+    display: flex;
+    align-items: center;
+    width: max-content;
+    animation: pp-scroll-{{ section.id }} {{ ss.duration | default: 30 }}s linear infinite;
+  }
+  #{{ el_id }} .pp-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: {{ ss.gap_m | default: 40 }}px;
+  }
+  #{{ el_id }} .pp-cell img,
+  #{{ el_id }} .pp-cell svg {
+    height: {{ ss.logo_height | default: 36 }}px;
+    width: auto;
+    max-width: none;
+    object-fit: contain;
+  }
+  #{{ el_id }} .pp-border {
+    border-bottom: 1px solid var(--main);
+    margin-top: 32px;
+  }
+  @keyframes pp-scroll-{{ section.id }} {
+    0% {
+      transform: translateX(0);
+    }
+    100% {
+      /* Track holds 4 identical copies of the logo list, so shifting a quarter loops seamlessly */
+      transform: translateX(-25%);
+    }
+  }
+  #{{ el_id }} .pp-list {
+    list-style: none;
+    margin: 0;
+    padding: 40px 0 0;
+  }
+  #{{ el_id }} .pp-item {
+    border-bottom: 1px solid var(--main);
+  }
+  #{{ el_id }} .pp-item--hidden {
+    display: none;
+  }
+  #{{ el_id }} .pp-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    padding: 20px 0;
+    text-decoration: none;
+  }
+  #{{ el_id }} .pp-item:first-child .pp-row {
+    padding-top: 0;
+  }
+  #{{ el_id }} .pp-year {
+    width: 50px;
+    flex-shrink: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #{{ el_id }} .pp-main {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  #{{ el_id }} .pp-provider {
+    max-width: 100%;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  #{{ el_id }} .pp-title {
+    font-size: 16px;
+    line-height: 1.4;
+    letter-spacing: -0.16px;
+  }
+  #{{ el_id }} .pp-icon {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-shrink: 0;
+    width: 24px;
+  }
+  #{{ el_id }} .pp-icon svg {
+    width: 24px;
+    height: 24px;
+    display: block;
+  }
+  #{{ el_id }} .pp-pagination {
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+  }
+  #{{ el_id }} .pp-load-more {
+    appearance: none;
+    background: transparent;
+    border: 1px solid var(--green);
+    padding: 12px 24px;
+    cursor: pointer;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .pp-header {
+      gap: 32px;
+      padding-bottom: 60px;
+    }
+    #{{ el_id }} .pp-desc {
+      max-width: 684px;
+    }
+    #{{ el_id }} .pp-cell {
+      margin-right: {{ ss.gap | default: 60 }}px;
+    }
+    #{{ el_id }} .pp-border {
+      margin-top: 40px;
+    }
+    #{{ el_id }} .pp-list {
+      padding-top: 60px;
+    }
+    #{{ el_id }} .pp-row {
+      gap: 24px;
+      padding: 24px 0;
+    }
+    #{{ el_id }} .pp-year {
+      width: 212px;
+    }
+    #{{ el_id }} .pp-main {
+      flex: 0 1 802px;
+    }
+    #{{ el_id }} .pp-title {
+      font-size: 24px;
+      line-height: 1.2;
+      letter-spacing: -0.48px;
+    }
+    #{{ el_id }} .pp-icon {
+      flex: 1 1 auto;
+    }
+    #{{ el_id }} .pp-pagination {
+      padding-top: 60px;
+    }
+  }
+</style>
+
+<div id="{{ el_id }}">
+  <div class="container">
+    <div class="pp-header">
+      <h1 class="h1 c-green">{{ ss.title | default: page.title }}</h1>
+      {% if ss.description != blank %}
+        <div class="pp-desc p1 c-green">{{ ss.description }}</div>
+      {% endif %}
+    </div>
+  </div>
+
+  {% if sb.size > 0 %}
+    <div class="pp-logos">
+      <div class="pp-marquee">
+        <div class="pp-track">
+          {% for i in (1..4) %}
+            {% for block in sb %}
+              {% if block.settings.image != blank %}
+                <div
+                  class="pp-cell"
+                  {% if i > 1 %}aria-hidden="true"{% endif %}
+                  {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
+                >
+                  {{ block.settings.image | image_url: height: 200 | image_tag: loading: 'lazy' }}
+                </div>
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="container">
+        <div class="pp-border"></div>
+      </div>
+    </div>
+  {% endif %}
+
+  {% paginate shop.metaobjects[mo_type].values by 50 %}
+    {% liquid
+      assign entries = shop.metaobjects[mo_type].values
+      if ss.sort_newest
+        assign entries = entries | sort: 'year' | reverse
+      endif
+    %}
+    <div class="container">
+      {% if entries.size == 0 %}
+        {% if request.design_mode %}
+          <p class="p2 c-label">
+            No "{{ mo_type }}" metaobject entries found. Add entries with title, provider, year and url fields in Admin &gt; Content &gt; Metaobjects.
+          </p>
+        {% endif %}
+      {% else %}
+        <ul class="pp-list">
+          {% for entry in entries %}
+            {% liquid
+              assign press_url = entry.url.value
+              assign row_tag = 'div'
+              if press_url != blank
+                assign row_tag = 'a'
+              endif
+            %}
+            <li class="pp-item{% if forloop.index > per_load %} pp-item--hidden{% endif %}">
+              <{{ row_tag }}
+                class="pp-row"
+                {% if press_url != blank %}href="{{ press_url }}" target="_blank" rel="noopener"{% endif %}
+              >
+                <span class="pp-year p3 c-label">{{ entry.year.value }}</span>
+                <span class="pp-main">
+                  {% if entry.provider.value != blank %}
+                    <span class="pp-provider p3 c-label">{{ entry.provider.value }}</span>
+                  {% endif %}
+                  <span class="pp-title c-green">{{ entry.title.value }}</span>
+                </span>
+                <span class="pp-icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M8 6.5H17.5M17.5 6.5V16M17.5 6.5L6 18" stroke="#19341E" stroke-width="1.5" stroke-linecap="square"/>
+                  </svg>
+                </span>
+              </{{ row_tag }}>
+            </li>
+          {% endfor %}
+        </ul>
+        {% if entries.size > per_load %}
+          <div class="pp-pagination">
+            <button type="button" class="pp-load-more p2 c-green">{{ ss.load_more_label | default: 'Load More' }}</button>
+          </div>
+        {% endif %}
+      {% endif %}
+    </div>
+  {% endpaginate %}
+</div>
+
+<script>
+  (function () {
+    var root = document.getElementById('{{ el_id }}');
+    if (!root) return;
+    var btn = root.querySelector('.pp-load-more');
+    if (!btn) return;
+    var step = {{ per_load }};
+    btn.addEventListener('click', function () {
+      var hidden = root.querySelectorAll('.pp-item--hidden');
+      for (var i = 0; i < hidden.length && i < step; i++) {
+        hidden[i].classList.remove('pp-item--hidden');
+      }
+      if (root.querySelectorAll('.pp-item--hidden').length === 0) {
+        btn.parentNode.style.display = 'none';
+      }
+    });
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Press Page",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title",
+      "default": "Press",
+      "info": "Falls back to the page title if left empty."
+    },
+    {
+      "type": "richtext",
+      "id": "description",
+      "label": "Description"
+    },
+    {
+      "type": "header",
+      "content": "Logo Marquee"
+    },
+    {
+      "type": "number",
+      "id": "duration",
+      "label": "Scroll Duration (seconds)",
+      "default": 30,
+      "info": "Time for one full loop. Lower is faster."
+    },
+    {
+      "type": "number",
+      "id": "logo_height",
+      "label": "Logo Height (px)",
+      "default": 36
+    },
+    {
+      "type": "number",
+      "id": "gap",
+      "label": "Gap Between Logos (Desktop, px)",
+      "default": 60
+    },
+    {
+      "type": "number",
+      "id": "gap_m",
+      "label": "Gap Between Logos (Mobile, px)",
+      "default": 40
+    },
+    {
+      "type": "header",
+      "content": "Press List"
+    },
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Metaobject Type",
+      "default": "press",
+      "info": "Entries need title, provider, year and url fields. Manage in Admin > Content > Metaobjects."
+    },
+    {
+      "type": "checkbox",
+      "id": "sort_newest",
+      "label": "Sort by Year (Newest First)",
+      "default": true,
+      "info": "Fill in the year field on every entry for this to sort correctly."
+    },
+    {
+      "type": "number",
+      "id": "items_per_load",
+      "label": "Items Per Load",
+      "default": 9,
+      "info": "How many entries show initially and per click of the load more button."
+    },
+    {
+      "type": "text",
+      "id": "load_more_label",
+      "label": "Load More Label",
+      "default": "Load More"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "logo",
+      "name": "Logo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Logo Image",
+          "info": "Upload a PNG with transparent background, or an SVG with width and height defined."
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Press Page",
+      "blocks": [
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" },
+        { "type": "logo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,47 @@
+{%- comment -%}
+Love&Co Theme
+
+Description:
+Snippet for displaying accordion
+
+Variables:
+- icon_rotate: Boolean. If true, the icon will be rotating if expanded
+- wrapper_class: String. Class for the wrapper
+- desc_class: String. Class for the description
+- title_class: String. Class for the title
+- title: String. text for title
+- description: String. text for description
+- desc_html: HTML string for description
+- desc_no_pt: Boolean. If true, description will not have padding top
+- desc_no_pb: Boolean. If true, description will not have padding bottom
+- default_active: Boolean. If true, this will open at start
+- open_one_at_a_time: Boolean
+- number: Loop index
+{%- endcomment -%}
+
+<div class="accordion {{ wrapper_class }} {% if icon_rotate == true %}icon-rotate{% endif %}">
+    <div class="title-icon accordion-title {{ title_wrapper_class }} relative cursor flex ai-center jc-between pt-15 d-pt-20 {% if title_no_pb != true %} pb-15 d-pb-20 {% endif %} {% if default_active %}active{% endif %}" {% if open_one_at_a_time == blank %}onclick="$360.accordionToggle(event)"{% else %}onclick="$360.accordionToggle(event,'.{{title_wrapper_class}}')"{% endif %}>
+        <div class="title {{ title_class }}">
+            {{ title }}
+            {%if number != blank%}
+                {%if number < 10%}
+                    <div class="accordion-number ab-top-left p2 bold-500">{{number | prepend: '0'}}</div>
+                {%else%}
+                    <div class="accordion-number ab-top-left p2 bold-500">{{number}}</div>
+                {%endif%}
+            {%endif%}
+        </div>
+        <div class="icon-wrapper">
+            <div class="icon icon-plus ai-center jc-center">{{ settings.icon_plus }}</div>
+            <div class="icon icon-minus ai-center jc-center">{{ settings.icon_minus }}</div>
+        </div>
+    </div>
+    <div class="description {% if default_active != true %}hide-m{% endif %} {% if desc_no_pt != true %}pt-20{% endif %} {{ desc_class }}">
+        {%- if description != blank -%}
+            <div class="p2 {% if desc_no_pb != true %}pb-20{% endif %}">{{ description | newline_to_br }}</div>
+        {%- endif -%}
+        {%- if desc_html != blank -%}
+            {{ desc_html }}
+        {%- endif -%}
+    </div>
+</div>

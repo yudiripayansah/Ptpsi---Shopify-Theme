@@ -1,0 +1,757 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'product-carousel-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+{% if request.visual_preview_mode %}
+    <img src="{{ 'product-carousel-figma.PNG' | asset_url }}" width="100%" height="100%" />
+{%- elsif sb.size > 0 -%}
+<style>
+    {%- if section.settings.bg_color != blank -%}
+        #{{el_id}} {
+            background-color: {{ section.settings.bg_color }};
+        }
+    {%- endif -%}
+    {%- if sb.size == 1 -%}
+        #{{el_id}} .pts-heading {
+            display: none;
+        }
+        #{{el_id}} .pts-loading {
+            display: none; /* Hide loading overlay if only one block */
+        }
+    {%- endif -%}
+    #{{el_id}} .pts-swiper {
+        display: block;
+        opacity: 1;
+        visibility: visible;
+        transition: opacity .3s ease, visibility .3s ease;
+        overflow: visible;
+    }
+    #{{ el_id }} .shs-button {
+        border: 1px solid var(--green);
+        width: 100%;
+        justify-content: space-between;
+    }
+    #{{ el_id }} .shs-button.hide {
+        display: none;
+    }
+    #{{ el_id }} .shs-button .icon,
+    #{{ el_id }} .shs-button .icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    #{{el_id}} .pts-swiper.is-hidden {
+        opacity: 0;
+        visibility: hidden;
+    }
+    #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-wrapper {
+        display: flex;
+    }
+    #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-slide {
+        flex-shrink: 0;
+        width: calc((100% - ({{ ss.slides_on_mobile | minus: 1 }} * 12px)) / {{ ss.slides_on_mobile }});
+        margin-right: 12px;
+    }
+
+    #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-slide:last-child {
+        margin-right: 0;
+    }
+
+    /* New tab style classes */
+    #{{el_id}} .pts-tab-style {
+        justify-content: flex-start;
+        align-items: center;
+        display: inline-flex;
+        color: #A4A399;
+    }
+
+    #{{el_id}} .pts-tab-style.active {
+        color: var(--green);
+    }
+
+    #{{el_id}} .pts-loading {
+        {%- if section.settings.bg_color != blank -%}
+            background-color: {{ section.settings.bg_color }};
+        {% else %}
+            background-color: var(--grey-04);
+        {% endif %}
+        opacity: 0;
+        visibility: hidden;
+        transition: all .3s ease;
+        z-index: 101; /* Ensure it's above the arrows */
+    }
+    #{{el_id}} .pts-loading.show {
+        opacity: 1;
+        visibility: visible;
+        transition: all .3s ease;
+    }
+
+    #{{el_id}} .title {
+        min-width: 94px;
+        color: #617A65;
+    }
+
+    #{{el_id}} .title-wrapper {
+        width: 100%;
+    }
+
+    #{{el_id}} .ptsh-tabs {
+        gap: 12px;
+        width: calc(100% + 32px);
+        margin-left: -16px;
+        padding-left: 16px;
+        flex-direction: row;
+        overflow-x: auto;
+        -ms-overflow-style: none;  /* IE and Edge */
+        scrollbar-width: none;  /* Firefox */
+        white-space: nowrap; /* Prevent tabs from wrapping */
+    }
+    #{{el_id}} .ptsh-tabs a:last-child::before {
+        content: '';
+        position: absolute;
+        right: -16px;
+        top: 0;
+        width: 16px;
+        height: 100%;
+    }
+
+    #{{el_id}} .ptsh-tabs::-webkit-scrollbar {
+        display: none; /* Chrome, Safari and Opera */
+    }
+
+    #{{ el_id }} .swiper-grid-arrow {
+        position: relative;
+        width: 18px;
+        height: 18px;
+        cursor: pointer;
+        align-items: center;
+        justify-content: center;
+        opacity: 1;
+        transition: 0.3s ease all;
+    }
+    #{{ el_id }} .swiper-grid-arrow svg {
+        width: 12px;
+        height: 12px;
+    }
+    #{{ el_id }} .swiper-grid-arrow.swiper-button-disabled {
+        opacity: 0.3;
+    }
+    #{{ el_id }} .swiper-grid-arrow-wrapper {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        column-gap: 8px;
+    }
+    /* Instantly hide arrows when loading, overriding other styles */
+    #{{ el_id }} .swiper-grid-arrow.is-loading {
+        transition: none !important;
+        opacity: 0 !important;
+        visibility: hidden !important;
+    }
+    @media screen and (min-width: 600px) {
+        #{{el_id}} .ptsh-tabs {
+            gap: 24px;
+            width: calc(100% + 40px);
+            margin-left: -20px;
+            padding-left: 20px;
+        }
+        #{{el_id}} .pts-swiper {
+            overflow: hidden;
+        }
+        #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-slide {
+            width: calc((100% - ({{ ss.slides_on_tablet | minus: 1 }} * 12px)) / {{ ss.slides_on_tablet }});
+        }
+        #{{el_id}} .ptsh-tabs {
+            width: calc(100% + 40px);
+            margin-left: -20px;
+            padding-left: 20px;
+        }
+        #{{el_id}} .ptsh-tabs a:last-child::before {
+            right: -20px;
+            width: 20px;
+        }
+    }
+
+    @media screen and (min-width: 1024px) {
+        #{{el_id}} .control-wrapper-mobile a {
+            width: auto;
+        }
+        #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-slide {
+            width: calc((100% - ({{ ss.slides_on_small_desktop | minus: 1 }} * 20px)) / {{ ss.slides_on_small_desktop }});
+            margin-right: 20px;
+        }
+        #{{el_id}} .title-wrapper {
+            {%- if ss.title_max_width > 0 -%}
+                max-width: {{ ss.title_max_width }}px;
+            {%- endif -%}
+            display: flex;
+            column-gap: 24px;
+            align-items: center;
+        }
+        #{{ el_id }} .shs-button:hover {
+            background-color: var(--green);
+            color: #fff;
+        }
+        #{{ el_id }} .shs-button:hover .icon svg path {
+            stroke: #fff;
+        }
+    }
+
+    @media screen and (min-width: 1440px) {
+        #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-slide {
+            width: calc((100% - ({{ ss.slides_on_medium_desktop | minus: 1 }} * 20px)) / {{ ss.slides_on_medium_desktop }});
+        }
+    }
+
+    @media screen and (min-width: 1920px) {
+        #{{el_id}} .pts-swiper:not(.swiper-initialized) .swiper-slide {
+            width: calc((100% - ({{ ss.slides_on_large_desktop | minus: 1 }} * 20px)) / {{ ss.slides_on_large_desktop }});
+        }
+    }
+</style>
+
+    <div id="{{ el_id }}" class="overflow">
+        <div class="container">
+            <div class="heading-wrapper flex ai-end jc-between">
+                <div class="title-wrapper">
+                    <p class="p3 title tl d-tl">
+                        {{- section.settings.title -}}
+                    </p>
+
+                    {%- if section.blocks.size > 1 -%}
+                        <div class="ptsh-tabs flex flex-row mt-12 d-mt-0">
+                            {% for block in sb %}
+                                {%- assign bs = block.settings -%}
+                                {% if bs.collection != blank %}
+                                <a href="{{ bs.collection.url }}?view=coll-prod-tab"
+                                    class="relative h2 bold-700 pts-tab-style {% if forloop.first == true %} active {% endif %}"
+                                    data-btn-label="{{ bs.btn_label }}"
+                                >
+                                    {{bs.title}}
+                                </a>
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {%- endif -%}
+                </div>
+                <div class="flex">
+                    {% for block in sb %}
+                        {%- assign bs = block.settings -%}
+                        {% if bs.btn_label != blank %}
+                            {% if bs.collection != blank %}
+                            <a href="{{ bs.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 hide-m show-d-flex mr-20 ai-center colgap-48 {% unless forloop.first == true %} hide{%endunless%}">
+                                {{ bs.btn_label }}
+                                <div class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                                    </svg>
+                                </div>
+                            </a>
+                            {% endif %}
+                        {% endif %}
+                    {% endfor %}
+                    <div class="swiper-grid-arrow-wrapper">
+                        <div class="swiper-grid-arrow hide-m show-d-flex left pl-15 d-pl-0">
+                            {{ settings.icon_slide_left }}
+                        </div>
+                        <div class="swiper-grid-arrow hide-m show-d-flex right pr-15 d-pr-0">
+                            {{ settings.icon_slide_right }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="container mt-32 d-mt-40 relative">
+            {% assign block = sb | first %}
+            {% assign bs = block.settings %}
+            <div class="swiper relative pts-swiper" id="tab-{{block.id}}">
+                <div class="swiper-wrapper">
+                    {%- for product in bs.collection.products limit: 10 -%}
+                        <div class="swiper-slide">
+                            <div class="pts-product-item h-full">
+                                {% render 'product-each', product: product %}
+                            </div>
+                        </div>
+                    {%- endfor -%}
+                </div>
+            </div>
+            <div class="pts-loading absolute w-full h-full flex ai-center jc-center top-0 left-0">
+                <h4 class="h5 c-black">{{'customer.orders.loading' | t}}</h4>
+            </div>
+            {% for block in sb %}
+                {%- assign bs = block.settings -%}
+                {% if bs.btn_label != blank %}
+                    <a href="{{ bs.btn_url }}" class="shs-button mt-24 p2 pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d mr-20 ai-center {% unless forloop.first == true %} hide{%endunless%}">
+                        {{ bs.btn_label }}
+                        <div class="icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                            </svg>
+                        </div>
+                    </a>
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+<script>
+    {%- assign function_name = el_id | replace: '-', '_' -%}
+    let swiperPts{{function_name}};
+    let initialLoad{{function_name}} = true; 
+
+    var desktopArrows = document.querySelectorAll(`#{{el_id}} .swiper-grid-arrow.show-d-flex`);
+    var mobileArrows = document.querySelectorAll(`#{{el_id}} .control-wrapper-mobile .swiper-grid-arrow`);
+
+    function toggleArrows(show) {
+        const allArrows = [...desktopArrows, ...mobileArrows];
+        allArrows.forEach(arrow => {
+            arrow.classList.toggle('is-loading', !show);
+        });
+    }
+
+    function initProductTabs{{function_name}}() {
+        let activeUrl = null;
+
+        async function initSlide{{ function_name }}(collUrl = null) {
+            let loading = document.querySelector('#{{el_id}} .pts-loading');
+            let tsEl = document.querySelector('#{{el_id}} .pts-swiper'); 
+            let tsSwEl = tsEl.querySelector('.swiper-wrapper'); 
+            {%- if sb.size > 1 -%} /* Only show loading and fetch if multiple blocks */
+            if (collUrl && (!initialLoad{{function_name}} || collUrl !== document.querySelector('#{{el_id}} .ptsh-tabs a.active')?.href)) {
+                toggleArrows(false);
+                loading.classList.add('show');
+                tsEl.classList.add('is-hidden');
+                activeUrl = collUrl;
+            }
+            {%- endif -%}
+
+            try {
+
+                {%- if sb.size > 1 -%} /* Only perform AJAX if there's more than one block */
+                if (collUrl && (!initialLoad{{function_name}} || collUrl !== document.querySelector('#{{el_id}} .ptsh-tabs a.active')?.href)) {
+                    let req = await axios.get(collUrl);
+                    if (swiperPts{{function_name}} && typeof swiperPts{{function_name}}.destroy === 'function') {
+                        swiperPts{{function_name}}.destroy(true, true);
+                    }
+                    let domPts = req.data;
+
+                    if (!initialLoad{{function_name}} || collUrl !== document.querySelector('#{{el_id}} .ptsh-tabs a.active')?.href) {
+                        tsSwEl.innerHTML = domPts;
+                    }
+                }
+                {%- endif -%}
+
+                swiperPts{{function_name}} = new Swiper('#{{el_id}} .pts-swiper', {
+                    slidesPerView: {{ ss.slides_on_mobile }},
+                    spaceBetween: 16,
+                    loop: false,
+                    breakpoints: {
+                        600: {
+                            slidesPerView: {{ ss.slides_on_tablet }},
+                            spaceBetween: 16
+                        },
+                        1024: {
+                            slidesPerView: {{ ss.slides_on_small_desktop }},
+                            spaceBetween: 24
+                        },
+                        1440: {
+                            slidesPerView: {{ ss.slides_on_medium_desktop }},
+                            spaceBetween: 24
+                        },
+                        1920: {
+                            slidesPerView: {{ ss.slides_on_large_desktop }},
+                            spaceBetween: 24
+                        }
+                    },
+                    navigation: {
+                        nextEl: '#{{ el_id }} .swiper-grid-arrow.right',
+                        prevEl: '#{{ el_id }} .swiper-grid-arrow.left'
+                    },
+                    on: {
+                        init: function (swiper) {
+                            $360.lazyLoadInstance.update();
+
+                            const cards = tsSwEl.querySelectorAll('.product-each');
+                            if (cards.length && typeof gsap !== 'undefined') {
+                                gsap.set(cards, { y: 60, opacity: 0, force3D: true });
+                            }
+
+                            setTimeout(function () {
+                                {%- if sb.size > 1 -%} /* Only hide loading and show swiper if multiple blocks */
+                                if (loading) {
+                                    loading.classList.remove('show');
+                                }
+                                if (tsEl) {
+                                    tsEl.classList.remove('is-hidden');
+                                }
+                                toggleArrows(true);
+                                {%- endif -%}
+
+                                if (cards.length && typeof gsap !== 'undefined') {
+                                    requestAnimationFrame(function () {
+                                        ScrollTrigger.refresh();
+                                        gsap.timeline({
+                                            scrollTrigger: {
+                                                trigger: tsEl,
+                                                start: 'top 85%',
+                                                once: true
+                                            }
+                                        }).to(cards, {
+                                            y: 0,
+                                            opacity: 1,
+                                            duration: 1.0,
+                                            ease: 'power3.out',
+                                            stagger: 0.15
+                                        });
+                                    });
+                                }
+                            }, 500);
+                        },
+                        slideChange: function () {
+                            $360.lazyLoadInstance.update();
+                        },
+                        resize: function (swiper) {
+                            $360.lazyLoadInstance.update();
+                        }
+                    }
+                });
+            } catch (error) {
+                console.log(error);
+                if (loading) {
+                    loading.classList.remove('show');
+                }
+                if (tsEl) {
+                    tsEl.classList.remove('is-hidden');
+                }
+                toggleArrows(true);
+            }
+
+            try {
+                if(typeof iWish!=='undefined'){
+                    setTimeout(function(){
+                        iWish.checkIwishColl();
+                    },1500)
+                }
+            } catch (error) {
+                // console.log(error);
+            }
+        }
+
+        {%- if sb.size > 1 -%}
+        let tabItem = document.querySelectorAll('#{{el_id}} .ptsh-tabs a');
+        let shsButtons = document.querySelectorAll('#{{el_id}} .shs-button');
+        tabItem.forEach(function (ti) {
+            ti.addEventListener('click', function (e) {
+                e.preventDefault();
+                let el = e.currentTarget;
+                let collUrl = el.getAttribute('href');
+                let btnLabel = el.dataset.btnLabel;
+                let btnUrl = el.dataset.btnUrl;
+                activeUrl = collUrl;
+
+                tabItem.forEach(function (theTi) {
+                    theTi.classList.remove('active');
+                });
+                el.classList.add('active');
+                shsButtons.forEach(function (btn) {
+                    let btnLabelShs = ti.dataset.btnLabel;
+                    if (btnLabelShs && btnLabelShs === btn.innerText.trim()) {
+                        btn.classList.remove('hide');
+                    } else {
+                        btn.classList.add('hide');
+                    }
+                });
+
+                const desktopBtn = document.querySelector('#{{el_id}} [data-curated-btn-desktop]');
+                const mobileBtn = document.querySelector('#{{el_id}} [data-curated-btn-mobile]');
+
+                if (btnLabel && btnUrl) {
+                    if (desktopBtn) {
+                        desktopBtn.href = btnUrl;
+                        desktopBtn.innerText = btnLabel;
+                        desktopBtn.style.visibility = 'visible';
+                    }
+                    if (mobileBtn) {
+                        mobileBtn.href = btnUrl;
+                        mobileBtn.innerText = btnLabel;
+                        mobileBtn.style.visibility = 'visible';
+                    }
+                } else {
+                    if (desktopBtn) desktopBtn.style.visibility = 'hidden';
+                    if (mobileBtn) mobileBtn.style.visibility = 'hidden';
+                }
+
+                initSlide{{ function_name }}(collUrl);
+            });
+        });
+        {%- endif -%}
+
+        let firstTab = document.querySelector('#{{el_id}} .ptsh-tabs a.active') || document.querySelector('#{{el_id}} .ptsh-tabs a');
+        if (firstTab) {
+            activeUrl = firstTab.getAttribute('href');
+            initSlide{{ function_name }}(activeUrl);
+        } else {
+            initSlide{{ function_name }}();
+        }
+        initialLoad{{function_name}} = false; 
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+        initProductTabs{{ function_name }}();
+    });
+
+    document.addEventListener("shopify:section:load", (e) => {
+        if (e.target.querySelector('#{{el_id}}')) {
+            initProductTabs{{ function_name }}();
+        }
+    });
+
+    document.addEventListener("shopify:block:select", () => {
+        initProductTabs{{ function_name }}();
+    });
+</script>
+  
+{%- endif -%}
+{% schema %}
+{
+    "name": "Product Carousel",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+            "type": "number",
+            "id": "title_max_width_m",
+            "label": "Title Max Width (Mobile)",
+            "info": "In pixels. Leave blank for default.",
+            "default": 738
+        },
+        {
+            "type": "number",
+            "id": "title_max_width_t",
+            "label": "Title Max Width (Tablet)",
+            "info": "In pixels. Leave blank for default.",
+            "default": 738
+        },
+        {
+            "type": "number",
+            "id": "title_max_width",
+            "label": "Title Max Width (Desktop)",
+            "info": "In pixels. Leave blank for default.",
+            "default": 738
+        },
+        {
+            "type": "number",
+            "id": "slides_on_mobile",
+            "label": "Slides per display on mobile",
+            "default": 2
+        },
+        {
+            "type": "number",
+            "id": "slides_on_tablet",
+            "label": "Slides per display on tablet",
+            "default": 2
+        },
+        {
+            "type": "number",
+            "id": "slides_on_small_desktop",
+            "label": "Slides per display on small desktop (1024)",
+            "default": 3
+        },
+        {
+            "type": "number",
+            "id": "slides_on_medium_desktop",
+            "label": "Slides per display on medium desktop (1440)",
+            "default": 5
+        },
+        {
+            "type": "number",
+            "id": "slides_on_large_desktop",
+            "label": "Slides per display on large desktop (1920)",
+            "default": 5
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "collection",
+            "name": "Collection",
+            "settings": [
+                {
+                    "type": "collection",
+                    "id": "collection",
+                    "label": "Collection"
+                },
+                {
+                    "type": "text",
+                    "id": "title",
+                    "label": "Title"
+                },
+                {
+                    "type": "text",
+                    "id": "btn_label",
+                    "label": "Button Label"
+                },
+                {
+                    "type": "url",
+                    "id": "btn_url",
+                    "label": "Button Url"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Product Carousel",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

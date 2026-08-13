@@ -1,0 +1,41 @@
+{% render 'faq-content' %}
+{% schema %}
+  {
+    "name": "FAQ Content 9",
+    "settings": [
+      {
+        "type": "checkbox",
+        "id": "enable_faq",
+        "label": "Enable FAQ"
+      },
+      {
+        "type": "text",
+        "id": "id_faq",
+        "label": "FAQ Id"
+      },
+      {
+        "type": "text",
+        "id": "title",
+        "label": "Title"
+      }
+    ],
+    "blocks": [
+      {
+        "type": "qna",
+        "name": "Q & A",
+        "settings": [
+          {
+            "type": "textarea",
+            "id": "title",
+            "label": "Question"
+          },
+          {
+            "type": "textarea",
+            "id": "text",
+            "label": "Answer"
+          }
+        ]
+      }
+    ]
+  }
+{% endschema %}

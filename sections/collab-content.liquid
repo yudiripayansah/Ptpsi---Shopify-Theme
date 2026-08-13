@@ -1,0 +1,632 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'collab-content-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    {% if ss.bg_color != blank %}
+      background-color: {{ ss.bg_color }};
+    {% endif %}
+  }
+  /* Per-block spacing: mobile 28/48/56, desktop 60/80/120 */
+  #{{ el_id }} .cct-pt-small { padding-top: 28px; }
+  #{{ el_id }} .cct-pt-medium { padding-top: 48px; }
+  #{{ el_id }} .cct-pt-large { padding-top: 56px; }
+  #{{ el_id }} .cct-pb-small { padding-bottom: 28px; }
+  #{{ el_id }} .cct-pb-medium { padding-bottom: 48px; }
+  #{{ el_id }} .cct-pb-large { padding-bottom: 56px; }
+
+  #{{ el_id }} .cct-caption {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+    margin-top: 8px;
+  }
+  #{{ el_id }} .cct-caption .cct-caption-label {
+    flex: 0 0 50px;
+  }
+  #{{ el_id }} .cct-caption .cct-caption-text {
+    flex: 1;
+    min-width: 0;
+  }
+  #{{ el_id }} .cct-media {
+    position: relative;
+    overflow: hidden;
+  }
+  #{{ el_id }} .cct-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #{{ el_id }} .cct-text-offset .rte p {
+    margin: 0 0 24px;
+  }
+  #{{ el_id }} .cct-text-offset .rte p:last-child {
+    margin-bottom: 0;
+  }
+  #{{ el_id }} .cct-pair-1 {
+    width: 73.8%;
+  }
+  #{{ el_id }} .cct-pair-1 .cct-media {
+    aspect-ratio: 448 / 598;
+  }
+  #{{ el_id }} .cct-pair-2 {
+    width: 73.8%;
+    margin-top: 40px;
+    margin-left: auto;
+  }
+  #{{ el_id }} .cct-pair-2 .cct-media {
+    aspect-ratio: 3 / 2;
+  }
+  #{{ el_id }} .cct-full .cct-media {
+    aspect-ratio: 343 / 550;
+  }
+  #{{ el_id }} .cct-columns {
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+  }
+  #{{ el_id }} .cct-columns .rte p {
+    margin: 0 0 24px;
+  }
+  #{{ el_id }} .cct-columns .rte p:last-child {
+    margin-bottom: 0;
+  }
+  #{{ el_id }} .cct-duo {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  #{{ el_id }} .cct-duo .cct-media {
+    aspect-ratio: 3 / 4;
+    width: 40.8%;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .cct-pt-small { padding-top: 60px; }
+    #{{ el_id }} .cct-pt-medium { padding-top: 80px; }
+    #{{ el_id }} .cct-pt-large { padding-top: 120px; }
+    #{{ el_id }} .cct-pb-small { padding-bottom: 60px; }
+    #{{ el_id }} .cct-pb-medium { padding-bottom: 80px; }
+    #{{ el_id }} .cct-pb-large { padding-bottom: 120px; }
+
+    #{{ el_id }} .cct-caption {
+      gap: 24px;
+    }
+    #{{ el_id }} .cct-caption .cct-caption-label {
+      flex: 0 0 94px;
+    }
+    #{{ el_id }} .cct-text-offset {
+      padding-left: 33.9%;
+    }
+    #{{ el_id }} .cct-pair {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 24px;
+    }
+    #{{ el_id }} .cct-pair-1 {
+      width: 32.18%;
+    }
+    #{{ el_id }} .cct-pair-2 {
+      width: 40.66%;
+      margin-top: 0;
+      margin-left: 0;
+    }
+    #{{ el_id }} .cct-full .cct-media {
+      aspect-ratio: 1392 / 726;
+    }
+    #{{ el_id }} .cct-columns {
+      flex-direction: row;
+      padding-left: 33.9%;
+    }
+    #{{ el_id }} .cct-columns .cct-column {
+      flex: 1;
+      min-width: 0;
+    }
+    #{{ el_id }} .cct-duo {
+      gap: 24px;
+    }
+    #{{ el_id }} .cct-duo .cct-media {
+      width: 40.66%;
+    }
+  }
+</style>
+
+{% if sb.size > 0 %}
+  <div id="{{ el_id }}">
+    <div class="container">
+      {% for block in sb %}
+        {% liquid
+          assign bs = block.settings
+          assign spacing = 'cct-pt-' | append: bs.top_spacing | append: ' cct-pb-' | append: bs.bottom_spacing
+        %}
+        {% case block.type %}
+          {% when 'text_offset' %}
+            {% if bs.text != blank %}
+              <div class="cct-text-offset {{ spacing }}" {{ block.shopify_attributes }}>
+                <div class="h4 c-green rte">{{ bs.text }}</div>
+              </div>
+            {% endif %}
+
+          {% when 'image_pair' %}
+            <div class="cct-pair {{ spacing }}" {{ block.shopify_attributes }}>
+              {% if bs.image_1 != blank %}
+                <div class="cct-pair-1">
+                  <div class="cct-media">
+                    {{ bs.image_1 | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1200', sizes: '(min-width: 1024px) 32vw, 74vw' }}
+                  </div>
+                  {% if bs.caption_1_label != blank or bs.caption_1_text != blank %}
+                    <div class="cct-caption p4 c-label">
+                      <div class="cct-caption-label">{{ bs.caption_1_label }}</div>
+                      <div class="cct-caption-text">{{ bs.caption_1_text }}</div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+              {% if bs.image_2 != blank %}
+                <div class="cct-pair-2">
+                  <div class="cct-media">
+                    {{ bs.image_2 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 74vw' }}
+                  </div>
+                  {% if bs.caption_2_label != blank or bs.caption_2_text != blank %}
+                    <div class="cct-caption p4 c-label">
+                      <div class="cct-caption-label">{{ bs.caption_2_label }}</div>
+                      <div class="cct-caption-text">{{ bs.caption_2_text }}</div>
+                    </div>
+                  {% endif %}
+                </div>
+              {% endif %}
+            </div>
+
+          {% when 'full_image' %}
+            {% if bs.image != blank or bs.image_m != blank %}
+              <div class="cct-full {{ spacing }}" {{ block.shopify_attributes }}>
+                <div class="cct-media">
+                  {% assign full_image = bs.image | default: bs.image_m %}
+                  <picture>
+                    {% if bs.image_m != blank and bs.image != blank %}
+                      <source media="(max-width: 1023px)" srcset="{{ bs.image_m | image_url: width: 1200 }}">
+                    {% endif %}
+                    {{ full_image | image_url: width: 2400 | image_tag: loading: 'lazy', widths: '600, 1000, 1600, 2400', sizes: '100vw' }}
+                  </picture>
+                </div>
+                {% if bs.caption_label != blank or bs.caption_text != blank %}
+                  <div class="cct-caption p4 c-label">
+                    <div class="cct-caption-label">{{ bs.caption_label }}</div>
+                    <div class="cct-caption-text">{{ bs.caption_text }}</div>
+                  </div>
+                {% endif %}
+              </div>
+            {% endif %}
+
+          {% when 'text_columns' %}
+            <div class="cct-columns {{ spacing }}" {{ block.shopify_attributes }}>
+              {% if bs.text_1 != blank %}
+                <div class="cct-column p1 c-green rte">{{ bs.text_1 }}</div>
+              {% endif %}
+              {% if bs.text_2 != blank %}
+                <div class="cct-column p1 c-green rte">{{ bs.text_2 }}</div>
+              {% endif %}
+            </div>
+
+          {% when 'image_duo' %}
+            <div class="cct-duo {{ spacing }}" {{ block.shopify_attributes }}>
+              {% if bs.image_1 != blank %}
+                <div class="cct-media">
+                  {{ bs.image_1 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 41vw' }}
+                </div>
+              {% endif %}
+              {% if bs.image_2 != blank %}
+                <div class="cct-media">
+                  {{ bs.image_2 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 41vw' }}
+                </div>
+              {% endif %}
+            </div>
+        {% endcase %}
+      {% endfor %}
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collab Content",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "text_offset",
+      "name": "Large Text (Offset)",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text",
+          "info": "Large statement text, offset to the right on desktop."
+        },
+        {
+          "type": "select",
+          "id": "top_spacing",
+          "label": "Top Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "medium"
+        },
+        {
+          "type": "select",
+          "id": "bottom_spacing",
+          "label": "Bottom Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "nopadding"
+        }
+      ]
+    },
+    {
+      "type": "image_pair",
+      "name": "Image Pair",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "First Image",
+          "info": "Portrait crop (3:4). Left on desktop, top left-aligned on mobile."
+        },
+        {
+          "type": "text",
+          "id": "caption_1_label",
+          "label": "First Caption Label"
+        },
+        {
+          "type": "text",
+          "id": "caption_1_text",
+          "label": "First Caption Text"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Second Image",
+          "info": "Landscape crop (3:2). Right on desktop, bottom right-aligned on mobile."
+        },
+        {
+          "type": "text",
+          "id": "caption_2_label",
+          "label": "Second Caption Label"
+        },
+        {
+          "type": "text",
+          "id": "caption_2_text",
+          "label": "Second Caption Text"
+        },
+        {
+          "type": "select",
+          "id": "top_spacing",
+          "label": "Top Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        },
+        {
+          "type": "select",
+          "id": "bottom_spacing",
+          "label": "Bottom Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        }
+      ]
+    },
+    {
+      "type": "full_image",
+      "name": "Full Width Image",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image (Desktop)",
+          "info": "Landscape crop, roughly 1392x726."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_m",
+          "label": "Image (Mobile)",
+          "info": "Portrait crop, roughly 343x550. Falls back to the desktop image."
+        },
+        {
+          "type": "text",
+          "id": "caption_label",
+          "label": "Caption Label"
+        },
+        {
+          "type": "text",
+          "id": "caption_text",
+          "label": "Caption Text"
+        },
+        {
+          "type": "select",
+          "id": "top_spacing",
+          "label": "Top Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        },
+        {
+          "type": "select",
+          "id": "bottom_spacing",
+          "label": "Bottom Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        }
+      ]
+    },
+    {
+      "type": "text_columns",
+      "name": "Text Columns (Offset)",
+      "settings": [
+        {
+          "type": "richtext",
+          "id": "text_1",
+          "label": "First Column"
+        },
+        {
+          "type": "richtext",
+          "id": "text_2",
+          "label": "Second Column"
+        },
+        {
+          "type": "select",
+          "id": "top_spacing",
+          "label": "Top Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "nopadding"
+        },
+        {
+          "type": "select",
+          "id": "bottom_spacing",
+          "label": "Bottom Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        }
+      ]
+    },
+    {
+      "type": "image_duo",
+      "name": "Image Duo",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "First Image",
+          "info": "Portrait crop (3:4)."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_2",
+          "label": "Second Image",
+          "info": "Portrait crop (3:4)."
+        },
+        {
+          "type": "select",
+          "id": "top_spacing",
+          "label": "Top Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        },
+        {
+          "type": "select",
+          "id": "bottom_spacing",
+          "label": "Bottom Spacing",
+          "options": [
+            { "value": "nopadding", "label": "None" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+          ],
+          "default": "large"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collab Content",
+      "blocks": [
+        { "type": "text_offset" },
+        { "type": "image_pair" },
+        { "type": "full_image" },
+        { "type": "text_columns" },
+        { "type": "image_duo" }
+      ]
+    }
+  ]
+}
+{% endschema %}

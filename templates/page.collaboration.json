@@ -1,0 +1,226 @@
+{
+  "wrapper": "div.global-content-top-margin.bg-background-main",
+  "sections": {
+    "collab_hero": {
+      "type": "collab-hero",
+      "name": "Collab Hero",
+      "settings": {
+        "bg_color": "",
+        "label": "Collaboration",
+        "title": "Soilboy x Oak & Bindi",
+        "title_dom_type": "h1",
+        "title_size": "h2",
+        "image": "shopify:\/\/shop_images\/Frame_8_199f797c-744e-4620-8df2-31ce785eecd3.png",
+        "image_small": "shopify:\/\/shop_images\/Frame_8_23f7ff64-83e4-4c59-a897-c2287afb3777.png",
+        "btn_label": "Shop Collection",
+        "btn_url": "",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "nopadding",
+        "bottom_padding": "nopadding",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "nopadding",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "nopadding"
+      }
+    },
+    "collab_content": {
+      "type": "collab-content",
+      "blocks": {
+        "intro_text": {
+          "type": "text_offset",
+          "settings": {
+            "text": "<p>Rooted in a shared love for nature and mindful living, Soilboy × Oak and Bindi brings together plant design and playful illustration in a collection of lifestyle pieces.<\/p><p>From wearable art to home essentials, each item carries the essence of both studios — thoughtful, expressive, and inspired by the beauty of taking things slow.<\/p>",
+            "top_spacing": "medium",
+            "bottom_spacing": "nopadding"
+          }
+        },
+        "image_pair_1": {
+          "type": "image_pair",
+          "settings": {
+            "image_1": "shopify:\/\/shop_images\/Image_e1ad683d-b958-4e5a-9061-1727c9d1591c.png",
+            "caption_1_label": "SP 01.",
+            "caption_1_text": "Senna Meridionalis",
+            "image_2": "shopify:\/\/shop_images\/Image_59cd115c-ecbe-4bb7-8485-4b987da6266c.png",
+            "caption_2_label": "SP 01.",
+            "caption_2_text": "Senna Meridionalis",
+            "top_spacing": "large",
+            "bottom_spacing": "large"
+          }
+        },
+        "full_image_1": {
+          "type": "full_image",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Image_1ad14658-8e2c-485b-80ec-7ef7812b30de.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Senna Meridionalis",
+            "top_spacing": "large",
+            "bottom_spacing": "large"
+          }
+        },
+        "text_columns_1": {
+          "type": "text_columns",
+          "settings": {
+            "text_1": "<p>Lorem ipsum dolor sit amet consectetur. Massa purus pellentesque vulputate cras amet vitae.<\/p><p>Ut sed neque et enim aenean tristique convallis pharetra. Viverra euismod nam aliquam purus quisque. Mi quis velit mi auctor odio sed enim.<\/p><p>Duis facilisis faucibus.<\/p>",
+            "text_2": "<p>Lorem ipsum dolor sit amet consectetur. Condimentum neque neque cras sed urna nibh velit mauris. Lectus nec ut id lobortis hendrerit.<\/p><p>Leo ut sed metus nibh. Faucibus dolor mattis sem ipsum. Nunc libero turpis maecenas pellentesque lacus pulvinar. Cum facilisis sit consequat sed cras. Condimentum nam eget phasellus sit vel vel lectus.<\/p>",
+            "top_spacing": "nopadding",
+            "bottom_spacing": "large"
+          }
+        },
+        "image_duo_1": {
+          "type": "image_duo",
+          "settings": {
+            "image_1": "shopify:\/\/shop_images\/Image_4cf81240-41ed-47a3-bc6a-0b588b012c9b.png",
+            "image_2": "shopify:\/\/shop_images\/Image_e38b715e-4209-48f8-91c6-936d3a9d8939.png",
+            "top_spacing": "large",
+            "bottom_spacing": "large"
+          }
+        }
+      },
+      "block_order": [
+        "intro_text",
+        "image_pair_1",
+        "full_image_1",
+        "text_columns_1",
+        "image_duo_1"
+      ],
+      "name": "Collab Content",
+      "settings": {
+        "bg_color": "",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "nopadding",
+        "bottom_padding": "nopadding",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "nopadding",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "nopadding"
+      }
+    },
+    "collab_explore": {
+      "type": "collab-explore",
+      "name": "Collab Explore",
+      "settings": {
+        "bg_color": "",
+        "title": "Explore the Collection",
+        "title_dom_type": "h2",
+        "title_size": "h3",
+        "products": [],
+        "collection": "",
+        "product_limit": 8,
+        "btn_label": "Shop All",
+        "btn_url": "",
+        "border_bottom": true,
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "nopadding",
+        "bottom_padding": "nopadding",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "nopadding",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "nopadding"
+      }
+    },
+    "work_with_us": {
+      "type": "work-with-us-form",
+      "name": "Work With Us Form",
+      "settings": {
+        "bg_color": "",
+        "anchor_id": "work-with-us",
+        "title_1": "Work With",
+        "title_2": "Us",
+        "title_dom_type": "h2",
+        "title_size": "h1",
+        "text": "Tell us about your gifting needs, and our team will be in touch with a tailored proposal.",
+        "image": "shopify:\/\/shop_images\/Image_1_39cfb587-fecc-432b-bd8d-e2c49861e007.png",
+        "caption_label": "SP 01.",
+        "caption_text": "Everfresh Tree",
+        "name_placeholder": "Name*",
+        "email_placeholder": "Email Address*",
+        "default_country_code": "+65",
+        "phone_placeholder": "Phone Number*",
+        "timeline_placeholder": "Preferred Timeline*",
+        "topic_placeholder": "Select your enquiry*",
+        "topic": "Collaboration,Corporate Gifts,Workshops,Installations,Others",
+        "message_placeholder": "Write your message here*",
+        "form_info": "<p>Email us at <a href=\"mailto:hello@soilboy.sg\">hello@soilboy.sg<\/a> or fill out the form. Our lean & green team, will respond between 1-3 business days.<\/p><p>Looking for corporate gifts, workshops or installations? Email us at <a href=\"mailto:business@soilboy.sg\">business@soilboy.sg<\/a> or indicate your project details in the form.<\/p>",
+        "button_label": "Submit",
+        "success_message": "Your message has been sent. Our team will be in touch shortly.",
+        "top_padding_m": "small",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "small",
+        "bottom_padding_t": "medium",
+        "top_padding": "small",
+        "bottom_padding": "medium",
+        "top_padding_hd": "small",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "small",
+        "bottom_padding_hhd": "medium"
+      }
+    },
+    "border_collabs": {
+      "type": "border",
+      "name": "Border",
+      "settings": {
+        "bg_color": "",
+        "b_color": "#304835",
+        "hascon": true
+      }
+    },
+    "more_collabs": {
+      "type": "more-collabs",
+      "blocks": {
+        "collab_1": {
+          "type": "collab",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Frame_e653e7db-fd2f-4d08-b067-0710150d299a.png",
+            "title": "Soilboy X Wacky Wears",
+            "url": ""
+          }
+        },
+        "collab_2": {
+          "type": "collab",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Frame_f4b4d011-7d86-41d2-854d-1407f6b59241.png",
+            "title": "Soilboy X Goodtotes",
+            "url": ""
+          }
+        }
+      },
+      "block_order": [
+        "collab_1",
+        "collab_2"
+      ],
+      "name": "More Collabs",
+      "settings": {
+        "bg_color": "",
+        "left_title": "More",
+        "right_title": "Collabs",
+        "top_padding_m": "medium",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "medium",
+        "top_padding": "medium",
+        "bottom_padding": "medium",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "medium"
+      }
+    }
+  },
+  "order": [
+    "collab_hero",
+    "collab_content",
+    "collab_explore",
+    "work_with_us",
+    "border_collabs",
+    "more_collabs"
+  ]
+}

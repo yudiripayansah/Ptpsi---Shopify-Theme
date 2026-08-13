@@ -1,0 +1,467 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'split-hero-accordion-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #{{el_id}} .container:after,
+  #{{el_id}} .container:before,
+  #{{el_id}} .row:after,
+  #{{el_id}} .row:before,
+  #{{el_id}} .row > div:after,
+  #{{el_id}} .row > div:before {
+    display: none;
+  }
+  #{{el_id}} .cf-subtitle {
+    min-width: 100px;
+  }
+  #{{el_id}} .accordion .title-icon .icon,
+  #{{el_id}} .accordion .title-icon .icon svg {
+    width: 14px;
+    height: 14px;
+  }
+  #{{el_id}} .cf-parag-text {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+    transition: all 0.3s ease;
+  }
+  #{{el_id}} .cf-parag-text.open {
+    -webkit-line-clamp: unset;
+    max-height: none;
+  }
+  #{{el_id}} .cf-parag-toggle-show {
+    cursor: pointer;
+    user-select: none;
+  }
+  #box-{{el_id}} .container:after,
+  #box-{{el_id}} .container:before {
+    display: none;
+  }
+  @media screen and (min-width: 1024px){
+    #{{el_id}} .cf-paragraph {
+      margin-top: 220px;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'collection-faq.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="box-{{el_id}}">
+    {% if ss.border_top %}
+      <div class="container">
+        <div class="bt-1 b-main w-full" style="height: 0;">&nbsp;</div>
+      </div>
+    {% endif %}
+    <div id="{{ el_id }}" class="relative">
+      <div class="container">
+        <div class="row flex d-flex-row flex-column ai-start d-ai-stretch jc-between">
+          <div class="col-12 col-d-6 d-pt-20 d-sticky top-0 flex flex-column jc-between">
+            <div class="flex ai-start d-colgap-24 d-flex-row flex-column">
+              {% if ss.title != blank %}
+                <div class="cf-subtitle p3 c-label min-100 d-pt-12 d-pb-12">{{ ss.title }}</div>
+              {% endif %}
+              <div class="cf-main-text mt-12 d-mt-0 w-full">
+                {% if ss.text != blank %}
+                  <{{ ss.title_dom_type }} class="{{ ss.title_size }} c-green">
+                    {{- ss.text |  newline_to_br-}}
+                  </{{ ss.title_dom_type }}>
+                {% endif %}
+                {% if ss.link_label != blank %}
+                  <a
+                    href="{{ss.link_url}}"
+                    class="d-max-350 w-full p2 d-mt-32 mt-24 b-1 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 b-green c-green"
+                  >
+                    {{ ss.link_label }}
+                    <span class="icon">
+                      {{ settings.icon_arrow_up_right }}
+                    </span>
+                  </a>
+                {% endif %}
+              </div>
+            </div>
+            {% if ss.parag_text != blank or ss.ss.parag_title != blank %}
+            <div class="cf-paragraph hide-m show-d">
+              <div class="c-green p1">{{ss.parag_title}}</div>
+              <div class="c-green p2 d-mt-12 cf-parag-text">{{ss.parag_text}}</div>
+              <div class="cursor underline p2 c-green cf-parag-toggle-show d-mt-8">Show More</div>
+            </div>
+            {% endif %}
+          </div>
+          <div class="col-12 col-d-6 mt-32 d-mt-0">
+            <div class="sha-accordion accordion-wrapper">
+              {% for block in sb %}
+                {% liquid
+                  assign bs = block.settings
+                  assign wrapper_class = 'pb-16 bb-1 b-secondary mb-16'
+                  assign title_wrapper_class = 'sha-accordion-title'
+                  assign title_class = 'p1 '
+                  if forloop.last == true
+                  assign wrapper_class = 'pb-16 bb-1 b-secondary'
+                  endif
+                %}
+                {% if bs.title != blank %}
+                  {% capture title %}
+                  <div class="p1 flex ai-center colgap-6 c-green">
+                    {{bs.title}}
+                  </div>
+                {% endcapture %}
+                  {% capture desc_html %}
+                  <div class="">
+                    {% if bs.image_desktop != blank or bs.image_mobile != blank %}
+                    {% assign image_id = "split-hero-accordion-image-acc-" | append: block.id %}
+                    {%- render 'global-image-wrapper-responsive',
+                      image_id: image_id,
+                      desktop_image: bs.image_desktop,
+                      mobile_image: bs.image_mobile,
+                      additional_class: 'no-bg'
+                    %}
+                    {% endif %}
+                    {% if bs.text != blank %}
+                    <div class="p2 mt-16 c-green">{{bs.text}}</div>
+                    {% endif %}
+                    {% if bs.link_label != blank %}
+                    <div class="mt-12">
+                      {%- assign link_id = "split-hero-accordion-link-" | append: block.id -%}
+                      {% render 'link-icon', 
+                          id: link_id,
+                          label: bs.link_label,
+                          url: bs.link_url,
+                          text_class: 'p2 underline dropdown-anim c-green',
+                          icon_color: 'var(--green)',
+                          icon_svg: settings.icon_arrow_up_right
+                      %}
+                    </div>
+                    {% endif %}
+                  </div>
+                {% endcapture %}
+                  {%- render 'accordion',
+                    icon_rotate: false,
+                    wrapper_class: wrapper_class,
+                    title_wrapper_class: title_wrapper_class,
+                    title_class: title_class,
+                    desc_no_pt: true,
+                    title: title,
+                    desc_html: desc_html,
+                    title_no_pt: true,
+                    title_no_pb: true,
+                    open_one_at_a_time: true
+                  -%}
+                {% endif %}
+              {% endfor %}
+            </div>
+            {% if ss.parag_title != blank and ss.parag_text != blank %}
+            <div class="cf-paragraph mt-40 hide-d">
+              <div class="c-green p1">{{ss.parag_title}}</div>
+              <div class="c-green p2 mt-12 cf-parag-text">{{ss.parag_text}}</div>
+              <div class="cursor underline p2 c-green cf-parag-toggle-show mt-8">Show More</div>
+            </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    {% if ss.border_bottom %}
+      <div class="container">
+        <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
+      </div>
+    {% endif %}
+  </div>
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      const toggles = document.querySelectorAll('.cf-parag-toggle-show');
+
+      toggles.forEach(toggle => {
+        toggle.addEventListener('click', function () {
+          const parent = toggle.closest('.cf-paragraph');
+          const text = parent.querySelector('.cf-parag-text');
+
+          // toggle class
+          text.classList.toggle('open');
+
+          // Ubah tulisan tombol
+          if (text.classList.contains('open')) {
+            toggle.textContent = "Show Less";
+          } else {
+            toggle.textContent = "Show More";
+          }
+        });
+      });
+    });
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collection FAQ",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_top",
+      "label": "Enable Border Top"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_bottom",
+      "label": "Enable Border Bottom"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Subtitle"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" },
+        { "value": "h7", "label": "H7" },
+        { "value": "h8", "label": "H8" },
+        { "value": "h9", "label": "H9" },
+        { "value": "p1", "label": "p1" },
+        { "value": "p2", "label": "p2" },
+        { "value": "p3", "label": "p3" },
+        { "value": "p4", "label": "p4" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "parag_title",
+      "label": "Paragraph Title"
+    },
+    {
+      "type": "textarea",
+      "id": "parag_text",
+      "label": "Paragraph Text"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link Label"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_desktop",
+          "label": "Image Desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image Mobile"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link Label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection FAQ",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

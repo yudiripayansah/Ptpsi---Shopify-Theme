@@ -1,0 +1,484 @@
+{% comment %} Luxlexicon - Yudi {% endcomment %}
+{%- assign el_id = 'order-details' | append: section.id -%}
+{% if customer %}
+  <style>
+    .va-middle {
+      vertical-align: middle;
+    }
+    #{{el_id}} .icon-back,
+    #{{el_id}} .icon-back svg {
+      width: 16px;
+      height: 16px;
+    }
+    #{{el_id}} .ln-image {
+      width: 100px;
+      flex: 0 0 100px;
+    }
+    #{{el_id}} .table-online-order-details td {
+      vertical-align: top;
+    }
+    #{{el_id}} .order-detail-item {
+      width: 50%;
+    }
+    #{{el_id}} .order-detail-qty {
+      width: 25%;
+    }
+    #{{el_id}} .order-detail-price {
+      width: 25%;
+    }
+    #{{el_id}} .order-detail-shipping {
+      width: 50%;
+    }
+    #{{el_id}} .order-detail-status {
+      width: 50%;
+    }
+    #{{el_id}} .tod-heading {
+      min-width: calc(100% / 3);
+      max-width: calc(100% / 3);
+    }
+    #{{el_id}} .col-fl-table {
+      width: 50%;
+    }
+    #{{el_id}} .col-fr-table {
+      width: 50%;
+    }
+    #{{el_id}} .table-order-details .left-side {
+      width: 70%;
+    }
+    #{{el_id}} .product-vendor {
+      line-height: 1.2;
+    }
+    #{{el_id}} .ln-pr-custom {
+      padding-right: 6px;
+    }
+    #{{el_id}} .ln-pl-custom {
+      padding-left: 6px;
+    }
+    #{{el_id}} .col-title {
+      width: calc(50% - 8px);
+    }
+    #{{el_id}} .col-value {
+      width: calc(50% - 8px);
+    }
+    #{{el_id}} .col-table-left {
+      width: calc(75% - 8px);
+    }
+    #{{el_id}} .col-table-right {
+      width: calc(25% - 8px);
+    }
+    @media screen and (min-width: 600px) and (max-width: 1023px) {
+      #{{el_id}} .price-column {
+        width: 30%;
+      }
+      #{{el_id}} .ln-pr-custom {
+        padding-right: 8px;
+      }
+      #{{el_id}} .ln-pl-custom {
+        padding-left: 8px;
+      }
+    }
+    @media screen and (min-width: 1024px) {
+      #{{el_id}} .d-table{
+        display:table-cell;
+      }
+      #{{el_id}} .col-fl-table {
+        padding-left: 50%;
+      }
+      #{{el_id}} .col-fl-table {
+        width: auto;
+      }
+      #{{el_id}} .col-fr-table {
+        width: 20%;
+      }
+      #{{el_id}} .ln-image {
+        width: 100px;
+        flex: 0 0 100px;
+      }
+      #{{el_id}} .col-title {
+        width: calc((100% / 7 * 2) - 12px);
+      }
+      #{{el_id}} .col-value {
+        width: calc((100% / 7 * 5) - 12px);
+      }
+      #{{el_id}} .col-table-left {
+        width: calc((100% / 7 * 5) - 12px);
+      }
+      #{{el_id}} .col-table-right {
+        width: calc((100% / 7 * 5) - 12px);
+      }
+      #{{el_id}} .w-d-50 {
+        width: 50%;
+      }
+    }
+    @media screen and (min-width: 1366px) {
+      #{{el_id}} .order-detail-item {
+        width: 50%;
+      }
+      #{{el_id}} .order-detail-qty {
+        width: 25%;
+      }
+      #{{el_id}} .order-detail-price {
+        width: 25%;
+      }
+    }
+    @media screen and (min-width: 1920px) {
+      #{{el_id}} .table-order-details .left-side {
+        width: 80%;
+      }
+    }
+  </style>
+  <div id="{{ el_id }}" class="pb-48 d-pb-80 pt-40 d-pt-0">
+    <a href="{{ routes.account_url }}" class="p2 pb-16 flex ai-center">
+      <span class="icon-back mr-4 font-0">
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M7.22255 4L3.33366 8M3.33366 8L7.22255 12M3.33366 8L12.667 8" stroke="#19341E" stroke-width="0.8" stroke-linecap="square"/>
+        </svg>
+      </span>
+      <span class="underline">{{ 'customer.orders.back_label_online' | t }}</span>
+    </a>
+    <div>
+      <h2 class="h2">{{'customer.order.order' | t}} {{ order.name }}</h2>
+      <div class="table-order-details w-full mt-40 d-mt-60">
+          <div class="flex flex-wrap">
+            <div class="w-full bb-1 b-background pb-12 c-label">
+              {{ 'customer.orders.order_details' | t }}
+            </div>
+            <div class="flex w-full pt-20 d-pt-24">
+              <div class="col-title flex ai-center">
+                <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.orders.date' | t }}</div>
+              </div>
+              <div class="col-value">
+                <div class="p2 pl-8 d-pl-12">{{ order.created_at | date: "%d %b %Y" }}</div>
+              </div>
+            </div>
+            <div class="flex w-full pt-12 d-pt-16">
+              <div class="col-title flex ai-center">
+                <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.orders.amount' | t }}</div>
+              </div>
+              <div class="col-value">
+                <div class="p2 pl-8 d-pl-12">S{{ order.total_price | money }}</div>
+              </div>
+            </div>
+            <div class="flex w-full pt-12 d-pt-16">
+              <div class="col-title flex ai-center">
+                <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.orders.shipping_method' | t }}</div>
+              </div>
+              <div class="col-value">
+                <div class="p2 pl-8 d-pl-12">{{ order.shipping_methods.first.title }}</div>
+              </div>
+            </div>
+            <div class="flex w-full pt-12 d-pt-16">
+              <div class="col-title flex ai-center">
+                <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.orders.status' | t}}</div>
+              </div>
+              <div class="col-value">
+                <div class="p2 pl-8 d-pl-12 capitalize">{{ order.fulfillment_status }}</div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap mt-40 d-mt-60">
+            <div class="w-full bb-1 b-background pb-12 c-label">
+              {{ 'customer.orders.addresses' | t }}
+            </div>
+            <div class="flex w-full pt-20 d-pt-24">
+              <div class="col-title flex">
+                <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.orders.delivery_address' | t}}</div>
+              </div>
+              <div class="col-value">
+                <div class="p2 pl-8 d-pl-12">
+                  {{ order.shipping_address.name -}}
+                  <br>
+                  {{ order.shipping_address.street -}}
+                  <br>
+                  {{ order.shipping_address.country }}
+                  {{ order.shipping_address.zip -}}
+                  <br>
+                  {{ order.shipping_address.phone }}
+                </div>
+              </div>
+            </div>
+            <div class="flex w-full pt-12 d-pt-16">
+              <div class="col-title flex">
+                <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.order.billing_address' | t }}</div>
+              </div>
+              <div class="col-value">
+                <div class="p2 pl-8 d-pl-12">
+                  {{ order.billing_address.name -}}
+                  <br>
+                  {{ order.billing_address.street -}}
+                  <br>
+                  {{ order.billing_address.country }}
+                  {{ order.billing_address.zip -}}
+                  <br>
+                  {{ order.billing_address.phone }}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="flex flex-wrap mt-40 d-mt-60">
+            <div class="w-full bb-1 b-background flex jc-between pb-12 c-label">
+              <span>{{ 'customer.orders.order_item' | t}}</span>
+              <span>{{ 'customer.orders.amount' | t}}</span>
+            </div>
+            {% for line_item in order.line_items %}
+              <a href="{{line_item.url}}" class="flex w-full">
+                <div class="flex w-full pt-20 d-pt-24 jc-between">
+                  <div class="col-table-left flex pr-8 d-pr-12">
+                    <div class="ln-image mr-16 flex">
+                      {%- render 'global-image-wrapper',
+                        image: line_item.product.featured_image,
+                        additional_class: '',
+                        image_id: 'line-item'
+                      %}
+                    </div>
+                    <div>
+                      <p class="p3 mb-8 d-mb-12">{{ line_item.product.title }}</p>
+                      {%- liquid
+                        # Workshops have no size, same rule as the cart.
+                        assign li_is_workshop = false
+                        assign li_title_check = line_item.product.title | default: '' | downcase
+                        if li_title_check contains 'workshop'
+                          assign li_is_workshop = true
+                        endif
+                      -%}
+                      {% if li_is_workshop == false and line_item.product.metafields.custom.size != blank %}
+                        <p class="p4 mb-2">Size: {{ line_item.product.metafields.custom.size }}</p>
+                      {% endif %}
+                      {% comment %} {{ line_item.product | json }} {% endcomment %}
+                      {% comment %} {% if line_item.variant.option1 != blank and line_item.variant.option1 != 'Default Title'%}
+                        <p class="p4 mb-2">{{ 'customer.order.planter' | t }}: {{ line_item.variant.option1 }}</p>
+                      {% endif %} {% endcomment %}
+                      {% if line_item.variant.option1 != blank and line_item.variant.option1 != 'Default Title' %}
+                        <p class="p4 mb-2">{{ 'customer.order.colour' | t }}: {{ line_item.variant.option1 }}</p>
+                      {% endif %}
+                      <p class="p4 mb-2">{{ 'customer.order.quantity' | t }}: {{ line_item.quantity }}</p>
+                    </div>
+                  </div>
+                  <div class="col-table-right pl-8 d-pl-12 tr">
+                    <div class="p3">
+                      {% assign price = line_item.price | money %}
+                      {% assign ori_price = line_item.original_price | money %}
+                      {% if line_item.original_price != line_item.price %}
+                        <span class="c-placeholder"><strike>S{{ ori_price }}</strike></span>
+                      {% endif %}
+                      S{{ price }}
+                    </div>
+                  </div>
+                </div>
+              </a>
+            {% endfor %}
+          </div>
+          <div class="flex flex-wrap mt-20 d-mt-24">
+            <div class="w-full bt-1 c-background flex jc-end pt-20 d-pt-24">
+              <div class="w-full w-d-50">
+                {%- if order.financial_status == 'partially_paid' -%}
+                  <div class="flex jc-between mb-8">
+                    <p class="p3 c-label pr-8 d-pr-12">{{ 'customer.order.amount_paid' | t }}</p>
+                    <p class="p3 pl-8 d-pl-12">S{{ order.transactions[0].amount | money }}</p>
+                  </div>
+                  <div class="flex jc-between mb-8">
+                    <p class="p3 c-label pr-8 d-pr-12">{{ 'customer.order.amount_duelater' | t }}</p>
+                    {%- assign due_later = order.total_price | minus: order.transactions[0].amount -%}
+                    <p class="p3 pl-8 d-pl-12">S{{ due_later | money }}</p>
+                  </div>
+                {%- endif -%}
+                <div class="flex jc-between mb-8">
+                  <p class="p3 c-label pr-8 d-pr-12">{{ 'customer.order.shipping' | t }}</p>
+                  <p class="p3 pl-8 d-pl-12">S{{ order.shipping_price | money }}</p>
+                </div>
+                {%- if order.cart_level_discount_applications != blank -%}
+                  {%- for discount_application in order.cart_level_discount_applications -%}
+                    <div class="flex jc-between mb-8">
+                      <p class="p3 c-label pr-8 d-pr-12">{{ 'customer.order.discount' | t }}: {{ discount_application.title }}</p>
+                      <p class="p3 pl-8 d-pl-12">S{{ discount_application.total_allocated_amount | money }}</p>
+                    </div>
+                  {%- endfor -%}
+                {%- endif -%}
+                <div class="flex jc-between">
+                  <p class="p3 c-label pr-8 d-pr-12">{{ 'customer.order.subtotal' | t }}</p>
+                  <p class="p3 pl-8 d-pl-12">S{{ order.total_price | money }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+      </div>
+      {% comment %} <h6 class="p3 pb-12 pt-40 d-pt-60 bb-1 b-border">{{'customer.order.order_items' | t}}</h6>
+      <table class="table-order-details w-full">
+        {% for line_item in order.line_items %}
+          <tr class="bb-1 b-border">
+            <td class="left-side hide-m d-table" colspan="2">
+              <a href="{{line_item.url}}" class="flex w-full pt-16 pb-16 d-pr-20">
+                <div class="ln-image mr-16 hd-mr-20 flex ai-center">
+                  {%- render 'global-image-wrapper',
+                    image: line_item.product.featured_image,
+                    additional_class: '',
+                    image_id: 'line-item'
+                  %}
+                </div>
+                <div class="ln-prod flex flex-column jc-center">
+                  <div class="p4 regular-400 product-title">{{ line_item.product.title }}</div>
+                  <div class="p3 c-grey">
+                    {%- if line_item.variant.option1 != blank and line_item.variant.option1 != 'Default Title' -%}
+                      {{ line_item.variant.option1 }}
+                    {% endif %}
+                    {%- if line_item.variant.option2 != blank and line_item.variant.option2 != 'Default Title' -%}
+                      {%- if line_item.variant.option1 != blank -%}&nbsp;/&nbsp;{% endif %}
+                      {{ line_item.variant.option2 }}
+                    {%- endif -%}
+                    {%- if line_item.variant.option3 != blank and line_item.variant.option3 != 'Default Title' -%}
+                      {%- if line_item.variant.option1 != blank or line_item.variant.option2 != blank -%}
+                        &nbsp;/&nbsp;
+                      {% endif %}
+                      {{ line_item.variant.option3 }}
+                    {%- endif -%}                    
+                  </div>
+                  <div class="hide-d">
+                    {%- if line_item.selling_plan_allocation.selling_plan.name != blank and order.financial_status == 'partially_paid' -%}
+                      {%- liquid
+                        assign downpay_selling_plan_groups = line_item.product.selling_plan_groups | where: 'app_id', 'downpay'
+                        assign first_downpay_selling_plan = downpay_selling_plan_groups.first.selling_plans.first
+                      -%}
+                      {{ first_downpay_selling_plan.checkout_charge.value | money_with_currency }}
+                    {%- else -%}
+                      {{ line_item.price | money_with_currency }}
+                    {%- endif -%}
+                  </div>
+                </div>
+              </a>
+            </td>
+            {% comment %} mobile only {% endcomment %}
+            <td class="left-side hide-d" colspan="3">
+              <a href="{{line_item.url}}" class="flex w-full pt-16 pb-16 d-pr-20">
+                <div class="w-full">
+                  <div class="row flex ai-center">
+                <div class="flex ai-center col-3 col-t-1per5 ln-pr-custom">
+                  {%- render 'global-image-wrapper',
+                    image: line_item.product.featured_image,
+                    additional_class: '',
+                    image_id: 'line-item'
+                  %}
+                </div>
+                <div class="ln-prod h-full flex flex-column jc-center col-6 ln-pl-custom">
+                  <div class="pr-4 pl-4 d-pr-0 d-pl-0">
+                    <div class="p4 product-title regular-400">{{ line_item.product.title }}</div>
+                    <div class="p3 c-grey">
+                      {%- if line_item.variant.option1 != blank and line_item.variant.option1 != 'Default Title' -%}
+                        {{ line_item.variant.option1 }}
+                      {% endif %}
+                      {%- if line_item.variant.option2 != blank and line_item.variant.option2 != 'Default Title' -%}
+                        {%- if line_item.variant.option1 != blank -%}&nbsp;/&nbsp;{% endif %}
+                        {{ line_item.variant.option2 }}
+                      {%- endif -%}
+                      {%- if line_item.variant.option3 != blank and line_item.variant.option3 != 'Default Title' -%}
+                        {%- if line_item.variant.option1 != blank or line_item.variant.option2 != blank -%}
+                          &nbsp;/&nbsp;
+                        {% endif %}
+                        {{ line_item.variant.option3 }}
+                      {%- endif -%}                    
+                    </div>
+                  </div>
+                </div>
+                <div class="col-3 price-column hide-d flex flex-column jc-center ai-end h-full">
+                  {%- if line_item.selling_plan_allocation.selling_plan.name != blank and order.financial_status == 'partially_paid' -%}
+                    {%- liquid
+                      assign downpay_selling_plan_groups = line_item.product.selling_plan_groups | where: 'app_id', 'downpay'
+                      assign first_downpay_selling_plan = downpay_selling_plan_groups.first.selling_plans.first
+                    -%}
+                    {{ first_downpay_selling_plan.checkout_charge.value | money_with_currency }}
+                  {%- else -%}
+                    {%- if line_item.original_price == line_item.price -%}
+                      {{ line_item.price | money_with_currency }}
+                    {% else %}
+                      <p>{{ line_item.price | money_with_currency }}</p>
+                      <p class="c-grey"><strike>{{ line_item.original_price | money_with_currency }}</strike></p>
+                    {%- endif -%}
+                  {%- endif -%}
+                </div>
+                </div>
+                </div>
+              </a>
+            </td>
+            {% comment %} end mobile only {% endcomment %}
+            <td class="p4 tr va-middle hide-m d-table c-grey td-price relative">
+              <a href="{{line_item.url}}" class="pt-16 pb-16 absolute top-0 right-0 h-full w-full flex flex-column ai-end jc-center">
+              {%- if line_item.selling_plan_allocation.selling_plan.name != blank and order.financial_status == 'partially_paid' -%}
+                {%- liquid
+                  assign downpay_selling_plan_groups = line_item.product.selling_plan_groups | where: 'app_id', 'downpay'
+                  assign first_downpay_selling_plan = downpay_selling_plan_groups.first.selling_plans.first
+                -%}
+                {{ first_downpay_selling_plan.checkout_charge.value | money_with_currency }}
+              {%- else -%}
+                {%- if line_item.original_price == line_item.price -%}
+                  {{ line_item.price | money_with_currency }}
+                {% else %}
+                  <p>{{ line_item.price | money_with_currency }}</p>
+                  <p class="c-grey"><strike>{{ line_item.original_price | money_with_currency }}</strike></p>
+                {%- endif -%}
+              {%- endif -%}
+              </a>
+            </td>
+          </tr>
+        {% endfor %}
+
+        {%- if order.financial_status == 'partially_paid' -%}
+          <tr>
+            <td class="d-pt-20 pt-16 col-fl-table p3" colspan="2">
+              <span>
+                {{ 'customer.order.amount_paid' | t }}
+              </span>
+            </td>
+            <td class="d-pt-20 pt-16 col-fr-table p3 tr">
+              {{ order.transactions[0].amount | money_with_currency }}
+            </td>
+          </tr>
+
+          <tr>
+            <td class="col-fl-table p3 pt-16 d-pt-8" colspan="2">
+              <span>
+                {{ 'customer.order.amount_duelater' | t }}
+              </span>
+            </td>
+            <td class="col-fr-table p3 tr">
+              {%- assign due_later = order.total_price | minus: order.transactions[0].amount -%}
+              {{ due_later | money_with_currency }}
+            </td>
+          </tr>
+        {%- endif -%}
+
+        
+        <tr>
+          <td class="col-fl-table p3 {% unless order.financial_status == 'partially_paid' %} d-pt-20 pt-16 {% else %} pt-16 d-pt-8 {% endunless %}" colspan="2">
+            <span>
+              {{ 'customer.order.shipping' | t }}
+            </span>
+          </td>
+          <td class="col-fr-table p3 tr">{{ order.shipping_price | money_with_currency }}</td>
+        </tr>
+        {%- if order.cart_level_discount_applications != blank -%}
+          <tr>
+            {%- for discount_application in order.cart_level_discount_applications -%}
+              <td class="col-fl-table p3 pt-2" colspan="2">
+                <span>
+                  {{ 'customer.order.discount' | t }}: {{ discount_application.title }}
+                </span>
+              </td>
+              <td class="col-fr-table p3 tr">-{{ discount_application.total_allocated_amount | money_with_currency }}</td>
+            {%- endfor -%}
+          </tr>
+        {%- endif -%}
+        <tr>
+          <td class="col-fl-table p3 pt-2" colspan="2">
+            <span>
+              {{ 'customer.order.subtotal' | t }}
+            </span>
+          </td>
+          <td class="col-fr-table p3 tr">{{ order.total_price | money_with_currency }}</td>
+        </tr>
+      </table> {% endcomment %}
+    </div>
+  </div>
+{% else %}
+  <script>
+    window.location.href = '{{ routes.account_url }}';
+  </script>
+{% endif %}

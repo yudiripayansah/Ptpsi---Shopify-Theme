@@ -1,0 +1,86 @@
+{%- comment -%}
+Description:
+Snippet for displaying lazy load image
+
+Variables:
+- image: image object
+- image_url: String of image url, use this if not using image object
+- height: Numeric. image height, if using image_url
+- width: Numeric. image width, if using image_url
+- acc: Boolean, if image is from accentuate
+- size: String, image size, if using image object from section
+- sizes_set: ...
+- additional_class: String Additional classes to the wrapper
+- preload: Boolean, if true, image will not using lazy load
+- overlay: Boelean to activate overlay infront of image
+- overlay_class: Class for overlay
+{%- endcomment -%}
+{%- if size == blank -%}
+    {%- assign size = '10x' -%}
+{%- endif -%}
+{%- if image_url != blank -%}
+    {%- assign hh = height | times: 1.00 -%}
+    {%- assign ww = width | times: 1.00 -%}
+{%- else -%}
+    {%- assign hh = image.height | times: 1.00 -%}
+    {%- assign ww = image.width | times: 1.00 -%}
+{%- endif -%}
+{%- if acc != blank -%}
+    {%- assign img = image.src -%}
+{%- elsif image_url != blank -%}
+    {%- assign img = image_url -%}
+{%- else -%}
+    {%- assign size = size | replace: 'x', '' | plus: 0 -%}
+    {%- assign img = image | image_url: width: size -%}
+{%- endif -%}
+
+{%- if sizes_set == blank -%}
+    {%- assign sizes_set = '' -%} 
+{%- endif -%}
+
+{%- if overlay == blank -%}
+    {%- assign overlay = false -%}
+{%- endif -%}
+
+{%- assign alt = image.alt | escape_once -%}
+{%- if alt == blank -%}
+    {%- assign alt = image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first | escape_once -%}
+{%- endif -%}
+
+{%- if preload == '' -%}
+    {%- assign preload = false -%}
+{%- endif -%}
+
+<div class="global-image-wrapper {{ additional_class }}" style="padding-bottom:{{ hh | divided_by: ww | times:100.00 }}%;">
+    {%- if overlay -%}
+        <div class="overlay {{ overlay_class }}"></div>
+    {%- endif -%}
+    {%- if acc == blank -%}
+        {%- assign srcset = "" %}
+        {%- assign sizes = "100,200,300,400,500,600,700,800,900,1000,1100,1200,1500,2000" | split:"," -%}
+        {%- for s in sizes -%}
+            {%- assign ss = s | remove: 'px' | times: 1 | remove:".0" -%}
+            {%- assign w = '_' | append:ss | append:"x." %}
+            {%- assign t = image | image_url: width: ss | append:" " | append:s | append:"w" -%}
+            {%- assign srcset = srcset | append:"," | append: t %}
+        {%- endfor -%}
+    {%- endif -%}
+    {%- if preload == true -%}
+        {%- if acc != blank -%}
+            {{ img | image_tag: preload: true, loading: 'eager', fetchpriority: high, class: "image loaded", alt: alt }}
+        {%- elsif image_url != blank -%}
+            {{ img | image_tag: preload: true, loading: 'eager', fetchpriority: high, class: "image loaded", alt: alt }}
+        {%- else -%}
+            {%- assign srcset_text = srcset | remove_first:"," | trim -%}
+            {{ img | image_tag: preload: true, loading: 'eager', fetchpriority: high, class: "image loaded", alt: alt, sizes: sizes_set, srcset: srcset_text }}
+        {%- endif -%}
+    {%- else -%}
+        {%- if acc != blank -%}
+            <img data-src="{{ img }}" alt="{{ alt }}" class="image lazy">    
+        {%- elsif image_url != blank -%}
+            <img data-src="{{ img }}" alt="" class="image lazy">
+        {%- else -%}
+            <img data-src="{{ img }}" sizes="{{ sizes_set }}" data-srcset="{{ srcset | remove_first:"," | trim }}" alt="{{ alt }}" class="image lazy">
+        {%- endif -%} 
+    {%- endif -%}
+</div>

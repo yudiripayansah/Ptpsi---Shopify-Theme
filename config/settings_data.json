@@ -1,206 +1,2579 @@
 {
   "current": {
-    "logo_height": 36,
-    "logo_height_mobile": 28,
-    "page_background_color": "{{ settings.color_palette.background }}",
-    "page_width": "narrow",
-    "page_text_color": "{{ settings.color_palette.foreground }}",
-    "type_body_font": "inter_n4",
-    "type_subheading_font": "inter_n5",
-    "type_heading_font": "inter_n7",
-    "type_accent_font": "inter_n7",
-    "type_size_paragraph": "14",
-    "type_line_height_paragraph": "body-loose",
-    "type_font_h1": "heading",
-    "type_size_h1": "56",
-    "type_line_height_h1": "display-tight",
-    "type_letter_spacing_h1": "heading-normal",
-    "type_case_h1": "none",
-    "type_font_h2": "heading",
-    "type_size_h2": "48",
-    "type_line_height_h2": "display-tight",
-    "type_letter_spacing_h2": "heading-normal",
-    "type_case_h2": "none",
-    "type_font_h3": "heading",
-    "type_size_h3": "32",
-    "type_line_height_h3": "display-normal",
-    "type_letter_spacing_h3": "heading-normal",
-    "type_case_h3": "none",
-    "type_font_h4": "heading",
-    "type_size_h4": "24",
-    "type_line_height_h4": "display-tight",
-    "type_font_h5": "subheading",
-    "type_size_h5": "14",
-    "type_line_height_h5": "display-loose",
-    "type_font_h6": "subheading",
-    "type_size_h6": "12",
-    "type_line_height_h6": "display-loose",
-    "page_transition_enabled": false,
-    "transition_to_main_product": false,
-    "card_hover_effect": "none",
-    "badge_position": "top-right",
-    "badge_corner_radius": 100,
-    "badge_sale_background_color": "{{ settings.color_palette.background }}",
-    "badge_sale_text_color": "{{ settings.color_palette.foreground }}",
-    "badge_sold_out_background_color": "#eef1ea",
-    "badge_sold_out_text_color": "{{ settings.color_palette.foreground }}",
-    "badge_text_transform": "none",
-    "palette_primary_button_background": "{{ settings.color_palette.foreground }}",
-    "palette_primary_button_text": "{{ settings.color_palette.background }}",
-    "palette_primary_button_border": "{{ settings.color_palette.foreground }}",
-    "primary_button_border_width": 0,
-    "button_border_radius_primary": 14,
-    "palette_secondary_button_background": "rgba(0,0,0,0)",
-    "palette_secondary_button_text": "{{ settings.color_palette.foreground }}",
-    "palette_secondary_button_border": "{{ settings.color_palette.foreground }}",
-    "secondary_button_border_width": 1,
-    "button_border_radius_secondary": 14,
-    "cart_type": "drawer",
-    "cart_price_font": "subheading",
-    "show_cart_note": false,
-    "show_add_discount_code": true,
-    "drawer_background_color": "{{ settings.color_palette.background }}",
-    "drawer_text_color": "{{ settings.color_palette.foreground }}",
-    "drawer_border_color": "{{ settings.color_palette.color2 }}",
-    "icon_stroke": "default",
-    "palette_input_background": "{{ settings.color_palette.background }}",
-    "palette_input_text": "{{ settings.color_palette.color1 }}",
-    "palette_input_border": "{{ settings.color_palette.color2 }}",
-    "input_border_width": 1,
-    "inputs_border_radius": 4,
-    "popover_background_color": "{{ settings.color_palette.background }}",
-    "popover_text_color": "{{ settings.color_palette.foreground }}",
-    "popover_border_radius": 14,
-    "popover_border_color": "{{ settings.color_palette.color2 }}",
-    "popover_border_width": 1,
-    "currency_code_enabled_product_pages": false,
-    "currency_code_enabled_product_cards": false,
-    "currency_code_enabled_cart_items": false,
-    "quick_add_background": "{{ settings.color_palette.background }}",
-    "quick_add_text": "{{ settings.color_palette.foreground }}",
-    "product_corner_radius": 0,
-    "card_corner_radius": 4,
-    "show_variant_image": false,
-    "variant_swatch_width": 34,
-    "variant_swatch_height": 34,
-    "variant_swatch_radius": 32,
-    "palette_variant_background": "{{ settings.color_palette.background }}",
-    "palette_variant_text": "{{ settings.color_palette.foreground }}",
-    "palette_variant_border": "{{ settings.color_palette.color2 }}",
-    "palette_selected_variant_background": "{{ settings.color_palette.foreground }}",
-    "palette_selected_variant_text": "{{ settings.color_palette.background }}",
-    "palette_selected_variant_border": "{{ settings.color_palette.foreground }}",
-    "variant_button_border_width": 1,
-    "variant_button_radius": 14,
-    "variant_button_width": "equal-width-buttons",
-    "color_palette": {
-      "background": "#ffffff",
-      "foreground": "#000000",
-      "color1": "#333333",
-      "color2": "#DFDFDF"
-    }
-  },
-  "presets": {
-    "Horizon": {
-      "logo_height": 36,
-      "logo_height_mobile": 28,
-      "page_background_color": "{{ settings.color_palette.background }}",
-      "page_width": "narrow",
-      "page_text_color": "{{ settings.color_palette.foreground }}",
-      "type_body_font": "inter_n4",
-      "type_subheading_font": "inter_n5",
-      "type_heading_font": "inter_n7",
-      "type_accent_font": "inter_n7",
-      "type_size_paragraph": "14",
-      "type_line_height_paragraph": "body-loose",
-      "type_font_h1": "heading",
-      "type_size_h1": "56",
-      "type_line_height_h1": "display-tight",
-      "type_letter_spacing_h1": "heading-normal",
-      "type_case_h1": "none",
-      "type_font_h2": "heading",
-      "type_size_h2": "48",
-      "type_line_height_h2": "display-tight",
-      "type_letter_spacing_h2": "heading-normal",
-      "type_case_h2": "none",
-      "type_font_h3": "heading",
-      "type_size_h3": "32",
-      "type_line_height_h3": "display-normal",
-      "type_letter_spacing_h3": "heading-normal",
-      "type_case_h3": "none",
-      "type_font_h4": "heading",
-      "type_size_h4": "24",
-      "type_line_height_h4": "display-tight",
-      "type_font_h5": "subheading",
-      "type_size_h5": "14",
-      "type_line_height_h5": "display-loose",
-      "type_font_h6": "subheading",
-      "type_size_h6": "12",
-      "type_line_height_h6": "display-loose",
-      "page_transition_enabled": false,
-      "transition_to_main_product": false,
-      "card_hover_effect": "none",
-      "badge_position": "top-right",
-      "badge_corner_radius": 100,
-      "badge_sale_background_color": "{{ settings.color_palette.background }}",
-      "badge_sale_text_color": "{{ settings.color_palette.foreground }}",
-      "badge_sold_out_background_color": "#eef1ea",
-      "badge_sold_out_text_color": "{{ settings.color_palette.foreground }}",
-      "badge_text_transform": "none",
-      "palette_primary_button_background": "{{ settings.color_palette.foreground }}",
-      "palette_primary_button_text": "{{ settings.color_palette.background }}",
-      "palette_primary_button_border": "{{ settings.color_palette.foreground }}",
-      "primary_button_border_width": 0,
-      "button_border_radius_primary": 14,
-      "palette_secondary_button_background": "rgba(0,0,0,0)",
-      "palette_secondary_button_text": "{{ settings.color_palette.foreground }}",
-      "palette_secondary_button_border": "{{ settings.color_palette.foreground }}",
-      "secondary_button_border_width": 1,
-      "button_border_radius_secondary": 14,
-      "cart_type": "drawer",
-      "cart_price_font": "subheading",
-      "show_cart_note": false,
-      "show_add_discount_code": true,
-      "drawer_background_color": "{{ settings.color_palette.background }}",
-      "drawer_text_color": "{{ settings.color_palette.foreground }}",
-      "drawer_border_color": "{{ settings.color_palette.color2 }}",
-      "icon_stroke": "default",
-      "palette_input_background": "{{ settings.color_palette.background }}",
-      "palette_input_text": "{{ settings.color_palette.color1 }}",
-      "palette_input_border": "{{ settings.color_palette.color2 }}",
-      "input_border_width": 1,
-      "inputs_border_radius": 4,
-      "popover_background_color": "{{ settings.color_palette.background }}",
-      "popover_text_color": "{{ settings.color_palette.foreground }}",
-      "popover_border_radius": 14,
-      "popover_border_color": "{{ settings.color_palette.color2 }}",
-      "popover_border_width": 1,
-      "currency_code_enabled_product_pages": false,
-      "currency_code_enabled_product_cards": false,
-      "currency_code_enabled_cart_items": false,
-      "quick_add_background": "{{ settings.color_palette.background }}",
-      "quick_add_text": "{{ settings.color_palette.foreground }}",
-      "product_corner_radius": 0,
-      "card_corner_radius": 4,
-      "show_variant_image": false,
-      "variant_swatch_width": 34,
-      "variant_swatch_height": 34,
-      "variant_swatch_radius": 32,
-      "palette_variant_background": "{{ settings.color_palette.background }}",
-      "palette_variant_text": "{{ settings.color_palette.foreground }}",
-      "palette_variant_border": "{{ settings.color_palette.color2 }}",
-      "palette_selected_variant_background": "{{ settings.color_palette.foreground }}",
-      "palette_selected_variant_text": "{{ settings.color_palette.background }}",
-      "palette_selected_variant_border": "{{ settings.color_palette.foreground }}",
-      "variant_button_border_width": 1,
-      "variant_button_radius": 14,
-      "variant_button_width": "equal-width-buttons",
-      "color_palette": {
-        "background": "#ffffff",
-        "foreground": "#000000",
-        "color1": "#333333",
-        "color2": "#DFDFDF"
+    "favicon": "shopify:\/\/shop_images\/soilboy-favicon.svg",
+    "icon_show_password": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"20\" height=\"15\" viewbox=\"0 0 20 15\" fill=\"none\">\n  <path d=\"M0.526367 7.42542C0.526367 7.42542 2.66098 1.23975 9.52637 1.12793C16.4783 1.12793 18.5264 7.42542 18.5264 7.42542C18.5264 7.42542 16.4783 13.7129 9.52637 13.7129C2.66098 13.7129 0.526367 7.42542 0.526367 7.42542ZM11.7764 7.42542C11.7764 8.62922 10.769 9.60509 9.52637 9.60509C8.28373 9.60509 7.27637 8.62922 7.27637 7.42542C7.27637 6.22161 8.28373 5.24575 9.52637 5.24575C10.769 5.24575 11.7764 6.22161 11.7764 7.42542Z\" stroke=\"#19341E\"><\/path>\n<\/svg>",
+    "icon_hide_password": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"20\" height=\"15\" viewbox=\"0 0 20 15\" fill=\"none\">\n  <path d=\"M17.4014 14.3544L3.33887 0.35437M7.83887 5.89984C7.48879 6.28408 7.27637 6.7888 7.27637 7.34159C7.27637 8.54539 8.28373 9.52126 9.52637 9.52126C10.0993 9.52126 10.6222 9.3138 11.0195 8.9722M17.4377 9.52126C18.2123 8.36687 18.5264 7.42542 18.5264 7.42542C18.5264 7.42542 16.4783 0.91437 9.52637 0.91437C9.13608 0.91437 8.76125 0.934892 8.40137 0.973631M14.5889 12.3472C13.2975 13.1673 11.6351 13.7473 9.52637 13.7129C2.66098 13.6011 0.526367 7.42542 0.526367 7.42542C0.526367 7.42542 1.51811 4.27258 4.46387 2.3548\" stroke=\"#19341E\"><\/path>\n<\/svg>",
+    "icon_search": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"20\" height=\"20\" viewbox=\"0 0 20 20\" fill=\"none\">\n              <path d=\"M15.3076 15.4333L19.1667 19.1667M17.9222 9.21111C17.9222 14.0221 14.0221 17.9222 9.21111 17.9222C4.4001 17.9222 0.5 14.0221 0.5 9.21111C0.5 4.4001 4.4001 0.5 9.21111 0.5C14.0221 0.5 17.9222 4.4001 17.9222 9.21111Z\" stroke=\"#19341E\"><\/path>\n            <\/svg>",
+    "icon_close": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"13\" height=\"13\" viewbox=\"0 0 13 13\" fill=\"none\">\n  <path d=\"M12.0202 0.353518L0.353516 12.0202M12.0202 12.0202L0.353516 0.353516\" stroke=\"#19341E\"><\/path>\n<\/svg>",
+    "icon_slide_right": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"12\" height=\"11\" viewbox=\"0 0 12 11\" fill=\"none\">\n  <path d=\"M6.625 0.707031L11 5.20703M11 5.20703L6.625 9.70703M11 5.20703L0.5 5.20703\" stroke=\"#19341E\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_slide_left": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"12\" height=\"11\" viewbox=\"0 0 12 11\" fill=\"none\">\n  <path d=\"M5.07422 0.707031L0.699219 5.20703M0.699219 5.20703L5.07422 9.70703M0.699219 5.20703L11.1992 5.20703\" stroke=\"#19341E\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_slide_right_2": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"6\" height=\"10\" viewbox=\"0 0 6 10\" fill=\"none\">\n  <path d=\"M1 1L5 5L1 9\" stroke=\"#1E1E1F\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_slide_left_2": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"6\" height=\"10\" viewbox=\"0 0 6 10\" fill=\"none\">\n  <path d=\"M5 9L1 5L5 1\" stroke=\"#1E1E1F\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_select": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"9\" height=\"5\" viewbox=\"0 0 9 5\" fill=\"none\">\n  <path d=\"M0.212158 0.211914L4.21281 4.21191L8.21216 0.211914\" stroke=\"#19341E\" stroke-width=\"0.6\"><\/path>\n<\/svg>",
+    "icon_plus": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10\" height=\"10\" viewbox=\"0 0 10 10\" fill=\"none\">\n  <path d=\"M4.66667 0L4.66667 9.33333M9.33333 4.66667L0 4.66667\" stroke=\"#19341E\" stroke-width=\"0.666667\"><\/path>\n<\/svg>",
+    "icon_minus": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10\" height=\"1\" viewbox=\"0 0 10 1\" fill=\"none\">\n  <path d=\"M9.33333 0.5L0 0.5\" stroke=\"#19341E\" stroke-width=\"0.666667\"><\/path>\n<\/svg>",
+    "icon_btn_left": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"6\" height=\"11\" viewbox=\"0 0 6 11\" fill=\"none\">\n  <path d=\"M5 9.5L1 5.5L5 1.5\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_arrow_up": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"8\" height=\"5\" viewbox=\"0 0 8 5\" fill=\"none\">\n  <path d=\"M1 4L4 1L7 4\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_arrow_right": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"5\" height=\"9\" viewbox=\"0 0 5 9\" fill=\"none\">\n  <path d=\"M0.666992 1.16675L4.00033 4.50008L0.666992 7.83341\" stroke=\"#1E1E1F\" stroke-width=\"0.625\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_play": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" viewbox=\"0 0 17 20\"><path d=\"M9,7.269V26.231a.518.518,0,0,0,.777.45L25.746,17.2a.52.52,0,0,0,0-.894L9.777,6.825A.513.513,0,0,0,9,7.269Z\" transform=\"translate(-9 -6.751)\" fill=\"#fff\"><\/path><\/svg>",
+    "icon_pause": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"7.457\" height=\"12.5\" viewbox=\"0 0 7.457 12.5\">\n  <g id=\"Icon_ionic-ios-pause\" data-name=\"Icon ionic-ios-pause\" transform=\"translate(-12 -6.75)\">\n    <path id=\"Path_66\" data-name=\"Path 66\" d=\"M10.8,19.25H9.2c-.113,0-.2-.141-.2-.312V7.062c0-.172.09-.312.2-.312H10.8c.113,0,.2.141.2.312V18.938C11,19.109,10.91,19.25,10.8,19.25Z\" transform=\"translate(3)\" fill=\"#fff\"><\/path>\n    <path id=\"Path_67\" data-name=\"Path 67\" d=\"M23.173,19.25H21.578c-.113,0-.2-.141-.2-.312V7.062c0-.172.09-.312.2-.312h1.595c.113,0,.2.141.2.312V18.938C23.375,19.109,23.285,19.25,23.173,19.25Z\" transform=\"translate(-3.918)\" fill=\"#fff\"><\/path>\n  <\/g>\n<\/svg>",
+    "icon_trash": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"11\" height=\"13\" viewbox=\"0 0 11 13\" fill=\"none\">\n  <path d=\"M0 2.61765H10.5M3.9375 9.67647V5.44118M6.5625 9.67647V5.44118M7.875 12.5H2.625C1.90013 12.5 1.3125 11.8679 1.3125 11.0882V3.32353C1.3125 2.93368 1.60631 2.61765 1.96875 2.61765H8.53125C8.89369 2.61765 9.1875 2.93368 9.1875 3.32353V11.0882C9.1875 11.8679 8.59987 12.5 7.875 12.5ZM3.9375 2.61765H6.5625C6.92494 2.61765 7.21875 2.30161 7.21875 1.91176V1.20588C7.21875 0.816034 6.92494 0.5 6.5625 0.5H3.9375C3.57506 0.5 3.28125 0.816034 3.28125 1.20588V1.91176C3.28125 2.30161 3.57506 2.61765 3.9375 2.61765Z\" stroke=\"#19341E\"><\/path>\n<\/svg>",
+    "icon_wishlist": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10\" height=\"15\" viewbox=\"0 0 10 15\" fill=\"none\">\n  <path d=\"M9 13.5L5 9.5L1 13.5V1.5C1 1.23478 1 0.5 1 0.5C1 0.5 1.73478 0.5 2 0.5H8C8.2652 0.5 9 0.5 9 0.5C9 0.5 9 1.23478 9 1.5V13.5Z\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_zoom": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"14\" height=\"14\" viewbox=\"0 0 14 14\" fill=\"none\">\n  <path d=\"M13 13L10.1047 10.1047M10.1047 10.1047C10.6 9.60945 10.9928 9.0215 11.2608 8.37442C11.5289 7.72734 11.6668 7.0338 11.6668 6.33341C11.6668 5.63302 11.5289 4.93948 11.2608 4.2924C10.9928 3.64532 10.6 3.05737 10.1047 2.56212C9.60945 2.06687 9.0215 1.67401 8.37442 1.40598C7.72734 1.13795 7.0338 1 6.33341 1C5.63302 1 4.93948 1.13795 4.2924 1.40598C3.64532 1.67401 3.05737 2.06687 2.56212 2.56212C1.56191 3.56233 1 4.9189 1 6.33341C1 7.74792 1.56191 9.10449 2.56212 10.1047C3.56233 11.1049 4.9189 11.6668 6.33341 11.6668C7.74792 11.6668 9.10449 11.1049 10.1047 10.1047ZM6.33341 4.33343V8.33339M4.33343 6.33341H8.33339\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_copy": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"12\" height=\"13\" viewbox=\"0 0 12 13\" fill=\"none\">\n<path d=\"M11 2.60114V12.6011H2\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\" stroke-linejoin=\"round\"><\/path>\n<rect x=\"0.96875\" y=\"0.398865\" width=\"8\" height=\"10\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\" stroke-linejoin=\"round\"><\/rect>\n<\/svg>",
+    "icon_arrow_up_right": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"9\" height=\"9\" viewbox=\"0 0 9 9\" fill=\"none\">\n  <path d=\"M1.69103 0.500133L7.77817 0.500046M7.77817 0.500046L7.77817 6.50061M7.77817 0.500046L0.7071 7.57111\" stroke=\"#19341E\" stroke-width=\"0.8\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_orange_circle": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"6\" height=\"6\" viewbox=\"0 0 6 6\" fill=\"none\">\n  <circle cx=\"3\" cy=\"3\" r=\"3\" fill=\"#B35E34\"><\/circle>\n<\/svg>",
+    "icon_checkmark": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"9\" height=\"8\" viewbox=\"0 0 9 8\" fill=\"none\">\n                          <path d=\"M8.35547 0.352539L2.3892 6.35254L0.355469 4.3073\" stroke=\"#19341E\"><\/path>\n                        <\/svg>",
+    "pg_enable_labels": true,
+    "pg_tag_1": "New",
+    "pg_tag_bg_1": "rgba(255,255,255,0.5)",
+    "pg_tag_color_1": "#1e1e1f",
+    "pg_tag_2": "Imported From Japan",
+    "pg_tag_bg_2": "",
+    "pg_tag_color_2": "#617a65",
+    "pg_tag_3": "Seasonal",
+    "pg_tag_color_3": "#617a65",
+    "pg_tag_4": "Pet-Friendly",
+    "pg_tag_color_4": "#617a65",
+    "pg_tag_5": "One of a Kind",
+    "pg_tag_color_5": "#617a65",
+    "pdp_top_disclaimer": "",
+    "cart_empty_message": "No leafy pals in sight? Explore and fill those plant shelves.",
+    "cart_empty_link_label_1": "Plants",
+    "cart_empty_links_1": "shopify:\/\/collections\/potted-plants",
+    "cart_empty_product_1": "master-plant-m",
+    "cart_empty_link_label_2": "Pots",
+    "cart_empty_links_2": "shopify:\/\/collections\/pots",
+    "cart_empty_product_2": "master-plant-2-s",
+    "cart_empty_link_label_3": "Lifestyle",
+    "cart_empty_links_3": "shopify:\/\/collections\/lifestyle",
+    "cart_empty_product_3": "master-plant-02",
+    "cart_empty_link_label_4": "Installations",
+    "cart_empty_links_4": "shopify:\/\/collections",
+    "cart_empty_product_4": "master-planter-01-m",
+    "spend_title": "You are [amount] away from free local shipping.",
+    "success_spend_title": "You’ve reached free shipping!",
+    "cart_fs_free": "1000",
+    "spend_title_international": "You are [amount] away from free local shipping.",
+    "success_spend_title_international": "You’ve reached free shipping!",
+    "cart_fs_free_international": "1000",
+    "cart_msg": "",
+    "cart_cross_sell_section_title": "You May Also Like",
+    "cart_cross_sell_products": [
+      "master-plant-m",
+      "master-plant-2-s",
+      "master-plant-02",
+      "master-planter-01-m",
+      "master-planter"
+    ],
+    "enable_gift_wrap": true,
+    "gift_wrap_product": "dev-gift-wrap",
+    "gift_wrap_banner_mobile": "shopify:\/\/shop_images\/Rectangle_1.png",
+    "gift_wrap_banner_desktop": "shopify:\/\/shop_images\/Rectangle_1.png",
+    "gift_wrap_banner_text": "All gifting orders arrive beautifully wrapped with a ribbon and a complimentary card of choice.",
+    "collection_number": 24,
+    "pro_oos_title": "notify me when available",
+    "pro_oos_desc": "This product is out of stock. Get notified once it is available.",
+    "pro_oos_button_label": "Notify me when available",
+    "pro_oos_success_message": "Thank you. You will be notified when the product is back available.",
+    "saucer_product": "saucer",
+    "icon_ec_facebook": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"8\" height=\"15\" viewbox=\"0 0 8 15\" fill=\"none\">\n  <path d=\"M0.723507 8.10484H2.2425V14.4226C2.2425 14.5474 2.34254 14.6484 2.46601 14.6484H5.04152C5.16498 14.6484 5.26502 14.5474 5.26502 14.4226V8.1346H7.01124C7.12478 8.1346 7.2203 8.04852 7.23327 7.93458L7.49848 5.60868C7.50577 5.54469 7.4857 5.48061 7.44332 5.4326C7.4009 5.38455 7.34019 5.35704 7.27649 5.35704H5.26511V3.89906C5.26511 3.45955 5.49935 3.23668 5.96138 3.23668C6.02723 3.23668 7.27649 3.23668 7.27649 3.23668C7.39996 3.23668 7.5 3.13556 7.5 3.01087V0.875915C7.5 0.751179 7.39996 0.650108 7.27649 0.650108H5.46408C5.45129 0.649476 5.42291 0.648438 5.38107 0.648438C5.0666 0.648438 3.97351 0.710805 3.11006 1.51332C2.15337 2.40264 2.28635 3.46745 2.31814 3.65207V5.357H0.723507C0.600042 5.357 0.5 5.45807 0.5 5.58281V7.87899C0.5 8.00372 0.600042 8.10484 0.723507 8.10484Z\" fill=\"#1E1E1F\"><\/path>\n<\/svg>",
+    "icon_ec_twitter": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"12\" height=\"11\" viewbox=\"0 0 12 11\" fill=\"none\">\n  <path d=\"M9.4507 0.648438H11.2908L7.27076 4.88434L12 10.6484H8.29704L5.39675 7.15254L2.07815 10.6484H0.236963L4.53678 6.11767L0 0.648438H3.79697L6.41858 3.84382L9.4507 0.648438ZM8.8049 9.63305H9.8245L3.24294 1.61049H2.1488L8.8049 9.63305Z\" fill=\"#1E1E1F\"><\/path>\n<\/svg>",
+    "icon_ec_share": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"12\" height=\"13\" viewbox=\"0 0 12 13\" fill=\"none\">\n  <path d=\"M2.93564 5.44917L1.45505 6.92975C0.90209 7.48271 0.584104 8.2351 0.589915 9.02583C0.595726 9.81656 0.906754 10.5735 1.48595 11.1348C2.04723 11.7141 2.80436 12.0251 3.59497 12.0309C4.40361 12.0368 5.13818 11.7368 5.69117 11.1838L7.17176 9.70319M9.06293 7.8482L10.5435 6.36761C11.0965 5.81465 11.4145 5.06227 11.4087 4.27154C11.4028 3.4808 11.0918 2.72383 10.5126 2.16252C9.95147 1.60137 9.19447 1.29033 8.40374 1.28452C7.613 1.27871 6.86052 1.57864 6.30753 2.13162L4.82694 3.6122M3.75407 8.85431L8.19583 4.41254\" stroke=\"#1E1E1F\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><\/path>\n<\/svg>",
+    "icon_menu": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"14\" height=\"12\" viewbox=\"0 0 14 12\" fill=\"none\">\n  <path d=\"M1 1H13M1 6H13M1 11H13\" stroke=\"white\" stroke-width=\"0.75\" stroke-linecap=\"square\" stroke-linejoin=\"round\"><\/path>\n<\/svg>",
+    "icon_account": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"10\" height=\"15\" viewbox=\"0 0 10 15\" fill=\"none\">\n  <path d=\"M9 13.5L5 9.5L1 13.5V1.5C1 1.23478 1 0.5 1 0.5C1 0.5 1.73478 0.5 2 0.5H8C8.2652 0.5 9 0.5 9 0.5C9 0.5 9 1.23478 9 1.5V13.5Z\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_cart": "<svg width=\"12\" height=\"16\" viewbox=\"0 0 12 16\" fill=\"none\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\n<path d=\"M8.909 4.2045C8.909 2.59785 7.60656 1.29541 5.99991 1.29541C4.39326 1.29541 3.09082 2.59785 3.09082 4.2045\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<rect x=\"1\" y=\"4.70459\" width=\"10\" height=\"10\" stroke=\"#1E1E1F\" stroke-width=\"0.75\"><\/rect>\n<\/svg>",
+    "icon_arrow_account": "<svg width=\"9\" height=\"7\" viewbox=\"0 0 9 7\" fill=\"none\" xmlns=\"http:\/\/www.w3.org\/2000\/svg\">\n<path d=\"M4.79712 0.650879L7.66667 3.52034M7.66667 3.52034L4.83797 6.34904M7.66667 3.52034L1 3.52034\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "icon_globe": "<svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"13\" height=\"13\" viewbox=\"0 0 13 13\" fill=\"none\">\n  <path d=\"M11.8921 6.5C11.8921 7.22227 11.7498 7.93747 11.4734 8.60476C11.197 9.27205 10.7919 9.87836 10.2812 10.3891C9.77045 10.8998 9.16414 11.3049 8.49685 11.5813C7.82956 11.8577 7.11436 12 6.39209 12C5.66982 12 4.95462 11.8577 4.28733 11.5813C3.62004 11.3049 3.01372 10.8998 2.503 10.3891C1.99228 9.87836 1.58715 9.27205 1.31075 8.60476C1.03435 7.93747 0.89209 7.22227 0.89209 6.5C0.89209 5.04131 1.47155 3.64236 2.503 2.61091C3.53445 1.57946 4.9334 1 6.39209 1C7.85078 1 9.24972 1.57946 10.2812 2.61091C11.3126 3.64236 11.8921 5.04131 11.8921 6.5Z\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n  <path d=\"M8.59219 6.50021C8.59219 7.22233 8.53499 7.93784 8.42445 8.60496C8.31446 9.27207 8.15221 9.87814 7.94762 10.3891C7.74358 10.9 7.50105 11.3048 7.23431 11.5814C6.96702 11.8575 6.68104 11.9999 6.3923 11.9999C6.10357 11.9999 5.81758 11.8575 5.55084 11.5814C5.28356 11.3048 5.04102 10.8994 4.83698 10.3891C4.63239 9.87814 4.47015 9.27262 4.3596 8.60496C4.24681 7.90908 4.19089 7.20517 4.19241 6.50021C4.19241 5.7781 4.24906 5.06258 4.3596 4.39547C4.47015 3.72835 4.63239 3.12228 4.83698 2.61136C5.04102 2.10043 5.28356 1.69565 5.55029 1.41902C5.81758 1.14348 6.10357 1.00049 6.3923 1.00049C6.68104 1.00049 6.96702 1.14293 7.23376 1.41902C7.50105 1.69565 7.74358 2.10098 7.94762 2.61136C8.15221 3.12228 8.31446 3.7278 8.42445 4.39547C8.53554 5.06258 8.59219 5.7781 8.59219 6.50021Z\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n  <path d=\"M0.892578 6.5H11.892\" stroke=\"#1E1E1F\" stroke-width=\"0.75\" stroke-linecap=\"square\"><\/path>\n<\/svg>",
+    "info_above_checkout_hide_on_loggedin": true,
+    "info_above_checkout": "<a href=\"\/account\" class=\"underline mr-5\">Log in<\/a> to enjoy member exclusive perks!",
+    "pdp_info_title_1": "Shipping",
+    "pdp_info_content_1": "<ul><li>Free shipping within Malaysia<\/li><li>Standard delivery within 3-5 business days<\/li><li>Express shipping available at an additional cost<\/li><\/ul>",
+    "pdp_info_title_2": "Returns",
+    "pdp_info_content_2": "<ul><li>Easy 30-day returns for a full refund<\/li><li>Items must be unworn and in original packaging<\/li><li>Refunds processed within 7 business days<\/li><\/ul>",
+    "cart_empty_links": "cart-empty",
+    "cart_empty_product": "mini-raccoon-mini",
+    "cart_empty_info_text": "",
+    "cart_empty_info_url": "#",
+    "cart_empty_link_1_url": "shopify:\/\/collections\/new-arrivals",
+    "cart_empty_link_1_label": "Continue shopping",
+    "cart_empty_image": "shopify:\/\/shop_images\/3_267c2484-cee4-4a65-a113-1b87764034e8.png",
+    "cart_empty_image_mobile": "shopify:\/\/shop_images\/3_267c2484-cee4-4a65-a113-1b87764034e8.png",
+    "cart_empty_banner_link_1_label": "New Arrivals",
+    "cart_empty_banner_link_2_label": "Explore Now",
+    "cart_empty_banner_url": "shopify:\/\/collections\/new-arrivals",
+    "enable_discount_warning": false,
+    "sections": {
+      "typography-header": {
+        "type": "typography-header",
+        "blocks": {
+          "style_PgHqJd": {
+            "type": "style",
+            "settings": {
+              "h1_rte": true,
+              "h2_rte": false,
+              "h3_rte": false,
+              "h4_rte": false,
+              "h5_rte": false,
+              "h6_rte": false,
+              "title": 1,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "32",
+              "mobile-height": "110%",
+              "mobile-spacing": "-0.72",
+              "tablet-size": "32",
+              "tablet-height": "110%",
+              "tablet-spacing": "-0.72",
+              "desktop-size": "52",
+              "desktop-height": "110%",
+              "desktop-spacing": "-1.44",
+              "point1-width": "1440",
+              "point1-size": "72",
+              "point1-height": "110%",
+              "point1-spacing": "-1.44",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_NGkHzc": {
+            "type": "style",
+            "settings": {
+              "h1_rte": false,
+              "h2_rte": true,
+              "h3_rte": false,
+              "h4_rte": false,
+              "h5_rte": false,
+              "h6_rte": false,
+              "title": 2,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "25",
+              "mobile-height": "110%",
+              "mobile-spacing": "-0.56",
+              "tablet-size": "25",
+              "tablet-height": "110%",
+              "tablet-spacing": "-0.56",
+              "desktop-size": "40",
+              "desktop-height": "110%",
+              "desktop-spacing": "-0.56",
+              "point1-width": "1440",
+              "point1-size": "52",
+              "point1-height": "110%",
+              "point1-spacing": "-0.56",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_GQD7zD": {
+            "type": "style",
+            "settings": {
+              "h1_rte": false,
+              "h2_rte": false,
+              "h3_rte": true,
+              "h4_rte": false,
+              "h5_rte": false,
+              "h6_rte": false,
+              "title": 3,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "23",
+              "mobile-height": "110%",
+              "mobile-spacing": "-0.8",
+              "tablet-size": "23",
+              "tablet-height": "110%",
+              "tablet-spacing": "-0.8",
+              "desktop-size": "32",
+              "desktop-height": "110%",
+              "desktop-spacing": "-0.8",
+              "point1-width": "1440",
+              "point1-size": "40",
+              "point1-height": "110%",
+              "point1-spacing": "-0.8",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_zrYeX8": {
+            "type": "style",
+            "settings": {
+              "h1_rte": false,
+              "h2_rte": false,
+              "h3_rte": false,
+              "h4_rte": true,
+              "h5_rte": false,
+              "h6_rte": false,
+              "title": 4,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "18",
+              "mobile-height": "1.2",
+              "mobile-spacing": "-0.48",
+              "tablet-size": "18",
+              "tablet-height": "1.2",
+              "tablet-spacing": "-0.48",
+              "desktop-size": "21",
+              "desktop-height": "1.2",
+              "desktop-spacing": "-0.48",
+              "point1-width": "1440",
+              "point1-size": "24",
+              "point1-height": "1.2",
+              "point1-spacing": "-0.48",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          }
+        },
+        "block_order": [
+          "style_PgHqJd",
+          "style_NGkHzc",
+          "style_GQD7zD",
+          "style_zrYeX8"
+        ],
+        "settings": {
+          "font1": "'PP Object Sans'",
+          "font2": "",
+          "font3": "",
+          "custom": ""
+        }
+      },
+      "typography-body": {
+        "type": "typography-body",
+        "blocks": {
+          "style_CDCdXQ": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 1,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "16",
+              "mobile-height": "140%",
+              "mobile-spacing": "-0.18",
+              "tablet-size": "16",
+              "tablet-height": "140%",
+              "tablet-spacing": "-0.16",
+              "desktop-size": "18",
+              "desktop-height": "140%",
+              "desktop-spacing": "-0.18",
+              "point1-width": "",
+              "point1-size": "",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_3jNR7L": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 2,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "14",
+              "mobile-height": "140%",
+              "mobile-spacing": "-0.14",
+              "tablet-size": "14",
+              "tablet-height": "140%",
+              "tablet-spacing": "-0.14",
+              "desktop-size": "14",
+              "desktop-height": "140%",
+              "desktop-spacing": "-0.14",
+              "point1-width": "",
+              "point1-size": "",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_cYGKLq": {
+            "type": "style",
+            "settings": {
+              "default": true,
+              "title": 3,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "11",
+              "mobile-height": "140%",
+              "mobile-spacing": "-0.12",
+              "tablet-size": "11",
+              "tablet-height": "140%",
+              "tablet-spacing": "-0.11",
+              "desktop-size": "12",
+              "desktop-height": "140%",
+              "desktop-spacing": "-0.12",
+              "point1-width": "",
+              "point1-size": "",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_HCVWQU": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 4,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "10",
+              "mobile-height": "140%",
+              "mobile-spacing": "0.11",
+              "tablet-size": "10",
+              "tablet-height": "140%",
+              "tablet-spacing": "0.1",
+              "desktop-size": "11",
+              "desktop-height": "140%",
+              "desktop-spacing": "0.11",
+              "point1-width": "",
+              "point1-size": "",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_YkLfDQ": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 5,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "9",
+              "mobile-height": "140%",
+              "mobile-spacing": "0.09",
+              "tablet-size": "9",
+              "tablet-height": "140%",
+              "tablet-spacing": "0.09",
+              "desktop-size": "9",
+              "desktop-height": "140%",
+              "desktop-spacing": "0.09",
+              "point1-width": "1440",
+              "point1-size": "",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "1920",
+              "point2-size": "",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_fettGr": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 6,
+              "family": "1",
+              "uppercase": true,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "12",
+              "mobile-height": "1.5",
+              "mobile-spacing": "1.2",
+              "tablet-size": "12",
+              "tablet-height": "",
+              "tablet-spacing": "",
+              "desktop-size": "12",
+              "desktop-height": "",
+              "desktop-spacing": "",
+              "point1-width": "1440",
+              "point1-size": "12",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "1920",
+              "point2-size": "12",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_G6f9PV": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 7,
+              "family": "1",
+              "uppercase": true,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "11",
+              "mobile-height": "1.5",
+              "mobile-spacing": "1.1",
+              "tablet-size": "11",
+              "tablet-height": "",
+              "tablet-spacing": "",
+              "desktop-size": "11",
+              "desktop-height": "",
+              "desktop-spacing": "",
+              "point1-width": "1440",
+              "point1-size": "11",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "1920",
+              "point2-size": "11",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          },
+          "style_n4HC7c": {
+            "type": "style",
+            "settings": {
+              "default": false,
+              "title": 8,
+              "family": "1",
+              "uppercase": false,
+              "capitalize": false,
+              "font-weight": "400",
+              "mobile-size": "9",
+              "mobile-height": "1.4",
+              "mobile-spacing": "0.9",
+              "tablet-size": "9",
+              "tablet-height": "",
+              "tablet-spacing": "",
+              "desktop-size": "9",
+              "desktop-height": "",
+              "desktop-spacing": "",
+              "point1-width": "1440",
+              "point1-size": "9",
+              "point1-height": "",
+              "point1-spacing": "",
+              "point2-width": "1920",
+              "point2-size": "9",
+              "point2-height": "",
+              "point2-spacing": "",
+              "point3-width": "",
+              "point3-size": "",
+              "point3-height": "",
+              "point3-spacing": ""
+            }
+          }
+        },
+        "block_order": [
+          "style_CDCdXQ",
+          "style_3jNR7L",
+          "style_cYGKLq",
+          "style_HCVWQU",
+          "style_YkLfDQ",
+          "style_fettGr",
+          "style_G6f9PV",
+          "style_n4HC7c"
+        ],
+        "settings": {
+          "font1": "'PP Object Sans'",
+          "font2": "",
+          "font3": "",
+          "custom": ""
+        }
+      },
+      "colors": {
+        "type": "colors",
+        "blocks": {
+          "colour_KF6jzi": {
+            "type": "colour",
+            "settings": {
+              "default": true,
+              "title": "green",
+              "color": "#19341e"
+            }
+          },
+          "colour_RLTi6F": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "label",
+              "color": "#617a65"
+            }
+          },
+          "colour_keynxz": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "placeholder",
+              "color": "#a4a399"
+            }
+          },
+          "colour_Drq7hm": {
+            "type": "colour",
+            "settings": {
+              "default": true,
+              "title": "main",
+              "color": "#304835"
+            }
+          },
+          "colour_hdpNbD": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "secondary",
+              "color": "#e4d7c8"
+            }
+          },
+          "colour_Tg3Giy": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "background-main",
+              "color": "#fff9f2"
+            }
+          },
+          "colour_6rTzib": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "background-secondary",
+              "color": "#f2e9df"
+            }
+          },
+          "colour_3A4X64": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "terracotta",
+              "color": "#b35e34"
+            }
+          },
+          "colour_miiJyU": {
+            "type": "colour",
+            "settings": {
+              "default": true,
+              "title": "black",
+              "color": "#19341e"
+            }
+          },
+          "colour_NN9jjX": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "white",
+              "color": "#ffffff"
+            }
+          },
+          "colour_VmBNNN": {
+            "type": "colour",
+            "settings": {
+              "default": false,
+              "title": "cream",
+              "color": "#d8cab8"
+            }
+          }
+        },
+        "block_order": [
+          "colour_KF6jzi",
+          "colour_RLTi6F",
+          "colour_keynxz",
+          "colour_Drq7hm",
+          "colour_hdpNbD",
+          "colour_Tg3Giy",
+          "colour_6rTzib",
+          "colour_3A4X64",
+          "colour_miiJyU",
+          "colour_NN9jjX",
+          "colour_VmBNNN"
+        ],
+        "settings": {}
+      },
+      "buttons": {
+        "type": "buttons",
+        "blocks": {
+          "style_w8VAaQ": {
+            "type": "style",
+            "settings": {
+              "title": 1,
+              "family": "1",
+              "uppercase": false,
+              "letter-spacing": "-0.14",
+              "font-weight": "400",
+              "border-top": 1,
+              "border-bottom": 1,
+              "border-left": 1,
+              "border-right": 1,
+              "border-radius": 1,
+              "color": "#ffffff",
+              "background-color": "#19341e",
+              "border-color": "#19341e",
+              "hover-color": "#19341e",
+              "hover-background-color": "rgba(0,0,0,0)",
+              "hover-border-color": "#19341e",
+              "padding-top": 12,
+              "padding-bottom": 12,
+              "padding-left": 24,
+              "padding-right": 24,
+              "mobile-size": "14",
+              "mobile-height": "1.4",
+              "padding-t-top": 12,
+              "padding-t-bottom": 12,
+              "padding-t-left": 24,
+              "padding-t-right": 24,
+              "tablet-size": "14",
+              "tablet-height": "1.4",
+              "padding-d-top": 12,
+              "padding-d-bottom": 12,
+              "padding-d-left": 24,
+              "padding-d-right": 24,
+              "desktop-size": "14",
+              "desktop-height": "1.4",
+              "point1-width": "1440",
+              "padding-p1-top": 12,
+              "padding-p1-bottom": 12,
+              "padding-p1-left": 24,
+              "padding-p1-right": 24,
+              "point1-size": "14",
+              "point1-height": "1.4",
+              "point2-width": "1920",
+              "padding-p2-top": 12,
+              "padding-p2-bottom": 12,
+              "padding-p2-left": 24,
+              "padding-p2-right": 24,
+              "point2-size": "14",
+              "point2-height": "1.4"
+            }
+          },
+          "style_Ve8Rr8": {
+            "type": "style",
+            "settings": {
+              "title": 2,
+              "family": "1",
+              "uppercase": false,
+              "letter-spacing": "-0.14",
+              "font-weight": "400",
+              "border-top": 1,
+              "border-bottom": 1,
+              "border-left": 1,
+              "border-right": 1,
+              "border-radius": 1,
+              "color": "#19341e",
+              "background-color": "#ffffff",
+              "border-color": "#ffffff",
+              "hover-color": "#ffffff",
+              "hover-background-color": "rgba(0,0,0,0)",
+              "hover-border-color": "#ffffff",
+              "padding-top": 12,
+              "padding-bottom": 12,
+              "padding-left": 24,
+              "padding-right": 24,
+              "mobile-size": "14",
+              "mobile-height": "1.4",
+              "padding-t-top": 12,
+              "padding-t-bottom": 2,
+              "padding-t-left": 24,
+              "padding-t-right": 24,
+              "tablet-size": "14",
+              "tablet-height": "1.4",
+              "padding-d-top": 12,
+              "padding-d-bottom": 12,
+              "padding-d-left": 24,
+              "padding-d-right": 24,
+              "desktop-size": "14",
+              "desktop-height": "1.4",
+              "point1-width": "1440",
+              "padding-p1-top": 12,
+              "padding-p1-bottom": 12,
+              "padding-p1-left": 24,
+              "padding-p1-right": 24,
+              "point1-size": "14",
+              "point1-height": "1.4",
+              "point2-width": "1920",
+              "padding-p2-top": 12,
+              "padding-p2-bottom": 12,
+              "padding-p2-left": 24,
+              "padding-p2-right": 24,
+              "point2-size": "14",
+              "point2-height": "1.4"
+            }
+          },
+          "style_ELBnrb": {
+            "type": "style",
+            "settings": {
+              "title": 3,
+              "family": "1",
+              "uppercase": false,
+              "letter-spacing": "-0.14",
+              "font-weight": "400",
+              "border-top": 1,
+              "border-bottom": 1,
+              "border-left": 1,
+              "border-right": 1,
+              "border-radius": 1,
+              "color": "#19341e",
+              "background-color": "rgba(0,0,0,0)",
+              "border-color": "#19341e",
+              "hover-color": "#ffffff",
+              "hover-background-color": "#19341e",
+              "hover-border-color": "#19341e",
+              "padding-top": 12,
+              "padding-bottom": 12,
+              "padding-left": 24,
+              "padding-right": 24,
+              "mobile-size": "14",
+              "mobile-height": "1.4",
+              "padding-t-top": 12,
+              "padding-t-bottom": 2,
+              "padding-t-left": 24,
+              "padding-t-right": 24,
+              "tablet-size": "14",
+              "tablet-height": "1.4",
+              "padding-d-top": 12,
+              "padding-d-bottom": 12,
+              "padding-d-left": 24,
+              "padding-d-right": 24,
+              "desktop-size": "14",
+              "desktop-height": "1.4",
+              "point1-width": "1440",
+              "padding-p1-top": 12,
+              "padding-p1-bottom": 12,
+              "padding-p1-left": 24,
+              "padding-p1-right": 24,
+              "point1-size": "14",
+              "point1-height": "1.4",
+              "point2-width": "1920",
+              "padding-p2-top": 12,
+              "padding-p2-bottom": 12,
+              "padding-p2-left": 24,
+              "padding-p2-right": 24,
+              "point2-size": "14",
+              "point2-height": "1.4"
+            }
+          },
+          "style_nGVT6L": {
+            "type": "style",
+            "settings": {
+              "title": 4,
+              "family": "1",
+              "uppercase": false,
+              "letter-spacing": "-0.14",
+              "font-weight": "400",
+              "border-top": 1,
+              "border-bottom": 1,
+              "border-left": 1,
+              "border-right": 1,
+              "border-radius": 1,
+              "color": "#19341e",
+              "background-color": "#ffffff",
+              "border-color": "#ffffff",
+              "hover-color": "#ffffff",
+              "hover-background-color": "rgba(0,0,0,0)",
+              "hover-border-color": "#ffffff",
+              "padding-top": 12,
+              "padding-bottom": 12,
+              "padding-left": 24,
+              "padding-right": 24,
+              "mobile-size": "14",
+              "mobile-height": "1.4",
+              "padding-t-top": 12,
+              "padding-t-bottom": 2,
+              "padding-t-left": 24,
+              "padding-t-right": 24,
+              "tablet-size": "14",
+              "tablet-height": "1.4",
+              "padding-d-top": 12,
+              "padding-d-bottom": 12,
+              "padding-d-left": 24,
+              "padding-d-right": 24,
+              "desktop-size": "14",
+              "desktop-height": "1.4",
+              "point1-width": "1440",
+              "padding-p1-top": 12,
+              "padding-p1-bottom": 12,
+              "padding-p1-left": 24,
+              "padding-p1-right": 24,
+              "point1-size": "14",
+              "point1-height": "1.4",
+              "point2-width": "1920",
+              "padding-p2-top": 12,
+              "padding-p2-bottom": 12,
+              "padding-p2-left": 24,
+              "padding-p2-right": 24,
+              "point2-size": "14",
+              "point2-height": "1.4"
+            }
+          }
+        },
+        "block_order": [
+          "style_w8VAaQ",
+          "style_Ve8Rr8",
+          "style_ELBnrb",
+          "style_nGVT6L"
+        ],
+        "settings": {
+          "font1": "'Founders Grotesk', sans-serif",
+          "font2": "",
+          "font3": "",
+          "animation": "all 0.3s ease"
+        }
+      },
+      "links": {
+        "type": "links",
+        "blocks": {
+          "style_TjXQpz": {
+            "type": "style",
+            "settings": {
+              "title": 1,
+              "family": "1",
+              "uppercase": false,
+              "letter-spacing": "-0.18",
+              "font-weight": "400",
+              "padding-top": 0,
+              "padding-bottom": 0,
+              "padding-left": 0,
+              "padding-right": 0,
+              "border-top": 0,
+              "border-bottom": 0,
+              "border-left": 0,
+              "border-right": 0,
+              "color": "#19341e",
+              "background-color": "",
+              "border-color": "rgba(0,0,0,0)",
+              "hover-color": "#475d4b",
+              "hover-background-color": "",
+              "hover-border-color": "rgba(0,0,0,0)",
+              "mobile-size": "16",
+              "mobile-height": "1.4",
+              "tablet-size": "16",
+              "tablet-height": "1.4",
+              "desktop-size": "18",
+              "desktop-height": "1.4",
+              "point1-width": "1440",
+              "point1-size": "18",
+              "point1-height": "1.3",
+              "point2-width": "1920",
+              "point2-size": "18",
+              "point2-height": "1.4"
+            }
+          },
+          "style_iEE99F": {
+            "type": "style",
+            "settings": {
+              "title": 2,
+              "family": "1",
+              "uppercase": true,
+              "letter-spacing": "-0.14",
+              "font-weight": "400",
+              "padding-top": 0,
+              "padding-bottom": 1,
+              "padding-left": 0,
+              "padding-right": 0,
+              "border-top": 0,
+              "border-bottom": 0,
+              "border-left": 0,
+              "border-right": 0,
+              "color": "#19341e",
+              "background-color": "",
+              "border-color": "",
+              "hover-color": "#475d4b",
+              "hover-background-color": "",
+              "hover-border-color": "#475d4b",
+              "mobile-size": "14",
+              "mobile-height": "1.4",
+              "tablet-size": "14",
+              "tablet-height": "1.4",
+              "desktop-size": "14",
+              "desktop-height": "1.4",
+              "point1-width": "1440",
+              "point1-size": "14",
+              "point1-height": "1.4",
+              "point2-width": "1920",
+              "point2-size": "14",
+              "point2-height": "1.4"
+            }
+          }
+        },
+        "block_order": [
+          "style_TjXQpz",
+          "style_iEE99F"
+        ],
+        "settings": {
+          "font1": "'Founders Grotesk', sans-serif",
+          "font2": "",
+          "font3": "",
+          "animation": "all 0.3s linear",
+          "custom": ""
+        }
+      },
+      "size-guide": {
+        "type": "size-guide",
+        "settings": {}
+      },
+      "selection-popup-subscription": {
+        "type": "selection-popup-subscription",
+        "settings": {
+          "enable": false,
+          "title": "",
+          "text": "",
+          "subscription_type": "embed",
+          "subscription_embed_code": ""
+        }
+      },
+      "header": {
+        "type": "header",
+        "blocks": {
+          "popular_keyword_de8ANd": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "bonsai"
+            }
+          },
+          "popular_keyword_9HmtYt": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "fern"
+            }
+          },
+          "popular_keyword_8P4ttG": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "gift card"
+            }
+          },
+          "popular_keyword_NnwKy8": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "pet friendly"
+            }
+          },
+          "popular_keyword_4gFCL4": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "planter"
+            }
+          },
+          "popular_keyword_WdPe47": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "potting mix"
+            }
+          },
+          "popular_keyword_eLhdx3": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "tree"
+            }
+          },
+          "popular_keyword_KDC6ck": {
+            "type": "popular_keyword",
+            "settings": {
+              "title": "workshop"
+            }
+          },
+          "submenu_8843dz": {
+            "type": "submenu",
+            "settings": {
+              "title": "Plants",
+              "menu": "dev-sub-menu-1",
+              "menu_2": "dev-submenu-2"
+            }
+          },
+          "submenu_qjaJtT": {
+            "type": "submenu",
+            "settings": {
+              "title": "Pots",
+              "menu": "pots-submenu-1",
+              "menu_2": "pots-submenu-2"
+            }
+          },
+          "submenu_bFnajr": {
+            "type": "submenu",
+            "settings": {
+              "title": "Plant Care",
+              "menu": "plant-care-submenu-1",
+              "menu_2": ""
+            }
+          },
+          "submenu_b9PpT8": {
+            "type": "submenu",
+            "settings": {
+              "title": "Lifestyle",
+              "menu": "lifestyle-submenu-1",
+              "menu_2": ""
+            }
+          },
+          "submenu_KQTgHa": {
+            "type": "submenu",
+            "settings": {
+              "title": "Gifting",
+              "menu": "gifting-submenu-1",
+              "menu_2": "gifting-submenu-2"
+            }
+          },
+          "submenu_BNHUKC": {
+            "type": "submenu",
+            "settings": {
+              "title": "Workshops",
+              "menu": "workshops-submenu-1",
+              "menu_2": "workshops-submenu-2"
+            }
+          }
+        },
+        "block_order": [
+          "popular_keyword_de8ANd",
+          "popular_keyword_9HmtYt",
+          "popular_keyword_8P4ttG",
+          "popular_keyword_NnwKy8",
+          "popular_keyword_4gFCL4",
+          "popular_keyword_WdPe47",
+          "popular_keyword_eLhdx3",
+          "popular_keyword_KDC6ck",
+          "submenu_8843dz",
+          "submenu_qjaJtT",
+          "submenu_bFnajr",
+          "submenu_b9PpT8",
+          "submenu_KQTgHa",
+          "submenu_BNHUKC"
+        ],
+        "settings": {
+          "hide_on_scroll": true,
+          "transparent_header_template": "index,page.careers,page.about-us",
+          "logo_image_black": "shopify:\/\/shop_images\/Vector.png",
+          "logo_image_white": "shopify:\/\/shop_images\/Vector.png",
+          "main_linklist": "dev-main-menu",
+          "info_linklist": "dev-site-info",
+          "sosmed_link": "connect",
+          "installation_url": "",
+          "address": "Soilboy Experience Store\n46 Kim Yam Road, #02-07\/08\nSingapore 239351",
+          "open_hours": "Opening Hours:\nDaily: 10am - 7pm",
+          "mobile_link_label_1": "Account",
+          "mobile_link_url_1": "\/account",
+          "mobile_link_label_2": "Installations",
+          "mobile_link_url_2": "#",
+          "mobile_link_label_3": "",
+          "mobile_link_url_3": "",
+          "search_suggestion_title": "Suggested",
+          "search_suggestion_links": "dev-site-info",
+          "message": true,
+          "color_bg": "#222222",
+          "color_text": "#ffffff"
+        }
+      },
+      "footer": {
+        "type": "footer",
+        "blocks": {
+          "country_HgBJFa": {
+            "type": "country",
+            "settings": {
+              "active": true,
+              "title": "Singapore (SGD)",
+              "url": "\/"
+            }
+          },
+          "country_6xPjWB": {
+            "type": "country",
+            "settings": {
+              "active": false,
+              "title": "Malaysia (MYR)",
+              "url": "\/"
+            }
+          }
+        },
+        "block_order": [
+          "country_HgBJFa",
+          "country_6xPjWB"
+        ],
+        "settings": {
+          "logo": "shopify:\/\/shop_images\/Vector_1.png",
+          "image_mobile": "shopify:\/\/shop_images\/Hidden_Footer_3.png",
+          "image_desktop": "shopify:\/\/shop_images\/Hidden_Footer_2.png",
+          "address": "Soilboy Experience Store\n46 Kim Yam Road, #02-07\/08\nSingapore 239351",
+          "opening_hours": "Opening Hours:\nDaily: 10am - 7pm",
+          "sticky_image_link_url": "#",
+          "footer_quote": "Who are we, you ask? <svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"28\" height=\"26\" viewbox=\"0 0 28 26\" fill=\"none\">\n  <path d=\"M16.6988 1.09416C16.7563 1.12956 16.8137 1.16496 16.873 1.20143C16.9053 1.22181 16.9377 1.24219 16.971 1.26319C17.3079 1.4568 17.6402 1.4848 18.0211 1.51877C19.4032 1.66701 20.2361 2.22498 21.1206 3.29654C21.5318 3.77782 22.0042 4.0765 22.553 4.37114C23.3423 4.79511 24.1383 5.25435 24.4369 6.16334C24.5558 6.64559 24.4653 7.11053 24.2323 7.54401C23.7919 8.20641 23.2085 8.56508 22.4464 8.72603C21.6611 8.87906 20.8629 8.9124 20.0659 8.94814C18.8846 8.95031 18.8846 8.95031 17.8398 9.39436C17.6863 9.57652 17.547 9.76513 17.4084 9.95893C16.7934 10.8088 15.729 11.2198 14.82 11.6549C14.4541 11.8307 14.0975 12.0196 13.745 12.2215C13.745 12.2977 13.745 12.3738 13.745 12.4523C13.7923 12.4711 13.8396 12.49 13.8883 12.5094C14.0663 12.5809 14.244 12.6532 14.4215 12.7259C14.4979 12.757 14.5744 12.7879 14.651 12.8184C15.5351 13.1709 16.0801 13.602 16.4735 14.4953C16.552 14.6789 16.6278 14.8634 16.7023 15.0486C16.7962 15.0296 16.89 15.0105 16.9867 14.9909C17.008 14.9213 17.0294 14.8517 17.0514 14.78C17.0807 14.6868 17.1101 14.5937 17.1396 14.5005C17.1604 14.432 17.1604 14.432 17.1817 14.3621C17.4442 13.5395 17.9299 13.1174 18.6491 12.686C19.1721 12.371 19.6463 12.0318 20.106 11.6278C21.0554 10.7948 22.0335 10.4152 23.29 10.4809C24.0813 10.5433 24.8125 10.8171 25.4038 11.356C25.4605 11.4076 25.4605 11.4076 25.5184 11.4602C25.6896 11.625 25.8365 11.7827 25.9649 11.9846C26.2877 12.4911 26.6095 12.6572 27.155 12.8667C27.481 12.9971 27.7582 13.2102 27.9234 13.5327C28.0575 13.9773 28.0113 14.4931 27.8179 14.9116C27.431 15.5549 26.8583 15.9629 26.1431 16.1449C26.0081 16.1729 25.873 16.2006 25.7379 16.2278C25.063 16.3744 24.7983 16.7013 24.3801 17.2411C22.3603 19.8264 19.4933 20.5537 16.3991 20.937C13.613 21.0987 13.613 21.0987 11.3253 22.4268C11.0843 22.7837 10.8647 23.1447 10.9014 23.5877C10.9924 23.68 11.0892 23.6548 11.2154 23.657C11.2715 23.6581 11.3276 23.6592 11.3854 23.6603C11.448 23.6612 11.5106 23.6621 11.5751 23.663C11.6414 23.6642 11.7076 23.6653 11.7759 23.6665C11.962 23.6696 12.148 23.6724 12.3341 23.6751C12.4537 23.6768 12.5733 23.6786 12.6929 23.6804C14.1238 23.7021 15.5546 23.7089 16.9857 23.7128C17.2079 23.7134 17.4301 23.7141 17.6523 23.7148C17.933 23.7157 18.2136 23.7166 18.4943 23.7174C18.5501 23.7176 18.6059 23.7178 18.6634 23.7179C19.2962 23.7199 19.929 23.7213 20.5618 23.7219C21.0756 23.7224 21.5893 23.7237 22.103 23.7259C22.3719 23.7271 22.6408 23.7278 22.9097 23.7275C23.1595 23.7272 23.4094 23.728 23.6593 23.7296C23.7504 23.73 23.8416 23.73 23.9328 23.7296C24.4583 23.7274 24.8802 23.7266 25.2933 24.0964C25.3192 24.1296 25.3451 24.1629 25.3718 24.1971C25.3987 24.2305 25.4256 24.2639 25.4533 24.2983C25.6301 24.5658 25.6109 24.8953 25.5744 25.2032C25.4522 25.5212 25.2319 25.7695 24.9488 25.9533C24.7614 25.9895 24.7614 25.9895 24.5537 25.9897C24.5151 25.9902 24.4765 25.9906 24.4368 25.9911C24.3076 25.9922 24.1785 25.9912 24.0493 25.9903C23.9558 25.9907 23.8622 25.9912 23.7686 25.9918C23.5115 25.9931 23.2545 25.9926 22.9974 25.9918C22.7201 25.9913 22.4429 25.9924 22.1656 25.9933C21.6224 25.9948 21.0792 25.9948 20.536 25.9941C20.0946 25.9937 19.6531 25.9937 19.2116 25.9941C19.1174 25.9942 19.1174 25.9942 19.0213 25.9943C18.8938 25.9944 18.7662 25.9946 18.6386 25.9947C17.4418 25.9958 16.2451 25.9951 15.0483 25.9938C14.0214 25.9928 12.9944 25.9934 11.9675 25.9952C10.7752 25.9974 9.58295 25.9984 8.39068 25.9976C8.26353 25.9975 8.13639 25.9974 8.00925 25.9974C7.94669 25.9973 7.88413 25.9973 7.81968 25.9973C7.37878 25.9971 6.93789 25.9977 6.497 25.9987C5.95962 25.9999 5.42226 25.9998 4.88488 25.9982C4.61068 25.9974 4.33651 25.9972 4.06232 25.9984C3.81126 25.9996 3.56026 25.9991 3.30921 25.9974C3.21843 25.997 3.12765 25.9973 3.03687 25.9982C2.21724 26.0055 2.21724 26.0055 1.88284 25.6971C1.61288 25.3968 1.50367 25.1463 1.51754 24.7417C1.56874 24.3451 1.75578 24.114 2.0496 23.8588C2.30899 23.6898 2.55678 23.6945 2.85803 23.6966C2.91948 23.6951 2.98093 23.6936 3.04424 23.692C3.23916 23.6876 3.43395 23.6862 3.62891 23.6851C3.82423 23.6825 4.01951 23.6792 4.21481 23.675C4.33588 23.6726 4.45698 23.6712 4.57808 23.6708C4.95292 23.6653 5.24766 23.6369 5.54561 23.3842C5.74607 23.1307 5.90643 22.8684 6.05663 22.5816C6.10617 22.4896 6.15571 22.3976 6.20526 22.3056C6.27662 22.1716 6.34768 22.0375 6.41816 21.9031C6.84286 21.094 7.32153 20.4474 8.05782 19.8951C8.09509 19.8671 8.13235 19.8391 8.17075 19.8102C8.7682 19.3632 9.37758 18.9338 9.99146 18.5104C9.92442 18.1957 9.73236 18.059 9.47961 17.8758C8.63011 17.3859 7.49719 17.3246 6.55071 17.5296C6.16228 17.6519 5.80365 17.8551 5.44443 18.0457C4.18983 18.7015 2.97453 19.005 1.57441 18.6258C0.993514 18.4103 0.465404 18.0408 0.145507 17.4935C-0.0306467 17.0865 -0.0392017 16.6003 0.0786385 16.1742C0.131743 16.0573 0.191337 15.9599 0.26636 15.8564C0.287181 15.8244 0.308001 15.7924 0.329453 15.7595C0.515531 15.5066 0.75241 15.3441 1.0057 15.1676C1.31857 14.9486 1.54424 14.7458 1.74503 14.414C2.36263 13.4526 2.98712 12.7673 4.11738 12.489C4.41157 12.4312 4.69844 12.4241 4.99739 12.427C5.0591 12.4274 5.1208 12.4278 5.18438 12.4282C6.32851 12.4512 7.50773 12.8408 8.35995 13.6387C8.70177 14.0033 8.89951 14.4364 9.07951 14.9021C9.29445 15.4267 9.84487 15.5807 10.3256 15.7915C10.8345 16.015 11.2893 16.2771 11.7083 16.6504C11.7386 16.6772 11.7689 16.704 11.8002 16.7317C11.8848 16.8077 11.9679 16.8857 12.0508 16.9637C12.2022 17.0836 12.2022 17.0836 12.3825 17.0698C12.691 16.9607 12.8921 16.7213 13.1194 16.491C13.1594 16.4512 13.1993 16.4113 13.2405 16.3702C13.4786 16.116 13.5976 15.9206 13.6313 15.5679C13.538 15.1892 13.2057 14.9574 12.8919 14.7601C12.3738 14.4668 11.8325 14.2155 11.2946 13.9621C9.35479 13.0453 9.35479 13.0453 8.95355 12.1131C8.69792 11.3796 8.82458 10.596 9.00087 9.85448C9.03363 9.69743 9.03998 9.5539 9.02464 9.39436C8.88889 9.25664 8.85267 9.25926 8.6663 9.2544C8.27764 9.26253 7.94818 9.41018 7.59218 9.55663C6.38296 10.0285 5.02435 10.3179 3.78287 9.7775C3.11515 9.45736 2.66451 9.02984 2.40261 8.31254C2.12887 7.28983 2.29047 6.24791 2.7865 5.33035C3.58218 4.04849 4.81767 3.58066 6.19591 3.22048C6.80735 3.05909 7.2194 2.89653 7.65971 2.41306C8.17336 1.94492 8.68094 1.69184 9.37253 1.63754C10.1704 1.57003 10.5908 1.36113 11.1906 0.831534C12.8718 -0.58325 15.0427 0.012795 16.6988 1.09416ZM12.437 8.41351C12.4052 8.44178 12.3735 8.47004 12.3408 8.49916C11.8714 8.9806 11.6202 9.67743 11.3848 10.2995C11.3703 10.3375 11.3558 10.3755 11.3408 10.4146C11.2665 10.6197 11.2262 10.7912 11.2426 11.0099C11.5082 10.9282 11.7476 10.8152 11.9926 10.6853C12.3386 10.5055 12.689 10.3452 13.0483 10.1949C13.9511 9.87702 13.9511 9.87702 14.5981 9.22127C14.6481 9.03676 14.6358 8.95745 14.5981 8.75969C14.2941 8.42047 13.8545 8.20539 13.4044 8.16898C12.877 8.15525 12.877 8.15525 12.437 8.41351ZM16.5602 17.1221C16.2977 17.477 15.9061 18.0596 15.9061 18.5104C16.7891 18.4557 17.8578 18.2104 18.4623 17.5183C18.6193 17.3076 18.6904 17.1762 18.7035 16.9093C18.6061 16.6388 18.4652 16.4987 18.2201 16.3576C17.4923 16.1687 17.0058 16.5848 16.5602 17.1221ZM21.1952 17.068C21.0834 17.2139 20.9771 17.3566 20.9109 17.5296C20.9279 17.656 20.9279 17.656 20.9677 17.7604C21.3764 17.6104 21.7307 17.3763 21.9985 17.0247C22.0664 16.8886 22.0664 16.8886 21.9914 16.7218C21.6078 16.6742 21.4401 16.789 21.1952 17.068Z\" fill=\"#19341E\"><\/path>\n<\/svg> Definitely not your average, run-of-the-mill gardeners or ‘plant lovers’. <svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"30\" height=\"28\" viewbox=\"0 0 30 28\" fill=\"none\">\n  <path d=\"M26.9449 8.87135C26.6154 9.15823 26.2311 9.37513 25.8152 9.50889C25.3994 9.64264 24.9607 9.69046 24.5258 9.64945C24.0909 9.60843 23.6689 9.47943 23.2853 9.27028C22.9018 9.06112 22.5648 8.77618 22.2947 8.43276C22.0246 8.08933 21.8271 7.69459 21.7143 7.27249C21.6014 6.85039 21.5754 6.40974 21.638 5.9773C21.7005 5.54486 21.8503 5.12965 22.0782 4.75688C22.3061 4.38411 22.6074 4.06156 22.9637 3.80881C24.3499 2.71247 28.7502 3.35738 28.7502 3.35738C28.7502 3.35738 28.3472 7.77501 26.9449 8.87135Z\" stroke=\"#19341E\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><\/path>\n  <path d=\"M21.9086 9.04156C20.9767 9.80534 20.2102 10.7511 19.6559 11.8211C19.1017 12.8911 18.7713 14.0629 18.6849 15.2649C18.6849 10.4281 16.2671 7.20357 12.2375 4.78516\" stroke=\"#19341E\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><\/path>\n  <path d=\"M9.69164 8.00978C10.4808 8.68778 11.4969 9.04258 12.5364 9.00317C13.576 8.96376 14.5623 8.53304 15.2979 7.79724C16.0335 7.06144 16.4641 6.07487 16.5035 5.03504C16.5429 3.99521 16.1882 2.97886 15.5104 2.18948C13.8985 0.593327 8.20875 0.754554 8.20875 0.754554C8.20875 0.754554 8.0798 6.39751 9.69164 8.00978Z\" stroke=\"#19341E\" stroke-width=\"1.5\" stroke-linecap=\"round\" stroke-linejoin=\"round\"><\/path>\n  <path d=\"M0.75 15.1218C0.75 14.4796 1.27495 13.959 1.92251 13.959H6.61254C7.2601 13.959 7.78505 14.4796 7.78505 15.1218V25.5869C7.78505 26.2291 7.2601 26.7496 6.61254 26.7496H1.92251C1.27495 26.7496 0.75 26.2291 0.75 25.5869V15.1218Z\" fill=\"#19341E\"><\/path>\n  <path d=\"M8.1359 23.712C7.74262 23.842 7.5292 24.2662 7.6592 24.6595C7.78921 25.0528 8.21342 25.2662 8.6067 25.1362L8.3713 24.4241L8.1359 23.712ZM17.1651 25.0055L17.0976 24.2585L17.1651 25.0055ZM22.4414 23.8427L22.7681 24.5178L22.4414 23.8427ZM27.483 19.2944L26.9021 18.82V18.82L27.483 19.2944ZM24.0348 16.4485L24.5629 16.9811V16.9811L24.0348 16.4485ZM21.7129 18.7512L22.241 19.2837L21.7129 18.7512ZM15.4064 19.0229C14.9921 19.0229 14.6564 19.3587 14.6564 19.7729C14.6564 20.1871 14.9921 20.5229 15.4064 20.5229V19.7729V19.0229ZM26.9469 16.1626L26.5333 16.7882L26.9469 16.1626ZM10.1558 15.3997L10.489 16.0716L10.1558 15.3997ZM16.4668 14.8272L16.6626 14.1032V14.1032L16.4668 14.8272ZM18.9313 15.4938L18.7355 16.2177V16.2177L18.9313 15.4938ZM19.7121 18.4098L19.184 17.8773V17.8773L19.7121 18.4098ZM17.8095 19.2404C17.5154 19.5321 17.5134 20.0069 17.8051 20.301C18.0968 20.5951 18.5716 20.5971 18.8657 20.3055L18.3376 19.7729L17.8095 19.2404ZM8.87594 16.0343L8.54276 15.3624L8.87594 16.0343ZM8.3713 24.4241L8.6067 25.1362C8.90131 25.0388 9.36551 25.0086 10.0222 25.055C10.6636 25.1004 11.4024 25.2108 12.2131 25.3371C13.7907 25.5829 15.6543 25.895 17.2326 25.7524L17.1651 25.0055L17.0976 24.2585C15.7446 24.3807 14.0907 24.1115 12.444 23.855C11.6424 23.7301 10.8423 23.6093 10.128 23.5587C9.42898 23.5093 8.72067 23.5187 8.1359 23.712L8.3713 24.4241ZM17.1651 25.0055L17.2326 25.7524C19.5301 25.5449 20.5253 25.6032 22.7681 24.5178L22.4414 23.8427L22.1147 23.1676C20.161 24.1131 19.4505 24.0459 17.0976 24.2585L17.1651 25.0055ZM22.4414 23.8427L22.7681 24.5178C24.7605 23.5535 26.7971 21.3199 28.0639 19.7688L27.483 19.2944L26.9021 18.82C25.6281 20.38 23.7753 22.3639 22.1147 23.1676L22.4414 23.8427ZM24.0348 16.4485L23.5067 15.916L21.1848 18.2187L21.7129 18.7512L22.241 19.2837L24.5629 16.9811L24.0348 16.4485ZM19.2256 19.7729V19.0229H15.4064V19.7729V20.5229H19.2256V19.7729ZM21.7129 18.7512L21.1848 18.2187C20.6662 18.7329 19.9616 19.0229 19.2256 19.0229V19.7729V20.5229C20.3554 20.5229 21.4402 20.0779 22.241 19.2837L21.7129 18.7512ZM26.9469 16.1626L27.3605 15.5369C26.1495 14.7363 24.5374 14.8938 23.5067 15.916L24.0348 16.4485L24.5629 16.9811C25.088 16.4604 25.9136 16.3785 26.5333 16.7882L26.9469 16.1626ZM27.483 19.2944L28.0639 19.7688C29.1771 18.4058 28.7689 16.4681 27.3605 15.5369L26.9469 16.1626L26.5333 16.7882C27.2639 17.2712 27.4069 18.2019 26.9021 18.82L27.483 19.2944ZM1.92251 13.959V14.709H6.61254V13.959V13.209H1.92251V13.959ZM7.78505 15.1218H7.03505V25.5869H7.78505H8.53505V15.1218H7.78505ZM6.61254 26.7496V25.9996H1.92251V26.7496V27.4996H6.61254V26.7496ZM0.75 25.5869H1.5V15.1218H0.75H0V25.5869H0.75ZM1.92251 26.7496V25.9996C1.68326 25.9996 1.5 25.809 1.5 25.5869H0.75H0C0 26.6491 0.866639 27.4996 1.92251 27.4996V26.7496ZM7.78505 25.5869H7.03505C7.03505 25.809 6.85179 25.9996 6.61254 25.9996V26.7496V27.4996C7.66841 27.4996 8.53505 26.6491 8.53505 25.5869H7.78505ZM6.61254 13.959V14.709C6.85178 14.709 7.03505 14.8997 7.03505 15.1218H7.78505H8.53505C8.53505 14.0595 7.66841 13.209 6.61254 13.209V13.959ZM1.92251 13.959V13.209C0.866635 13.209 0 14.0595 0 15.1218H0.75H1.5C1.5 14.8997 1.68326 14.709 1.92251 14.709V13.959ZM8.87594 16.0343L9.20912 16.7063L10.489 16.0716L10.1558 15.3997L9.82266 14.7278L8.54276 15.3624L8.87594 16.0343ZM13.8264 14.5404V15.2904H14.3072V14.5404V13.7904H13.8264V14.5404ZM16.4668 14.8272L16.2709 15.5512L18.7355 16.2177L18.9313 15.4938L19.1271 14.7698L16.6626 14.1032L16.4668 14.8272ZM19.7121 18.4098L19.184 17.8773L17.8095 19.2404L18.3376 19.7729L18.8657 20.3055L20.2403 18.9423L19.7121 18.4098ZM18.9313 15.4938L18.7355 16.2177C19.4864 16.4208 19.7241 17.3416 19.184 17.8773L19.7121 18.4098L20.2403 18.9423C21.6099 17.584 20.9818 15.2714 19.1271 14.7698L18.9313 15.4938ZM14.3072 14.5404V15.2904C14.9706 15.2904 15.631 15.3781 16.2709 15.5512L16.4668 14.8272L16.6626 14.1032C15.8949 13.8956 15.1028 13.7904 14.3072 13.7904V14.5404ZM10.1558 15.3997L10.489 16.0716C11.5249 15.558 12.6676 15.2904 13.8264 15.2904V14.5404V13.7904C12.4368 13.7904 11.0661 14.1112 9.82266 14.7278L10.1558 15.3997ZM8.87594 16.0343L8.54276 15.3624C8.15821 15.5531 7.79574 15.7854 7.46184 16.0551L7.93314 16.6385L8.40444 17.2219C8.653 17.0211 8.92285 16.8482 9.20912 16.7063L8.87594 16.0343Z\" fill=\"#19341E\"><\/path>\n<\/svg> We speak and breathe plant. In fact, that’s what we do all day. <svg xmlns=\"http:\/\/www.w3.org\/2000\/svg\" width=\"30\" height=\"30\" viewbox=\"0 0 30 30\" fill=\"none\">\n  <path d=\"M28.75 14.75C28.75 16.2778 28.5053 17.7484 28.0529 19.1249C26.2158 24.7143 20.9542 28.75 14.75 28.75C8.54581 28.75 3.28421 24.7143 1.44712 19.1249C0.994726 17.7484 0.75 16.2778 0.75 14.75C0.75 13.5415 0.903135 12.3687 1.19106 11.25C2.74521 5.2117 8.22656 0.75 14.75 0.75C21.2734 0.75 26.7548 5.2117 28.3089 11.25C28.5969 12.3687 28.75 13.5415 28.75 14.75Z\" fill=\"#19341E\"><\/path>\n  <path d=\"M1.19106 11.25L0.464733 11.0631L1.19106 11.25ZM28.3089 11.25L29.0353 11.0631L28.3089 11.25ZM14.75 28.75V28C14.1525 28 13.5241 27.7264 12.8872 27.1106C12.2466 26.4914 11.6356 25.5591 11.1061 24.3489C10.0481 21.9307 9.375 18.5376 9.375 14.75H8.625H7.875C7.875 18.6944 8.57299 22.3013 9.73185 24.9501C10.3108 26.2734 11.0195 27.3914 11.8446 28.189C12.6732 28.9901 13.6562 29.5 14.75 29.5V28.75ZM8.625 14.75H9.375C9.375 10.9624 10.0481 7.56929 11.1061 5.15112C11.6356 3.94092 12.2466 3.00865 12.8872 2.3894C13.5241 1.77364 14.1525 1.5 14.75 1.5V0.75V0C13.6562 0 12.6732 0.509857 11.8446 1.31098C11.0195 2.10861 10.3108 3.22659 9.73185 4.54989C8.57299 7.19872 7.875 10.8056 7.875 14.75H8.625ZM14.75 28.75V29.5C15.8438 29.5 16.8268 28.9901 17.6554 28.189C18.4805 27.3914 19.1892 26.2734 19.7681 24.9501C20.927 22.3013 21.625 18.6944 21.625 14.75H20.875H20.125C20.125 18.5376 19.4519 21.9307 18.3939 24.3489C17.8644 25.5591 17.2534 26.4914 16.6128 27.1106C15.9759 27.7264 15.3475 28 14.75 28V28.75ZM20.875 14.75H21.625C21.625 10.8056 20.927 7.19872 19.7681 4.54989C19.1892 3.22659 18.4805 2.10861 17.6554 1.31098C16.8268 0.509857 15.8438 0 14.75 0V0.75V1.5C15.3475 1.5 15.9759 1.77364 16.6128 2.3894C17.2534 3.00865 17.8644 3.94092 18.3939 5.15112C19.4519 7.56929 20.125 10.9624 20.125 14.75H20.875ZM2.5 11.25V12H27V11.25V10.5H2.5V11.25ZM2.64697 19.1249V19.8749H27.147V19.1249V18.3749H2.64697V19.1249ZM0.75 14.75H1.5C1.5 13.605 1.64505 12.4951 1.91739 11.4369L1.19106 11.25L0.464733 11.0631C0.161221 12.2423 0 13.4779 0 14.75H0.75ZM1.19106 11.25L1.91739 11.4369C3.38832 5.72197 8.57706 1.5 14.75 1.5V0.75V0C7.87606 0 2.1021 4.70144 0.464733 11.0631L1.19106 11.25ZM2.5 11.25V10.5H1.19106V11.25V12H2.5V11.25ZM14.75 28.75V28C8.87933 28 3.89856 24.1815 2.15962 18.8907L1.44712 19.1249L0.734613 19.359C2.66986 25.2471 8.21229 29.5 14.75 29.5V28.75ZM1.44712 19.1249L2.15962 18.8907C1.73176 17.5889 1.5 16.1973 1.5 14.75H0.75H0C0 16.3583 0.257693 17.908 0.734613 19.359L1.44712 19.1249ZM2.64697 19.1249V18.3749H1.44712V19.1249V19.8749H2.64697V19.1249ZM28.75 14.75H28C28 16.1973 27.7682 17.5889 27.3404 18.8907L28.0529 19.1249L28.7654 19.359C29.2423 17.908 29.5 16.3583 29.5 14.75H28.75ZM28.0529 19.1249L27.3404 18.8907C25.6014 24.1815 20.6207 28 14.75 28V28.75V29.5C21.2877 29.5 26.8301 25.2471 28.7654 19.359L28.0529 19.1249ZM27.147 19.1249V19.8749H28.0529V19.1249V18.3749H27.147V19.1249ZM14.75 0.75V1.5C20.9229 1.5 26.1117 5.72197 27.5826 11.4369L28.3089 11.25L29.0353 11.0631C27.3979 4.70144 21.6239 0 14.75 0V0.75ZM28.3089 11.25L27.5826 11.4369C27.8549 12.4951 28 13.605 28 14.75H28.75H29.5C29.5 13.4779 29.3388 12.2423 29.0353 11.0631L28.3089 11.25ZM27 11.25V12H28.3089V11.25V10.5H27V11.25Z\" fill=\"#F2E9DF\"><\/path>\n<\/svg>",
+          "newsletter_title": "",
+          "newsletter_text": "Receive updates on our new arrivals, exclusive offers and events.",
+          "newsletter_placeholder": "Email",
+          "newsletter_btn": "Submit",
+          "link_list_1": "about",
+          "link_list_2": "support",
+          "link_list_3": "connect",
+          "link_list_footer_bot": "footer-bottom",
+          "country_list": "blocks",
+          "country_selector_title": "shipping to",
+          "country_selector_btn_label": "confirm",
+          "copy_text": "Soilboy © 2025",
+          "designed_text": "Designed by 360&5"
+        }
+      },
+      "footer-privacy": {
+        "type": "footer-privacy",
+        "settings": {
+          "enabled": false,
+          "text": "",
+          "understand": "",
+          "more": "",
+          "more_url": ""
+        }
+      },
+      "homepage_banner_kkqUmi": {
+        "type": "homepage-banner",
+        "blocks": {
+          "entry_EcUbJJ": {
+            "type": "entry",
+            "settings": {
+              "overlay": true,
+              "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 10%, rgba(0, 0, 0, 0) 100%)",
+              "banner_url": "",
+              "text_color": "white",
+              "text_align": "jc-center tc text-center",
+              "text_align_d": "d-jc-center d-tc d-text-center",
+              "title_v_align": "jc-end relative",
+              "title_v_align_d": "d-jc-end d-relative",
+              "title": "",
+              "title_dom_type": "h1",
+              "title_size": "h1",
+              "text": "",
+              "text_max_width_mobile": 450,
+              "text_max_width_tablet": 450,
+              "text_max_width_desktop": 450,
+              "text_max_width_hd": 450,
+              "text_max_width_fullhd": 450,
+              "button_label_1": "",
+              "button_url_1": "",
+              "button_label_2": "",
+              "button_url_2": "",
+              "link_label": "",
+              "link_url": "",
+              "desktop_image": "shopify:\/\/shop_images\/hero-d.png",
+              "mobile_image": "shopify:\/\/shop_images\/hero-m.png",
+              "autoplay": false,
+              "youtube_embed_code": ""
+            }
+          },
+          "entry_fhLFJW": {
+            "type": "entry",
+            "settings": {
+              "overlay": true,
+              "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 10%, rgba(0, 0, 0, 0) 100%)",
+              "banner_url": "",
+              "text_color": "white",
+              "text_align": "jc-center tc text-center",
+              "text_align_d": "d-jc-center d-tc d-text-center",
+              "title_v_align": "jc-end relative",
+              "title_v_align_d": "d-jc-end d-relative",
+              "title": "",
+              "title_dom_type": "h1",
+              "title_size": "h1",
+              "text": "",
+              "text_max_width_mobile": 450,
+              "text_max_width_tablet": 450,
+              "text_max_width_desktop": 450,
+              "text_max_width_hd": 450,
+              "text_max_width_fullhd": 450,
+              "button_label_1": "",
+              "button_url_1": "",
+              "button_label_2": "",
+              "button_url_2": "",
+              "link_label": "",
+              "link_url": "",
+              "desktop_image": "shopify:\/\/shop_images\/slideshow-d_d4a2ddad-f1d2-4aea-b70d-1ca02a092861.png",
+              "mobile_image": "shopify:\/\/shop_images\/slideshow-m_9fd66678-a6ee-4dba-89df-fa14243c2673.png",
+              "autoplay": false,
+              "youtube_embed_code": ""
+            }
+          }
+        },
+        "block_order": [
+          "entry_EcUbJJ",
+          "entry_fhLFJW"
+        ],
+        "settings": {
+          "section_id": "",
+          "bg_color": "#fff9f2",
+          "disable_lazyload": true,
+          "text_over_image": false,
+          "enable_parallax": false,
+          "enable_sticky": false,
+          "section_width": "container",
+          "section_width_percentage": 0,
+          "section_width_percentage_d": 0,
+          "screen_image_height_m": "image",
+          "height_custom_m": 0,
+          "hbl_title": "As Interesting As A Plant",
+          "hbl_label": "Shop Bestsellers",
+          "hbl_url": "shopify:\/\/collections\/bestsellers",
+          "screen_image_height_t": "image",
+          "height_custom_t": 0,
+          "screen_image_height_d": "image",
+          "height_custom_d": 0,
+          "top_padding_m": 0,
+          "bottom_padding_m": 0,
+          "top_padding_t": 0,
+          "bottom_padding_t": 0,
+          "top_padding": 0,
+          "bottom_padding": 0,
+          "top_padding_hd": "",
+          "bottom_padding_hd": "",
+          "top_padding_hhd": "",
+          "bottom_padding_hhd": ""
+        }
+      },
+      "faq-navigation": {
+        "type": "faq-navigation",
+        "blocks": {
+          "entry_hNdjUp": {
+            "type": "entry",
+            "settings": {
+              "title": "Plant Care",
+              "section_id": "plant-care"
+            }
+          },
+          "entry_ydL9ay": {
+            "type": "entry",
+            "settings": {
+              "title": "Choosing Your Plant",
+              "section_id": "choosing-your-plant"
+            }
+          },
+          "entry_BYWHhN": {
+            "type": "entry",
+            "settings": {
+              "title": "Shipping & Delivery",
+              "section_id": "shipping-delivery"
+            }
+          },
+          "entry_RDKxLU": {
+            "type": "entry",
+            "settings": {
+              "title": "Returns & Refunds",
+              "section_id": "returns-refunds"
+            }
+          }
+        },
+        "block_order": [
+          "entry_hNdjUp",
+          "entry_ydL9ay",
+          "entry_BYWHhN",
+          "entry_RDKxLU"
+        ],
+        "settings": {}
+      },
+      "faq-content-1": {
+        "type": "faq-content-1",
+        "blocks": {
+          "qna_ULRUzY": {
+            "type": "qna",
+            "settings": {
+              "title": "When do I know if I can repot my plant?",
+              "text": "Your plant will give you a few clear signs! Look out for roots growing out from the drainage hole, soil has sinked considerably and an increase in frequency of watering. As a general rule, most plants love a slightly bigger home every 1 or 2 years.",
+              "table_html_code": ""
+            }
+          },
+          "qna_iUcw4m": {
+            "type": "qna",
+            "settings": {
+              "title": "Should I trim my plant?",
+              "text": "Yes, absolutely! Trimming\/pruning is like giving a fresh haircut to your plant. It encourages the plant to grow back fuller and helps to neaten up the plant.\n\nAlways snip off any leaves that have completely turned yellow, brown, or crispy. These won't turn green again, and removing them signals the plant to redirect its energy into growing shiny new leaves instead.",
+              "table_html_code": ""
+            }
+          },
+          "qna_aHeifw": {
+            "type": "qna",
+            "settings": {
+              "title": "Do I need to fertilise my plant regularly?",
+              "text": "Not necessarily! Fertilisers are more of a vitamin boost rather than actual food (plants make their own food using sunlight!). But if you want to accelerate its growth and see bigger, lusher leaves, a little fertiliser can definitely give it that extra push. Otherwise, your plant can and will do perfectly fine without it.\n\nNever fertilise a plant that is undergoing stress, wilting, or root rot. Fertiliser is meant to boost a healthy plant, not rescue a sick one!",
+              "table_html_code": ""
+            }
+          },
+          "qna_W6hyCE": {
+            "type": "qna",
+            "settings": {
+              "title": "How often should I water my plant?",
+              "text": "Watering frequency varies depending on the plant, potting mix, and lighting environment. We recommend checking the soil moisture with a chopstick before watering or refer to the plant’s care guide on our website!",
+              "table_html_code": ""
+            }
+          },
+          "qna_TMfh9a": {
+            "type": "qna",
+            "settings": {
+              "title": "Can I overwater my plant?",
+              "text": "Yes, it’s possible. Overwatering is one of the most common causes of unhealthy plants. Always allow the potting mix to reach the recommended moisture level before the next watering cycle.",
+              "table_html_code": ""
+            }
+          },
+          "qna_R4UBTw": {
+            "type": "qna",
+            "settings": {
+              "title": "My plant dropped a few leaves. Is this normal?",
+              "text": "Yes. It's common for plants to experience minor leaf drop after transport or when adjusting to its new environment. Given time and proper care, most plants will recover and begin producing new growth.",
+              "table_html_code": ""
+            }
+          },
+          "qna_bNzYXV": {
+            "type": "qna",
+            "disabled": true,
+            "settings": {
+              "title": "Can I bring my plant down for repotting?",
+              "text": "Yes, we do offer repotting services and would be happy to assist you with your plant’s needs!",
+              "table_html_code": ""
+            }
+          }
+        },
+        "block_order": [
+          "qna_ULRUzY",
+          "qna_iUcw4m",
+          "qna_aHeifw",
+          "qna_W6hyCE",
+          "qna_TMfh9a",
+          "qna_R4UBTw",
+          "qna_bNzYXV"
+        ],
+        "settings": {
+          "enable_faq": true,
+          "id_faq": "plant-care",
+          "title": "Plant Care"
+        }
+      },
+      "faq-content-2": {
+        "type": "faq-content-2",
+        "blocks": {
+          "qna_PTjWFL": {
+            "type": "qna",
+            "settings": {
+              "title": "Do you have non-toxic plants?",
+              "text": "Yes, we offer a range of plants that are suitable for homes with pets or children and we would recommend dropping by our New Bahru store to allow us to better assist you!"
+            }
+          },
+          "qna_h9dBVB": {
+            "type": "qna",
+            "settings": {
+              "title": "Will my plant look exactly like the one on the website?",
+              "text": "Just like us, every plant is a unique individual! There will naturally be slight variations in both height and overall shape as compared to the photos. But we’d always hand-picked the best looking plant for your order!"
+            }
+          },
+          "qna_kmMC7g": {
+            "type": "qna",
+            "settings": {
+              "title": "When will ____ be back in stock?",
+              "text": "The best way to stay in the loop is to keep a close lookout right here on our website or follow us on Instagram for the latest updates.\n\nHave a specific question about an item? Feel free to drop us a DM!"
+            }
+          }
+        },
+        "block_order": [
+          "qna_PTjWFL",
+          "qna_h9dBVB",
+          "qna_kmMC7g"
+        ],
+        "settings": {
+          "enable_faq": true,
+          "id_faq": "choosing-your-plant",
+          "title": "Choosing Your Plant"
+        }
+      },
+      "faq-content-3": {
+        "type": "faq-content-3",
+        "blocks": {
+          "qna_yXGtkW": {
+            "type": "qna",
+            "settings": {
+              "title": "Do you ship internationally?",
+              "text": "We do not ship our live plants internationally due to strict customs regulations and the fragile nature of shipping live items.\n\nHowever, our pots and merchandise are available worldwide! If you are located outside of Singapore and have your eye on our accessories, please reach out to us directly via Instagram DM or drop us an email. Our team will gladly calculate the international shipping rates and help you complete your order."
+            }
+          }
+        },
+        "block_order": [
+          "qna_yXGtkW"
+        ],
+        "settings": {
+          "enable_faq": true,
+          "id_faq": "shipping-delivery",
+          "title": "Shipping & Delivery"
+        }
+      },
+      "faq-content-4": {
+        "type": "faq-content-4",
+        "blocks": {
+          "qna_3pb7Mj": {
+            "type": "qna",
+            "settings": {
+              "title": "Can I refund or exchange my plant?",
+              "text": "Because plants are live, perishable items, we are unable to accept returns or exchanges once the plant has left the shop. Once a plant has entered into its new home, its health depends entirely on its new environment (like light and watering habits) which is out of our hands, so we cannot take responsibility for its care after purchase.\n\nExchange is available for non-live items within 7 days of purchase. Please note that we reserve the right to decline an exchange if the item is returned to us in an unfavourable or unsellable condition."
+            }
+          },
+          "qna_cKJXDe": {
+            "type": "qna",
+            "settings": {
+              "title": "My plant is struggling a couple of weeks later. Can I get a refund?",
+              "text": "Because plants are living organisms, we cannot offer refunds once they have been in a new environment for a few weeks. A plant's long-term health depends entirely on the care, light, and watering it receives in its new home, which is out of our control.\n\nHowever, we don't want you to go through it alone! We are always happy to assist you the best we can. Reach out to us if you have any questions."
+            }
+          }
+        },
+        "block_order": [
+          "qna_3pb7Mj",
+          "qna_cKJXDe"
+        ],
+        "settings": {
+          "enable_faq": true,
+          "id_faq": "returns-refunds",
+          "title": "Returns & Refunds"
+        }
+      },
+      "faq-content-5": {
+        "type": "faq-content-5",
+        "settings": {
+          "enable_faq": false,
+          "id_faq": "",
+          "title": ""
+        }
+      },
+      "faq-content-6": {
+        "type": "faq-content-6",
+        "settings": {
+          "enable_faq": false,
+          "id_faq": "",
+          "title": ""
+        }
+      },
+      "faq-content-7": {
+        "type": "faq-content-7",
+        "settings": {
+          "enable_faq": false,
+          "id_faq": "",
+          "title": ""
+        }
+      },
+      "faq-content-8": {
+        "type": "faq-content-8",
+        "settings": {
+          "enable_faq": false,
+          "id_faq": "",
+          "title": ""
+        }
+      },
+      "faq-content-9": {
+        "type": "faq-content-9",
+        "settings": {
+          "enable_faq": false,
+          "id_faq": "",
+          "title": ""
+        }
+      },
+      "login": {
+        "type": "login",
+        "settings": {
+          "image_desktop": "shopify:\/\/shop_images\/login-desktop.jpg",
+          "image_mobile": "shopify:\/\/shop_images\/login-mobile.png",
+          "label_1": "SP 01.",
+          "label_2": "Olive Tree",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "nopadding",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "activate_account": {
+        "type": "activate_account",
+        "settings": {
+          "image_desktop": "shopify:\/\/shop_images\/login-desktop.jpg",
+          "image_mobile": "shopify:\/\/shop_images\/login-mobile.png",
+          "label_1": "SP 01.",
+          "label_2": "Olive Tree",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "medium",
+          "bottom_padding": "medium",
+          "top_padding_hd": "medium",
+          "bottom_padding_hd": "medium",
+          "top_padding_hhd": "medium",
+          "bottom_padding_hhd": "medium"
+        }
+      },
+      "reset_password": {
+        "type": "reset_password",
+        "settings": {
+          "image_desktop": "shopify:\/\/shop_images\/login-desktop.jpg",
+          "image_mobile": "shopify:\/\/shop_images\/login-mobile.png",
+          "label_1": "SP 01.",
+          "label_2": "Olive Tree",
+          "t_padding_m": 40,
+          "b_padding_m": 80,
+          "t_padding_t": 0,
+          "b_padding_t": 0,
+          "t_padding": 120,
+          "b_padding": 250,
+          "t_padding_hd": 0,
+          "b_padding_hd": 0,
+          "t_padding_hhd": 0,
+          "b_padding_hhd": 0
+        }
+      },
+      "password-content": {
+        "type": "password-content",
+        "custom_css": [],
+        "settings": {
+          "image": "shopify:\/\/shop_images\/LOCK_PAGE-desktop.png",
+          "image_mobile": "shopify:\/\/shop_images\/LOCK_PAGE-mob.png",
+          "logo_desktop": "shopify:\/\/shop_images\/Vector_b2aa2632-e949-4605-9423-30c4ca804751.png",
+          "logo_mobile": "shopify:\/\/shop_images\/Vector_b2aa2632-e949-4605-9423-30c4ca804751.png",
+          "title": "Something's growing.",
+          "title_size": "h1",
+          "text": "We're repotting our home online - give us a little more time to get the soil just right. Soilboy will be back soon, ready for you to bring a little green into your space.",
+          "password": true
+        }
+      },
+      "gift-card": {
+        "type": "gift-card",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "mood_image": "shopify:\/\/shop_images\/gift-mood.jpg",
+          "mood_image_label_1": "SP 01.",
+          "mood_image_label_2": "Olive Tree",
+          "redeem_text": "Use code at checkout to redeem",
+          "print_label": "",
+          "shop_label": "Start Shopping",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "extrasmall",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "extrasmall",
+          "top_padding": "nopadding",
+          "bottom_padding": "extrasmall",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "extrasmall",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "extrasmall"
+        }
+      },
+      "pdp-product-top": {
+        "type": "pdp-product-top",
+        "settings": {}
+      },
+      "register": {
+        "type": "register",
+        "settings": {
+          "image_desktop": "shopify:\/\/shop_images\/login-desktop.jpg",
+          "image_mobile": "shopify:\/\/shop_images\/login-mobile.png",
+          "label_1": "SP 01.",
+          "label_2": "Olive Tree",
+          "t_padding_m": 0,
+          "b_padding_m": 0,
+          "t_padding_t": 0,
+          "b_padding_t": 0,
+          "t_padding": 0,
+          "b_padding": 0,
+          "t_padding_hd": 0,
+          "b_padding_hd": 0,
+          "t_padding_hhd": 0,
+          "b_padding_hhd": 0
+        }
+      },
+      "product_carousel_WxKmh6": {
+        "type": "product-carousel",
+        "blocks": {
+          "collection_j7QgwL": {
+            "type": "collection",
+            "settings": {
+              "collection": "potted-plants",
+              "title": "Plants",
+              "btn_label": "View All Potted Plants",
+              "btn_url": "shopify:\/\/collections\/potted-plants"
+            }
+          },
+          "collection_3NzUqK": {
+            "type": "collection",
+            "settings": {
+              "collection": "pots",
+              "title": "Pots",
+              "btn_label": "View All Pots",
+              "btn_url": "shopify:\/\/collections\/pots"
+            }
+          },
+          "collection_kPtC6k": {
+            "type": "collection",
+            "settings": {
+              "collection": "lifestyle",
+              "title": "Lifestyle",
+              "btn_label": "View All Lifestyle",
+              "btn_url": "shopify:\/\/collections\/lifestyle"
+            }
+          }
+        },
+        "block_order": [
+          "collection_j7QgwL",
+          "collection_3NzUqK",
+          "collection_kPtC6k"
+        ],
+        "name": "Product Carousel",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "title": "Shop",
+          "title_max_width_m": 278,
+          "title_max_width_t": 278,
+          "title_max_width": 800,
+          "slides_on_mobile": 1.2,
+          "slides_on_tablet": 2,
+          "slides_on_small_desktop": 4,
+          "slides_on_medium_desktop": 4,
+          "slides_on_large_desktop": 4,
+          "top_padding_m": "large",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "large",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "large",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "split_hero_sticky_dH7fFn": {
+        "type": "split-hero-sticky",
+        "name": "Split Hero Sticky",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "subtitle": "Featured",
+          "title": "Growing with Time",
+          "title_dom_type": "h2",
+          "title_size": "h3",
+          "text": "Living sculptures shaped through patience and time. Each bonsai develops its own character, bringing a timeless presence to your space.",
+          "btn_label": "Shop Bonsais",
+          "btn_url": "shopify:\/\/collections\/new-bonsai",
+          "small_image": "shopify:\/\/shop_images\/Image_5.png",
+          "big_image": "shopify:\/\/shop_images\/Image_4.png",
+          "image_label_1": "",
+          "image_label_2": "",
+          "top_padding_m": "extrasmall",
+          "bottom_padding_m": "extrasmall",
+          "top_padding_t": "extrasmall",
+          "bottom_padding_t": "extrasmall",
+          "top_padding": "extrasmall",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "extrasmall",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "extrasmall",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "split_collection_sticky_ehjVP8": {
+        "type": "split-collection-sticky",
+        "name": "Split Collection Sticky",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "collection": "pots",
+          "image_label_1": "",
+          "image_label_2": "",
+          "link_label": "",
+          "link_url": "#",
+          "subtitle": "Pots",
+          "title": "Handcrafted ceramics from South Korea",
+          "title_dom_type": "h2",
+          "title_size": "h2",
+          "text": "",
+          "btn_label": "Shop Pots",
+          "btn_url": "shopify:\/\/collections\/pots",
+          "mobile_image": "shopify:\/\/shop_images\/Frame_8.png",
+          "desktop_image": "shopify:\/\/shop_images\/Frame_8_1.png",
+          "top_padding_m": "large",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "large",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "large",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "carousel_jagged_mVYtYJ": {
+        "type": "carousel-jagged",
+        "blocks": {
+          "range_6WkHM4": {
+            "type": "range",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/Frame_1_80b7be4e-d9a8-4293-b310-5a1cb0d68835.png",
+              "mobile_image": "shopify:\/\/shop_images\/Frame_1_80b7be4e-d9a8-4293-b310-5a1cb0d68835.png",
+              "subcaption": "",
+              "caption": "Juniper Chinensis Bonsai Wiring Workshop",
+              "url": "#",
+              "clicon": true
+            }
+          },
+          "range_m4cGqx": {
+            "type": "range",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/Frame_2.png",
+              "mobile_image": "shopify:\/\/shop_images\/Frame_2.png",
+              "subcaption": "",
+              "caption": "Soilboy Kokedama x All Day Matcha Club Workshop",
+              "url": "#",
+              "clicon": true
+            }
+          },
+          "range_8VCy8r": {
+            "type": "range",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/16d8e08b286ad711ed491a1df3f1692ba3bdbdf0.png",
+              "mobile_image": "shopify:\/\/shop_images\/16d8e08b286ad711ed491a1df3f1692ba3bdbdf0.png",
+              "subcaption": "",
+              "caption": "Ikebana Workshop",
+              "url": "#",
+              "clicon": true
+            }
+          }
+        },
+        "block_order": [
+          "range_6WkHM4",
+          "range_m4cGqx",
+          "range_8VCy8r"
+        ],
+        "name": "Carousel Jagged",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "subtitle": "Workshops",
+          "title": "Nurture your love for plants through our hands-on workshops",
+          "title_dom_type": "h3",
+          "title_size": "h3",
+          "btn_label": "View Workshops",
+          "btn_url": "#",
+          "product_highlighted": "",
+          "top_padding_m": "large",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "large",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "large",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "split_image_header_pQPFrf": {
+        "type": "split-image-header",
+        "blocks": {
+          "range_z4k8Gt": {
+            "type": "range",
+            "settings": {
+              "big_image": "shopify:\/\/shop_images\/Frame_3.png",
+              "small_image": "shopify:\/\/shop_images\/Frame_4.png",
+              "title": "Desk Companions",
+              "url": "shopify:\/\/collections\/new-desk-companions",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "range_xDXYT4": {
+            "type": "range",
+            "settings": {
+              "big_image": "shopify:\/\/shop_images\/Frame_2.png",
+              "small_image": "shopify:\/\/shop_images\/16d8e08b286ad711ed491a1df3f1692ba3bdbdf0.png",
+              "title": "One of a Kind",
+              "url": "shopify:\/\/collections\/new-one-of-a-kind",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "range_qDa8dt": {
+            "type": "range",
+            "settings": {
+              "big_image": "shopify:\/\/shop_images\/Frame_3.png",
+              "small_image": "shopify:\/\/shop_images\/Frame_4.png",
+              "title": "Pet-Friendly",
+              "url": "shopify:\/\/collections\/new-pet-friendly",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "range_L98F3g": {
+            "type": "range",
+            "settings": {
+              "big_image": "shopify:\/\/shop_images\/Frame_2.png",
+              "small_image": "shopify:\/\/shop_images\/16d8e08b286ad711ed491a1df3f1692ba3bdbdf0.png",
+              "title": "For First Timers",
+              "url": "shopify:\/\/collections\/new-beginner-friendly",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "range_9xBqVP": {
+            "type": "range",
+            "settings": {
+              "big_image": "shopify:\/\/shop_images\/Frame_3.png",
+              "small_image": "shopify:\/\/shop_images\/Frame_4.png",
+              "title": "Easy-Care",
+              "url": "shopify:\/\/collections\/new-easy-care",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "range_rGEE9x": {
+            "type": "range",
+            "disabled": true,
+            "settings": {
+              "big_image": "shopify:\/\/shop_images\/Frame_2.png",
+              "small_image": "shopify:\/\/shop_images\/16d8e08b286ad711ed491a1df3f1692ba3bdbdf0.png",
+              "title": "Low Light",
+              "url": "#",
+              "image_label_1": "Block 6 Caption 1",
+              "image_label_2": "Block 6 Caption 1"
+            }
+          }
+        },
+        "block_order": [
+          "range_z4k8Gt",
+          "range_xDXYT4",
+          "range_qDa8dt",
+          "range_L98F3g",
+          "range_9xBqVP",
+          "range_rGEE9x"
+        ],
+        "name": "Split Image Header",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "subtitle": "Explore",
+          "top_padding_m": "large",
+          "bottom_padding_m": "medium",
+          "top_padding_t": "large",
+          "bottom_padding_t": "medium",
+          "top_padding": "large",
+          "bottom_padding": "medium",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "medium",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "medium"
+        }
+      },
+      "homepage_banner_J8WwR8": {
+        "type": "homepage-banner",
+        "blocks": {
+          "entry_y8e6a3": {
+            "type": "entry",
+            "settings": {
+              "overlay": true,
+              "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 10%, rgba(0, 0, 0, 0) 100%)",
+              "banner_url": "",
+              "text_color": "white",
+              "text_align": "jc-center tc text-center",
+              "text_align_d": "d-jc-center d-tc d-text-center",
+              "title_v_align": "jc-end relative",
+              "title_v_align_d": "d-jc-end d-relative",
+              "title": "",
+              "title_dom_type": "h1",
+              "title_size": "h1",
+              "text": "",
+              "text_max_width_mobile": 450,
+              "text_max_width_tablet": 450,
+              "text_max_width_desktop": 450,
+              "text_max_width_hd": 450,
+              "text_max_width_fullhd": 450,
+              "button_label_1": "",
+              "button_url_1": "",
+              "button_label_2": "",
+              "button_url_2": "",
+              "link_label": "",
+              "link_url": "",
+              "desktop_image": "shopify:\/\/shop_images\/banner1.png",
+              "mobile_image": "shopify:\/\/shop_images\/slideshow-m_9fd66678-a6ee-4dba-89df-fa14243c2673.png",
+              "autoplay": false,
+              "youtube_embed_code": ""
+            }
+          },
+          "entry_WFEkYp": {
+            "type": "entry",
+            "settings": {
+              "overlay": true,
+              "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.4) 10%, rgba(0, 0, 0, 0) 100%)",
+              "banner_url": "",
+              "text_color": "white",
+              "text_align": "jc-center tc text-center",
+              "text_align_d": "d-jc-center d-tc d-text-center",
+              "title_v_align": "jc-end relative",
+              "title_v_align_d": "d-jc-end d-relative",
+              "title": "",
+              "title_dom_type": "h1",
+              "title_size": "h1",
+              "text": "",
+              "text_max_width_mobile": 450,
+              "text_max_width_tablet": 450,
+              "text_max_width_desktop": 450,
+              "text_max_width_hd": 450,
+              "text_max_width_fullhd": 450,
+              "button_label_1": "",
+              "button_url_1": "",
+              "button_label_2": "",
+              "button_url_2": "",
+              "link_label": "",
+              "link_url": "",
+              "desktop_image": "shopify:\/\/shop_images\/banner2.png",
+              "mobile_image": "shopify:\/\/shop_images\/Frame_2.png",
+              "autoplay": false,
+              "youtube_embed_code": ""
+            }
+          }
+        },
+        "block_order": [
+          "entry_y8e6a3",
+          "entry_WFEkYp"
+        ],
+        "settings": {
+          "section_id": "",
+          "bg_color": "#fff9f2",
+          "disable_lazyload": true,
+          "text_over_image": false,
+          "enable_parallax": false,
+          "enable_sticky": false,
+          "section_width": "container",
+          "section_width_percentage": 0,
+          "section_width_percentage_d": 0,
+          "screen_image_height_m": "image",
+          "height_custom_m": 0,
+          "hbl_title": "",
+          "hbl_label": "",
+          "hbl_url": "",
+          "screen_image_height_t": "image",
+          "height_custom_t": 0,
+          "screen_image_height_d": "image",
+          "height_custom_d": 0,
+          "pt_custom_d": 24,
+          "top_padding_m": 0,
+          "bottom_padding_m": 0,
+          "top_padding_t": 0,
+          "bottom_padding_t": 0,
+          "top_padding": 0,
+          "bottom_padding": 0,
+          "top_padding_hd": "",
+          "bottom_padding_hd": "",
+          "top_padding_hhd": "",
+          "bottom_padding_hhd": ""
+        }
+      },
+      "about_us_ip8wQW": {
+        "type": "about-us",
+        "blocks": {
+          "entry_K7W6EV": {
+            "type": "entry",
+            "settings": {
+              "contact_label": "Contact Us",
+              "contact_url": "#"
+            }
+          },
+          "entry_7q73jG": {
+            "type": "entry",
+            "settings": {
+              "contact_label": "Instagram",
+              "contact_url": "#"
+            }
+          }
+        },
+        "block_order": [
+          "entry_K7W6EV",
+          "entry_7q73jG"
+        ],
+        "name": "About Us",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "subtitle": "About Us",
+          "title": "Soilboy is a contemporary plant and design studio based in Singapore, built around a love for thoughtful design, craftsmanship, and plants. Through carefully curated plants and handmade ceramics, we hope to inspire a greener way of living.",
+          "title_dom_type": "h2",
+          "title_size": "h2",
+          "btn_label": "Learn More",
+          "btn_url": "shopify:\/\/pages\/about-us",
+          "address": "<p>Soilboy Experience Store<br\/>46 Kim Yam Road, #02-07\/08<br\/>Singapore 239351<\/p>",
+          "details": "<p>Opening Hours:<br\/>Daily: 10am - 7pm<\/p>",
+          "contact_image": "shopify:\/\/shop_images\/Image_6.png",
+          "top_padding_m": "small",
+          "bottom_padding_m": "extrasmall",
+          "top_padding_t": "small",
+          "bottom_padding_t": "extrasmall",
+          "top_padding": "small",
+          "bottom_padding": "extrasmall",
+          "top_padding_hd": "small",
+          "bottom_padding_hd": "extrasmall",
+          "top_padding_hhd": "small",
+          "bottom_padding_hhd": "extrasmall"
+        }
+      },
+      "split_hero_accordion_GnHr9Q": {
+        "type": "split-hero-accordion",
+        "blocks": {
+          "entry_k6Yh6Y": {
+            "type": "entry",
+            "settings": {
+              "image_desktop": "shopify:\/\/shop_images\/Image_10.png",
+              "image_mobile": "shopify:\/\/shop_images\/Image_11.png",
+              "title": "Planter Box",
+              "text": "Custom-built planter boxes designed to integrate greenery seamlessly into your space. Each piece balances clean design, functionality, and plant health — creating structured green moments that feel natural and enduring.",
+              "link_label": "Shop Planter Box",
+              "link_url": "#"
+            }
+          },
+          "entry_hfQ4Eb": {
+            "type": "entry",
+            "settings": {
+              "image_desktop": "shopify:\/\/shop_images\/Image_10.png",
+              "image_mobile": "shopify:\/\/shop_images\/Image_11.png",
+              "title": "Landscape",
+              "text": "Custom-built planter boxes designed to integrate greenery seamlessly into your space. Each piece balances clean design, functionality, and plant health — creating structured green moments that feel natural and enduring.",
+              "link_label": "Shop Planter Box",
+              "link_url": "#"
+            }
+          },
+          "entry_bGmWzz": {
+            "type": "entry",
+            "settings": {
+              "image_desktop": "shopify:\/\/shop_images\/Image_10.png",
+              "image_mobile": "shopify:\/\/shop_images\/Image_11.png",
+              "title": "Plant Installation",
+              "text": "Custom-built planter boxes designed to integrate greenery seamlessly into your space. Each piece balances clean design, functionality, and plant health — creating structured green moments that feel natural and enduring.",
+              "link_label": "Shop Planter Box",
+              "link_url": "#"
+            }
+          }
+        },
+        "block_order": [
+          "entry_k6Yh6Y",
+          "entry_hfQ4Eb",
+          "entry_bGmWzz"
+        ],
+        "name": "Split Hero Accordion",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "image_desktop": "shopify:\/\/shop_images\/Image_8.png",
+          "image_mobile": "shopify:\/\/shop_images\/Image_9.png",
+          "image_title": "Senna Meridionalis",
+          "image_label": "SP 04.",
+          "title": "Installations",
+          "text": "Every project begins with thoughtful design. Our in-house team provides tailored design, fabrication, and installation solutions, bringing nature closer to residential and commercial spaces.",
+          "link_label": "Get Started",
+          "link_url": "#",
+          "top_padding_m": "large",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "large",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "large",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "text_and_links_FGmWkj": {
+        "type": "text-and-links",
+        "blocks": {
+          "entry_bgeBiF": {
+            "type": "entry",
+            "settings": {
+              "label": "Instagram",
+              "url": "#"
+            }
+          },
+          "entry_TjMcqV": {
+            "type": "entry",
+            "settings": {
+              "label": "Tiktok",
+              "url": "#"
+            }
+          },
+          "entry_rPpmPc": {
+            "type": "entry",
+            "settings": {
+              "label": "Facebook",
+              "url": "#"
+            }
+          }
+        },
+        "block_order": [
+          "entry_bgeBiF",
+          "entry_TjMcqV",
+          "entry_rPpmPc"
+        ],
+        "name": "Text and Links",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "title": "Socials"
+        }
+      },
+      "split_hero_list_PLdwhj": {
+        "type": "split-hero-list",
+        "blocks": {
+          "entry_wR7HGa": {
+            "type": "entry",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/mini.png",
+              "mobile_image": "shopify:\/\/shop_images\/Image_7.png",
+              "col_label": "Mini",
+              "col_url": "shopify:\/\/collections\/plants-mini",
+              "image_label_1": "SP 03.",
+              "image_label_2": "Everfresh Tree"
+            }
+          },
+          "entry_3W7hig": {
+            "type": "entry",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/mini.png",
+              "mobile_image": "shopify:\/\/shop_images\/Image_7.png",
+              "col_label": "Extra Small",
+              "col_url": "shopify:\/\/collections\/plants-extra-small",
+              "image_label_1": "SP 03.",
+              "image_label_2": "Everfresh Tree"
+            }
+          },
+          "entry_wWBpzA": {
+            "type": "entry",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/small.png",
+              "mobile_image": "shopify:\/\/shop_images\/small_edb39cd1-fed6-43d3-9018-bbf9ccec053b.png",
+              "col_label": "Small",
+              "col_url": "shopify:\/\/collections\/plants-small",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "entry_F9MBTB": {
+            "type": "entry",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/large.png",
+              "mobile_image": "shopify:\/\/shop_images\/med.png",
+              "col_label": "Medium",
+              "col_url": "shopify:\/\/collections\/plants-medium",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "entry_hEXzdA": {
+            "type": "entry",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/large.png",
+              "mobile_image": "shopify:\/\/shop_images\/med.png",
+              "col_label": "Large",
+              "col_url": "shopify:\/\/collections\/plants-large",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          },
+          "entry_RRkgDX": {
+            "type": "entry",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/large.png",
+              "mobile_image": "shopify:\/\/shop_images\/med.png",
+              "col_label": "Extra Large",
+              "col_url": "shopify:\/\/collections\/plants-extra-large",
+              "image_label_1": "",
+              "image_label_2": ""
+            }
+          }
+        },
+        "block_order": [
+          "entry_wR7HGa",
+          "entry_3W7hig",
+          "entry_wWBpzA",
+          "entry_F9MBTB",
+          "entry_hEXzdA",
+          "entry_RRkgDX"
+        ],
+        "name": "Split Hero List",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "subtitle": "Shop by Size",
+          "title": "Plants for Every Space",
+          "title_dom_type": "h2",
+          "title_size": "h2",
+          "btn_label": "Shop All Potted Plants",
+          "btn_url": "shopify:\/\/collections\/potted-plants",
+          "top_padding_m": "large",
+          "bottom_padding_m": "extrasmall",
+          "top_padding_t": "large",
+          "bottom_padding_t": "extrasmall",
+          "top_padding": "large",
+          "bottom_padding": "extrasmall",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "extrasmall",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "extrasmall"
+        }
+      },
+      "carousel_jagged_bU347M": {
+        "type": "carousel-jagged",
+        "blocks": {
+          "range_XGAtnr": {
+            "type": "range",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/Frame_5.png",
+              "mobile_image": "shopify:\/\/shop_images\/Frame_5.png",
+              "subcaption": "Plant Care",
+              "caption": "The Houseplant Care Routine",
+              "url": "#",
+              "clicon": false
+            }
+          },
+          "range_FdjT8Y": {
+            "type": "range",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/Frame_6.png",
+              "mobile_image": "shopify:\/\/shop_images\/Frame_6.png",
+              "subcaption": "Guide",
+              "caption": "How to Propagate Plants",
+              "url": "#",
+              "clicon": false
+            }
+          },
+          "range_96nMAj": {
+            "type": "range",
+            "settings": {
+              "desktop_image": "shopify:\/\/shop_images\/Frame_5.png",
+              "mobile_image": "shopify:\/\/shop_images\/Frame_5.png",
+              "subcaption": "Styling",
+              "caption": "Tips for Decorating Your Space with Houseplants",
+              "url": "#",
+              "clicon": false
+            }
+          }
+        },
+        "block_order": [
+          "range_XGAtnr",
+          "range_FdjT8Y",
+          "range_96nMAj"
+        ],
+        "name": "Carousel Jagged",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "subtitle": "Plant Care",
+          "title": "Learn. Grow. Thrive.",
+          "title_dom_type": "h3",
+          "title_size": "h3",
+          "btn_label": "Visit Blog",
+          "btn_url": "#",
+          "product_highlighted": "",
+          "top_padding_m": "large",
+          "bottom_padding_m": "large",
+          "top_padding_t": "large",
+          "bottom_padding_t": "large",
+          "top_padding": "large",
+          "bottom_padding": "large",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "large",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "large"
+        }
+      },
+      "border_JRVY8B": {
+        "type": "border",
+        "name": "Border",
+        "settings": {
+          "bg_color": "",
+          "b_color": "#304835",
+          "hascon": true
+        }
+      },
+      "border_XYhAqm": {
+        "type": "border",
+        "name": "Border",
+        "settings": {
+          "bg_color": "",
+          "b_color": "#304835",
+          "hascon": true
+        }
+      },
+      "account-menu": {
+        "type": "account-menu",
+        "settings": {}
+      },
+      "account-orders": {
+        "type": "account-orders",
+        "settings": {}
+      },
+      "custom_liquid_kqVRQe": {
+        "type": "custom-liquid",
+        "disabled": true,
+        "name": "Custom Liquid",
+        "settings": {
+          "bg_color": "",
+          "custom_liquid": "",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "nopadding",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "marquee-text": {
+        "type": "marquee-text",
+        "name": "Marquee Text",
+        "settings": {
+          "bg_color": "#fff9f2",
+          "text": "To inspire a sense of curiosity for the greener things in life.",
+          "duration": 20,
+          "text_size": "h1",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "nopadding",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "split-showcase": {
+        "type": "split-showcase",
+        "settings": {
+          "bg_color": "",
+          "big_image_desktop": "shopify:\/\/shop_images\/Image_2.png",
+          "big_image_mobile": "shopify:\/\/shop_images\/Image_2.png",
+          "big_image_title": "About Us",
+          "big_image_url": "shopify:\/\/pages\/contact",
+          "small_image_desktop": "shopify:\/\/shop_images\/Frame_1_9446463c-8931-48d7-aed5-78fa2e32dbb5.png",
+          "small_image_mobile": "shopify:\/\/shop_images\/Image_3_0a2d8154-5f4d-443d-8e10-466f141b3fb4.png",
+          "small_image_title": "Installations",
+          "small_image_url": "\/",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "medium",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "medium",
+          "top_padding": "nopadding",
+          "bottom_padding": "medium",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "medium",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "medium"
+        }
+      },
+      "installation-hero": {
+        "type": "installation-hero",
+        "settings": {
+          "back_link_label": "Back to Installations",
+          "back_link_url": "",
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "nopadding",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "installation-intro": {
+        "type": "installation-intro",
+        "settings": {
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "nopadding",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "nopadding",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "nopadding",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "installation-body": {
+        "type": "installation-body",
+        "settings": {
+          "top_padding_m": "medium",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "medium",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "medium",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "medium",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "medium",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "installation-testimonial": {
+        "type": "installation-testimonial",
+        "settings": {
+          "top_padding_m": "nopadding",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "nopadding",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "large",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "large",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "large",
+          "bottom_padding_hhd": "nopadding"
+        }
+      },
+      "work-with-us-form": {
+        "type": "work-with-us-form",
+        "settings": {
+          "bg_color": "",
+          "anchor_id": "",
+          "title_1": "Work With",
+          "title_2": "Us",
+          "title_dom_type": "h4",
+          "title_size": "h1",
+          "text": "Tell us about your gifting needs, and our team will be in touch with a tailored proposal.",
+          "image": "shopify:\/\/shop_images\/Image_16.png",
+          "caption_label": "SP 01.",
+          "caption_text": "Everfresh Tree",
+          "name_placeholder": "Name*",
+          "email_placeholder": "Email Address*",
+          "default_country_code": "+65",
+          "phone_placeholder": "Phone Number*",
+          "timeline_placeholder": "Preferred Timeline*",
+          "topic_placeholder": "Select your enquiry*",
+          "topic": "",
+          "message_placeholder": "Write your message here*",
+          "form_info": "<p>Email us at <a href=\"mailto:hello@soilboy.sg\" title=\"mailto:hello@soilboy.sg\">hello@soilboy.sg<\/a> or fill out the form. Our lean & green team, will respond between 1-3 business days.<br\/><br\/>Looking for corporate gifts, workshops or installations? Email us at <a href=\"mailto:business@soilboy.sg\" title=\"mailto:business@soilboy.sg\">business@soilboy.sg<\/a> or indicate your project details in the form.<\/p>",
+          "button_label": "Submit",
+          "success_message": "",
+          "top_padding_m": "medium",
+          "bottom_padding_m": "medium",
+          "top_padding_t": "medium",
+          "bottom_padding_t": "medium",
+          "top_padding": "medium",
+          "bottom_padding": "small",
+          "top_padding_hd": "medium",
+          "bottom_padding_hd": "small",
+          "top_padding_hhd": "small",
+          "bottom_padding_hhd": "medium"
+        }
+      },
+      "pdp-faq": {
+        "type": "pdp-faq",
+        "settings": {
+          "bg_color": "",
+          "title": "",
+          "text": "",
+          "link_label": "",
+          "link_url": "",
+          "show_product_faq": true,
+          "product_faq_position": "after",
+          "top_padding_m": "medium",
+          "bottom_padding_m": "medium",
+          "top_padding_t": "medium",
+          "bottom_padding_t": "medium",
+          "top_padding": "medium",
+          "bottom_padding": "medium",
+          "top_padding_hd": "medium",
+          "bottom_padding_hd": "medium",
+          "top_padding_hhd": "medium",
+          "bottom_padding_hhd": "medium"
+        }
+      },
+      "installation-next": {
+        "type": "installation-next",
+        "settings": {
+          "metaobject_type": "installation",
+          "top_padding_m": "medium",
+          "bottom_padding_m": "nopadding",
+          "top_padding_t": "medium",
+          "bottom_padding_t": "nopadding",
+          "top_padding": "medium",
+          "bottom_padding": "nopadding",
+          "top_padding_hd": "medium",
+          "bottom_padding_hd": "nopadding",
+          "top_padding_hhd": "medium",
+          "bottom_padding_hhd": "nopadding"
+        }
       }
-    }
+    },
+    "content_for_index": [
+      "homepage_banner_kkqUmi",
+      "product_carousel_WxKmh6",
+      "split_image_header_pQPFrf",
+      "split_hero_sticky_dH7fFn",
+      "split_hero_list_PLdwhj",
+      "split_collection_sticky_ehjVP8",
+      "carousel_jagged_mVYtYJ",
+      "split_hero_accordion_GnHr9Q",
+      "carousel_jagged_bU347M",
+      "border_JRVY8B",
+      "about_us_ip8wQW",
+      "homepage_banner_J8WwR8",
+      "text_and_links_FGmWkj",
+      "border_XYhAqm",
+      "custom_liquid_kqVRQe"
+    ]
   }
 }

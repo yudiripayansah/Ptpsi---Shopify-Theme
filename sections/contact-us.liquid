@@ -1,0 +1,581 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'contact-us-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+<style>
+  #{{el_id}} {
+    {% if ss.bg_color != blank %}
+      background-color: {{ss.bg_color}};
+    {% endif %}
+  }
+  #{{el_id}} .global-input::placeholder {
+    color: var(--grey);
+    opacity: 1;
+  }
+  #{{el_id}} .global-input:focus::placeholder {
+    opacity: 0;
+  }
+  #{{el_id}} .global-select-div .icons .icon {
+    padding: 9px 6px;
+    width: unset;
+    height: unset;
+  }
+  #{{el_id}} .global-select-div .icons .icon svg {
+    width: 12px;
+    height: 12px;
+  }
+  #{{el_id}} .global-select-div .options li {
+    padding: 6px 20px;
+  }
+  #{{el_id}} .global-select-div .options li:first-child {
+    padding-top: 15px;
+  }
+  #{{el_id}} .global-select-div .options li:last-child {
+    padding-bottom: 15px;
+  }
+  #{{el_id}} .global-select-div .options li:after{
+    content: '';
+    display: none;
+    width: 5px;
+    height: 5px;
+    margin-left: 8px;
+    transform: translateY(-25%);
+    background-color: #B35E34;
+    border-radius: 100px;
+  }
+  #{{el_id}} .global-select-div .options li.active,
+  #{{el_id}} .global-select-div .options li:hover {
+    color: var(--green);
+  }
+  #{{el_id}} .global-select-div .options li:hover:after{
+    display: inline-block;
+  }
+  #{{el_id}} .global-select-div .options li.active:after{
+    display: inline-block;
+  }
+  @media(min-width: 1024px) {
+    
+  }
+</style>
+{% if request.visual_preview_mode %}
+  <img src="{{ 'contact-us.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{el_id}}" class="contact-us">
+    <div class="container">
+      <div class="contact-us-banner">
+        {%- assign image_id = 'contact-banner-' | append: el_id -%}
+        {%- assign preload = '' -%}
+        {%- if section.index == 1 -%}
+          {%- assign preload = true -%}
+        {%- endif -%}
+        {%- render 'global-image-wrapper-responsive',
+          image_id: image_id,
+          desktop_image: ss.desktop_image,
+          mobile_image: ss.mobile_image,
+          additional_class: 'no-bg',
+          preload: preload
+        %}
+      </div>
+      <div class="contact-us-heading d-pt-24 pt-16 flex flex-column d-flex-row jc-between ai-start colgap-24 rowgap-24">
+        <div class="contact-us-heading-text w-full">
+          <{{ ss.title_dom_type }} class="{{ ss.title_size }} c-green d-colgap-80 flex jc-between d-jc-start">{{ ss.title }}</{{ ss.title_dom_type }}>
+          <div class="p1 c-green d-mt-32 mt-16 d-max-560">{{ss.text |  newline_to_br}}</div>
+        </div>
+        <div class="contact-us-heading-product w-full d-max-210 flex jc-end">
+          <a href="{{ss.product.url}}" class="flex flex-column hcep-product w-full d-max-210 max-165" data-index="{{forloop.index}}">
+            {%- render 'global-image-wrapper',
+              image: ss.product.featured_image,
+              additional_class: 'no-bg',
+              image_id: 'product-image-contact'
+            %}
+            <div class="flex ai-start jc-between w-full mt-8">
+              <span class="p4 c-label dont-break">
+                {% if ss.product_label %}
+                  {{ss.product_label}}
+                {% else %}
+                  {{ss.product.metafields.custom.image_code}}
+                {% endif %}
+              </span>
+              <span class="p4 c-label tr">
+                {{ss.product.title}}
+              </span>
+            </div>
+          </a>
+        </div>
+      </div>
+      <div class="contact-us-form flex d-flex-row rowgap-24 d-pt-60 pt-40 column-reverse">
+        <div class="contact-us-form-box w-full d-max-680 col-d-6 d-pl-0 d-pr-0">
+          {%- form 'contact', id: 'contact_form', class: 'flex flex-column rowgap-16' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="p1 c-green pb-24">
+                Your message has been sent.
+              </p>
+            {%- else -%}
+              {%- if form.errors -%}
+                {%- for error in form.errors -%}
+                  <p class="p1 tc pb-24 c-grey">
+                    {% if error == 'form' %}
+                      {{ form.errors.messages[error] }}
+                    {% else %}
+                      {{ form.errors.translated_fields[error] }} - {{ form.errors.messages[error] }}
+                    {% endif %}
+                  </p>
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endif -%}
+            <div class="form-each w-full relative">
+              <div class="relative overflow pb-1">
+                <input
+                  v-model="contactForm.name"
+                  type="text"
+                  name="contact[name]"
+                  placeholder="Name*"
+                  class="p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                >
+              </div>
+              <div v-if="contactForm.name_error" class="p3 mt-4 c-red">
+                Please enter your name.
+              </div>
+            </div>
+            {% comment %} <div class="form-each w-full relative">
+              <div class="relative overflow pb-1">
+                <input
+                  v-model="contactForm.last_name"
+                  type="text"
+                  name="contact[last_name]"
+                  placeholder="{{ 'contact.form.last_name' | t }}"
+                  class="p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                >
+              </div>
+              <div v-if="contactForm.last_name_error" class="p3 mt-4 c-red">
+                {{ 'customer.contact.error_last_name' | t }}
+              </div>
+            </div> {% endcomment %}
+            <div class="form-each w-full relative">
+              <div class="">
+                <div class="relative overflow pb-1">
+                  <input
+                    v-model="contactForm.email"
+                    @change="validateEmail"
+                    type="email"
+                    name="contact[email]"
+                    placeholder="Email Address*"
+                    class="p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                  >
+                </div>
+                <!-- Show when email is empty -->
+                <div v-if="contactForm.email_error" class="p3 mt-4 c-red">
+                  {{ 'customer.login.error_email' | t }}
+                </div>
+                <!-- Show when email format is invalid -->
+                <div v-if="contactForm.email_invalid" class="p3 mt-4 c-red">
+                  {{ 'customer.register.error_valid_email' | t }}
+                </div>
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <div class="relative pb-1 flex d-colgap-24 colgap-16">
+                <div class="pt-8 w-full max-110">
+                  {%- assign select_id = 'contact-country-code-' | append: section.id -%}
+                  {% assign values = "+1,+7,+20,+27,+30,+31,+32,+33,+34,+36,+39,+40,+41,+43,+44,+45,+46,+47,+48,+49,+51,+52,+53,+54,+55,+56,+57,+58,+60,+61,+62,+63,+64,+65,+66,+81,+82,+84,+86,+90,+91,+92,+93,+94,+95,+98,+211,+212,+213,+216,+218,+220,+221,+222,+223,+224,+225,+226,+227,+228,+229,+230,+231,+232,+233,+234,+235,+236,+237,+238,+239,+240,+241,+242,+243,+244,+245,+246,+248,+249,+250,+251,+252,+253,+254,+255,+256,+257,+258,+260,+261,+262,+263,+264,+265,+266,+267,+268,+269,+290,+291,+297,+298,+299,+350,+351,+352,+353,+354,+355,+356,+357,+358,+359,+370,+371,+372,+373,+374,+375,+376,+377,+378,+380,+381,+382,+383,+385,+386,+387,+389,+420,+421,+423,+500,+501,+502,+503,+504,+505,+506,+507,+508,+509,+590,+591,+592,+593,+594,+595,+596,+597,+598,+599,+670,+672,+673,+674,+675,+676,+677,+678,+679,+680,+681,+682,+683,+685,+686,+687,+688,+689,+690,+691,+692,+850,+852,+853,+855,+856,+870,+880,+886,+960,+961,+962,+963,+964,+965,+966,+967,+968,+970,+971,+972,+973,+974,+975,+976,+977,+992,+993,+994,+995,+996,+998" %}
+                  {% assign values = values | split: ',' %}
+                  {% assign default_text = '+65' %}
+                  {%- render 'global-select',
+                    default_value: '+65',
+                    default_text: default_text,
+                    values: values,
+                    option_values: values,
+                    id: select_id,
+                    selected_text_class: 'p2 c-green',
+                    global_select_class: 'global-input bb-1 b-main pt-8 pb-8 pr-0',
+                    field_name: '',
+                    vue_v_model: 'v-model="contactForm.country_code"',
+                    label_class: 'p2 c-green'
+                  -%}
+                </div>
+                <input
+                  v-model="contactForm.phone"
+                  type="number"
+                  name=""
+                  placeholder="Phone Number*"
+                  class="p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                >
+                <input type="hidden" name="contact[phone]" :value="contactForm.country_code+contactForm.phone">
+              </div>
+              <div v-if="contactForm.phone_error" class="p3 mt-4 c-red">
+                {{ 'customer.contact.error_phone' | t }}
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <div class="pt-8">
+                {%- assign select_id = 'contact-topic-' | append: section.id -%}
+                {% assign values = ss.topic %}
+                {% assign values = values | split: ',' %}
+                {% assign default_text = 'Select your enquiry*' %}
+                {%- render 'global-select',
+                  default_value: '',
+                  default_text: default_text,
+                  values: values,
+                  option_values: values,
+                  id: select_id,
+                  selected_text_class: 'p2 c-green',
+                  global_select_class: 'global-input bb-1 b-main pt-8 pb-8 pr-0',
+                  field_name: 'contact[reason]',
+                  vue_v_model: 'v-model="contactForm.topic"',
+                  label_class: 'p2 c-green'
+                -%}
+                <div v-if="contactForm.topic_error" class="p3 mt-4 c-red">
+                  {{ 'customer.contact.error_reason' | t }}
+                </div>
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <div class="relative overflow pb-1">
+                <textarea
+                  v-model="contactForm.message"
+                  name="contact[message]"
+                  placeholder="Write your message here*"
+                  class="p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                  rows="6"
+                ></textarea>
+              </div>
+              <div v-if="contactForm.message_error" class="p3 mt-4 c-red">
+                {{ 'customer.contact.error_message' | t }}
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <button class="p2 c-white bg-green pt-12 pb-12 pl-24 pr-24 submit" type="submit">{{ ss.button_label }}</button>
+            </div>
+          {%- endform -%}
+        </div>
+        <div class="contact-us-form-text col-d-4 push-d-2 d-pl-0 d-pr-0">
+          <div class="p2 c-green rte w-full d-max-330">
+            {{ss.form_info}}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const contactusVue = Vue.createApp({
+      delimiters: ['${', '}'],
+      data() {
+        return {
+          contactForm: {
+            country_code: '+65',
+            phone: null,
+            name: null,
+            email: null,
+            topic: null,
+            message: null,
+            has_error: false,
+            phone_error: false,
+            name_error: false,
+            email_error: false, // True if empty
+            email_invalid: false, // True if format is wrong
+            topic_error: false,
+            message_error: false,
+          },
+        };
+      },
+      watch: {
+        'contactForm.phone'(value) {
+          this.contactForm.phone_error = !value;
+        },
+        'contactForm.name'(value) {
+          this.contactForm.name_error = !value;
+        },
+        'contactForm.topic'(value) {
+          this.contactForm.topic_error = !value;
+        },
+        'contactForm.message'(value) {
+          this.contactForm.message_error = !value;
+        },
+      },
+      methods: {
+        validateEmail() {
+          const email = this.contactForm.email;
+          if (!email) {
+            this.contactForm.email_error = true;
+            this.contactForm.email_invalid = false; // Clear format error if empty
+          } else if (!this.isValidEmail(email)) {
+            this.contactForm.email_error = false; // Email is not empty
+            this.contactForm.email_invalid = true; // But format is wrong
+          } else {
+            this.contactForm.email_error = false;
+            this.contactForm.email_invalid = false;
+          }
+        },
+        isValidEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+        },
+        validateFormOnSubmit() {
+          this.contactForm.phone_error = !this.contactForm.phone;
+          this.contactForm.name_error = !this.contactForm.name;
+          this.contactForm.topic_error = !this.contactForm.topic;
+          this.contactForm.message_error = !this.contactForm.message;
+          this.validateEmail(); // Ensure email is validated on submit
+
+          this.contactForm.has_error =
+            this.contactForm.phone_error ||
+            this.contactForm.name_error ||
+            this.contactForm.email_error ||
+            this.contactForm.email_invalid ||
+            this.contactForm.topic_error ||
+            this.contactForm.message_error;
+
+          return !this.contactForm.has_error;
+        },
+      },
+      mounted() {
+        const thisObj = this;
+        document.getElementById('contact_form').addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          if (!thisObj.validateFormOnSubmit()) {
+            e.stopImmediatePropagation();
+          } else {
+            this.submit();
+          }
+        });
+      },
+    }).mount('#{{el_id}} .contact-us-form-box');
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Contact us",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Desktop Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Mobile Image"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "p1", "label": "P1" },
+        { "value": "p2", "label": "P2" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "product",
+      "id": "product",
+      "label": "Featured Product"
+    },
+    {
+      "type": "text",
+      "id": "product_label",
+      "label": "Product Image Label"
+    },
+    {
+      "type": "textarea",
+      "id": "topic",
+      "label": "Topic",
+      "info": "Input separated by comma. e.g. topic 1,topic 2,topic 3"
+    },
+    {
+      "type": "richtext",
+      "id": "form_info",
+      "label": "Form Info"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Submit button label"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success message"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Contact us"
+    }
+  ]
+}
+{% endschema %}

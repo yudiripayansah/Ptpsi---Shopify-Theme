@@ -1,0 +1,92 @@
+{% comment %}
+  Love&Co Theme
+  Description:
+  Snippet for displaying free shipping information
+
+  Variables:
+  wrapper_class: String, class for the wrapper
+  text_class: String, class for the text
+  junio - done
+{% endcomment %}
+
+<style>
+  .free-shipping-info .cart-prompt:first-child {
+    margin-top: 0;
+  }
+  .free-shipping-info .cart-indicator-bar {
+    position: relative;
+    height: 3px;
+    background: var(--placeholder);
+  }
+  .free-shipping-info .cart-indicator-inner {
+    position: absolute;
+    left: 0;
+    height: 3px;
+  }
+</style>
+{%- comment -%}
+  cart.requires_shipping is false only when nothing in the cart ships - a
+  workshop-only cart, for instance. Talking about a free shipping threshold
+  there is meaningless, so the whole bar stays out. Add a plant alongside the
+  workshop and it requires shipping again, so the bar comes back.
+{%- endcomment -%}
+{%- if settings.cart_fs_free != blank and cart.requires_shipping -%}
+  {%- if localization.country.iso_code == 'MY' -%}
+    <div data-market="{{ localization.country.iso_code }}" class="free-shipping-info {{ wrapper_class }}">
+      {%- assign convert_pro = all_products['for-internal-use-converter'] -%}
+      {%- assign converted_price = settings.cart_fs_free | times: convert_pro.price -%}
+      {%- assign free_shipping = converted_price | divided_by: 100 -%}
+      {% assign diff = free_shipping | minus: cart.original_total_price %}
+      {% assign percentage = diff | times: 100 | divided_by: free_shipping %}
+
+      {% if cart.total_price < free_shipping %}
+        {% assign difference = free_shipping | minus: cart.total_price %}
+        {% assign difference = difference | money %}
+        {% assign difference = difference | prepend: 'S' %}
+        {% assign spend = settings.spend_title | replace: '[amount]', difference %}
+        <div class="cart-indicator-bar overflow">
+          <div style="width:{{ 100 | minus: percentage }}%" class="cart-indicator-inner bg-green"></div>
+        </div>
+        <div class="cart-prompt cart-prompt-style mt-8 p3 c-green">
+          {{ spend }}
+        </div>
+      {% else %}
+        <div class="cart-indicator-bar overflow">
+          <div style="width:{{ 100 | minus: percentage }}%" class="cart-indicator-inner bg-green"></div>
+        </div>
+        <div class="cart-prompt cart-prompt-style mt-8 p3 c-green">
+          {{ settings.success_spend_title }}
+        </div>
+      {% endif %}
+    </div>
+  {% else %}
+    <div data-market="{{ localization.country.iso_code }}" class="free-shipping-info {{ wrapper_class }}">
+      {%- assign convert_pro = all_products['for-internal-use-converter'] -%}
+      {%- assign converted_price = settings.cart_fs_free_international | times: convert_pro.price -%}
+      {%- assign free_shipping = converted_price | divided_by: 100 -%}
+      {% assign diff = free_shipping | minus: cart.original_total_price %}
+      {% assign percentage = diff | times: 100 | divided_by: free_shipping %}
+      {% if cart.total_price < free_shipping %}
+        {% assign difference = free_shipping | minus: cart.total_price %}
+        {% assign difference = difference | money %}
+        {% assign difference = difference | prepend: 'S' %}
+        {% assign spend = settings.spend_title_international | replace: '[amount]', difference %}
+        <div class="cart-indicator-bar overflow">
+          <div style="width:{{ 100 | minus: percentage }}%" class="cart-indicator-inner bg-green"></div>
+        </div>
+        <div class="cart-prompt cart-prompt-style mt-8 p3 c-green">
+          {{ spend }}
+        </div>
+
+      {% else %}
+        <div class="cart-indicator-bar overflow">
+          <div style="width:{{ 100 | minus: percentage }}%" class="cart-indicator-inner bg-green"></div>
+        </div>
+        <div class="cart-prompt cart-prompt-style mt-8 p3 c-green">
+          {{ settings.success_spend_title_international }}
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
+{%- endif -%}
+<!-- end free shipping info -->

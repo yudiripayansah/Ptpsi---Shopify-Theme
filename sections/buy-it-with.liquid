@@ -1,0 +1,268 @@
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'buy-it-with-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+    #{{ el_id }} {
+        background-color: {{ section.settings.bg_color }};
+    }
+    @media screen and (min-width: 1024px){
+        #{{ el_id }} .top-title {
+            display: none;
+        }
+    }
+</style>
+
+{% if request.visual_preview_mode %}
+    <img src="{{ 'buy-it-with-figma.png' | asset_url }}" width="100%" height="100%" />
+{% elsif product.metafields.custom.buy_it_with != blank or product.metafields.custom.buy_it_with_collection != blank %}
+    <div id="{{ el_id }}">
+        <div class="container">
+            <div class="flex jc-between mb-32 top-title">
+                <div class="h1">{{ section.settings.left_title }}</div>
+                <div class="h1">{{ section.settings.right_title }}</div>
+            </div>
+            <div class="row">
+                <div class="col-d-3 hide-m show-d">
+                    <div class="h1">{{ section.settings.left_title }}</div>
+                </div>
+                {% if product.metafields.custom.buy_it_with != blank %}
+                    {% for pro in product.metafields.custom.buy_it_with.value limit: 2 %}
+                        <div class="col-6 col-d-3 js-buy-with-item">
+                            {% render 'product-each', product: pro %}
+                        </div>
+                    {% endfor %}
+                {% endif %}
+                {% if product.metafields.custom.buy_it_with.value.size < 2 or product.metafields.custom.buy_it_with == blank %}
+                    {% if product.metafields.custom.buy_it_with.value.size == 1 %}
+                    <div class="col-6 col-d-3">
+                    {% elsif product.metafields.custom.buy_it_with == blank %}
+                    <div class="col-12 col-d-6">
+                    {% endif %}
+                        <div class="row js-buy-with">
+                            {% assign buy_with_collection = product.metafields.custom.buy_it_with_collection.value %}
+                            {% for pro in buy_with_collection.products %}
+                                {% if pro.id != product.id and pro.available %}
+                                    {% if product.metafields.custom.buy_it_with.value.size == 1 %}
+                                        <div class="col-12 js-buy-with-item-collection">
+                                    {% elsif product.metafields.custom.buy_it_with == blank %}
+                                        <div class="col-6 js-buy-with-item-collection">
+                                    {% endif %}
+                                        {% render 'product-each', product: pro %}
+                                    {% if product.metafields.custom.buy_it_with.value.size == 1 %}
+                                        </div>
+                                    {% elsif product.metafields.custom.buy_it_with == blank %}
+                                        </div>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                        </div>
+                    {% if product.metafields.custom.buy_it_with.value.size == 1 %}
+                    </div>
+                    {% elsif product.metafields.custom.buy_it_with == blank %}
+                    </div>
+                    {% endif %}
+                {% endif %}
+                <div class="col-d-3 hide-m show-d tr">
+                    <div class="h1">{{ section.settings.right_title }}</div>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        const buyWithProducts = document.querySelectorAll('.js-buy-with-item');
+        if (buyWithProducts.length >= 2) return;
+
+        const container = document.querySelector('.js-buy-with');
+        if (!container) return;
+
+        const items = Array.from(container.querySelectorAll('.js-buy-with-item-collection'));
+        if (items.length === 0) return;
+
+        // Shuffle
+        for (let i = items.length - 1; i > 0; i--) {
+            const j = Math.floor(Math.random() * (i + 1));
+            [items[i], items[j]] = [items[j], items[i]];
+        }
+
+        const keep = buyWithProducts.length === 1 ? 1 : 2;
+
+        items.slice(0, keep).forEach(item => container.appendChild(item));
+        items.slice(keep).forEach(item => item.remove());
+    });
+
+</script>
+
+{% schema %}
+{
+    "name": "Buy It With",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "text",
+            "id": "left_title",
+            "label": "Left Title"
+        },
+        {
+            "type": "text",
+            "id": "right_title",
+            "label": "Right Title"
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Buy It With",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

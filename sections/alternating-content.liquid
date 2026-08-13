@@ -1,0 +1,383 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+    assign el_id = 'alternating-content-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+    #{{ el_id }} {
+        background-color: {{ ss.bg_color }};
+    }
+    #{{ el_id }} .ac-row {
+        display: flex;
+        flex-direction: column;
+    }
+    #{{ el_id }} .ac-row::before,
+    #{{ el_id }} .ac-row::after {
+        display: none;
+    }
+    #{{ el_id }} .ac-row > div {
+        float: none;
+    }
+    #{{ el_id }} .ac-row + .ac-row {
+        margin-top: 48px;
+    }
+    #{{ el_id }} .ac-label {
+        margin-bottom: 16px;
+    }
+    #{{ el_id }} .ac-title {
+        margin-bottom: 16px;
+    }
+    #{{ el_id }} .ac-media-col {
+        margin-top: 32px;
+    }
+    #{{ el_id }} .ac-caption {
+        margin-top: 8px;
+        column-gap: 16px;
+    }
+    #{{ el_id }} .ac-caption-label {
+        flex: 0 0 50px;
+    }
+    @media screen and (min-width: 1024px) {
+        #{{ el_id }} .ac-row {
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+        #{{ el_id }} .ac-row + .ac-row {
+            margin-top: 80px;
+        }
+        /* Mobile always stacks text above image, so the text column is first in
+           the DOM. On desktop the order setting decides which side it sits on. */
+        #{{ el_id }} .ac-row.ac-image-first .ac-media-col {
+            order: 1;
+        }
+        #{{ el_id }} .ac-row.ac-image-first .ac-text {
+            order: 2;
+        }
+        #{{ el_id }} .ac-row.ac-text-first .ac-text {
+            order: 1;
+        }
+        #{{ el_id }} .ac-row.ac-text-first .ac-media-col {
+            order: 2;
+        }
+        #{{ el_id }} .ac-text {
+            padding-top: 40px;
+        }
+        #{{ el_id }} .ac-media-col {
+            margin-top: 0;
+            padding-top: 24px;
+        }
+        #{{ el_id }} .ac-title {
+            margin-bottom: 40px;
+        }
+        #{{ el_id }} .ac-caption {
+            column-gap: 24px;
+        }
+        #{{ el_id }} .ac-caption-label {
+            flex: 0 0 94px;
+        }
+    }
+</style>
+
+{% if request.visual_preview_mode %}
+    <img src="{{ 'alternating-content-figma.PNG' | asset_url }}" width="100%" height="100%" />
+{% else %}
+    <div id="{{ el_id }}">
+        <div class="container">
+            {% for block in sb %}
+                {% assign bs = block.settings %}
+                <div
+                    class="row ac-row {% if bs.image_position == 'image_first' %}ac-image-first{% else %}ac-text-first{% endif %}"
+                    {{ block.shopify_attributes }}
+                >
+                    <div class="col-12 col-d-4 ac-text">
+                        {% if bs.label != blank %}
+                            <p class="p3 c-label ac-label">{{ bs.label }}</p>
+                        {% endif %}
+                        {% if bs.title != blank %}
+                            <{{ bs.title_dom_type }} class="{{ bs.title_size }} c-green ac-title">
+                                {{- bs.title -}}
+                            </{{ bs.title_dom_type }}>
+                        {% endif %}
+                        {% if bs.body != blank %}
+                            <div class="rte p2 c-green ac-body">
+                                {{ bs.body }}
+                            </div>
+                        {% endif %}
+                    </div>
+                    <div class="col-12 col-d-5 ac-media-col">
+                        {% assign image_id = 'ac-image-' | append: section.id | append: '-' | append: block.id %}
+                        {% if bs.desktop_image != blank and bs.mobile_image != blank %}
+                            {%- render 'global-image-wrapper-responsive',
+                                image_id: image_id,
+                                desktop_image: bs.desktop_image,
+                                mobile_image: bs.mobile_image,
+                                additional_class: 'no-bg'
+                            -%}
+                        {% elsif bs.desktop_image != blank %}
+                            {%- render 'global-image-wrapper',
+                                image: bs.desktop_image,
+                                additional_class: 'no-bg'
+                            -%}
+                        {% elsif bs.mobile_image != blank %}
+                            {%- render 'global-image-wrapper',
+                                image: bs.mobile_image,
+                                additional_class: 'no-bg'
+                            -%}
+                        {% endif %}
+                        {% if bs.caption_label != blank or bs.caption_text != blank %}
+                            <div class="flex ac-caption p4 c-label">
+                                <div class="ac-caption-label">{{ bs.caption_label }}</div>
+                                <div class="ac-caption-text">{{ bs.caption_text }}</div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Alternating Content",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "large"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "row",
+            "name": "Row",
+            "settings": [
+                {
+                    "type": "select",
+                    "id": "image_position",
+                    "label": "Image Position (Desktop)",
+                    "info": "On mobile the text always sits above the image.",
+                    "options": [
+                        { "value": "image_first", "label": "Image first (left)" },
+                        { "value": "text_first", "label": "Text first (left)" }
+                    ],
+                    "default": "image_first"
+                },
+                {
+                    "type": "text",
+                    "id": "label",
+                    "label": "Label"
+                },
+                {
+                    "type": "textarea",
+                    "id": "title",
+                    "label": "Title"
+                },
+                {
+                    "type": "select",
+                    "id": "title_dom_type",
+                    "label": "Title DOM Type",
+                    "options": [
+                        { "value": "h1", "label": "H1" },
+                        { "value": "h2", "label": "H2" },
+                        { "value": "h3", "label": "H3" },
+                        { "value": "h4", "label": "H4" },
+                        { "value": "h5", "label": "H5" }
+                    ],
+                    "default": "h2"
+                },
+                {
+                    "type": "select",
+                    "id": "title_size",
+                    "label": "Title Size",
+                    "options": [
+                        { "value": "h1", "label": "H1" },
+                        { "value": "h2", "label": "H2" },
+                        { "value": "h3", "label": "H3" },
+                        { "value": "h4", "label": "H4" }
+                    ],
+                    "default": "h2"
+                },
+                {
+                    "type": "richtext",
+                    "id": "body",
+                    "label": "Body"
+                },
+                {
+                    "type": "image_picker",
+                    "id": "desktop_image",
+                    "label": "Image (Desktop)",
+                    "info": "Portrait crop. The Figma uses a 566 x 787 ratio."
+                },
+                {
+                    "type": "image_picker",
+                    "id": "mobile_image",
+                    "label": "Image (Mobile)",
+                    "info": "Landscape crop. The Figma uses a 3:2 ratio."
+                },
+                {
+                    "type": "text",
+                    "id": "caption_label",
+                    "label": "Caption Label"
+                },
+                {
+                    "type": "text",
+                    "id": "caption_text",
+                    "label": "Caption Text"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Alternating Content",
+            "blocks": [
+                { "type": "row", "settings": { "image_position": "image_first" } },
+                { "type": "row", "settings": { "image_position": "text_first" } }
+            ]
+        }
+    ]
+}
+{% endschema %}

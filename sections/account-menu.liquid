@@ -1,0 +1,180 @@
+<style>
+  .account-menu ul {
+    column-gap: 24px;
+  }
+  .account-menu .account-menu-name-mw {
+    max-width: 250px;
+  }
+  .account .account-menu-left {
+    position: sticky;
+    top: 0;
+  }
+  .account .shopify-section {
+    height: 100%;
+  }
+  .account-menu .account-side-link svg {
+    width: 6px;
+    height: 6px;
+    margin-left: 8px;
+    display: none;
+  }
+  .account-menu .account-side-link.active svg {
+    display: block;
+  }
+  .account-menu .account-side-link-selected-wrapper svg {
+    width: 24px;
+    height: 24px;
+  }
+  .account-menu .account-side-link-selected-wrapper.active svg {
+    transform: rotate(180deg);
+  }
+  .account-menu .account-side-link-list {
+    transition: height 0.3s ease-in-out;
+    overflow: hidden;
+    height: 0;
+  }
+  .account-menu .account-side-link-list.active {
+    max-height: 100vh;
+  }
+  @media screen and (min-width: 600px) {
+    .account-menu .account-menu-name-mw {
+      max-width: 300px;
+    }
+  }
+  @media only screen and (max-width: 1023px) {
+    .account-sticky-mobile {
+      position: sticky;
+      z-index: 100;
+      top: 0;
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    .account-menu ul {
+      column-gap: 0;
+    }
+    .account-menu .link4.hide-d {
+      display: none;
+    }
+    .account-sticky-mobile {
+      width: 212px;
+      padding: 0;
+    }
+  }
+</style>
+<div class="account-menu account-menu-left pt-0 d-pt-85 d-pb-80">
+  <div class="show-d-flex ai-center jc-between d-jc-start hide-m">
+    <h4 class="h4 account-menu-name-mw">Hi, {{ customer.first_name }}</h4>
+  </div>
+  <div class="hide-d pt-16 bb-1 b-background pb-16">
+    <div class="account-side-link-selected-wrapper flex ai-center jc-between">
+      <p class="account-side-link-selected p1 flex ai-center">
+        {% if request.path == routes.account_url or request.path contains 'orders' %}
+          <span class="p4 c-label mr-8">01</span>
+          {{- 'customer.menu.order_history' | t -}}
+        {% elsif request.path == routes.account_addresses_url %}
+          <span class="p4 c-label mr-8">02</span>
+          {{- 'customer.menu.address_book' | t -}}
+        {% endif %}
+      </p>
+      <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+        <path d="M6 9L12.001 15L18 9" stroke="#19341E"/>
+      </svg>
+    </div>
+    <ul class="account-side-link-list flex flex-column">
+      {% unless request.path == routes.account_url or request.path contains 'orders' %}
+        <li class="pt-10">
+          <a href="{{ routes.account_url }}" class="p1 flex ai-center account-side-link-mobile {% if request.path == routes.account_url or request.path contains 'orders' %}active{% endif %}">
+            <span class="p4 c-label mr-8">01</span>{{- 'customer.menu.order_history' | t -}}
+          </a>
+        </li>
+      {% endunless %}
+      {% unless request.path == routes.account_addresses_url %}
+        <li class="pt-10">
+          <a
+            href="{{ routes.account_addresses_url }}"
+            class="p1 flex ai-center account-side-link-mobile {% if request.path == routes.account_addresses_url %}active{% endif %}"
+          >
+            <span class="p4 c-label mr-8">02</span>{{- 'customer.menu.address_book' | t -}}
+          </a>
+        </li>
+      {% endunless %}
+      <li class="pt-10">
+        <a href="{{ routes.account_logout_url }}" class="p1 flex ai-center account-side-link-mobile {% if request.path == routes.account_logout_url %}active{% endif %}">
+          <span class="p4 c-label mr-8">03</span>{{- 'customer.menu.logout' | t -}}
+        </a>
+      </li>
+    </ul>
+  </div>
+  <ul class="hide-m show-d-flex d-flex-column mt-20 d-mt-40">
+    <li class="d-pb-12">
+      <a href="{{ routes.account_url }}" class="p1 flex ai-center account-side-link {% if request.path == routes.account_url or request.path contains 'orders' %}active{% endif %}">
+        <span class="p4 c-label mr-8">01</span>{{- 'customer.menu.order_history' | t -}}
+        <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+          <circle cx="3" cy="3" r="3" fill="#B35E34"/>
+        </svg>
+      </a>
+    </li>
+    <li class="d-pt-12 d-pb-12 bt-1 b-background">
+      <a
+        href="{{ routes.account_addresses_url }}"
+        class="p1 flex ai-center account-side-link {% if request.path == routes.account_addresses_url %}active{% endif %}"
+      >
+        <span class="p4 c-label mr-8">02</span>{{- 'customer.menu.address_book' | t -}}
+        <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+          <circle cx="3" cy="3" r="3" fill="#B35E34"/>
+        </svg>
+      </a>
+    </li>
+    <li class="d-pt-12 bt-1 b-background">
+      <a href="{{ routes.account_logout_url }}" class="p1 flex ai-center account-side-link {% if request.path == routes.account_logout_url %}active{% endif %}">
+        <span class="p4 c-label mr-8">03</span>{{- 'customer.menu.logout' | t -}}
+          <svg xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+            <circle cx="3" cy="3" r="3" fill="#B35E34"/>
+          </svg>
+      </a>
+    </li>
+  </ul>
+</div>
+
+<script>
+  function setTopNavAccount(direction){
+    if (window.innerWidth >= 1024) return;
+
+    let header = document.querySelector(".header-con-outer");
+    let fn = document.querySelector(".account-sticky-mobile");
+    if (!header || !fn) return;
+    let hh = header.offsetHeight
+    if(direction == 'up') {
+      fn.style.top = hh +'px';
+    } else {
+      fn.style.top = 0;
+    }
+  }
+  document.addEventListener("DOMContentLoaded", () => {
+    setTopNavAccount()
+    document.querySelector('.account-side-link-selected-wrapper').addEventListener('click', () => {
+      document.querySelector('.account-side-link-selected-wrapper').classList.toggle('active');
+      if (document.querySelector('.account-side-link-selected-wrapper').classList.contains('active')) {
+        document.querySelector('.account-side-link-list').style.height = document.querySelector('.account-side-link-list').scrollHeight + 'px';
+      } else {
+        document.querySelector('.account-side-link-list').style.height = 0;
+      }
+    });
+  });
+  window.addEventListener("resize", () => {
+    setTopNavAccount()
+  });
+  let lastScrollTop = 0;
+  window.addEventListener("scroll", () => {
+    let st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
+    if (st > lastScrollTop) {
+      setTopNavAccount('down')
+    } else if (st < lastScrollTop) {
+      setTopNavAccount('up')
+    }
+    lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
+  });
+  document.addEventListener('shopify:section:load', () => {
+    setTopNavAccount()
+  });
+</script>

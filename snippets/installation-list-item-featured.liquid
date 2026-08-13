@@ -1,0 +1,67 @@
+{%- comment -%}
+Soilboy
+
+Full-width featured installation banner. Rendered once, grid view only, for
+the first installation entry with Featured checked.
+
+Title and image link to the entry's own metaobject page (entry.system.url),
+falling back to a non-link wrapper (matching installation-list-item.liquid)
+if that's blank — e.g. because Online Store capability isn't enabled on the
+metaobject definition yet. cta_url is only used for the "View Project"
+button, the one deliberate place on this card where the two can differ.
+
+An unset `url`-type metaobject field resolves to the shop's root domain
+rather than truly blank, so cta_url is checked against `shop.url` too —
+otherwise every entry without a CTA URL set would show a "View Project"
+button that links to the homepage.
+
+Variables:
+- entry: installation metaobject entry (title, category, banner_image or
+  hero_image, cta_label, cta_url)
+{%- endcomment -%}
+{%- liquid
+  assign category = entry.category.value
+  assign category_name = category.name.value
+  assign category_handle = category.system.handle
+  assign banner_image = entry.banner_image.value | default: entry.hero_image.value
+  assign cta_label = entry.cta_label.value | default: 'View Project'
+  assign url = entry.system.url
+  assign link_tag = 'div'
+  if url != blank
+    assign link_tag = 'a'
+  endif
+  assign cta_url = entry.cta_url.value
+  if cta_url == shop.url
+    assign cta_url = blank
+  endif
+-%}
+<div class="ill-featured flex" data-ill-item data-category="{{ category_handle }}">
+  <div class="ill-featured-text flex flex-column">
+    <{{ link_tag }} {% if url != blank %}href="{{ url }}"{% endif %} class="ill-featured-link">
+      {% if category_name != blank %}
+        <p class="ill-featured-eyebrow p3 c-label">{{ category_name }}</p>
+      {% endif %}
+      <p class="ill-featured-title h3 c-green">{{ entry.title.value }}</p>
+    </{{ link_tag }}>
+    {% if cta_url != blank %}
+      <a href="{{ cta_url }}" class="ill-featured-btn p2 c-green flex ai-center jc-between">
+        {{ cta_label }}
+        <span class="icon flex ai-center jc-center">{{ settings.icon_arrow_up_right }}</span>
+      </a>
+    {% endif %}
+  </div>
+  {% if banner_image != blank %}
+    <{{ link_tag }} {% if url != blank %}href="{{ url }}"{% endif %} class="ill-featured-media">
+      {{
+        banner_image
+        | image_url: width: 1600
+        | image_tag:
+          loading: 'lazy',
+          widths: '600, 900, 1200, 1600',
+          sizes: '(min-width: 1024px) 56vw, 100vw',
+          class: 'ill-featured-img',
+          alt: entry.title.value
+      }}
+    </{{ link_tag }}>
+  {% endif %}
+</div>

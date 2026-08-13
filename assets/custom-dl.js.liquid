@@ -1,0 +1,77 @@
+/*
+window.dataLayer = window.dataLayer || [];
+window.addEventListener("DOMContentLoaded", (event) => {
+  document.addEventListener('RemovedItemInCartShopify', function (event) {
+    //console.log('item remove!', event.detail);
+    window.dataLayer.push({
+           'event': 'remove_from_cart',
+           'item': event.detail.items
+         });
+  });
+  const wishlist_selector = '.wishlist-handler-p-each, .wishlist-handler';
+   waitForElmFpd(wishlist_selector).then((e) => {
+     const dd = document.querySelectorAll(wishlist_selector);
+     dd.forEach((ws) => {
+       ws.addEventListener('click', function(event) {
+         var pt, url;
+         if (ws.classList.contains('wishlist-handler-p-each')) {
+           const pd = ws.closest('.product-each');
+           //console.log(pd, 'pd');
+           if (pd.querySelector('.details-con a')) {
+              pt = pd.querySelector('.details-con a').textContent;
+              url =  'https://love-and-co.com' + pd.querySelector('a').getAttribute('href');
+           }
+         }
+         if (ws.classList.contains('wishlist-handler')) {
+           const pdsingle = ws.closest('.product-info');
+             //console.log(pdsingle, 'pdsingle');
+           if (pdsingle.querySelector('h1')) {
+             pt = fpdtrimSpaceLeftRight(pdsingle.querySelector('h1').textContent);
+             url = 'https://love-and-co.com/' + ws.getAttribute('data-product-url');
+           }
+         }
+         window.dataLayer.push({
+           'event': 'add_to_wishlist',
+           'items': {
+             product_name: pt,
+             product_url: url
+           }
+         });
+
+         /*
+         console.log({
+           'event': 'add_to_wishlist',
+           'items': {
+             product_name: pt,
+             product_url: url
+           }
+         });
+         
+
+       });
+     });
+   });
+});
+function waitForElmFpd(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+}
+
+
+function fpdtrimSpaceLeftRight(text) {
+  text = text.replace(/^\s+|\s+$/g, '');
+  return text; 
+}*/

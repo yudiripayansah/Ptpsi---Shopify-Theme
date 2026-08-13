@@ -1,0 +1,368 @@
+{% comment %} Soilboy {% endcomment %}
+{% assign el_id = 'shopify-section-' | append: section.id %}
+{% assign ss = section.settings %}
+{% assign sb = section.blocks %}
+{% render 'section-padding', section: section, el_id: el_id %}
+
+<style>
+  #box-{{el_id}} .container-border {
+    height: 0;
+  }
+  #{{el_id}} {
+    {% if section.settings.bg_color %}
+      background-color: {{ section.settings.bg_color }};
+    {% endif %}
+  }
+  #{{el_id}} .swiper-button-disabled {
+    opacity: 0.5;
+  }
+  #{{el_id}} .pdpr-swiper {
+    overflow: visible;
+  }
+  #{{el_id}} .pdpr-slide-arrow svg {
+    width: 10.5px;
+    height: 10.5px;
+  }
+  #{{el_id}} .pdpr-slide-arrow svg * {
+    stroke: var(--green);
+  }
+  #box-{{el_id}} .container:after,
+  #box-{{el_id}} .container:before {
+    display: none;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{el_id}} .pdpr-swiper {
+      overflow: hidden;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'pdp-recommendation-figma.PNG' | asset_url }}" width="100%" height="100%">
+{% else %}
+<div id="box-{{el_id}}" class="hide-m">
+  {% if ss.border_top %}
+    <div class="container container-border">
+      <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
+    </div>
+  {% endif %}
+  <div class="product-recommendation-wrapper overflow">
+    <div class="" id="product-recommendation">
+      <div class="container">
+        <div class="pdpr-heading flex ai-center jc-between">
+          <{{ ss.title_dom_type }} class="{{ ss.title_size }}">
+            {{ ss.title }}
+          </{{ ss.title_dom_type }}>
+          <div class="d-flex hide-m ai-center jc-center colgap-8">
+            <div class="pdpr-slide-arrow cursor flex ai-center jc-center p-5 left">
+              {{ settings.icon_slide_left }}
+            </div>
+            <div class="pdpr-slide-arrow cursor flex ai-center jc-center p-5 right">
+              {{ settings.icon_slide_right }}
+            </div>
+          </div>
+        </div>
+        <div class="swiper pdpr-swiper d-mt-40 mt-32">
+          <div class="product-wrapper swiper-wrapper">
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% if ss.border_bottom %}
+    <div class="container container-border">
+      <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
+    </div>
+  {% endif %}
+</div>
+{% endif %}
+
+<script>
+  let swiperAnimSetup{{section.id | replace: '-', ''}} = false;
+
+  function initSwiper(){
+    const main_elem = document.querySelector('#box-{{el_id}}');
+    const swiperEl = document.querySelector('#{{el_id}} .pdpr-swiper');
+    new Swiper(`#{{el_id}} .pdpr-swiper`, {
+      slidesPerView: 1.3,
+      spaceBetween: 16,
+      loop: false,
+      breakpoints: {
+        1024: {
+          slidesPerView: 4,
+          spaceBetween: 24,
+        },
+      },
+      navigation: {
+        nextEl: `#{{el_id}} .pdpr-slide-arrow.right`,
+        prevEl: `#{{el_id}} .pdpr-slide-arrow.left`,
+      },
+    });
+    main_elem.classList.remove('hide-m');
+
+    if (!swiperAnimSetup{{section.id | replace: '-', ''}} && typeof gsap !== 'undefined') {
+      swiperAnimSetup{{section.id | replace: '-', ''}} = true;
+      swiperEl._gsapInit = true;
+      requestAnimationFrame(function () {
+        ScrollTrigger.refresh();
+        ScrollTrigger.create({
+          trigger: swiperEl,
+          start: 'top 85%',
+          once: true,
+          onEnter: function () {
+            const slides = swiperEl.querySelectorAll('.swiper-slide');
+            gsap.to(slides, {
+              y: 0,
+              opacity: 1,
+              duration: 1.0,
+              ease: 'power3.out',
+              stagger: 0.15
+            });
+          }
+        });
+      });
+    }
+  }
+
+  function initPdpRecommendation(){
+    fetch(window.Shopify.routes.root + "recommendations/products.json?product_id={{ product.id }}&limit=10&intent=related")
+        .then(response => response.json())
+        .then(({ products }) => {
+            if(products.length > 0) {
+                const main_elem = document.querySelector('#shopify-section-{{ section.id }} .product-recommendation-wrapper');
+                const elem_wrapper = document.querySelector('#shopify-section-{{ section.id }} .product-wrapper');
+                if(main_elem != null) {
+                    const limit = 6;
+                    for(let i=0; i<products.length; i++) {
+                        if(i<6) {
+                          if(!products[i].tags.includes("hidden")) {
+                            axios.get(`${window.Shopify.routes.root}products/${products[i].handle}?view=grid`)
+                            .then(function(response) {
+                                const html = document.createRange().createContextualFragment(response.data);
+                                const slide = html.querySelector('.swiper-slide');
+                                if (slide && typeof gsap !== 'undefined') {
+                                  gsap.set(slide, { y: 60, opacity: 0, force3D: true });
+                                }
+                                elem_wrapper.append(html);
+                                $360.lazyLoadInstance.update();
+                                initSwiper();
+                            })
+                            .catch(function(error) {
+                                console.log(error);
+                            });
+                          }
+                        }
+                    }
+                }
+            } else {
+              const this_section = document.querySelector('#shopify-section-{{ section.id }}');
+              if(this_section != null) {
+                this_section.remove();
+              }
+            }
+        }
+    );
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    initPdpRecommendation()
+  });
+  
+  document.addEventListener('shopify:section:load', () => { 
+    initPdpRecommendation()
+  })
+</script>
+
+{% schema %}
+{
+  "name": "PDP - Recommendation",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Padding Settings"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_top",
+      "label": "Enable Border Top"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_bottom",
+      "label": "Enable Border Bottom"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+		{
+			"type": "select",
+			"id": "top_padding_m",
+			"label": "Top padding (Mobile)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "bottom_padding_m",
+			"label": "Bottom padding (Mobile)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "top_padding_t",
+			"label": "Top padding (Tablet)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "bottom_padding_t",
+			"label": "Bottom padding (Tablet)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "top_padding",
+			"label": "Top padding (Desktop)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "bottom_padding",
+			"label": "Bottom padding (Desktop)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "top_padding_hd",
+			"label": "Top padding (HD)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "bottom_padding_hd",
+			"label": "Bottom padding (HD)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "top_padding_hhd",
+			"label": "Top padding (HHD)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+		{
+			"type": "select",
+			"id": "bottom_padding_hhd",
+			"label": "Bottom padding (HHD)",
+			"options": [
+			  { "value": "nopadding", "label": "No padding" },
+			  { "value": "small", "label": "Small" },
+			  { "value": "medium", "label": "Medium" },
+			  { "value": "large", "label": "Large" }
+			],
+			"default": "medium"
+		},
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" },
+        { "value": "h6", "label": "H6" },
+        { "value": "h7", "label": "H7" },
+        { "value": "h8", "label": "H8" },
+        { "value": "h9", "label": "H9" },
+        { "value": "p1", "label": "p1" },
+        { "value": "p2", "label": "p2" },
+        { "value": "p3", "label": "p3" },
+        { "value": "p4", "label": "p4" }
+      ]
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ]
+    }
+  ],
+  "blocks": [
+  ],
+  "presets": [
+    {
+      "name": "PDP - Recommendation",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

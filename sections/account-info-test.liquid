@@ -1,0 +1,949 @@
+{% comment %} IGC - Yudi {% endcomment %}
+{%- assign el_id = 'change-password-' | append: section.id -%}
+{%- render 'section-padding', el_id: el_id, section: section -%}
+
+{% assign customer_id = 7411757973718 %}
+{% assign customer_email = "tham_brenda@yahoo.com.sg" %}
+
+  <style>
+    #{{el_id}} .account-menu {
+      flex-direction: row;
+    }
+    #{{el_id}} .b-transparent {
+      border-color: transparent;
+    }
+    #{{el_id}} .account-menu-mobile {
+      margin-left: -20px;
+      margin-right: -20px;
+    }
+    #{{el_id}} .poo-mobile > div div > div {
+      width: 30%;
+    }
+    #{{el_id}} .icon-back {
+      margin-top: -3px;
+    }
+    #{{el_id}} .icon-back,
+    #{{el_id}} .icon-back svg {
+      width: 10px;
+      height: 10px;
+    }
+    #{{el_id}} .ln-image {
+      width: 55px;
+    }
+    #{{el_id}} .table-online-order-details td {
+      vertical-align: top;
+    }
+    #{{el_id}} .aifs-bar-progress {
+      height: 2px;
+    }
+    #{{el_id}} .aicm-buttons {
+      flex-direction: column;
+    }
+    #{{el_id}} .av-mobile .row {
+      margin-left: 0;
+      margin-right: 0;
+    }
+    #{{el_id}} .av-mobile .row > div {
+      padding-left: 0;
+      padding-right: 0;
+    }
+    #{{el_id}} .c-pc {
+      width: 20%;
+    }
+    #{{el_id}} .c-d {
+      width: 23%;
+    }
+    #{{el_id}} .c-v {
+      width: 12%;
+    }
+    #{{el_id}} .c-e {
+      width: 15%;
+    }
+    #{{el_id}} .c-s {
+      width: 13%;
+    }
+    #{{el_id}} .c-rd {
+      width: 17%;
+    }
+    #{{el_id}} .account-menu-mobile .icon {
+      max-width: 8.31px;
+    }
+    #{{el_id}} .acm-cat {
+      max-height: 0px;
+      transition: all .3s ease;
+    }
+    #{{el_id}} .acm-cat.show {
+      max-height: 200px;
+    }
+    #{{el_id}} .loading-screen {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      background: #fff;
+      left: 0;
+      top: 0;
+      z-index: 2;
+    }
+    @media screen and (min-width: 1024px) {
+      #{{el_id}} .icon-back {
+        margin-top: -5px;
+      }
+      #{{el_id}} .account-menu-mobile {
+        margin-left: 0px;
+        margin-right: 0px;
+      }
+      #{{el_id}} .account-menu {
+        flex-direction: column;
+      }
+      #{{el_id}} .aicm-buttons {
+        flex-direction: row;
+      }
+      #{{el_id}} .ln-image {
+        width: 60px;
+      }
+    }
+  </style>
+  <div id="{{ el_id }}">
+    <div class="container">
+      <div class="row">
+        <div class="col-d-3 col-12">
+          {% render 'account-title' %}
+        </div>
+        {% render 'account-menu', active: 'account-info' %}
+        <div id="account-info" class="account-page col-d-5 col-12 mt-30 d-mt-0">
+          <div class="loading-screen p1">{{ 'customer.orders.loading' | t }}</div>
+
+          <div class="row"> 
+            <div class="ai-frequent-shopper col-12">
+              <div class="hide-m ai-center jc-between aifs-top-text">
+                <div class="p1 medium-500 aifs-remain-wrapper">
+                </div>
+                <div class="p1 medium-500">
+                  <span class="amount-spend"></span> / <span class="amount-needed"></span>
+                </div>
+              </div>
+              <div class="aifs-bar bg-border w-full mt-10 mb-10 hide-m">
+                <div class="aifs-bar-progress bg-black"></div>
+              </div>
+              <a href="#" rel="nofollow" class="c-grey p1 medium-500 hover-underline-grey hide-m"> 
+                {{- 'customer.account_info.progress_link_label' | t -}}
+              </a>
+
+              {%- if settings.ai_label_customer != blank -%}
+                <a href="{{ settings.ai_url_customer }}" class="c-grey p1 medium-500 hover-underline-grey find-out-customer mt-10 mb-20 hide-m">
+                  {{ settings.ai_label_customer }}
+                </a>
+              {%- endif -%}
+              {%- if settings.ai_label_fs != blank -%}
+                <a href="{{ settings.ai_url_fs }}" class="c-grey p1 medium-500 hover-underline-grey find-out-fs mt-10 mb-20 hide-m">
+                  {{ settings.ai_label_fs }}
+                </a>
+              {%- endif -%}
+
+              <div class="total-spending-wrapper">
+                <div class="accumulated-spend-wrapper">
+                  <span class="p1 c-grey medium-500 w-full max-120 show-m-inline-block">{{ 'customer.account_info.accumulated_spend' | t }}</span>
+                  <span class="p1 medium-500 ml-35 amount-accumulated-spend"></span>
+                </div>
+                <div> 
+                  <span class="p1 c-grey medium-500 w-full max-120 show-m-inline-block">{{ 'customer.account_info.progress_total_spending' | t }}</span>
+                  <span class="p1 medium-500 ml-35 amount-total-spend"></span>
+                </div>
+              </div>
+            </div>
+            <div class="ai-login-details col-12 d-mt-40 mt-25">
+              <div class="row">
+                <div class="col-12">
+                  <h6 class="h3 bold-600 pb-15 mb-18 bb-1 b-border">
+                    {{ 'customer.account_info.login_detail_title' | t }}
+                  </h6>
+                </div>
+                <div class="p1 c-grey medium-500 col-12">{{ 'customer.account_info.login_detail_email' | t }}</div>
+                <div class="col-12 col-d-5">
+                  <span class="p1 medium-500" id="customer-email">{{ customer.email }}</span>
+                </div>
+                <div class="col-12 col-d-7 mt-5 d-mt-0">
+                  <a href="#" rel="nofollow" class="link3" onclick="changePage('form-change-password',event)">
+                    {{- 'customer.account_info.login_detail_change_password' | t -}}
+                  </a>
+                </div>
+              </div>
+            </div>
+            <div class="ai-personal-details col-12 d-mt-50 mt-30">
+              <div class="row">
+                <div class="col-12">
+                  <h6 class="h3 bold-600 pb-20 mb-20 bb-1 b-border">{{ 'customer.account.personal_details' | t }}</h6>
+                </div>
+                <div class="col-12">
+                  <div class="p1 c-grey medium-500">{{ 'customer.register.salutation' | t }}</div>
+                  <div class="p1 medium-500 account-info-salutation">-</div>
+                </div>
+                <div class="col-6 col-d-5 mt-12">
+                  <div class="p1 c-grey medium-500">{{ 'customer.register.first_name' | t }}</div>
+                  <div class="p1 medium-500">{{ customer.first_name }}</div>
+                </div>
+                <div class="col-6 col-d-7 mt-12">
+                  <div class="p1 c-grey medium-500">{{ 'customer.register.last_name' | t }}</div>
+                  <div class="p1 medium-500">{% if customer.last_name != blank %}{{ customer.last_name }}{% else %}&nbsp;{% endif %}</div>
+                </div>
+                <div class="col-6 col-d-5 mt-12">
+                  <div class="p1 c-grey medium-500">{{ 'customer.register.dob' | t }}</div>
+                  <div class="p1 medium-500 account-info-birth">
+                    {% if customer.dob %}{{ customer.dob }}{% else %}-{% endif %}
+                  </div>
+                </div>
+                <div class="col-6 col-d-7 mt-12">
+                  <div class="p1 c-grey medium-500">{{ 'customer.register.gender' | t }}</div>
+                  <div class="p1 medium-500 account-info-gender">
+                    {% if customer.gender %}{{ customer.gender }}{% else %}-{% endif %}
+                  </div>
+                </div>
+                <div class="col-6 col-d-5 mt-12">
+                  <div class="p1 c-grey medium-500">{{ 'customer.register.contact' | t }}</div>
+                  <div class="p1 medium-500 phone-number">
+                    {% if customer.default_address.phone %}{{ customer.default_address.phone }}{% else %}-{% endif %}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="ai-contact-mode col-12 d-mt-50 mt-30 hide-m">
+              <div class="row">
+                <div class="col-12">
+                  <h6 class="h3 bold-600 pb-20 mb-20 bb-1 b-border">{{ 'customer.account.contact_mode' | t }}</h6>
+                </div>
+                <div class="col-12">
+                  <label class="global-radio flex ai-start">
+                    <input type="checkbox" name="customer['newsletter']" onchange="checkNewsLetter(event)">
+                    <div class="gr-mark mr-8 mt-3"></div>
+                    <div class="p1">{{ 'customer.register.newsletter' | t }}</div>
+                  </label>
+                </div>
+                <div class="col-12 acm-cat overflow">
+                  <div class="pl-20 pt-15">
+                    <div class="p1">{{ 'customer.register.interest' | t }}</div>
+                    <div class="flex ai-center mt-15">
+                      {% for tag in customer.tags %}
+                        {% assign tag = tag %}
+                      {% endfor %}
+                      <label class="global-radio flex ai-center">
+                        <input type="radio" name="customer['interest']" value="{{ 'customer.register.i_women' | t }}">
+
+                        <div class="gr-mark mr-8"></div>
+                        <div class="p1">{{ 'customer.register.i_women' | t }}</div>
+                      </label>
+                      <label class="global-radio flex ai-center ml-15">
+                        <input type="radio" name="customer['interest']" value="{{ 'customer.register.i_men' | t }}">
+
+                        <div class="gr-mark mr-8"></div>
+                        <div class="p1">{{ 'customer.register.i_men' | t }}</div>
+                      </label>
+                      <label class="global-radio flex ai-center ml-15">
+                        <input
+                          type="radio"
+                          name="customer['interest']"
+                          value="{{ 'customer.register.i_women_and_men' | t }}"
+                        >
+
+                        <div class="gr-mark mr-8"></div>
+                        <div class="p1">{{ 'customer.register.i_women_and_men' | t }}</div>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-12 flex ai-center d-mt-50 mt-25 aicm-buttons">
+                  <button type="button" class="btn1 w-full submit-btn d-max-290" onclick="contactmode(event,true)">
+                    {{ 'customer.account_info.save' | t }}
+                  </button>
+
+                  {% comment %}
+                    <a href="#" rel="nofollow" class="link3 d-ml-30 mt-10 d-mt-0">{{ 'customer.addresses.cancel' | t }}</a>
+                  {% endcomment %}
+                </div>
+
+                <div class="col-12 mt-10 p2 error-save-message c-red hide-m"></div>
+                <div class="col-12 mt-10 p2 success-save-message hide-m"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="account-voucher" class="account-page hide-m col-d-5 col-12 mt-30 d-mt-0">
+          <div>
+            <div class="p1 medium-500">
+              {{ 'customer.voucher.title' | t }}
+              <br>
+              <br>
+              {{ 'customer.voucher.text' | t }}
+            </div>
+            <div class="av-desktop d-mt-30  hide-m show-hd">
+              <table class="w-full" width="100%">
+                <thead>
+                  <tr class="">
+                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-pc">
+                      {{ 'customer.voucher.promotion_code' | t }}
+                    </th>
+                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-d">{{ 'customer.voucher.description' | t }}</th>
+                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-v">{{ 'customer.voucher.value' | t }}</th>
+                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-e">{{ 'customer.voucher.expiry' | t }}</th>
+                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-s">{{ 'customer.voucher.status' | t }}</th>
+                    <th class="tl p2 d-pb-15 bb-1 b-border c-rd">{{ 'customer.voucher.redemption_date' | t }}</th>
+                  </tr>
+                </thead>
+                <tbody id="voucher-container-d">
+                </tbody>
+              </table>
+            </div>
+            <div class="av-mobile mt-30 hide-hd bt-1 b-border">
+              <div id="voucher-container-m"></div>
+              <div class="tc mt-30 hide-d av-load-more">
+                <a href="#" rel="nofollow" class="link1">{{ 'customer.voucher.load_more' | t }}</a>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div id="form-change-password" class="account-page hide-m col-d-5 col-12 mt-30 d-mt-0">
+          <a href="#" rel="nofollow" onclick="changePage('account-info',event)" class="p2 flex ai-center">
+            <span class="icon-back mr-5">
+              {{ settings.icon_btn_left }}
+            </span>
+            {{ 'customer.account.back_to_info' | t }}
+          </a>
+          <div class="d-mt-25 mt-25">
+            {%- form 'reset_customer_password', id: 'reset-password-form' -%}
+              <div class="p1 medium-500">
+                {{ 'customer.change_password.title' | t }}
+              </div>
+              <div class="w-full mt-30">
+                <div class="relative overflow pb-1">
+                  <input
+                    type="password"
+                    name="customer[password_old]"
+                    id="password_old"
+                    class="global-input w-full bb-1 b-black p1 c-black pr-65"
+                    placeholder="{{ 'customer.change_password.old_password' | t }}"
+                  >
+                  <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                    {{ 'customer.change_password.old_password' | t }}
+                  </div>
+                </div>
+                <div class="p2 mt-5 c-red hide-m error error-password-old"></div>
+              </div>
+              <div class="w-full mt-20 mb-10">
+                <div class="relative overflow pb-1">
+                  <input
+                    type="password"
+                    name="customer[password]"
+                    id="password"
+                    class="global-input w-full bb-1 b-black p1 c-black pr-50"
+                    placeholder="{{ 'customer.change_password.password' | t }}"
+                  >
+                  <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                    {{ 'customer.change_password.password' | t }}
+                  </div>
+                </div>
+                <div class="p2 mt-5 c-red hide-m error error-password"></div>
+              </div>
+              <div class="w-full mt-20 mb-0">
+                <div class="relative overflow pb-1">
+                  <input
+                    type="password"
+                    name="customer[password_confirmation]"
+                    id="password_confirmation"
+                    class="global-input w-full bb-1 b-black p1 c-black pr-100"
+                    placeholder="{{ 'customer.change_password.repeat_password' | t }}"
+                  >
+                  <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                    {{ 'customer.change_password.repeat_password' | t }}
+                  </div>
+                </div>
+                <div class="p2 mt-5 c-red hide-m error error-password-confirmation"></div>
+              </div>
+              <button type="button" class="mt-25 d-mt-30 btn1 w-full submit-btn" onclick="validate(event,true)">
+                {{ 'customer.change_password.submit' | t }}
+              </button>
+              <p class="p2 error-message c-red mt-10 hide-m"></p>
+              <p class="p2 success-message mt-10 hide-m"></p>
+            {%- endform -%}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  {{ 'jquery-ajax-module.js' | asset_url | script_tag }}
+  <script>
+    window.ShopifyCurrency = {
+        money_format: "{{ shop.money_format | escape }}",
+        money_with_currency_format: "{{ shop.money_with_currency_format | escape }}"
+    };
+    function formatCurrency(amount, withCurrency = false) {
+      const moneyFormat = withCurrency ? window.ShopifyCurrency.money_with_currency_format : window.ShopifyCurrency.money_format;
+      const regex = /\{\{\s*(\w+)\s*\}\}/;
+
+      function format(template, amount) {
+          return template.replace(regex, (match, p1) => {
+              switch (p1) {
+                  case 'amount':
+                      return (amount / 100).toFixed(2);
+                  case 'amount_no_decimals':
+                      return (amount / 100).toFixed(0);
+                  case 'amount_with_comma_separator':
+                      return (amount / 100).toFixed(2).replace(/\./, ',');
+                  case 'amount_no_decimals_with_comma_separator':
+                      return (amount / 100).toFixed(0).replace(/\./, ',');
+                  default:
+                      return amount;
+              }
+          });
+      }
+
+      return format(moneyFormat, amount);
+    }
+    let acmCat = document.querySelector('.acm-cat')
+    function checkNewsLetter(e){
+      let target = e.target
+      if(target.checked){
+        acmCat.classList.add('show')
+      } else {
+        acmCat.classList.remove('show')
+      }
+    }
+    const customerSubscribed = {% if customer.accepts_marketing %} true {% else %} false {% endif %};
+    const newsletterCheckbox = document.querySelector('input[name="customer[\'newsletter\']"]');
+    if (customerSubscribed) {
+        newsletterCheckbox.checked = true;
+        acmCat.classList.add('show')
+    } else {
+        newsletterCheckbox.checked = false;
+        acmCat.classList.remove('show')
+    }
+    function contactmode(e, submit = false) {
+      e.preventDefault();
+      
+      {% assign hash = customer_id | append: customer_email | append: '4778e9165d835dcf04de708c98efbac1' | md5 %}
+      {% assign hash = hash | md5 %}
+      {% assign hash = hash | md5 %}
+
+      {% assign idencrypt = customer_id | base64_encode %}
+      {% assign emailencrypt = customer_email | base64_encode %}
+    
+      let container = e.target.closest('.ai-contact-mode');
+      let form = e.target.closest('form');
+      let newsletterElem = container.querySelector('input[name="customer[\'newsletter\']"]');
+      let interestElems = container.querySelectorAll('input[name="customer[\'interest\']"]');
+      let newsletter = newsletterElem.checked ? 'true' : 'false';
+      let interest = '';
+    
+      for (let i = 0; i < interestElems.length; i++) {
+        if (interestElems[i].checked) {
+          if (interest !== '') {
+            interest += ' & ';
+          }
+          interest += interestElems[i].value.trim().replace(/\s+/g, ' ');
+        }
+      }
+      if (submit) {          
+        let submitBtn = container.querySelector('.submit-btn');
+        let prevText = submitBtn.innerHTML;
+        const btnLoading = '<span class="btn-loading"></span>';
+        submitBtn.style.height = `${submitBtn.offsetHeight}px`;
+        submitBtn.style.width = `${submitBtn.offsetWidth}px`;
+        submitBtn.innerHTML = btnLoading;
+        submitBtn.setAttribute('disabled', true);
+        $.ajax({
+          type: "POST",
+          url: "/apps/integration",
+          data: `action=edit-customer&customer[hash]={{ hash }}&customer[newsletter]=${newsletter}&customer[interest]=${encodeURIComponent(interest)}`,
+          dataType: "json",
+          success: function(response) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.innerHTML = prevText;
+            const error_message_save_elem = document.querySelector('.error-save-message');
+            const success_message_save_elem = document.querySelector('.success-save-message');
+            if (error_message_save_elem != null) {
+              if (!response.api) {
+                error_message_save_elem.classList.remove('hide-m');
+                success_message_save_elem.classList.add('c-red');
+                success_message_save_elem.classList.remove('c-green');
+                error_message_save_elem.innerHTML = response.msg;
+              } else {
+                if (form) {
+                  form.reset();
+                }
+                success_message_save_elem.innerHTML = response.msg;
+                success_message_save_elem.classList.add('c-green');
+                success_message_save_elem.classList.remove('c-red');
+                success_message_save_elem.classList.remove('hide-m');
+                setTimeout(() => {
+                  success_message_save_elem.classList.add('hide-m');
+                }, 5000);
+              }
+            }
+          },
+          error: function(xhr, status, error) {
+            submitBtn.removeAttribute('disabled');
+            submitBtn.innerHTML = prevText;
+            console.error(error);
+          }
+        });
+      }
+    }
+    function validatePasswordLength(password) {
+      return password.length >= 6;
+    }
+    function validate(e, submit = false) {
+      e.preventDefault();
+
+      {% assign hash = customer_id | append: customer_email | append: '4778e9165d835dcf04de708c98efbac1' | md5 %}
+      {% assign hash = hash | md5 %}
+      {% assign hash = hash | md5 %}
+      let form = e.target.closest('form');
+      let customerEmail = document.getElementById('customer-email').textContent.trim();
+      let error_password = "{{ 'customer.register.required_field' | t }}";
+      let password = form.querySelector('input[name="customer[password]"]');
+      let elErrorpassword = form.querySelector('.error-password');
+      let error_passwordOld = "{{ 'customer.register.required_field' | t }}";
+      let passwordOld = form.querySelector('input[name="customer[password_old]"]');
+      let elErrorpasswordOld = form.querySelector('.error-password-old');
+      let error_passwordConfirmation = "{{ 'customer.register.required_field' | t }}";
+      let passwordConfirmation = form.querySelector('input[name="customer[password_confirmation]"]');
+      let elErrorpasswordConfirmation = form.querySelector('.error-password-confirmation');
+      let submitBtn = form.querySelector('.submit-btn');
+      let error_valid_char_password = "{{ 'customer.register.error_valid_char_password' | t }}";
+      if (password.value && passwordOld.value && passwordConfirmation.value) {
+        if (!validatePasswordLength(password.value)) {
+          elErrorpassword.innerHTML = error_valid_char_password;
+          elErrorpassword.classList.remove('hide-m');
+          return;
+        } else {
+          elErrorpassword.classList.add('hide-m');
+        }
+        if (password.value == passwordConfirmation.value) {
+          elErrorpasswordConfirmation.classList.add('hide-m');
+          elErrorpassword.classList.add('hide-m');
+          elErrorpasswordOld.classList.add('hide-m');
+          submitBtn.removeAttribute('disabled');
+          if (submit) {
+            {% comment %} start BE integration {% endcomment %}
+            let submitBtn = form.querySelector('.submit-btn')
+            let prevText = submitBtn.innerHTML;
+            const btnLoading = '<span class="btn-loading"></span>';
+            submitBtn.style.height = `${submitBtn.offsetHeight}px`;
+            submitBtn.style.width = `${submitBtn.offsetWidth}px`;
+            submitBtn.innerHTML = btnLoading;
+            submitBtn.setAttribute('disabled', true);
+            $.ajax({
+              type: "POST",
+              url: "/apps/integration",
+              data: `action=change-password-customer&customer[hash]={{ hash }}&customer[password_old]=${passwordOld.value}&customer[password]=${password.value}&customer[password_confirmation]=${passwordConfirmation.value}`,
+              dataType: "json",
+              success: function(data) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.innerHTML = prevText;
+                const error_message_elem = document.querySelector('.error-message');
+                const success_message_elem = document.querySelector('.success-message');
+                if (error_message_elem != null) {
+                  if (!data.api) {
+                    error_message_elem.classList.remove('hide-m');
+                    success_message_elem.classList.add('c-red');
+                    success_message_elem.classList.remove('c-green');
+                    error_message_elem.innerHTML = data.msg;
+                  } else {
+                    form.reset();
+                    success_message_elem.innerHTML = data.msg;
+                    success_message_elem.classList.add('c-green');
+                    success_message_elem.classList.remove('c-red');
+                    success_message_elem.classList.remove('hide-m')
+                    window.location.href = "/account/logout";
+                  }
+                }
+              },
+              error: function(e) {
+                submitBtn.removeAttribute('disabled');
+                submitBtn.innerHTML = prevText;
+                console.log(e);
+              }
+            });
+          {% comment %} end BE integration {% endcomment %}
+          }
+        } else {
+          error_passwordConfirmation = "{{ 'customer.register.error_valid_password' | t }}";
+          elErrorpasswordConfirmation.innerHTML = error_passwordConfirmation;
+          elErrorpasswordConfirmation.classList.remove('hide-m');
+        }
+      } else {
+        if (!password.value) {
+          elErrorpassword.innerHTML = error_password;
+          elErrorpassword.classList.remove('hide-m');
+        } else {
+          elErrorpassword.classList.add('hide-m');
+        }
+        if (!passwordOld.value) {
+          elErrorpasswordOld.innerHTML = error_passwordOld;
+          elErrorpasswordOld.classList.remove('hide-m');
+        } else {
+          elErrorpasswordOld.classList.add('hide-m');
+        }
+        if (!passwordConfirmation.value) {
+          elErrorpasswordConfirmation.innerHTML = error_passwordConfirmation;
+          elErrorpasswordConfirmation.classList.remove('hide-m');
+        } else {
+          elErrorpasswordConfirmation.classList.add('hide-m');
+        }
+      }
+    }
+
+    // Voucher function
+    function populateDivs(data, checkVoucherLimit) {
+      var container = document.querySelector('#voucher-container-m');
+      container.innerHTML = "";
+
+      if (!container) {
+        console.error('Container not found.');
+        return;
+      }
+
+      data.forEach(function(item, index) {
+        if(checkVoucherLimit){
+          if(index + 1 <= checkVoucherLimit){
+            var dollarSymbol = item.type === 'dollar' ? '$' : '';
+            var percentSymbol = item.type === 'percent' ? '%' : '';
+            var divHtml = `
+            <div  class="row pt-20 pb-20 bb-1 b-border">
+              <div class="p1 medium-500 col-5">{{ 'customer.voucher.promotion_code' | t }}</div>
+              <div class="p1 medium-500 col-7">${item.code}</div>
+              <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.description' | t }}</div>
+              <div class="p1 medium-500 mt-8 col-7">${item.title}</div>
+              <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.value' | t }}</div>
+              <div class="p1 medium-500 mt-8 col-7">${dollarSymbol}${item.value}${percentSymbol}</div>
+              <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.expiry' | t }}</div>
+              <div class="p1 medium-500 mt-8 col-7">${item.ExpiryDate}</div>
+              <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.status' | t }}</div>
+              <div class="p1 medium-500 mt-8 col-7">${item.status}</div>
+              <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.redemption_date' | t }}</div>
+              <div class="p1 medium-500 mt-8 col-7">${item.RedeemedDate}</div>
+            </div>
+            `;
+            container.innerHTML += divHtml;
+          }
+        } else {
+          var dollarSymbol = item.type === 'dollar' ? '$' : '';
+          var percentSymbol = item.type === 'percent' ? '%' : '';
+          var divHtml = `
+          <div  class="row pt-20 pb-20 bb-1 b-border">
+            <div class="p1 medium-500 col-5">{{ 'customer.voucher.promotion_code' | t }}</div>
+            <div class="p1 medium-500 col-7">${item.code}</div>
+            <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.description' | t }}</div>
+            <div class="p1 medium-500 mt-8 col-7">${item.title}</div>
+            <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.value' | t }}</div>
+            <div class="p1 medium-500 mt-8 col-7">${dollarSymbol}${item.value}${percentSymbol}</div>
+            <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.expiry' | t }}</div>
+            <div class="p1 medium-500 mt-8 col-7">${item.ExpiryDate}</div>
+            <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.status' | t }}</div>
+            <div class="p1 medium-500 mt-8 col-7">${item.status}</div>
+            <div class="p1 medium-500 mt-8 col-5">{{ 'customer.voucher.redemption_date' | t }}</div>
+            <div class="p1 medium-500 mt-8 col-7">${item.RedeemedDate}</div>
+          </div>
+          `;
+          container.innerHTML += divHtml;
+        }
+      });
+      document.querySelector('.av-load-more').classList.remove('hide-m');
+      if(data.length <= 10) {
+        document.querySelector('.av-load-more').classList.add('hide-m');
+      }
+    }
+
+    //Voucher load more button
+    document.querySelector('.av-load-more').addEventListener("click", function(e) {
+      e.preventDefault();
+      populateDivs(loyaltyVoucherData);
+      document.querySelector('.av-load-more').classList.add('hide-m');
+    });
+
+    var loyaltyVoucherData;
+
+    //Voucher HD View Only
+    document.addEventListener('DOMContentLoaded', function() {
+      {% assign test = customer_id | append: customer_email | append: '4778e9165d835dcf04de708c98efbac1' %}
+      {% assign hash = customer_id | append: customer_email | append: '4778e9165d835dcf04de708c98efbac1' | md5 %}
+      {% assign hash = hash | md5 %}
+      {% assign hash = hash | md5 %}
+      
+
+      const urlParams = new URLSearchParams(window.location.search);
+      const paramValue = urlParams.get('type');
+
+      if(paramValue == 'account-voucher') {
+        $.ajax({
+          type: "POST",
+          url: "/apps/integration",
+          dataType: "json",
+          data: "action=get-vouchers&customer={{hash}}",
+          success: function(res) {
+            let {data, api, msg} = res;
+
+            loyaltyVoucherData = data;
+            populateTable(loyaltyVoucherData);
+            populateDivs(loyaltyVoucherData);
+          },
+          error: function() {
+            console.error("Error fetching customer data");
+          }
+        });
+      }
+
+      if(paramValue == 'account-info') {
+        //for debug only
+        $.ajax({
+            type: "POST",
+            url: "/apps/integration",
+            dataType: "json",
+            data: "action=profile-customer&customer={{hash}}&id={{idencrypt}}&email={{emailencrypt}}",
+            success: function(res) {
+              const loadingScreen = document.querySelector('.account-page .loading-screen');
+        if(loadingScreen != null) {
+          loadingScreen.remove();
+        }
+
+        let {data, api, msg} = res;
+          let tier = data.journey.CurrentTier; 
+          let phoneNumber = data.personal_details.cc + data.personal_details.phone;         
+          let amountNeeded = 0;
+          let currentAmount = 0;
+          if(data.UpgradeTier.AmountNeeded != null) {
+            amountNeeded = Number(data.UpgradeTier.AmountNeeded)*100;
+            currentAmount = Number(data.UpgradeTier.CurrentAmount)*100; 
+          }
+
+          let progress = currentAmount / amountNeeded * 100;
+          let amountTotalSpend = data.journey.TotalSpendingAmount * 100;
+          let accumulatedPurchase = Number(data.journey.AccumulatedPurchase)*100; 
+          let NextReward = null;
+          let nextRCurrentAmount = 0;
+          let nextRAmountNeeded = 0;
+          let goalAmount = 0;
+
+          if(tier == 'FS') {
+            NextReward = data.NextReward;
+            nextRCurrentAmount = Number(NextReward.CurrentAmount)*100;
+            nextRAmountNeeded = Number(NextReward.AmountNeeded)*100;
+            goalAmount = Number(NextReward.GoalAmount)*100;
+            progress = nextRCurrentAmount / goalAmount * 100;
+            currentAmount = Number(nextRCurrentAmount);
+          } else {
+            goalAmount = Number(data.UpgradeTier.GoalAmount)*100;
+            progress = currentAmount / goalAmount * 100;
+          }
+
+          let salutation = data.personal_details.salutation;
+          let gender = data.personal_details.gender;
+          let birth = data.personal_details.birth;
+          let interest = data.personal_details.interest;
+          let newsletter = data.personal_details.newsletter;
+          let upgradeTier = data.UpgradeTier;
+          let nextTier = data.journey.NextTier;
+    
+          // Update DOM elements
+          let elTier=document.querySelector('.customer-tier')
+          let elSpend=document.querySelector('.amount-spend')
+          let elneeded=document.querySelector('.amount-needed')
+          let eltotalspend=document.querySelector('.amount-total-spend')
+          let elprogress=document.querySelector('.aifs-bar-progress')
+          let elsalutation=document.querySelector('.account-info-salutation')
+          let elgender=document.querySelector('.account-info-gender')
+          let elbirth=document.querySelector('.account-info-birth')
+          let elAccumulated=document.querySelector('.amount-accumulated-spend')
+          let elPhoneNumber=document.querySelector('.phone-number')
+
+          if(elPhoneNumber) {
+            elPhoneNumber.innerHTML = phoneNumber;
+          }
+
+          if(elAccumulated) {
+            elAccumulated.innerText = Shopify.formatMoney(currentAmount,'{{ shop.money_with_currency_format }}');
+          }
+          if(elTier){
+            elTier.innerText = tier;
+          }
+          if(elSpend){
+            elSpend.innerText = Shopify.formatMoney(currentAmount,'{{ shop.money_with_currency_format }}');
+          }
+          if(elneeded){
+            elneeded.innerText = Shopify.formatMoney(goalAmount,'{{ shop.money_with_currency_format }}');
+          }
+          if(eltotalspend){
+            eltotalspend.innerText = Shopify.formatMoney(amountTotalSpend,'{{ shop.money_with_currency_format }}');
+          }
+          if(elprogress){
+            elprogress.style.width = progress + '%';
+          }
+          if(elsalutation){
+            elsalutation.innerText = salutation;
+          }
+          if(elgender){
+            elgender.innerText = gender;
+          }
+          if(elbirth){
+            elbirth.innerText = birth;
+          }
+    
+          // Check the radio button that matches the interest
+          let interestRadios = document.querySelectorAll('.global-radio input[name="customer[\'interest\']"]');
+          interestRadios.forEach(function(radio) {
+            if (radio.value === interest) {
+              radio.checked = true;
+            }
+          });
+        
+          let newsletterRadio = document.querySelector(`.global-radio input[name="customer[\'newsletter\']"]`);
+          if(newsletterRadio != null) {
+            if(newsletter == 'false') {
+              newsletter = false;
+            }
+            
+            newsletterRadio.checked = newsletter;
+          }
+
+          if(newsletter) {
+            const interest_wrapper = document.querySelector('.ai-contact-mode .acm-cat');
+            if(interest_wrapper) {
+              interest_wrapper.classList.add('show');
+            }
+          }
+
+          /* upgrade tier */
+          const tierProgress = document.querySelector('.ai-frequent-shopper');
+          if(upgradeTier.AmountNeeded == null) {
+            tierProgress.querySelector('.aifs-top-text').classList.add('hide-m');
+            tierProgress.querySelector('.aifs-top-text').classList.remove('flex');
+            tierProgress.querySelector('.total-spending-wrapper').classList.remove('mt-15');
+            tierProgress.querySelector('.aifs-bar').classList.add('hide-m');
+
+            if(tier == 'FS') {
+              tierProgress.querySelector('.aifs-top-text').classList.remove('hide-m');
+              tierProgress.querySelector('.aifs-top-text').classList.add('flex');
+              tierProgress.querySelector('.total-spending-wrapper').classList.add('mt-15');
+              tierProgress.querySelector('.aifs-bar').classList.remove('hide-m');
+              tierProgress.querySelector('.find-out-fs').classList.remove('hide-m');
+
+              let labelFs = '{{ settings.ai_text_fs }}';
+              labelFs = labelFs.replace('[amount]',Shopify.formatMoney(nextRAmountNeeded,'{{ shop.money_with_currency_format }}'));
+              tierProgress.querySelector('.aifs-remain-wrapper').innerHTML = labelFs;
+
+              if(elSpend){
+                elSpend.innerText = Shopify.formatMoney(nextRCurrentAmount,'{{ shop.money_with_currency_format }}');
+              }
+              if(elneeded){
+                elneeded.innerText = Shopify.formatMoney(goalAmount,'{{ shop.money_with_currency_format }}');
+              }
+            }
+          } else {
+            let label = '{{ settings.ai_text_customer }}';
+            label = label.replace('[amount]',Shopify.formatMoney(amountNeeded,'{{ shop.money_with_currency_format }}'));
+
+            tierProgress.querySelector('.aifs-remain-wrapper').innerHTML = label;
+            tierProgress.querySelector('.aifs-top-text').classList.remove('hide-m');
+            tierProgress.querySelector('.aifs-top-text').classList.add('flex');
+            tierProgress.querySelector('.aifs-bar').classList.remove('hide-m');
+            tierProgress.querySelector('.find-out-customer').classList.remove('hide-m');
+            tierProgress.querySelector('.total-spending-wrapper').classList.add('mt-15');
+          }
+            },
+            error: function() {
+              console.error("Error fetching customer data");
+            }
+          });
+      }
+      
+      function populateTable(data) {
+        var tableBody = document.querySelector('#voucher-container-d');
+
+        if (!tableBody) {
+          console.error('Table body not found.');
+          return;
+        }
+
+        data.forEach(function(item) {
+          var dollarSymbol = item.type === 'dollar' ? '$' : '';
+          var percentSymbol = item.type === 'percentage' ? '%' : '';
+          var row = document.createElement('tr');
+
+          var codeCell = document.createElement('td');
+          codeCell.textContent = item.code;
+          codeCell.className = 'p2 d-pt-20 pr-15';
+
+          var titleCell = document.createElement('td');
+          titleCell.textContent = item.title;
+          titleCell.className = 'p2 d-pt-20 pr-15';
+
+          var valueCell = document.createElement('td');
+          valueCell.textContent = `${dollarSymbol}${item.value}${percentSymbol}`;
+          valueCell.className = 'p2 d-pt-20 pr-15';
+
+          var expiryCell = document.createElement('td');
+          expiryCell.textContent = item.ExpiryDate
+          expiryCell.className = 'p2 d-pt-20 pr-15';
+
+          var statusCell = document.createElement('td');
+          statusCell.textContent = item.status;
+          statusCell.className = 'p2 d-pt-20 pr-15';
+
+          var redemptiondateCell = document.createElement('td');
+          redemptiondateCell.textContent = item.RedeemedDate;
+          redemptiondateCell.className = 'p2 d-pt-20';
+
+          row.appendChild(codeCell);
+          row.appendChild(titleCell);
+          row.appendChild(valueCell);
+          row.appendChild(expiryCell);
+          row.appendChild(statusCell);
+          row.appendChild(redemptiondateCell);
+
+          tableBody.appendChild(row);
+        });
+      }
+    });
+  </script>
+
+{% schema %}
+{
+  "name": "Change Password",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Padding"
+    },
+    {
+      "type": "number",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)"
+    },
+    {
+      "type": "number",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)"
+    },
+    {
+      "type": "number",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)"
+    },
+    {
+      "type": "number",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)"
+    },
+    {
+      "type": "number",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)"
+    },
+    {
+      "type": "number",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)"
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,616 @@
+{% comment %} Sansans Theme - Yudi {% endcomment %}
+{% liquid
+  assign pm = product.metafields
+  assign ilayout = 'layout-2-col'
+  for tag in product.tags
+    if tag contains 'layout'
+      assign the_tag = tag | split: ':'
+      case the_tag[1]
+        when '1 Col'
+          assign ilayout = 'layout-1-col'
+        when '2 Col'
+          assign ilayout = 'layout-2-col'
+        when '1-2 Col'
+          assign ilayout = 'layout-1-2-col'
+      endcase
+    endif
+  endfor
+%}
+<style>
+  #product-images-popup {
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.4s ease, visibility 0.4s ease;
+    will-change: opacity;
+    z-index: -1;
+  }
+  #product-images-popup.show {
+    opacity: 1;
+    visibility: visible;
+    z-index: 999999999;
+  }
+  .pi-swiper {
+      cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M13 13L10.1047 10.1047M10.1047 10.1047C10.6 9.60945 10.9928 9.0215 11.2608 8.37442C11.5289 7.72734 11.6668 7.0338 11.6668 6.33341C11.6668 5.63302 11.5289 4.93948 11.2608 4.2924C10.9928 3.64532 10.6 3.05737 10.1047 2.56212C9.60945 2.06687 9.0215 1.67401 8.37442 1.40598C7.72734 1.13795 7.0338 1 6.33341 1C5.63302 1 4.93948 1.13795 4.2924 1.40598C3.64532 1.67401 3.05737 2.06687 2.56212 2.56212C1.56191 3.56233 1 4.9189 1 6.33341C1 7.74792 1.56191 9.10449 2.56212 10.1047C3.56233 11.1049 4.9189 11.6668 6.33341 11.6668C7.74792 11.6668 9.10449 11.1049 10.1047 10.1047ZM6.33341 4.33343V8.33339M4.33343 6.33341H8.33339" stroke="%231E1E1F" stroke-linecap="square"/></svg>'), auto;
+  }
+  .pip-image-each {
+    cursor: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M13 13L10.1047 10.1047M10.1047 10.1047C10.6 9.60945 10.9928 9.0215 11.2608 8.37442C11.5289 7.72734 11.6668 7.0338 11.6668 6.33341C11.6668 5.63302 11.5289 4.93948 11.2608 4.2924C10.9928 3.64532 10.6 3.05737 10.1047 2.56212C9.60945 2.06687 9.0215 1.67401 8.37442 1.40598C7.72734 1.13795 7.0338 1 6.33341 1C5.63302 1 4.93948 1.13795 4.2924 1.40598C3.64532 1.67401 3.05737 2.06687 2.56212 2.56212C1.56191 3.56233 1 4.9189 1 6.33341C1 7.74792 1.56191 9.10449 2.56212 10.1047C3.56233 11.1049 4.9189 11.6668 6.33341 11.6668C7.74792 11.6668 9.10449 11.1049 10.1047 10.1047ZM6.33341 4.33339M4.33343 6.33341H8.33339" stroke="%231E1E1F" stroke-width="0.75" stroke-linecap="square"/></svg>') 7 7, auto;
+  }
+  #product-images-popup .pip-overlay {
+    background-color: #00000080;
+    -webkit-backdrop-filter: blur(10px);
+    backdrop-filter: blur(10px);
+  }
+  #product-images-popup .pipt-image {
+    width: 60px;
+    height: 90px;
+    cursor: pointer;
+    transition: 0.3s ease all;
+    opacity: .5;
+  }
+  #product-images-popup .pipt-image img {
+    height: 100%;
+    object-fit: contain;
+  }
+  #product-images-popup .pipt-image.active {
+    opacity: 1;
+  }
+  #product-images-popup .pip-thumbnail {
+    max-height: 560px;
+    height: auto;
+    align-items: center;
+    flex-direction: column;
+    top: 50%;
+    transform: translateY(-50%);
+  }
+  #product-images-popup .pip-main::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+    display: none;
+  }
+  #product-images-popup .swiper-slide {
+    height: 90px !important;
+  }
+  #product-images-popup .swiper-slide .global-image-wrapper {
+    padding-bottom: 90px !important;
+  }
+  #product-images-popup .pip-main {
+    position: relative;
+    width: 100vw;
+    height: 100%;
+    overflow: auto;
+  }
+  #product-images-popup .swiper-close {
+    position: fixed;
+  }
+  #product-images-popup .swiper-close svg {
+    width: 10px;
+    height: 10px;
+    cursor: pointer;
+  }
+  #product-images-popup .pip-image-each video,
+  #product-images-popup .pipt-video video {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .product-images-main .swiper-pagination .swiper-pagination-bullet {
+    opacity: 0.15;
+  }
+  .product-images-main .swiper-pagination .swiper-pagination-bullet.swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+  .product-images-main .pis-more-info {
+    bottom: 16px;
+    left: 16px;
+    cursor: default;
+  }
+  .product-images-main .pismi-label {
+    visibility: visible;
+    opacity: 1;
+  }
+  .product-images-main .pismi-value {
+    visibility: hidden;
+    opacity: 0;
+    transition: all 0.3s ease;
+    left: 16px;
+    bottom: 16px;
+  }
+  .product-images-main .pis-more-info.show .pismi-value {
+    visibility: visible;
+    opacity: 1;
+  }
+  .product-images-main .pis-zoom {
+    right: 0;
+    bottom: 0;
+    width: 48px;
+    height: 48px;
+  }
+  .product-images-main .pis-zoom svg {
+    width: 14px;
+    height: 14px;  
+  }
+  .product-images-main .ab-section {
+    {%- if product.media.size > 1 -%}
+      width: calc(100% / 1.1);
+    {%- else -%}
+      width: 100%;
+    {%- endif -%}
+  }
+  @media screen and (min-width: 768px) {
+    .product-images-main .ab-section {
+      {%- if product.media.size > 1 -%}
+        width: calc(100% / 1.3); 
+      {%- else -%}
+        width: 100%;
+      {%- endif -%}
+    }
+  }
+  @media screen and (min-width: 1024px) {
+    #product-images-popup .pip-main {
+      width: 100vw;
+      height: 100vh;
+    }
+    .product-images-main .layout-1-col .pi-swiper {
+      width: 100%;
+    }
+    .product-images-main .layout-2-col .pi-swiper,
+    .product-images-main .layout-1-2-col .pi-swiper {
+      width: 50%;
+    }
+    .product-images-main .layout-1-2-col .pi-swiper:first-child,
+    .product-images-main .layout-1-2-col .pi-swiper.first {
+      width: 100%;
+    }
+    .product-images-main .pis-more-info {
+      bottom: 0;
+      right: 0;
+      left: unset;
+    }
+    .product-images-main .pismi-value {
+      left: unset;
+      right: 16px;
+    }
+    .product-images-main .pis-more-info.show .pismi-value {
+      visibility: hidden;
+      opacity: 0;
+    }
+    .product-images-main .pis-more-info.show:hover .pismi-value,
+    .product-images-main .pis-more-info:hover .pismi-value {
+      visibility: visible;
+      opacity: 1;
+    }
+  }
+</style>
+{% capture model_info %}
+  {% if pm.info.model_info != blank %}
+    <div class="pis-more-info d-absolute zi-3 flex ai-center jc-end p-16" :class="(showModelInfo) && 'show'" @click="showModelInfo = !showModelInfo">
+      <div class="p5 pismi-label">
+        {{ 'general.model_info' | t }}
+      </div>
+      <div class="bg-white p5 pismi-value pt-4 pb-5 pl-8 pr-8 bgg-white dont-break absolute">
+        {{ pm.info.model_info }}
+      </div>
+    </div>
+  {% endif %}
+{% endcapture %}
+<div id="product-images" class="product-images">
+  <div class="product-images-main">
+    {%- assign image_count = 0 -%}
+    {%- for media in product.media -%}
+      {%- assign image_count = image_count | plus: 1 -%}
+    {%- endfor -%}
+
+    {%- assign mod_image_count = image_count | modulo: 2 -%}
+
+    <div
+      data-image-count="{{ image_count }}"
+      class="global-flex flex-wrap product-images-wrapper {% if mod_image_count == 0 %} even {% endif %}"
+    >
+      <div class="swiper swiper-pim width-100 relative">
+        <div class="hide-d">
+          <div class="flex ab-section jc-between ai-center absolute left-0 right-0 bottom-0">
+            {{ model_info }}
+            <div class="absolute right-0 bottom-0 hide-d zi-2">
+              <div class="cursor pis-zoom p-16 zi-3 flex ai-center jc-center" @click="togglePopup('readslide')">
+                {{ settings.icon_zoom }}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="swiper-wrapper {{ilayout}}">
+          {%- for media in product.media -%}
+            <div
+              data-index="{{ forloop.index0 }}"
+              data-alt="{{ media.alt | remove: 'color:' | remove: 'color: ' | remove: 'Color:' | remove: 'Color: ' }}"
+              class="pi-swiper relative swiper-slide pl-0 pr-0 {% unless forloop.first %} d-mt-30 {% endunless %}"
+            >
+              {%- assign preload = false -%}
+              {%- if forloop.first -%}
+                {%- assign preload = true -%}
+              {%- endif -%}
+              <div
+              @click="togglePopup($event)"
+              data-alt="{{ media.alt }}"
+              data-image-url="{{ media | image_url }}">
+                {% if media.media_type == 'image' %}
+                  {%- render 'global-image-wrapper',
+                    additional_class: 'no-bg relative zi-2',
+                    image: media,
+                    size: '2000x',
+                    preload: preload
+                  -%}
+                {% elsif media.media_type == 'video' %}
+                  <div class="absolute w-full h-full top-0 left-0">
+                    {{ media | video_tag: controls: false, image_size: '2000x', autoplay: true, loop: true }}
+                  </div>
+                {% endif %}
+              </div>
+              <div class="hide-m show-d">
+                {% if ilayout == 'layout-2-col' and forloop.index == 2 %}
+                  {{ model_info }}
+                {% endif %}
+                {% if ilayout == 'layout-1-col' and forloop.index == 1 %}
+                  {{ model_info }}
+                {% endif %}
+                {% if ilayout == 'layout-1-2-col' and forloop.index == 1 %}
+                  {{ model_info }}
+                {% endif %}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <Teleport to="body">
+    <div
+      id="product-images-popup"
+      class="fixed w-full h-full top-0 left-0 zi-9 flex d-ai-center jc-center"
+      :class="{'show': pipShow}"
+    >
+      <div class="pip-box flex ai-center jc-center">
+        <div class="pip-overlay absolute top-0 left-0 right-0 bottom-0 w-full h-full" @click="togglePopup()"></div>
+        <div class="top-0 left-0 h-full absolute d-p-32 hide-m d-flex zi-8">
+          <div class="pip-thumbnail d-flex relative">
+            <div class="swiper swiper-popup-thumbnail">
+              <div class="swiper-wrapper">
+                {%- for media in product.media -%}
+                  <div 
+                    class="swiper-slide pip-thumbnail-each"
+                    data-alt="{{ media.alt | remove: 'color:' | remove: 'color: ' | remove: 'Color:' | remove: 'Color: ' }}"
+                  >
+                    <div
+                        data-index="{{ forloop.index0 }}"
+                        class="pipt-image relative {% if forloop.first %} active {% endif %}"
+                        @click="pipSlideToThis($event)"
+                    >
+                        {% if media.media_type == 'image' %}
+                          {%- render 'global-image-wrapper',
+                            additional_class: 'no-bg',
+                            image: media,
+                            size: '500x',
+                            preload: true
+                          -%}
+                        {% elsif media.media_type == 'video' %}
+                          <div class="absolute w-full h-full top-0 left-0 pipt-video">
+                            {{ media | video_tag: controls: false, image_size: '2000x', autoplay: false, loop: false }}
+                          </div>
+                        {% endif %}
+                    </div>
+                  </div>
+                {%- endfor -%}
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="pip-main">
+          <div class="pip-wrapper">
+            {%- for media in product.media -%}
+              <div
+                data-index="{{ forloop.index0 }}"
+                data-alt="{{ media.alt | remove: 'color:' | remove: 'color: ' | remove: 'Color:' | remove: 'Color: ' }}"
+                class="pip-image-each font-0"
+                @click="togglePopup()"
+              >
+                {% if media.media_type == 'image' %}
+                  {%- render 'global-image-wrapper',
+                    additional_class: 'no-bg',
+                    image: media,
+                    size: '2000x',
+                    preload: true
+                  -%}
+                {% elsif media.media_type == 'video' %}
+                  {{ media | video_tag: controls: false, image_size: '2000x', autoplay: true, loop: true }}
+                {% endif %}
+              </div>
+            {%- endfor -%}
+          </div>
+          <div
+            class="absolute p-20 d-p-32 top-0 right-0 swiper-close flex ai-center jc-center zi-5 "
+            @click="togglePopup()"
+          >
+            {{ settings.icon_close }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </Teleport>
+</div>
+<script>
+  document.addEventListener('click', function(event){
+      if(event.target.closest('.pi-swiper')) {
+        ProductImagesVue.togglePopup(event);
+      }
+  });
+
+  var ProductImagesVue = null;
+  function initVueProdIm() {
+    if (ProductImagesVue) {
+      ProductImagesVue.unmount(); // Unmount the existing Vue instance
+      ProductImagesVue = null;
+    }
+
+    ProductImagesVue = Vue.createApp({
+      delimiters: ['${', '}'],
+      data() {
+        return {
+          productImagesCarousel: null,
+          productThumbnailCarousel: null,
+          first_img_url: null,
+          showGalleryPopup: false,
+          pipShow: false,
+          pipActive: 0,
+          showModelInfo: false,
+          slideIndex: 0
+        };
+      },
+      mounted() {
+        const this_obj = this;
+        this.initCarousel();
+        this.initCarouselThumbnail();
+        window.addEventListener('resize', this.checkCarousel);
+
+        /* check if element is entering the viewport (popup image) */
+        const popupImages = document.querySelectorAll('.pip-image-each');
+        popupImages.forEach(function (popupImg) {
+          this_obj.onElementInView(popupImg, (element) => {
+            const activeThumb = document.querySelector('.pipt-image.active');
+            if (activeThumb != null) {
+              activeThumb.classList.remove('active');
+            }
+
+            const activeIndex = element.getAttribute('data-index');
+            this_obj.productThumbnailCarousel.slideTo(activeIndex);
+            const nextActiveThumb = document.querySelector(`.pipt-image[data-index="${activeIndex}"]`);
+            if (nextActiveThumb != null) {
+              nextActiveThumb.classList.add('active');
+            }
+          });
+        });
+      },
+      methods: {
+        adjustHeightSwiperThumbnail() {
+          let swiperContainer = document.querySelector("#product-images-popup .pipt-swiper");
+          let visibleSlides = swiperContainer.querySelectorAll(".swiper-slide-visible img");
+
+          let totalHeight = 0;
+          visibleSlides.forEach((img) => {
+            totalHeight += img.clientHeight + 4; // Add 4px gap
+          });
+
+          swiperContainer.style.height = totalHeight + "px";
+        },
+        onElementInView(element, callback) {
+          if (!('IntersectionObserver' in window)) {
+            console.warn('IntersectionObserver is not supported by your browser.');
+            return;
+          }
+
+          const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                callback(entry.target); // Fires when element enters the viewport
+              }
+            });
+          }, { threshold: 0.2 });
+
+          observer.observe(element);
+        },
+        checkCarousel() {
+          if (document.body.clientWidth < 1024) {
+            this.productImagesCarousel = new Swiper('#product-images .product-images-main .swiper-pim', {
+              direction: 'horizontal',
+              {% if ilayout == 'layout-2-col' %}
+              slidesPerView: 1.1,
+              spaceBetween: 1,
+              {% endif %}
+              {% if ilayout == 'layout-1-col' %}
+              slidesPerView: 1,
+              {% endif %}
+              {% if ilayout == 'layout-1-2-col'%}
+              slidesPerView: 1.1,
+              spaceBetween: 1,
+              {% endif %}
+              observer: true,
+              watchSlidesProgress: true,
+              {%- if product.media.size > 1 -%}
+              loop: true,
+              {%- endif -%}
+              pagination: {
+                el: '#product-images .product-images-main .swiper-pim .swiper-pagination',
+                clickable: true,
+              },
+              on: {
+                init: function () {
+                  $360.lazyLoadInstance.update();
+                },
+                slideChange: function () {
+                  $360.lazyLoadInstance.update();
+                },
+                resize: function () {
+                  $360.lazyLoadInstance.update();
+                },
+              },
+            });
+          } else {
+            if (this.productImagesCarousel != null) {
+              this.productImagesCarousel.destroy(true, true);
+              this.productImagesCarousel = null;
+            }
+          }
+        },
+        initCarousel() {
+          if (document.body.clientWidth < 1024) {
+            this.productImagesCarousel = new Swiper('#product-images .product-images-main .swiper-pim', {
+              direction: 'horizontal',
+              {% if ilayout == 'layout-2-col' %}
+              slidesPerView: 1.1,
+              spaceBetween: 1,
+              {% endif %}
+              {% if ilayout == 'layout-1-col' %}
+              slidesPerView: 1.1,
+              {% endif %}
+              {% if ilayout == 'layout-1-2-col'%}
+              slidesPerView: 1.1,
+              spaceBetween: 1,
+              {% endif %}
+              watchSlidesProgress: true,
+              {%- if product.media.size > 1 -%}
+              loop: true,
+              {%- else -%}
+              slidesPerView: 1,
+              {%- endif -%}
+              pagination: {
+                el: '#product-images .product-images-main .swiper-pim .swiper-pagination',
+                clickable: true,
+              },
+              breakpoints: {
+                768: {
+                  {%- if product.media.size > 1 -%}
+                    slidesPerView: 1.3,
+                    spaceBetween: 1,
+                  {%- else -%}
+                    slidesPerView: 1
+                  {%- endif -%}
+                }, 
+              },
+              on: {
+                update: function () {},
+                slideChange: function (swiper) {
+                  this.update();
+                },
+                activeIndexChange: function () {
+                  this.update();
+                },
+                init: function () {
+                  $360.lazyLoadInstance.update();
+                },
+                slideChange: function (swiper) {
+                  $360.lazyLoadInstance.update();
+                },
+                resize: function () {
+                  $360.lazyLoadInstance.update();
+                },
+              },
+            });
+          }
+        },
+        initCarouselThumbnail() {
+          let this_obj = this
+          this.productThumbnailCarousel = new Swiper('#product-images-popup .swiper-popup-thumbnail', {
+            direction: 'vertical',
+            slidesPerView: 6,
+            spaceBetween: 4,
+            on: {
+              init: function () {
+                $360.lazyLoadInstance.update();
+              },
+              slideChange: function () {
+                $360.lazyLoadInstance.update();
+              },
+              resize: function () {
+                $360.lazyLoadInstance.update();
+              },
+            },
+          });
+        },
+        scrollToImage(index) {
+          const y =
+            document.querySelector(`.product-images-main.desktop .each[data-index="${index}"]`).getBoundingClientRect()
+              .top +
+            window.pageYOffset -
+            125;
+          window.scrollTo({ top: y, behavior: 'smooth' });
+        },
+        showPopup(index) {
+          this.showGalleryPopup = true;
+        },
+        togglePopup(e) {
+          let body = document.querySelector('body');
+          body.classList.toggle('overflow');
+          this.pipShow = !this.pipShow;
+
+
+          let to;
+          if(e == null) {
+            to = 0;
+          } else if(e == 'readslide'){
+            const elem = document.querySelector(`.pi-swiper.swiper-slide-active`);
+            to = elem.getAttribute('data-index');
+            this.pipSlideTo(to);
+          }else {
+            e.stopImmediatePropagation();
+            
+            const elem = e.target.closest('.pi-swiper');
+            to = elem.getAttribute('data-index');
+            this.pipSlideTo(to);
+          }
+        },
+        pipSlideTo(to) {
+          const active_slide = document.querySelector(`#product-images-popup .pipt-image.active`);
+          if(active_slide != null) {
+            active_slide.classList.remove('active');
+          }
+
+          const next_active_slide = document.querySelector(`#product-images-popup .pipt-image[data-index="${to}"]`);
+          if(next_active_slide != null) {
+            next_active_slide.classList.add('active');
+          }
+
+          const nextActiveImage = document.querySelector(`.pip-image-each[data-index="${to}"]`);
+          const galleryWrapper = document.querySelector('#product-images-popup .pip-main');
+          if (nextActiveImage != null && galleryWrapper != null) {
+            const topPos = nextActiveImage.getBoundingClientRect().top + galleryWrapper.scrollTop;
+            galleryWrapper.scrollTo({ top: topPos, behavior: 'smooth' });
+          }
+        },
+        pipSlideToThis(e) {
+          const elem = e.target.closest('.pipt-image');
+          const to = elem.getAttribute('data-index');
+
+          const active_slide = document.querySelector(`#product-images-popup .pipt-image.active`);
+          if(active_slide != null) {
+            active_slide.classList.remove('active');
+          }
+
+          const next_active_slide = document.querySelector(`#product-images-popup .pipt-image[data-index="${to}"]`);
+          if(next_active_slide != null) {
+            next_active_slide.classList.add('active');
+          }
+
+          const nextActiveImage = document.querySelector(`.pip-image-each[data-index="${to}"]`);
+          const galleryWrapper = document.querySelector('#product-images-popup .pip-main');
+          if (nextActiveImage != null && galleryWrapper != null) {
+            const topPos = nextActiveImage.getBoundingClientRect().top + galleryWrapper.scrollTop;
+            galleryWrapper.scrollTo({ top: topPos, behavior: 'smooth' });
+          }
+        },
+      },
+    }).mount('#product-images');
+  }
+  initVueProdIm();
+  document.addEventListener('shopify:section:load', () => {
+    initVueProdIm();
+  });
+</script>

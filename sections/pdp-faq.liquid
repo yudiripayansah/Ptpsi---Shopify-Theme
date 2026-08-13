@@ -1,0 +1,367 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'pdp-faq-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+
+  comment
+    Per-product FAQ entries. Positional pairs: faq_answers[n] answers faq_questions[n].
+  endcomment
+  assign faq_questions = blank
+  assign faq_answers = blank
+  if ss.show_product_faq and product != blank
+    assign faq_questions = product.metafields.custom.faq_questions.value
+    assign faq_answers = product.metafields.custom.faq_answers.value
+  endif
+
+  assign total_entries = 0
+  for block in sb
+    if block.settings.title != blank
+      assign total_entries = total_entries | plus: 1
+    endif
+  endfor
+  for question in faq_questions
+    if question != blank
+      assign total_entries = total_entries | plus: 1
+    endif
+  endfor
+
+  assign render_order = 'global,product' | split: ','
+  if ss.product_faq_position == 'before'
+    assign render_order = 'product,global' | split: ','
+  endif
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #{{el_id}} .container:after,
+  #{{el_id}} .container:before,
+  #{{el_id}} .row:after,
+  #{{el_id}} .row:before {
+    display: none;
+  }
+  #{{ el_id }} .accordion .title-icon .icon,
+  #{{ el_id }} .accordion .title-icon .icon svg {
+    width: 14px;
+    height: 14px;
+  }
+  @media screen and (min-width: 1024px){
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'pdp-faq-figma.PNG' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      <div class="row flex d-flex-row flex-column ai-start jc-between">
+        <div class="col-12 col-d-1">
+          {% if ss.title != blank %}
+            <div class="p3 c-label">{{ ss.title }}</div>
+          {% endif %}
+        </div>
+        <div class="col-12 col-d-5 d-pt-0 pt-12 d-pr-120">
+          {% if ss.text != blank %}
+            <div class="h3 no-anim c-green d-max-450">{{ ss.text }}</div>
+          {% endif %}
+          {% if ss.link_label != blank %}
+            <a
+              href="{{ss.link_url}}"
+              class="d-max-330 w-full p2 d-mt-32 mt-24 b-1 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 b-green c-green"
+            >
+              {{ ss.link_label }}
+              <span class="icon">
+                {{ settings.icon_arrow_up_right }}
+              </span>
+            </a>
+          {% endif %}
+        </div>
+        <div class="col-12 col-d-6 ml-auto d-ml-0 col-d-5 d-pt-0">
+          <div class="sha-accordion d-mt-0 mt-32 accordion-wrapper">
+            {% liquid
+              assign entry_index = 0
+              assign title_wrapper_class = 'sha-accordion-title-' | append: fn
+              assign title_class = 'p1 '
+            %}
+            {% for source in render_order %}
+              {% liquid
+                if source == 'global'
+                  assign loop_items = sb
+                else
+                  assign loop_items = faq_questions
+                endif
+              %}
+              {% for item in loop_items %}
+                {% liquid
+                  if source == 'global'
+                    assign entry_title = item.settings.title
+                    assign entry_text = item.settings.text
+                  else
+                    assign entry_title = item
+                    assign entry_text = faq_answers[forloop.index0] | escape | newline_to_br
+                  endif
+                %}
+                {% if entry_title != blank %}
+                  {% liquid
+                    assign entry_index = entry_index | plus: 1
+                    assign wrapper_class = 'pb-16 bb-1 b-main mb-16'
+                    if entry_index == total_entries
+                      assign wrapper_class = 'pb-16 bb-1 b-main'
+                    endif
+                  %}
+                  {% capture title %}
+                    <div class="p1 flex ai-center colgap-6 c-green">
+                      {{entry_title}}
+                    </div>
+                  {% endcapture %}
+                  {% capture desc_html %}
+                    <div class="pt-16">
+                      {% if entry_text != blank %}
+                      <div class="p2 c-green rte">{{entry_text}}</div>
+                      {% endif %}
+                    </div>
+                  {% endcapture %}
+                  {%- render 'accordion',
+                    icon_rotate: false,
+                    wrapper_class: wrapper_class,
+                    title_wrapper_class: title_wrapper_class,
+                    title_class: title_class,
+                    desc_no_pt: true,
+                    title: title,
+                    desc_html: desc_html,
+                    title_no_pt: true,
+                    title_no_pb: true,
+                    open_one_at_a_time: true
+                  -%}
+                {% endif %}
+              {% endfor %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "PDP - FAQ",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link Label"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Product Specific FAQ"
+    },
+    {
+      "type": "paragraph",
+      "content": "On product pages, extra questions are read from the product metafields custom.faq_questions and custom.faq_answers. Keep the two lists paired — the 1st answer belongs to the 1st question, and so on."
+    },
+    {
+      "type": "checkbox",
+      "id": "show_product_faq",
+      "label": "Show product specific questions",
+      "default": true
+    },
+    {
+      "type": "select",
+      "id": "product_faq_position",
+      "label": "Product questions position",
+      "options": [
+        { "value": "after", "label": "After global questions" },
+        { "value": "before", "label": "Before global questions" }
+      ],
+      "default": "after"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_m",
+        "label": "Top padding (Mobile)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_m",
+        "label": "Bottom padding (Mobile)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_t",
+        "label": "Top padding (Tablet)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_t",
+        "label": "Bottom padding (Tablet)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding",
+        "label": "Top padding (Desktop)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding",
+        "label": "Bottom padding (Desktop)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_hd",
+        "label": "Top padding (HD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_hd",
+        "label": "Bottom padding (HD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_hhd",
+        "label": "Top padding (HHD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_hhd",
+        "label": "Bottom padding (HHD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "richtext",
+          "id": "text",
+          "label": "Text"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP - FAQ",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

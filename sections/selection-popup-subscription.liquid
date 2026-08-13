@@ -1,0 +1,221 @@
+{% liquid
+    assign el_id = section.id
+    assign ss = section.settings
+%}
+{% if ss.enable %}
+<style>
+    #{{el_id}} .sp-overlay {
+        background: rgba(23, 23, 23, 0.5);
+    }
+    #shopify-section-{{ section.id }} {
+        z-index: 99999;
+    }
+
+    #{{el_id}} .sp-wrap {
+      opacity: 0;
+      visibility: hidden;
+      transition: .5s;
+    }
+    #{{el_id}} #sp-wrap.show {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    #{{el_id}} .sp-box {
+        position:absolute;
+        bottom:0;
+        right:0;
+        width:100%;
+    }
+
+    #{{el_id}} .spb-content{
+        padding:25px 20px;
+    }
+
+    #{{el_id}} .close-popup{
+        position:absolute;
+        top:20px;
+        right:20px;
+        width: 12px;
+        height: 12px;
+        z-index:1;
+    }
+    #{{el_id}} .close-popup svg{
+        width: 12px;
+        height: 12px;
+    }
+
+    @media(min-width: 600px) {
+        #{{el_id}} .sp-box {
+            width:410px;
+        }
+    }
+    
+    @media(min-width: 1024px) {
+        #{{el_id}} .sp-box {
+            width:440px;
+        }
+        #{{el_id}} .spb-content{
+            padding:30px;
+        }
+    }
+</style>
+
+<section id="{{el_id}}">
+    <div class="">
+        {% render 'selection-popup', section: section, type: 'subscription' %}
+    </div>
+</section>
+
+<script>
+    let overlay_subs = document.querySelectorAll('.sp-overlay');
+
+    if (!toggleContentSelectionPopup) {
+        function toggleContentSelectionPopup(e) { 
+            if(e != null) {
+                e.preventDefault();
+            }
+            let target = e ? e.target : false
+            let body = document.querySelector('body');
+            let type = body.getAttribute('data-content');
+            let popup = document.querySelector('#{{el_id}} .sp-wrap');
+            if(target){
+                popup.classList.toggle('show');
+                body.classList.toggle('overflow');
+            } else {
+                const delay_time = 0;
+                /* check if register popup appear */
+                const delay = setTimeout(() => {
+                    const account_popup = document.querySelector('.sp-wrap-account');
+                    if(account_popup != null) {
+                        if(!account_popup.classList.contains('show')) {
+                            popup.classList.toggle('show');
+                            body.classList.toggle('overflow');
+                        }
+                    } else {
+                        popup.classList.toggle('show');
+                        body.classList.toggle('overflow');
+                    }
+                    clearTimeout(delay);
+                }, delay_time);
+            }
+        }
+    }
+
+    if (!setCookie) {
+        function setCookie(name, value, days) {
+        const expires = new Date();
+        expires.setTime(expires.getTime() + days * 24 * 60 * 60 * 1000);
+        //expires.setTime(expires.getTime() + 1 * 60 * 1000); // test 1 min
+        const cookieValue = encodeURIComponent(name) + '=' + encodeURIComponent(value) + ';expires=' + expires.toUTCString() + ';path=/';
+        document.cookie = cookieValue;
+        }
+    }
+
+    if(!getCookie){
+        function getCookie(name) {
+        const cookieName = encodeURIComponent(name) + '=';
+        const cookieArray = document.cookie.split(';');
+        for (let i = 0; i < cookieArray.length; i++) {
+            let cookie = cookieArray[i].trim();
+            if (cookie.indexOf(cookieName) === 0) {
+            return decodeURIComponent(cookie.substring(cookieName.length, cookie.length));
+            }
+        }
+        return null;
+        }
+    }
+    if(!deleteCookie){
+        function deleteCookie(name) {
+            // Set the cookie with the same name and an expiration date in the past
+            document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
+        }
+    }
+    
+    {% comment %} function getQueryParamValue(param) {
+      const urlParams = new URLSearchParams(window.location.search);
+      return urlParams.get(param);
+    } {% endcomment %}
+
+    const popupaccount = getCookie('igcPopupAccount');
+    {% comment %}
+    {%- if template == "index" -%}
+        {% if ss.enable_test_mode %}
+            deleteCookie('igcPopupSubscription')
+            if(popupaccount){
+                toggleContentSelectionPopup();
+            }
+        {% else %}
+            const selection = getCookie('igcPopupSubscription');
+            if (!selection) {
+                if(popupaccount){
+                    toggleContentSelectionPopup();
+                }
+            }
+            setCookie('igcPopupSubscription', 'true', 7); /* expire in 7 days */
+        {% endif %}
+    {%- endif -%}
+    {% endcomment %}
+  
+    overlay_subs.forEach(function(item){
+      item.addEventListener('click', function(){toggleContentSelectionPopup()})
+    });
+
+</script>
+{%- else -%}
+    <script>
+        document.addEventListener("DOMContentLoaded", function(){
+            const footer_subscription_link = document.querySelector('.footer-subscription-popup');
+            if(footer_subscription_link != null) {
+                footer_subscription_link.closest('li').remove();
+            }
+        });
+    </script>
+{% endif %}
+{% schema %}
+  {
+    "name": "Subscription Popup",
+    "settings": [
+        {
+            "type": "checkbox",
+            "id": "enable",
+            "label": "Enable Popup"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_desktop",
+            "label": "Image (Desktop)"
+        },
+        {
+            "type": "image_picker",
+            "id": "image_mobile",
+            "label": "Image (Mobile)"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        },
+        {
+            "type": "textarea",
+            "id": "text",
+            "label": "Text"
+        },
+        {
+            "type": "select",
+            "id": "subscription_type",
+            "label": "Subscription Type",
+            "options": [
+                {"value":"native","label":"Native"},
+                {"value":"embed","label":"Embed"}
+            ]
+        },
+        {
+            "type": "textarea",
+            "id": "subscription_embed_code",
+            "label": "Mailing List Embed Code"
+        }
+    ]
+  }
+{% endschema %}
+  

@@ -1,0 +1,377 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'split-hero-accordion-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #{{el_id}} .container:after,
+  #{{el_id}} .container:before,
+  #{{el_id}} .row:after,
+  #{{el_id}} .row:before {
+    display: none;
+  }
+  @media screen and (min-width: 1024px){
+    #{{el_id}} .sha-accordion .accordion .description .global-image-wrapper {
+      transition: 1s all ease;
+    }
+    #{{el_id}} .sha-accordion .accordion .description .global-image-wrapper:hover {
+      scale: 1.1;
+    }
+    #{{ el_id }} .shs-button:hover {
+        background-color: var(--green);
+        color: #fff;
+    }
+    #{{ el_id }} .shs-button:hover .icon svg path {
+        stroke: #fff;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'split-hero-accordion-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      <div class="row flex d-flex-row column-reverse ai-start jc-between">
+        <div class="col-12 col-d-5 d-pt-20 pt-16 sticky top-0">
+          {% if ss.title != blank %}
+            <div class="p3 c-label">{{ ss.title }}</div>
+          {% endif %}
+          {% if ss.text != blank %}
+            <div class="h4 d-mt-16 no-anim c-green mt-12">{{ ss.text }}</div>
+          {% endif %}
+          {% if ss.link_label != blank %}
+            <a
+              href="{{ss.link_url}}"
+              class="d-max-330 shs-button w-full p2 d-mt-32 mt-24 b-1 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 b-green c-green"
+            >
+              {{ ss.link_label }}
+              <span class="icon">
+                {{ settings.icon_arrow_up_right }}
+              </span>
+            </a>
+          {% endif %}
+          <div class="sha-accordion d-mt-40 mt-32 accordion-wrapper">
+            {% for block in sb %}
+              {% liquid
+                assign bs = block.settings
+                assign wrapper_class = 'pb-12 bb-1 b-main mb-12'
+                assign title_wrapper_class = 'sha-accordion-title'
+                assign title_class = 'p1 '
+              %}
+              {% if forloop.last %}
+                {% assign wrapper_class = 'pb-12 bb-1 b-main mb-1' %}
+              {% endif %}
+              {% if bs.title != blank %}
+                {% capture title %}
+                  <div class="p1 flex ai-center colgap-8 c-green">
+                    <div class="p4 c-label">
+                      {% if forloop.index < 10 %}0{% endif %}{{forloop.index}}
+                    </div>
+                    {{bs.title}}
+                  </div>
+                {% endcapture %}
+                {% capture desc_html %}
+                  <div class="pt-12 d-pb-8 pb-4">
+                    {% if bs.image_desktop != blank or bs.image_mobile != blank %}
+                    {% assign image_id = "split-hero-accordion-image-acc-" | append: block.id %}
+                    <div class="overflow">
+                    {%- render 'global-image-wrapper-responsive',
+                      image_id: image_id,
+                      desktop_image: bs.image_desktop,
+                      mobile_image: bs.image_mobile,
+                      additional_class: 'no-bg'
+                    %}
+                    </div>
+                    {% endif %}
+                    {% if bs.text != blank %}
+                    <div class="p2 mt-16 c-green">{{bs.text}}</div>
+                    {% endif %}
+                    {% if bs.link_label != blank %}
+                    <div class="mt-12">
+                      {%- assign link_id = "split-hero-accordion-link-" | append: block.id -%}
+                      {% render 'link-icon', 
+                          id: link_id,
+                          label: bs.link_label,
+                          url: bs.link_url,
+                          text_class: 'p2 underline c-green',
+                          icon_color: 'var(--green)',
+                          icon_svg: settings.icon_arrow_up_right
+                      %}
+                    </div>
+                    {% endif %}
+                  </div>
+                {% endcapture %}
+                {%- render 'accordion',
+                  icon_rotate: false,
+                  wrapper_class: wrapper_class,
+                  title_wrapper_class: title_wrapper_class,
+                  title_class: title_class,
+                  desc_no_pt: true,
+                  title: title,
+                  desc_html: desc_html,
+                  title_no_pt: true,
+                  title_no_pb: true,
+                  open_one_at_a_time: true
+                -%}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-6 ml-auto d-ml-0 col-d-5 d-pt-20 push-d-2 d-sticky top-0">
+          {% if ss.image_desktop != blank or ss.image_mobile != blank %}
+            {% assign image_id = 'split-hero-accordion-image-' | append: section.id %}
+            {%- render 'global-image-wrapper-responsive',
+              image_id: image_id,
+              desktop_image: ss.image_desktop,
+              mobile_image: ss.image_mobile,
+              additional_class: 'no-bg'
+            %}
+          {% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Split Hero Accordion",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Image Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image Mobile"
+    },
+    {
+      "type": "textarea",
+      "id": "image_title",
+      "label": "Image Title"
+    },
+    {
+      "type": "textarea",
+      "id": "image_label",
+      "label": "Image Label"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Link Label"
+    },
+    {
+      "type": "url",
+      "id": "link_url",
+      "label": "Link URL"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_m",
+        "label": "Top padding (Mobile)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_m",
+        "label": "Bottom padding (Mobile)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_t",
+        "label": "Top padding (Tablet)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_t",
+        "label": "Bottom padding (Tablet)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding",
+        "label": "Top padding (Desktop)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding",
+        "label": "Bottom padding (Desktop)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_hd",
+        "label": "Top padding (HD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_hd",
+        "label": "Bottom padding (HD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_hhd",
+        "label": "Top padding (HHD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_hhd",
+        "label": "Bottom padding (HHD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image_desktop",
+          "label": "Image Desktop"
+        },
+        {
+          "type": "image_picker",
+          "id": "image_mobile",
+          "label": "Image Mobile"
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "textarea",
+          "id": "text",
+          "label": "Text"
+        },
+        {
+          "type": "text",
+          "id": "link_label",
+          "label": "Link Label"
+        },
+        {
+          "type": "url",
+          "id": "link_url",
+          "label": "Link URL"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Hero Accordion",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

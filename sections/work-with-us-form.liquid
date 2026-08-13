@@ -1,0 +1,666 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'work-with-us-form-' | append: section.id
+  assign ss = section.settings
+  assign form_id = 'work-with-us-form-el-' | append: section.id
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    {% if ss.bg_color != blank %}
+      background-color: {{ ss.bg_color }};
+    {% endif %}
+    {% if ss.anchor_id != blank %}
+      scroll-margin-top: 100px;
+    {% endif %}
+  }
+  #{{ el_id }} .wwu-figure {
+    margin-left: auto;
+  }
+  #{{ el_id }} .wwu-caption {
+    margin-top: 8px;
+    column-gap: 16px;
+  }
+  #{{ el_id }} .wwu-caption-label {
+    flex: 0 0 50px;
+  }
+  #{{ el_id }} .global-input::placeholder {
+    color: var(--grey);
+    opacity: 1;
+  }
+  #{{ el_id }} .global-input:focus::placeholder {
+    opacity: 0;
+  }
+  #{{ el_id }} .wwu-input::placeholder {
+    color: var(--grey);
+    opacity: 1;
+  }
+  #{{ el_id }} .wwu-input:focus::placeholder {
+    opacity: 0;
+  }
+  #{{ el_id }} .global-select-div .icons .icon {
+    padding: 9px 6px;
+    width: unset;
+    height: unset;
+  }
+  #{{ el_id }} .global-select-div .icons .icon svg {
+    width: 12px;
+    height: 12px;
+  }
+  #{{ el_id }} .global-select-div .options li {
+    padding: 6px 20px;
+  }
+  #{{ el_id }} .global-select-div .options li:first-child {
+    padding-top: 15px;
+  }
+  #{{ el_id }} .global-select-div .options li:last-child {
+    padding-bottom: 15px;
+  }
+  #{{ el_id }} .global-select-div .options li:after {
+    content: '';
+    display: none;
+    width: 5px;
+    height: 5px;
+    margin-left: 8px;
+    transform: translateY(-25%);
+    background-color: #B35E34;
+    border-radius: 100px;
+  }
+  #{{ el_id }} .global-select-div .options li.active,
+  #{{ el_id }} .global-select-div .options li:hover {
+    color: var(--green);
+  }
+  #{{ el_id }} .global-select-div .options li:hover:after {
+    display: inline-block;
+  }
+  #{{ el_id }} .global-select-div .options li.active:after {
+    display: inline-block;
+  }
+  @media (min-width: 1024px) {
+    #{{ el_id }} .wwu-figure {
+      margin-left: 0;
+    }
+    #{{ el_id }} .wwu-caption {
+      column-gap: 24px;
+    }
+    #{{ el_id }} .wwu-caption-label {
+      flex: 0 0 94px;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'work-with-us-form-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" {% if ss.anchor_id != blank %}data-anchor="{{ ss.anchor_id }}"{% endif %}>
+    {% if ss.anchor_id != blank %}
+      <span id="{{ ss.anchor_id }}"></span>
+    {% endif %}
+    <div class="container">
+      <div class="wwu-header flex flex-column d-flex-row jc-between ai-start colgap-24 rowgap-24">
+        <div class="wwu-heading w-full">
+          <{{ ss.title_dom_type }} class="{{ ss.title_size }} c-green d-colgap-80 flex jc-between d-jc-start">
+            <span>{{ ss.title_1 }}</span>
+            {%- if ss.title_2 != blank -%}
+              <span>{{ ss.title_2 }}</span>
+            {%- endif -%}
+          </{{ ss.title_dom_type }}>
+          {% if ss.text != blank %}
+            <div class="p1 c-green d-mt-32 mt-16 d-max-560">{{ ss.text | newline_to_br }}</div>
+          {% endif %}
+        </div>
+        {% if ss.image != blank %}
+          <div class="wwu-figure w-full max-165 d-max-210">
+            {%- assign image_id = 'wwu-image-' | append: section.id -%}
+            {%- render 'global-image-wrapper', image: ss.image, additional_class: 'no-bg', image_id: image_id -%}
+            {% if ss.caption_label != blank or ss.caption_text != blank %}
+              <div class="flex wwu-caption p4 c-label">
+                <div class="wwu-caption-label">{{ ss.caption_label }}</div>
+                <div class="wwu-caption-text">{{ ss.caption_text }}</div>
+              </div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+      <div class="wwu-form-row flex d-flex-row rowgap-24 d-pt-60 pt-40 column-reverse">
+        <div class="wwu-form-box w-full d-max-680 col-d-6 d-pl-0 d-pr-0">
+          {%- form 'contact', id: form_id, class: 'flex flex-column rowgap-16' -%}
+            {%- if form.posted_successfully? -%}
+              <p class="p1 c-green pb-24">
+                {{ ss.success_message | default: 'Your message has been sent.' }}
+              </p>
+            {%- else -%}
+              {%- if form.errors -%}
+                {%- for error in form.errors -%}
+                  <p class="p1 tc pb-24 c-grey">
+                    {% if error == 'form' %}
+                      {{ form.errors.messages[error] }}
+                    {% else %}
+                      {{ form.errors.translated_fields[error] }} - {{ form.errors.messages[error] }}
+                    {% endif %}
+                  </p>
+                {%- endfor -%}
+              {%- endif -%}
+            {%- endif -%}
+            <div class="form-each w-full relative">
+              <div class="relative overflow pb-1">
+                <input
+                  v-model="contactForm.name"
+                  type="text"
+                  name="contact[name]"
+                  placeholder="{{ ss.name_placeholder | default: 'Name*' }}"
+                  class="wwu-input p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                >
+              </div>
+              <div v-if="contactForm.name_error" class="p3 mt-4 c-red">
+                Please enter your name.
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <div class="relative overflow pb-1">
+                <input
+                  v-model="contactForm.email"
+                  @change="validateEmail"
+                  type="email"
+                  name="contact[email]"
+                  placeholder="{{ ss.email_placeholder | default: 'Email Address*' }}"
+                  class="wwu-input p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                >
+              </div>
+              <!-- Show when email is empty -->
+              <div v-if="contactForm.email_error" class="p3 mt-4 c-red">
+                {{ 'customer.login.error_email' | t }}
+              </div>
+              <!-- Show when email format is invalid -->
+              <div v-if="contactForm.email_invalid" class="p3 mt-4 c-red">
+                {{ 'customer.register.error_valid_email' | t }}
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <div class="relative pb-1 flex d-colgap-24 colgap-16">
+                <div class="pt-8 w-full max-110">
+                  {%- assign select_id = 'wwu-country-code-' | append: section.id -%}
+                  {% assign values = "+1,+7,+20,+27,+30,+31,+32,+33,+34,+36,+39,+40,+41,+43,+44,+45,+46,+47,+48,+49,+51,+52,+53,+54,+55,+56,+57,+58,+60,+61,+62,+63,+64,+65,+66,+81,+82,+84,+86,+90,+91,+92,+93,+94,+95,+98,+211,+212,+213,+216,+218,+220,+221,+222,+223,+224,+225,+226,+227,+228,+229,+230,+231,+232,+233,+234,+235,+236,+237,+238,+239,+240,+241,+242,+243,+244,+245,+246,+248,+249,+250,+251,+252,+253,+254,+255,+256,+257,+258,+260,+261,+262,+263,+264,+265,+266,+267,+268,+269,+290,+291,+297,+298,+299,+350,+351,+352,+353,+354,+355,+356,+357,+358,+359,+370,+371,+372,+373,+374,+375,+376,+377,+378,+380,+381,+382,+383,+385,+386,+387,+389,+420,+421,+423,+500,+501,+502,+503,+504,+505,+506,+507,+508,+509,+590,+591,+592,+593,+594,+595,+596,+597,+598,+599,+670,+672,+673,+674,+675,+676,+677,+678,+679,+680,+681,+682,+683,+685,+686,+687,+688,+689,+690,+691,+692,+850,+852,+853,+855,+856,+870,+880,+886,+960,+961,+962,+963,+964,+965,+966,+967,+968,+970,+971,+972,+973,+974,+975,+976,+977,+992,+993,+994,+995,+996,+998" %}
+                  {% assign values = values | split: ',' %}
+                  {% assign default_code = ss.default_country_code | default: '+65' %}
+                  {%- render 'global-select',
+                    default_value: default_code,
+                    default_text: default_code,
+                    values: values,
+                    option_values: values,
+                    id: select_id,
+                    selected_text_class: 'p2 c-green',
+                    global_select_class: 'global-input bb-1 b-main pt-8 pb-8 pr-0',
+                    field_name: '',
+                    vue_v_model: 'v-model="contactForm.country_code"',
+                    label_class: 'p2 c-green'
+                  -%}
+                </div>
+                <input
+                  v-model="contactForm.phone"
+                  type="number"
+                  name=""
+                  placeholder="{{ ss.phone_placeholder | default: 'Phone Number*' }}"
+                  class="wwu-input p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                >
+                <input type="hidden" name="contact[phone]" :value="contactForm.country_code+contactForm.phone">
+              </div>
+              <div v-if="contactForm.phone_error" class="p3 mt-4 c-red">
+                {{ 'customer.contact.error_phone' | t }}
+              </div>
+            </div>
+            <div class="form-each w-full relative flex flex-column d-flex-row d-colgap-24 rowgap-16">
+              <div class="w-full relative">
+                <div class="relative overflow pb-1">
+                  <input
+                    v-model="contactForm.timeline"
+                    type="text"
+                    name="contact[preferred_timeline]"
+                    placeholder="{{ ss.timeline_placeholder | default: 'Preferred Timeline*' }}"
+                    class="wwu-input p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                  >
+                </div>
+                <div v-if="contactForm.timeline_error" class="p3 mt-4 c-red">
+                  Please enter your preferred timeline.
+                </div>
+              </div>
+              <div class="w-full relative">
+                <div class="pt-8">
+                  {%- assign select_id = 'wwu-topic-' | append: section.id -%}
+                  {% assign values = ss.topic %}
+                  {% assign values = values | split: ',' %}
+                  {% assign default_text = ss.topic_placeholder | default: 'Select your enquiry*' %}
+                  {%- render 'global-select',
+                    default_value: '',
+                    default_text: default_text,
+                    values: values,
+                    option_values: values,
+                    id: select_id,
+                    selected_text_class: 'p2 c-green',
+                    global_select_class: 'global-input bb-1 b-main pt-8 pb-8 pr-0',
+                    field_name: 'contact[reason]',
+                    vue_v_model: 'v-model="contactForm.topic"',
+                    label_class: 'p2 c-green'
+                  -%}
+                  <div v-if="contactForm.topic_error" class="p3 mt-4 c-red">
+                    {{ 'customer.contact.error_reason' | t }}
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <div class="relative overflow pb-1">
+                <textarea
+                  v-model="contactForm.message"
+                  name="contact[message]"
+                  placeholder="{{ ss.message_placeholder | default: 'Write your message here*' }}"
+                  class="wwu-input p2 c-green bb-1 b-main pt-8 pb-8 w-full"
+                  rows="6"
+                ></textarea>
+              </div>
+              <div v-if="contactForm.message_error" class="p3 mt-4 c-red">
+                {{ 'customer.contact.error_message' | t }}
+              </div>
+            </div>
+            <div class="form-each w-full relative">
+              <button class="p2 c-white bg-green pt-12 pb-12 pl-24 pr-24 submit" type="submit">
+                {{ ss.button_label | default: 'Submit' }}
+              </button>
+            </div>
+          {%- endform -%}
+        </div>
+        <div class="wwu-form-text col-d-4 push-d-2 d-pl-0 d-pr-0">
+          <div class="p2 c-green rte w-full d-max-330">
+            {{ ss.form_info }}
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const workWithUsVue{{ fn }} = Vue.createApp({
+      delimiters: ['${', '}'],
+      data() {
+        return {
+          contactForm: {
+            country_code: '{{ ss.default_country_code | default: "+65" }}',
+            phone: null,
+            name: null,
+            email: null,
+            timeline: null,
+            topic: null,
+            message: null,
+            has_error: false,
+            phone_error: false,
+            name_error: false,
+            email_error: false, // True if empty
+            email_invalid: false, // True if format is wrong
+            timeline_error: false,
+            topic_error: false,
+            message_error: false,
+          },
+        };
+      },
+      watch: {
+        'contactForm.phone'(value) {
+          this.contactForm.phone_error = !value;
+        },
+        'contactForm.name'(value) {
+          this.contactForm.name_error = !value;
+        },
+        'contactForm.timeline'(value) {
+          this.contactForm.timeline_error = !value;
+        },
+        'contactForm.topic'(value) {
+          this.contactForm.topic_error = !value;
+        },
+        'contactForm.message'(value) {
+          this.contactForm.message_error = !value;
+        },
+      },
+      methods: {
+        validateEmail() {
+          const email = this.contactForm.email;
+          if (!email) {
+            this.contactForm.email_error = true;
+            this.contactForm.email_invalid = false; // Clear format error if empty
+          } else if (!this.isValidEmail(email)) {
+            this.contactForm.email_error = false; // Email is not empty
+            this.contactForm.email_invalid = true; // But format is wrong
+          } else {
+            this.contactForm.email_error = false;
+            this.contactForm.email_invalid = false;
+          }
+        },
+        isValidEmail(email) {
+          const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+          return emailRegex.test(email);
+        },
+        validateFormOnSubmit() {
+          this.contactForm.phone_error = !this.contactForm.phone;
+          this.contactForm.name_error = !this.contactForm.name;
+          this.contactForm.timeline_error = !this.contactForm.timeline;
+          this.contactForm.topic_error = !this.contactForm.topic;
+          this.contactForm.message_error = !this.contactForm.message;
+          this.validateEmail(); // Ensure email is validated on submit
+
+          this.contactForm.has_error =
+            this.contactForm.phone_error ||
+            this.contactForm.name_error ||
+            this.contactForm.email_error ||
+            this.contactForm.email_invalid ||
+            this.contactForm.timeline_error ||
+            this.contactForm.topic_error ||
+            this.contactForm.message_error;
+
+          return !this.contactForm.has_error;
+        },
+      },
+      mounted() {
+        const thisObj = this;
+        document.getElementById('{{ form_id }}').addEventListener('submit', function (e) {
+          e.preventDefault();
+
+          if (!thisObj.validateFormOnSubmit()) {
+            e.stopImmediatePropagation();
+          } else {
+            this.submit();
+          }
+        });
+      },
+    }).mount('#{{ el_id }} .wwu-form-box');
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Work With Us Form",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "text",
+      "id": "anchor_id",
+      "label": "Section Anchor ID",
+      "info": "Optional. Lets buttons on the page jump to this section, e.g. set 'work-with-us' and link buttons to '#work-with-us'."
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title (First Part)",
+      "info": "On mobile the two title parts spread to the edges; on desktop they sit with a fixed gap."
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Title (Second Part)"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Font Size",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" },
+        { "value": "h4", "label": "h4" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "header",
+      "content": "Image"
+    },
+    {
+      "type": "image_picker",
+      "id": "image",
+      "label": "Image",
+      "info": "Portrait crop. The Figma uses a 3:4 ratio."
+    },
+    {
+      "type": "text",
+      "id": "caption_label",
+      "label": "Caption Label"
+    },
+    {
+      "type": "text",
+      "id": "caption_text",
+      "label": "Caption Text"
+    },
+    {
+      "type": "header",
+      "content": "Form"
+    },
+    {
+      "type": "text",
+      "id": "name_placeholder",
+      "label": "Name Placeholder",
+      "default": "Name*"
+    },
+    {
+      "type": "text",
+      "id": "email_placeholder",
+      "label": "Email Placeholder",
+      "default": "Email Address*"
+    },
+    {
+      "type": "text",
+      "id": "default_country_code",
+      "label": "Default Country Code",
+      "default": "+65"
+    },
+    {
+      "type": "text",
+      "id": "phone_placeholder",
+      "label": "Phone Placeholder",
+      "default": "Phone Number*"
+    },
+    {
+      "type": "text",
+      "id": "timeline_placeholder",
+      "label": "Preferred Timeline Placeholder",
+      "default": "Preferred Timeline*"
+    },
+    {
+      "type": "text",
+      "id": "topic_placeholder",
+      "label": "Enquiry Dropdown Placeholder",
+      "default": "Select your enquiry*"
+    },
+    {
+      "type": "textarea",
+      "id": "topic",
+      "label": "Enquiry Options",
+      "info": "Input separated by comma. e.g. topic 1,topic 2,topic 3"
+    },
+    {
+      "type": "text",
+      "id": "message_placeholder",
+      "label": "Message Placeholder",
+      "default": "Write your message here*"
+    },
+    {
+      "type": "richtext",
+      "id": "form_info",
+      "label": "Form Info",
+      "info": "Text column shown beside the form on desktop and above it on mobile."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Submit Button Label",
+      "default": "Submit"
+    },
+    {
+      "type": "textarea",
+      "id": "success_message",
+      "label": "Success Message"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Work With Us Form"
+    }
+  ]
+}
+{% endschema %}

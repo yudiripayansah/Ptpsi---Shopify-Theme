@@ -1,0 +1,324 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'installation-intro-' | append: section.id
+  assign entry = metaobject
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #shopify-section-installation-intro {
+    z-index: 99;
+  }
+  #{{ el_id }} .ii-cta-fixed {
+    bottom: -100%;
+    transition: all .3s ease;
+  }
+  #{{ el_id }} .ii-cta-fixed.show {
+    bottom: 0;
+  }
+  #{{ el_id }} .ii-wrap {
+    display: flex;
+    flex-direction: column;
+    row-gap: 32px;
+  }
+  #{{ el_id }} .ii-spec {
+    row-gap: 8px;
+    width: 100%;
+    max-width: 447px;
+  }
+  #{{ el_id }} .ii-spec-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    border-bottom: 1px solid var(--main);
+  }
+  #{{ el_id }} .ii-cta {
+    column-gap: 48px;
+    padding: 12px 24px;
+    background-color: var(--green);
+    text-decoration: none;
+    width: 100%;
+    justify-content: space-between;
+    width: 100%;
+  }
+  #{{ el_id }} .ii-cta .icon svg {
+    width: 10px;
+    height: 10px;
+  }
+  #{{ el_id }} .ii-cta .icon svg * {
+    stroke: var(--white)
+  }
+  #{{ el_id }} .ii-excerpt { 
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .ii-wrap {
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: flex-start;
+      column-gap: 48px;
+    }
+    #{{ el_id }} .ii-main {
+      /* row-gap: 32px; */
+    }
+    #{{ el_id }} .ii-excerpt {
+      max-width: 448px;
+      margin-top: 0;
+    }
+    #{{ el_id }} .ii-cta {
+      max-width: 447px;
+    }
+  }
+</style>
+
+<div id="{{ el_id }}" data-ii>
+  {% if entry != blank %}
+    {% liquid
+      assign ref = entry.reference_number.value
+      assign ref_padded = ref
+      if ref < 10
+        assign ref_padded = '0' | append: ref
+      endif
+      assign cta_url = entry.cta_url.value
+    %}
+    <div class="container">
+      <div class="ii-wrap pt-20 d-pt-24 pb-56 d-pb-120 bb-1 b-main">
+        <div class="ii-main flex flex-column">
+          <div class="flex flex-column rowgap-16">
+            {% if entry.sector.value != blank %}
+              <p class="p3 c-label">{{ entry.sector.value }}</p>
+            {% endif %}
+            <p class="h1 c-green">{{ entry.title.value }}</p>
+          </div>
+          <div class="ii-spec flex flex-column mt-24 d-mt-32">
+            <div class="ii-spec-row pb-16 d-pb-12">
+              <span class="p4 c-label">INS. {{ ref_padded }}</span>
+              <span class="p2 c-green">{{ entry.client_name.value }}</span>
+            </div>
+            <div class="ii-spec-row pt-16 pb-16 d-pt-12 d-pb-12">
+              <span class="p4 c-label">Year</span>
+              <span class="p2 c-green">{{ entry.year.value }}</span>
+            </div>
+            {% if entry.industry.value != blank %}
+              <div class="ii-spec-row pt-16 pb-16 d-pt-12 d-pb-12">
+                <span class="p4 c-label">Industry</span>
+                <span class="p2 c-green">{{ entry.industry.value }}</span>
+              </div>
+            {% endif %}
+          </div>
+          {% if cta_url != blank %}
+            <a href="{{ cta_url }}" class="ii-cta p2 c-white flex ai-center mt-24">
+              {{ entry.cta_label.value | default: 'Get Started' }}
+              <span class="icon flex ai-center jc-center">{{ settings.icon_arrow_up_right }}</span>
+            </a>
+          {% endif %}
+        </div>
+        {% if entry.excerpt.value != blank %}
+          <div class="ii-excerpt p1 c-green pt-8 d-pt-40">{{ entry.excerpt.value | newline_to_br }}</div>
+        {% endif %}
+      </div>
+    </div>
+  {% endif %}
+  {% if cta_url != blank %}
+    <div class="ii-cta-fixed pt-16 pb-16 fixed bottom-0 left-0 zi-5 w-full bg-background-main">
+      <div class="container">
+        <a href="{{ cta_url }}" class="ii-cta p2 c-white flex ai-center">
+          {{ entry.cta_label.value | default: 'Get Started' }}
+          <span class="icon flex ai-center jc-center">{{ settings.icon_arrow_up_right }}</span>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+</div>
+
+<script>
+  (function () {
+    var SECTION_ID = '{{ el_id }}';
+
+    function initFixedCta(root) {
+      var fixedCta = root.querySelector('.ii-cta-fixed');
+      if (!fixedCta || !('IntersectionObserver' in window)) return null;
+
+      // The Shopify-generated wrapper around this section is the "is the
+      // section itself still on screen" target — not just the CTA button,
+      // so the fixed bar shows only once the whole section has scrolled by.
+      var target = root.closest('[id^="shopify-section-"]') || root;
+
+      var observer = new IntersectionObserver(function (entries) {
+        entries.forEach(function (entry) {
+          fixedCta.classList.toggle('show', !entry.isIntersecting);
+        });
+      });
+      observer.observe(target);
+
+      return function destroy() {
+        observer.disconnect();
+      };
+    }
+
+    function initIntro(root) {
+      if (!root || root.iiInited) return;
+      root.iiInited = true;
+      root.iiDestroy = initFixedCta(root);
+    }
+
+    initIntro(document.getElementById(SECTION_ID));
+
+    if (window.Shopify && window.Shopify.designMode) {
+      document.addEventListener('shopify:section:load', function (event) {
+        var el = event.target.querySelector('[data-ii]');
+        if (el) initIntro(el);
+      });
+      document.addEventListener('shopify:section:unload', function (event) {
+        var el = event.target.querySelector('[data-ii]');
+        if (el && el.iiDestroy) el.iiDestroy();
+      });
+    }
+  })();
+</script>
+
+{% schema %}
+{
+  "name": "Installation Intro",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installation Intro"
+    }
+  ]
+}
+{% endschema %}

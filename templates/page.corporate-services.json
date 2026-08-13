@@ -1,0 +1,468 @@
+{
+  "wrapper": "div.global-content-top-margin.bg-background-main",
+  "sections": {
+    "intro_image_paragraph": {
+      "type": "image-with-paragraph",
+      "name": "Image With Paragraph",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "desktop_image": "shopify:\/\/shop_images\/cs-hero-desktop.png",
+        "mobile_image": "shopify:\/\/shop_images\/cs-hero-mobile.png",
+        "label": "Corporate Services",
+        "title": "Our corporate services turn plants into timeless expressions of gratitude and care. Thoughtfully curated and beautifully presented, each gift is designed to grow with your clients, colleagues, and partners.",
+        "title_dom_type": "h1",
+        "title_size": "h2",
+        "button_label": "Work With Us",
+        "button_url": "#work-with-us",
+        "button_style": "filled",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "large",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "large",
+        "top_padding": "nopadding",
+        "bottom_padding": "large",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "large",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "large"
+      }
+    },
+    "how_it_works": {
+      "type": "how-it-works-parallax",
+      "blocks": {
+        "set_consultation": {
+          "type": "set",
+          "settings": {
+            "title": "Consultation",
+            "text": "We start by understanding your space, style, and needs — from office environments to event settings — to ensure the greenery complements your vision.",
+            "image_1": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_2": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_3": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_4": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_5": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_6": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_7": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_8": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_9": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_10": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "scroll_length_d": 150,
+            "scroll_length_m": 125
+          }
+        },
+        "set_curation": {
+          "type": "set",
+          "settings": {
+            "title": "Curation & Design",
+            "text": "We translate your vision into a tailored proposal — selecting plants, planters, and finishes that suit your space, brand, and budget.",
+            "image_1": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_2": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_3": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_4": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_5": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_6": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_7": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_8": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_9": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_10": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "scroll_length_d": 150,
+            "scroll_length_m": 125
+          }
+        },
+        "set_installation": {
+          "type": "set",
+          "settings": {
+            "title": "Installation & Aftercare",
+            "text": "Our team handles delivery, styling, and setup from end to end, and shares simple care guidance so the greenery keeps thriving long after handover.",
+            "image_1": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_2": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_3": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_4": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_5": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_6": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_7": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_8": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_9": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_10": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "scroll_length_d": 150,
+            "scroll_length_m": 125
+          }
+        }
+      },
+      "block_order": [
+        "set_consultation",
+        "set_curation",
+        "set_installation"
+      ],
+      "name": "How It Works Parallax",
+      "settings": {
+        "bg_color": "#f2e9df",
+        "label": "How It Works",
+        "title": "From concept to completion, we make it seamless",
+        "title_dom_type": "h2",
+        "title_size": "h3",
+        "media_type": "frames",
+        "frame_fit": "contain",
+        "illustration_width": 42,
+        "illustration_width_m": 92
+      }
+    },
+    "gifts_numbered_details": {
+      "type": "split-numbered-details",
+      "blocks": {
+        "entry_bulk_orders": {
+          "type": "entry",
+          "settings": {
+            "title": "Bulk Plant Orders",
+            "text": "Order plants in bulk for your team, clients, or events. We curate healthy, design-led greenery at scale, handle the styling and packaging, and coordinate delivery so every recipient gets a gift that feels personal."
+          }
+        },
+        "entry_branded_pots": {
+          "type": "entry",
+          "settings": {
+            "title": "Custom-Branded Pots",
+            "text": "Elevate your corporate gifts with a personal touch. Our planters can be custom engraved with your company logo, a special message, or a memorable date—turning every gift into a meaningful keepsake. Perfect for client appreciation, team milestones, or office décor that reflects your brand."
+          }
+        },
+        "entry_plant_tags": {
+          "type": "entry",
+          "settings": {
+            "title": "Branded Plant Tags",
+            "text": "Add a finishing touch with plant tags customised to your brand. From logos to personalised messages, each tag makes your gift instantly recognisable and memorable."
+          }
+        }
+      },
+      "block_order": [
+        "entry_bulk_orders",
+        "entry_branded_pots",
+        "entry_plant_tags"
+      ],
+      "name": "Split Numbered Details",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "image_position": "image_first",
+        "label": "Our Services",
+        "title": "Gifts That Grow with Meaning",
+        "title_dom_type": "h2",
+        "title_size": "h2",
+        "dot_color": "#b35e34",
+        "desktop_image": "shopify:\/\/shop_images\/cs-module-1.png",
+        "mobile_image": "shopify:\/\/shop_images\/cs-module-1.png",
+        "caption_label": "OBJ 01.",
+        "caption_text": "Soilboy Flat Pot Small, Speckled",
+        "button_label": "Work With Us",
+        "button_url": "#work-with-us",
+        "button_style": "outlined",
+        "top_padding_m": "large",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "large",
+        "bottom_padding_t": "medium",
+        "top_padding": "large",
+        "bottom_padding": "medium",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "medium"
+      }
+    },
+    "workshops_numbered_details": {
+      "type": "split-numbered-details",
+      "blocks": {
+        "entry_brand_led": {
+          "type": "entry",
+          "settings": {
+            "title": "Brand-Led Plant Workshops",
+            "text": "Bring your brand story to life through hands-on plant experiences. We tailor each workshop to your company's identity, from the plants and pots to the take-home keepsakes your team will remember."
+          }
+        },
+        "entry_group": {
+          "type": "entry",
+          "settings": {
+            "title": "Group Workshops",
+            "text": "Reconnect your team with nature through thoughtful, customisable workshops. Choose from a range of plant-based experiences designed to inspire collaboration, mindfulness, and a shared sense of growth."
+          }
+        }
+      },
+      "block_order": [
+        "entry_brand_led",
+        "entry_group"
+      ],
+      "name": "Split Numbered Details",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "image_position": "text_first",
+        "label": "Workshops",
+        "title": "Planting Moments That Blossom Into Teamwork",
+        "title_dom_type": "h2",
+        "title_size": "h2",
+        "dot_color": "#b35e34",
+        "desktop_image": "shopify:\/\/shop_images\/cs-module-2.png",
+        "mobile_image": "shopify:\/\/shop_images\/cs-module-2.png",
+        "caption_label": "OBJ 01.",
+        "caption_text": "Soilboy Flat Pot Small, Speckled",
+        "button_label": "View Workshops",
+        "button_url": "#",
+        "button_style": "outlined",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "nopadding",
+        "bottom_padding": "nopadding",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "nopadding",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "nopadding"
+      }
+    },
+    "testimonials": {
+      "type": "testimonial-carousel",
+      "blocks": {
+        "testimonial_1": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        },
+        "entry_weCqez": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        },
+        "entry_aBrTWr": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        },
+        "entry_4hCNqp": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "entry_weCqez",
+        "entry_aBrTWr",
+        "entry_4hCNqp"
+      ],
+      "name": "Testimonial Carousel",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "show_top_border": false,
+        "show_top_border_m": true,
+        "top_padding_m": "large",
+        "bottom_padding_m": "large",
+        "top_padding_t": "large",
+        "bottom_padding_t": "large",
+        "top_padding": "large",
+        "bottom_padding": "large",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "large",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "large"
+      }
+    },
+    "partner_logos": {
+      "type": "marquee-logos",
+      "blocks": {
+        "logo_1": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Logo-1.png"
+          }
+        },
+        "logo_2": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Logo-2.png"
+          }
+        },
+        "logo_ybc4d3": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Logo-3.png"
+          }
+        },
+        "logo_3": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Logo-4.png"
+          }
+        },
+        "logo_7": {
+          "type": "logo",
+          "settings": {
+            "image": "shopify:\/\/shop_images\/Logo-5.svg"
+          }
+        }
+      },
+      "block_order": [
+        "logo_1",
+        "logo_2",
+        "logo_ybc4d3",
+        "logo_3",
+        "logo_7"
+      ],
+      "name": "Marquee Logos",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "duration": 30,
+        "logo_height": 36,
+        "gap": 60,
+        "gap_m": 40,
+        "show_bottom_border": true,
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "medium",
+        "top_padding": "nopadding",
+        "bottom_padding": "medium",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "medium"
+      }
+    },
+    "work_with_us": {
+      "type": "work-with-us-form",
+      "name": "Work With Us Form",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "anchor_id": "work-with-us",
+        "title_1": "Work With",
+        "title_2": "Us",
+        "title_dom_type": "h1",
+        "title_size": "h1",
+        "text": "Tell us about your gifting needs, and our team will be in touch with a tailored proposal.",
+        "image": "shopify:\/\/shop_images\/Image_1_39cfb587-fecc-432b-bd8d-e2c49861e007.png",
+        "caption_label": "SP 01.",
+        "caption_text": "Everfresh Tree",
+        "name_placeholder": "Name*",
+        "email_placeholder": "Email Address*",
+        "default_country_code": "+65",
+        "phone_placeholder": "Phone Number*",
+        "timeline_placeholder": "Preferred Timeline*",
+        "topic_placeholder": "Select your enquiry*",
+        "topic": "Bulk Plant Orders, Custom-Branded Pots, Branded Plant Tags, Workshops, Installations, Others",
+        "message_placeholder": "Write your message here*",
+        "form_info": "<p>Email us at hello@soilboy.sg or fill out the form. Our lean & green team, will respond between 1-3 business days.<\/p><p>Looking for corporate gifts, workshops or installations? Email us at business@soilboy.sg or indicate your project details in the form.<\/p>",
+        "button_label": "Submit",
+        "success_message": "Your message has been sent.",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "nopadding",
+        "bottom_padding": "nopadding",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "nopadding",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "nopadding"
+      }
+    },
+    "faq": {
+      "type": "pdp-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_2": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_3": {
+          "type": "entry",
+          "settings": {
+            "title": "Sed at elementum odio?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_4": {
+          "type": "entry",
+          "settings": {
+            "title": "In semper tortor pharetra vitae?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_5": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_6": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6"
+      ],
+      "name": "PDP - FAQ",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title": "FAQ",
+        "text": "Got a question? We’re here to help.",
+        "link_label": "View All FAQ",
+        "link_url": "\/pages\/faq",
+        "show_product_faq": false,
+        "product_faq_position": "after",
+        "top_padding_m": "large",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "large",
+        "bottom_padding_t": "medium",
+        "top_padding": "large",
+        "bottom_padding": "medium",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "medium"
+      }
+    }
+  },
+  "order": [
+    "intro_image_paragraph",
+    "how_it_works",
+    "gifts_numbered_details",
+    "workshops_numbered_details",
+    "testimonials",
+    "partner_logos",
+    "work_with_us",
+    "faq"
+  ]
+}

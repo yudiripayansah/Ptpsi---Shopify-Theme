@@ -1,0 +1,138 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'text-and-links-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+    #{{ el_id }} {
+        background-color: {{ section.settings.bg_color }};
+        overflow: hidden;
+    }
+    #{{ el_id }} .hbl-button {
+        width: fit-content;
+        justify-content: space-between;
+        column-gap: 4px;
+        text-decoration: underline;
+    }
+
+    #{{ el_id }} .hbl-button .icon,
+    #{{ el_id }} .hbl-button .icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    #{{ el_id }} .border-wrapper {
+        width: 100%;
+    }
+    @media screen and (max-width: 1023px){
+        #{{ el_id }} .tal-container {
+            display: flex;
+        }
+        #{{ el_id }} .tal-desktop-container {
+            width: 50%;
+            margin-right: 0;
+            margin-left: 0;
+            display: flex;
+            flex-direction: column;
+            row-gap: 4px;
+            padding-left: 4px;
+        }
+        #{{ el_id }} .w-50 {
+            width: 50%;
+            padding-right: 4px;
+        }
+        #{{ el_id }} .tal-desktop-container::before,
+        #{{ el_id }} .tal-desktop-container::after {
+            display: none;
+        }
+        #{{ el_id }} .tal-desktop-container * {
+            padding-left: 0;
+            padding-right: 0;
+        }
+    }
+</style>
+
+{% if request.visual_preview_mode %}
+    <img src="{{ 'text-and-links-figma.PNG' | asset_url }}" width="100%" height="100%" /> 
+{% else %}
+    <div id="{{ el_id }}" class="mt-16 d-mt-24 mb-20 d-mb-24">
+        <div class="container tal-container">
+            <div class="w-50 hide-d">
+                {% if ss.title != blank%}
+                    <p class="p3 c-label">{{ ss.title }}</p>
+                {% endif %}
+            </div>
+            <div class="row tal-desktop-container w-full">
+                {% if ss.title != blank%}
+                    <div class="col-12 col-d-3 hide-m show-d">
+                        <p class="p3 c-label">{{ ss.title }}</p>
+                    </div>
+                {% endif %}
+                {% for block in sb %}
+                    {% assign bs = block.settings %}
+                    <div class="col-12 col-d-3">
+                        {% if bs.label != blank %}
+                            <a href="{{ bs.url }}" class="hbl-button p2 flex ai-center">
+                                {{ bs.label }}
+                                <div class="icon">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                                        <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                                    </svg>
+                                </div>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endif %}
+
+{% schema %}
+{
+    "name": "Text and Links",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "textarea",
+            "id": "title",
+            "label": "Title"
+        }
+    ],
+    "blocks": [
+        {
+            "type": "entry",
+            "name": "Entry",
+            "settings": [
+                {
+                    "type": "text",
+                    "id": "label",
+                    "label": "Link Label"
+                },
+                {
+                    "type": "url",
+                    "id": "url",
+                    "label": "Link Url"
+                }
+            ]
+        }
+    ],
+    "presets": [
+        {
+            "name": "Text and Links",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

@@ -1,0 +1,586 @@
+{% liquid
+    assign fn = section.id | replace: '-', ''
+    assign el_id = 'buy-it-with-' | append: section.id
+    assign ss = section.settings
+    assign sb = section.blocks
+    render 'section-padding', el_id: el_id, section: section
+
+    assign is_workshop = false
+    assign product_title_check = product.title | default: '' | downcase
+    if product_title_check contains 'workshop'
+        assign is_workshop = true
+    endif
+
+    if is_workshop
+        assign detail_title_1 = 'sections.product_detail.workshop_title_1' | t
+        assign detail_title_2 = 'sections.product_detail.workshop_title_2' | t
+    else
+        assign detail_title_1 = 'sections.product_detail.title_1' | t
+        assign detail_title_2 = 'sections.product_detail.title_2' | t
+    endif
+
+    # The top description is care-card copy about the plant you receive, so a
+    # workshop has nothing to say there.
+    assign show_top_description = false
+    if ss.top_description != blank and is_workshop == false
+        assign show_top_description = true
+    endif
+%}
+
+<script>
+    (function() {
+        const initAccordion = () => {
+            const el = document.getElementById('{{ el_id }}');
+            if (!el) return;
+
+            const headers = el.querySelectorAll('.accordion-header');
+
+            headers.forEach(header => {
+                header.addEventListener('click', function() {
+                    const item = this.closest('.accordion-item');
+                    const content = item.querySelector('.accordion-content');
+                    const isActive = this.classList.contains('active');
+
+                    // Close all accordions first so only one can remain open
+                    el.querySelectorAll('.accordion-item').forEach(otherItem => {
+                        const otherHeader = otherItem.querySelector('.accordion-header');
+                        const otherContent = otherItem.querySelector('.accordion-content');
+                        otherHeader.classList.remove('active');
+                        otherContent.classList.remove('active');
+                    });
+
+                    // Toggle current item: open if it was closed, otherwise leave all closed
+                    if (!isActive) {
+                        this.classList.add('active');
+                        content.classList.add('active');
+                    }
+                });
+            });
+        };
+
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', initAccordion);
+        } else {
+            initAccordion();
+        }
+    })();
+</script>
+
+<style>
+    #{{ el_id }} {
+        background-color: {{ section.settings.bg_color }};
+    }
+
+    #{{ el_id }} .icon, #{{ el_id }} .icon svg {
+        width: 14px;
+        height: 14px;
+    }
+
+    #{{ el_id }} .accordion-wrapper {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #{{ el_id }} .accordion-items {
+        display: flex;
+        flex-direction: column;
+    }
+
+    #{{ el_id }} .accordion-item {
+        border-bottom: 1px solid #304835;
+        overflow: hidden;
+    }
+    #{{ el_id }} .accordion-item:first-child {
+        border-top: 1px solid #304835;
+    }
+
+    #{{ el_id }} .accordion-header {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 24px 0;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+
+    #{{ el_id }} .accordion-header .icon-plus {
+        display: block;
+    }
+    #{{ el_id }} .accordion-header .icon-minus {
+        display: none;
+    }
+    #{{ el_id }} .accordion-header.active .icon-minus {
+        display: block;
+    }
+    #{{ el_id }} .accordion-header.active .icon-plus {
+        display: none;
+    }
+
+    #{{ el_id }} .accordion-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    #{{ el_id }} .accordion-content.active {
+        max-height: 1000px;
+    }
+
+    #{{ el_id }} .accordion-body {
+        padding-bottom: 24px;
+    }
+
+    {% comment %} #{{ el_id }} .accordion-body .col-12:first-child {
+        padding-left: 24px;
+    } {% endcomment %}
+    #{{ el_id }} .detail-video-box {
+        cursor: pointer;
+    }
+    #{{ el_id }} .detail-video-box video {
+        position: absolute;
+        height: 100%;
+        width: 100%;
+        object-fit: cover;
+        top: 0;
+        left: 0;
+    }
+    #{{el_id}} .cv-pausePlayButton,
+    #{{el_id}} .video-control {
+        width: 28px;
+        height: 28px;
+    }
+    #{{el_id}} .cv-pausePlayButton span,
+    #{{el_id}} .cv-pausePlayButton svg {
+        height: 14px;
+        width: 14px;
+    }
+    #{{el_id}} .detail-video-box.video-play .cv-pausePlayButton {
+        transition: all .3s ease;
+        opacity: 0;
+    }
+    #{{el_id}} .detail-video-box.video-play:hover .cv-pausePlayButton {
+        opacity: 1;
+    }
+    #{{ el_id }} .shs-button {
+        border: 1px solid var(--green);
+        width: 100%;
+        justify-content: space-between;
+    }
+    #{{ el_id }} .shs-button .icon,
+    #{{ el_id }} .shs-button .icon svg {
+        width: 16px;
+        height: 16px;
+    }
+    #{{ el_id }} .product-detail-header:before,
+    #{{ el_id }} .product-detail-header:after {
+        display: none;
+    }
+    @media screen and (min-width: 1024px){
+        #{{ el_id }} .icon, #{{ el_id }} .icon svg {
+            width: 18px;
+            height: 18px;
+        }
+        #{{ el_id }} .d-y0 {
+            transform: translateY(0);
+        }
+        #{{ el_id }} .accordion-body .col-12:first-child {
+            padding-right: 12.5%;
+        }
+        #{{el_id}} .cv-pausePlayButton,
+        #{{el_id}} .video-control {
+            width: 40px;
+            height: 40px;
+        }
+        #{{el_id}} .cv-pausePlayButton span,
+        #{{el_id}} .cv-pausePlayButton svg {
+            height: 20px;
+            width: auto;
+        }
+        #{{ el_id }} .shs-button {
+            max-width: 330px;
+        }
+        #{{ el_id }} .accordion-header:hover {
+            opacity: 0.7;
+        }
+    }
+</style>
+
+{% if request.visual_preview_mode %}
+    <img src="{{ 'product-detail-figma.png' | asset_url }}" width="100%" height="100%" />
+{% elsif product.metafields.custom.product_detail != blank%}
+    <div id="{{ el_id }}">
+        <div class="container">
+            <div class="row flex{% if show_top_description %} jc-between{% endif %} flex-column d-flex-row pb-56 d-pb-0">
+                <div class="product-detail-header flex jc-between d-jc-start d-mb-80 col-12 col-d-8" style="gap:80px">
+                    <div class="h1">{{ detail_title_1 }}</div>
+                    <div class="h1">{{ detail_title_2 }}</div>
+                </div>
+                {% if show_top_description %}
+                    <div class="p1 col-12 col-d-4 d-mb-80 mt-16 d-mt-0 flex ai-center">
+                        {{ ss.top_description }}
+                    </div>
+                {% endif %}
+            </div>
+            <div class="accordion-wrapper">
+                <div class="accordion-column">
+                    <div class="accordion-items">
+                        {%- for entry in product.metafields.custom.product_detail.value -%}
+                            {% assign i = forloop.index %}
+                            {% assign title = entry["title_1"] %}
+                            {% assign detail_image_object = entry["image_1"] %}
+                            {% assign detail_image = entry["image_1"].value %}
+                            {% assign detail_video = entry["video_1"].value %}
+                            {% assign image_caption_1 = entry["image_caption_1_1"].value %}
+                            {% assign image_caption_2 = entry["image_caption_1_2"].value %}
+                            {% assign description_title_1 = entry["description_1_title_1"].value %}
+                            {% assign description_title_2 = entry["description_1_title_2"].value %}
+                            {% assign description_title_3 = entry["description_1_title_3"].value %}
+                            {% assign description_title_4 = entry["description_1_title_4"].value %}
+                            {% assign description_text_1 = entry["description_1_text_1"].value %}
+                            {% assign description_text_2 = entry["description_1_text_2"].value %}
+                            {% assign description_text_3 = entry["description_1_text_3"].value %}
+                            {% assign description_text_4 = entry["description_1_text_4"].value %}
+                            
+                            {% if detail_image and detail_image.src != blank %}
+                                <!-- Image Object Exists -->
+                            {% endif %}
+                            <div class="accordion-item">
+                                <button class="accordion-header {% if i == 1 %}active{% endif %}">
+                                    <div class="flex d-ai-center" style="gap:8px">
+                                        <div class="p3 c-label y5 d-y0">0{{ i }}</div>
+                                        <div class="h3 c-green tl">{{ title }}</div>
+                                    </div>
+                                    <div class="icon icon-plus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="19" viewBox="0 0 19 19" fill="none">
+                                            <path d="M9.33333 0L9.33333 18.6667M18.6667 9.33333L0 9.33333" stroke="#19341E"/>
+                                        </svg>
+                                    </div>
+                                    <div class="icon icon-minus">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="19" height="1" viewBox="0 0 19 1" fill="none">
+                                            <path d="M18.6667 0.499999L0 0.5" stroke="#19341E"/>
+                                        </svg>
+                                    </div>
+                                </button>
+                                <div class="accordion-content {% if i == 1 %}active{% endif %}">
+                                    <div class="accordion-body">
+                                        <div class="row">
+                                            <div class="col-12 col-d-6">
+                                                <div class="flex" style="gap:8px">
+                                                <div class="p3 c-label" style="opacity:0">0{{ i }}</div>
+                                                <div>
+                                                {% if description_title_1 != blank %}
+                                                <div class="p3 c-label">{{ description_title_1 }}</div>
+                                                <div class="p1 mt-8 c-green">{{ description_text_1 }}</div>
+                                                {% endif %}
+                                                {% if description_title_2 != blank %}
+                                                <div class="p3 c-label mt-20 d-mt-24">{{ description_title_2 }}</div>
+                                                <div class="p1 mt-8 c-green">{{ description_text_2 }}</div>
+                                                {% endif %}
+                                                {% if description_title_3 != blank %}
+                                                <div class="p3 c-label mt-20 d-mt-24">{{ description_title_3 }}</div>
+                                                <div class="p1 mt-8 c-green">{{ description_text_3 }}</div>
+                                                {% endif %}
+                                                {% if description_title_4 != blank %}
+                                                <div class="p3 c-label mt-20 d-mt-24">{{ description_title_4 }}</div>
+                                                <div class="p1 mt-8 c-green">{{ description_text_4 }}</div>
+                                                {% endif %}
+                                                </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-12 col-d-6 mt-40 d-mt-0">
+                                                {% comment %} Video has higher priority than image {% endcomment %}
+                                                {% if detail_video != blank %}
+                                                    <div class="detail-video-box relative" onclick="toggleVideo(event)">
+                                                        {%- assign video_id = 'video_product_detail_' | append: i -%}
+                                                        {%- assign video_url_desktop = '' -%}
+                                                        {%- for vid_source in detail_video.sources -%}
+                                                            {%- if vid_source.mime_type == 'video/mp4' -%}
+                                                            {%- assign video_url_desktop = vid_source.url -%}
+                                                            {%- endif -%}
+                                                        {%- endfor -%}
+                                                        {% assign autoplay = false %}
+                                                        {% assign muted = false %}
+                                                        {% comment %} {%- if bs.autoplay -%}
+                                                        {%- assign autoplay = true -%}
+                                                        {% assign muted = true %}
+                                                        {%- endif -%} {% endcomment %}
+                                                        
+                                                        {%- assign video_url_mobile = '' -%}
+                                                        {%- for vid_source in detail_video.sources -%}
+                                                            {%- if vid_source.mime_type == 'video/mp4' -%}
+                                                                {%- assign video_url_mobile = vid_source.url -%}
+                                                            {%- endif -%}
+                                                        {%- endfor -%}
+    
+                                                        {%- render 'global-video-wrapper-responsive',
+                                                            desktop_image: detail_image,
+                                                            mobile_image: detail_image,
+                                                            desktop_video_url: video_url_desktop,
+                                                            mobile_video_url: video_url_mobile,
+                                                            video_id: video_id,
+                                                            autoplay: autoplay,
+                                                            preload: false,
+                                                            muted: muted,
+                                                            loop: true,
+                                                            load_inside_vue: false
+                                                        -%}
+                                                        {%- if autoplay == false -%}
+                                                            <div class="video-control bottom-20 right-20 d-bottom-40 d-right-40 zi-2 flex ai-center jc-center absolute w-full h-full">
+                                                                <div class="cv-pausePlayButton video-control-button flex ai-center jc-center cursor">
+                                                                    <span class="play-icon">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="23" viewBox="0 0 20 23" fill="none">
+                                                                            <path d="M17.9647 10.0732C19.7866 10.9757 19.7933 12.1111 17.9647 13.1314L3.83536 21.6018C2.06003 22.4439 0.854272 21.9467 0.727701 20.1244L0.667746 2.39617C0.627777 0.717625 2.18327 0.243377 3.66548 1.04816L17.9647 10.0732Z" fill="white" stroke-width="1.33333"/>
+                                                                        </svg>
+                                                                    </span>
+                                                                    <span class="pause-icon hide-m">
+                                                                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="27" viewBox="0 0 20 27" fill="none">
+                                                                            <path d="M0 2.22222C0 0.994922 0.994923 0 2.22222 0H4.44444C5.67174 0 6.66667 0.994923 6.66667 2.22222V24.4444C6.66667 25.6717 5.67174 26.6667 4.44444 26.6667H2.22222C0.994923 26.6667 0 25.6717 0 24.4444V2.22222Z" fill="white"/>
+                                                                            <path d="M13.3333 2.22222C13.3333 0.994922 14.3283 0 15.5556 0H17.7778C19.0051 0 20 0.994923 20 2.22222V24.4444C20 25.6717 19.0051 26.6667 17.7778 26.6667H15.5556C14.3283 26.6667 13.3333 25.6717 13.3333 24.4444V2.22222Z" fill="white"/>
+                                                                        </svg>
+                                                                    </span>
+                                                                </div>
+                                                            </div>
+                                                        {% endif %}
+                                                    </div>
+                                                {% elsif detail_image and detail_image.src != blank %}
+
+                                                    {% assign image_id = "product_detail_image_" | append: i %}
+                                                    {%- render 'global-image-wrapper-responsive',
+                                                        image_id: image_id,
+                                                        desktop_image: detail_image,
+                                                        mobile_image: detail_image,
+                                                        additional_class: 'no-bg'
+                                                    %}
+                                                    {% if image_caption_1 != blank or image_caption_2 != blank %}
+                                                        <div class="flex mt-8" style="gap:24px">
+                                                            {% if image_caption_1 != blank %}
+                                                                <div class="p4 c-label">{{ image_caption_1 }}</div>
+                                                            {% endif %}
+                                                            {% if image_caption_2 != blank %}
+                                                                <div class="p4 c-label">{{ image_caption_2 }}</div>
+                                                            {% endif %}
+                                                        </div>
+                                                    {% endif %}
+                                                {% endif %}
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        {%- endfor -%}
+                    </div>
+                </div>
+            </div>
+            {% if ss.button_label != blank%}
+                <a href="{{ ss.button_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 show-m flex mt-24 d-mt-32 ai-center">
+                    {{ ss.button_label }}
+                    <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                            <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                        </svg>
+                    </div>
+                </a>
+            {% endif %}
+        </div>
+    </div>
+    <script>
+        function toggleVideo(e) {
+            let target = e.target.closest('.detail-video-box')
+            let cover_image = target.querySelector('.global-video-wrapper .global-image-wrapper')
+            let video = target.querySelector('.global-video-wrapper video')
+            let btn = target.querySelector('.cv-pausePlayButton')
+            let icon_play = btn.querySelector('.play-icon')
+            let icon_pause = btn.querySelector('.pause-icon')
+            cover_image?.classList.toggle('hide-m')
+            if (video.paused) {
+                video.play();
+                target.classList.add('video-play')
+                icon_play.classList.add('hide-m')
+                icon_pause.classList.remove('hide-m')
+            } else {
+                video.pause();
+                target.classList.remove('video-play')
+                icon_play.classList.remove('hide-m')
+                icon_pause.classList.add('hide-m')
+            }
+        }
+    </script>
+{% endif %}
+
+
+{% schema %}
+{
+    "name": "Product Detail",
+    "settings": [
+        {
+            "type": "header",
+            "content": "General Settings"
+        },
+        {
+            "type": "color",
+            "id": "bg_color",
+            "label": "Background Color"
+        },
+        {
+            "type": "paragraph",
+            "content": "The heading reads \"Product Details\", or \"Workshop Details\" when the product title contains \"Workshop\". Edit the wording under Content > Edit default theme content > Sections."
+        },
+        {
+            "type": "textarea",
+            "id": "top_description",
+            "label": "Top Description"
+        },
+        {
+            "type": "text",
+            "id": "button_label",
+            "label": "Button Label"
+        },
+        {
+            "type": "url",
+            "id": "button_url",
+            "label": "Button URL"
+        },
+        {
+            "type": "header",
+            "content": "Section Paddings"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_m",
+            "label": "Top padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_m",
+            "label": "Bottom padding (Mobile)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_t",
+            "label": "Top padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_t",
+            "label": "Bottom padding (Tablet)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding",
+            "label": "Top padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding",
+            "label": "Bottom padding (Desktop)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hd",
+            "label": "Top padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hd",
+            "label": "Bottom padding (HD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "top_padding_hhd",
+            "label": "Top padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        },
+        {
+            "type": "select",
+            "id": "bottom_padding_hhd",
+            "label": "Bottom padding (HHD)",
+            "options": [
+                { "value": "nopadding", "label": "No padding" },
+                { "value": "extrasmall", "label": "Extra Small" },
+                { "value": "small", "label": "Small" },
+                { "value": "medium", "label": "Medium" },
+                { "value": "large", "label": "Large" }
+            ],
+            "default": "medium"
+        }
+    ],
+    "presets": [
+        {
+            "name": "Product Detail",
+            "blocks": []
+        }
+    ]
+}
+{% endschema %}

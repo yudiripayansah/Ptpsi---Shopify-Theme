@@ -1,0 +1,430 @@
+{% comment %} Can Can Theme - Yudi {% endcomment %}
+{% liquid
+  assign el_id = 'faq-navigation-' | append: section.id
+  assign fn = section.id | replace: '-', ''
+  assign ss = section.settings
+  assign sb = section.blocks
+%}
+<style>
+  #{{el_id}} .nav-link-mobile{
+      display: inline-flex;
+      align-items: center;
+      color: var(--black);
+  }
+  #{{el_id}} .nav-link-mobile.active{
+    display: none;
+  }
+  #{{el_id}} .nav-each {
+    display: inline-flex;
+    align-items: center;
+    transition: all .3s ease;
+  }
+  #{{el_id}} .icons .icon,
+  #{{el_id}} .icons .icon svg {
+    width: 24px;
+    height: 24px;
+  }
+  #{{el_id}} .nav-each svg {
+    width: 6px;
+    height: 6px;
+    opacity: 0;
+    transition: all .3s ease;
+  }
+  #{{el_id}} .nav-each.active svg {
+    opacity: 1;
+  }
+  #{{el_id}} .faq-navigation-contact-link {
+    white-space: nowrap;
+  }
+  #{{el_id}} .faq-navigation-contact-link svg {
+    width: 16px;
+    height: 16px;
+  }
+  #{{el_id}} .nav-link-mobile.active {
+    {% comment %} width: fit-content;
+    border-bottom: 1px solid var(--black); {% endcomment %}
+  }
+  #{{el_id}} .nav-each.active,
+  #{{el_id}} .nav-each:hover {
+    color: var(--black);
+  }
+  #{{el_id}} .global-select-div .options li {
+    padding: 0;
+  }
+  #{{el_id}} .global-select-div .options {
+    opacity: 0;
+    visibility: hidden;
+    display: unset;
+    transition: all .2s ease;
+  }
+  #{{el_id}} .global-select-div.active .options {
+    visibility: visible;
+    opacity: 1;
+  }
+  #{{el_id}} .global-select-div .options li {
+  border-bottom: 0;
+  padding: 4px 16px;
+}
+#{{el_id}} .global-select-div .options li:last-child {
+  padding-bottom: 16px;
+}
+  #{{el_id}} .swiper-mobile-nav {
+    margin: 0 -16px;
+  }
+  #{{el_id}} .mobile-fn .options {
+    margin-left: 0;
+  }
+  #{{el_id}} .mobile-fn .options li:before {
+    display: none;
+  }
+  #{{el_id}} .mobile-fn .swiper-wrapper {
+    white-space: nowrap;
+    overflow: auto;
+  }
+  #{{el_id}} .mobile-fn .swiper-wrapper {
+    scrollbar-width: none; /* Firefox */
+    -ms-overflow-style: none; /* Internet Explorer 10+ */
+  }
+
+  #{{el_id}} .mobile-fn .swiper-wrapper::-webkit-scrollbar {
+    display: none; /* Chrome, Safari, and Edge */
+  }
+  #{{el_id}} .mobile-fn .swiper-slide {
+    display: inline-flex;
+    width: auto;
+  }
+  #{{el_id}} .dd-faq .faq-dd {
+    transition: height 0.3s ease-in-out;
+    overflow: hidden;
+    height: 0;
+  }
+  @media(min-width: 600px) {
+    #{{el_id}} .swiper-mobile-nav {
+      margin: 0 -20px;
+    }
+    #{{el_id}} .icons .icon {
+      right: -6px;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+    <img src="{{ 'faq-navigation-figma.PNG' | asset_url }}" width="100%" height="100%" />
+{% else %}
+<section id="{{el_id}}" class="faq-navigation d-mt-80">
+  <div class="hide-m show-d">
+    {% for block in sb %}
+      {% assign bs = block.settings %}
+      <div class="bb-1 b-background">
+        <a
+          href="#{{bs.section_id}}"
+          rel="nofollow"
+          onclick="changeSection{{fn}}(event)"
+          class="flex ai-center pb-12 nav-each p1{% if forloop.first %} active{% else %} pt-12{% endif %}"
+          data-tag="{{bs.section_id}}"
+        >
+          <span class="c-label p4 mr-8">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span> <span class="c-green">{{- bs.title }}</span>
+          <svg class="ml-8" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+            <circle cx="3" cy="3" r="3" fill="#B35E34"/>
+          </svg>
+        </a>
+      </div>
+    {% endfor %}
+    <div class="flex flex-wrap pt-40">
+      <p class="p2 mr-8">Need more help?</p>
+      <a class="p2 underline flex ai-center faq-navigation-contact-link" href="#">
+        <span class="mr-4">Contact Us</span>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+          <path d="M5.36071 4.64051L11.4478 4.64043M11.4478 4.64043L11.4478 10.641M11.4478 4.64043L4.37678 11.7115" stroke="#19341E" stroke-width="0.8" stroke-linecap="square"/>
+        </svg>
+      </a>
+    </div>
+  </div>
+  <div class="hide-d show-m mobile-fn swiper-mobile-nav">
+    <div class="global-select-div dd-faq pl-0 pr-0 pt-0 pb-0 bb-0 b-background bg-background-main" onclick="ddActive()">
+      <div class="container">
+        <div class="bb-1 b-background pb-16 pt-16 d-pt-0">
+          <div class="inner relative">
+            <div class="text selected-div-text tl flex ai-center">
+              <span class="p4 mr-8">01</span> <span class="p1">{{ sb[0].settings.title }}</span>
+            </div>
+            <div class="icons">
+              <div class="icon icon-caret">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M6 9L12.001 15L18 9" stroke="#19341E"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <ul class="faq-dd b-background bg-background tl">
+            {% for block in sb %}
+              {% assign bs = block.settings %}
+              <li
+                onclick="changeSection{{fn}}(event)"
+                data-sections="{{ bs.section_id }}"
+                data-title="{{ bs.title }}"
+                data-tag="{{bs.section_id}}"
+              >
+                <a
+                  data-sections="{{ bs.section_id }}"
+                  data-title="{{ bs.title }}"
+                  data-tag="{{bs.section_id}}"
+                  href="#{{bs.section_id}}"
+                  rel="nofollow"
+                  class="nav-link-mobile nav-handler show-m-inline-block w-full nav-each nav-each-mobile pt-8 {%if forloop.first%}active{% endif %}"
+                >
+                  <span class="p4 mr-8">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span> <span class="p1">{{ bs.title }}</span>
+                </a>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endif %}
+
+<script>
+    const selectElement = document.querySelector("#{{el_id}} select");
+    //for mobile
+    function switchSections{{fn}}(event){
+        event.preventDefault();
+        let target = event.target;
+        let nlm = document.querySelectorAll("#{{el_id}} .nav-link-mobile")
+        let tag_id = target.getAttribute("data-sections");
+        let curr_title = target.getAttribute('data-title');
+        let selectedFaq = document.querySelector(`#${tag_id}`);
+        let nlmt = document.querySelector("#{{el_id}} .nav-link-mobile[data-sections='"+tag_id+"']")
+        let offset = document.querySelector('#shopify-section-header').clientHeight + document.querySelector('.mobile-fn').clientHeight;
+        let elementPosition = selectedFaq.getBoundingClientRect().top;
+        let offsetPosition = elementPosition + window.pageYOffset - offset;
+        let dropdown_label = document.querySelectorAll(`#{{el_id}} .selected-div-text`);
+        const sections = document.querySelectorAll('.page-faq-right .section-spy');
+        dropdown_label.forEach((item)=>{
+          item.innerHTML = curr_title;
+        })
+        nlm.forEach((item) => {
+          sections.forEach((itemo)=>{
+            itemo.classList.add("hide-m");
+          })
+          item.classList.remove("active");
+        })
+        nlmt.classList.add("active");
+        if (screen.width < 1024) {
+          selectedFaq.classList.remove("hide-m");
+          window.scrollTo({
+            top: 0,
+            behavior: "smooth"
+          });
+        } else {
+          window.scrollTo({
+            top: offsetPosition,
+            behavior: "smooth"
+          });
+        }
+    };
+    function ddActive(){
+      {% comment %} let selectDivEl = document.querySelector('.swiper-mobile-nav .global-select-div');
+      let overlay = document.querySelector('.faq-overlay');
+      if(selectDivEl.classList.contains('active')) {
+        overlay.classList.remove('active');
+      } else {
+        setTimeout(() => {
+          overlay.classList.add('active');
+        }, 10);
+      } {% endcomment %}
+      let selectDivEl = document.querySelector('.global-select-div.dd-faq');
+      if (selectDivEl.classList.contains('active')) {
+        document.querySelector('.faq-dd').style.height = 0;
+      } else {
+        selectDivEl.querySelector('.faq-dd').style.height = selectDivEl.querySelector('.faq-dd').scrollHeight + 'px';
+      }
+    }
+    //for desktop
+    let scrollToPosition = 0
+    function changeSection{{fn}}(e){
+        e.preventDefault();
+        let target = e.target.parentElement;
+        let tag_id = target.getAttribute("data-tag");
+        let navItem;
+        if (window.innerWidth < 1024) {
+          navItem =  document.querySelectorAll(".nav-each-mobile");
+        } else {
+          navItem =  document.querySelectorAll(".nav-each");
+        }
+        navItem.forEach(ni => {
+          ni.classList.remove("active");
+          ni.querySelector("a")?.classList.remove("active");
+        })
+        target.classList.add("active");
+        let selectedFaq = document.querySelector(`#${tag_id}`);
+        let header = document.querySelector("#shopify-section-header");
+        let targetPosition = selectedFaq.getBoundingClientRect().top + window.pageYOffset;
+        let offset = header.offsetHeight;
+        if (window.innerWidth < 1024) {
+          scrollToPosition = targetPosition - offset - 80;
+        } else {
+          scrollToPosition = targetPosition - offset;
+        }
+        window.scrollTo({ top: scrollToPosition, behavior: 'smooth' });
+    }
+    function setTopNav{{fn}}(direction){
+      let header = document.querySelector(".header-con-outer");
+      let fn = document.querySelector(".page-faq-left");
+      let hh = header.offsetHeight
+      if(direction == 'up') {
+        fn.style.top = hh +'px';
+      } else {
+        fn.style.top = '0';
+      }
+    }
+    {% comment %} function scrollSpy{{fn}}() {
+      // Map section elements to related menu items
+      const sections = document.querySelectorAll('.page-faq-right .section-spy');
+      let links;
+      if (window.innerWidth < 1024) {
+        links = {
+          {% for block in sb %}
+            {% assign bs = block.settings %}
+            '{{bs.section_id}}': document.querySelector(`.nav-each-mobile[href="#{{bs.section_id}}"]`),
+          {% endfor %}
+        }
+      } else {
+        links = {
+          {% for block in sb %}
+            {% assign bs = block.settings %}
+            '{{bs.section_id}}': document.querySelector(`.nav-each[href="#{{bs.section_id}}"]`),
+          {% endfor %}
+        };
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            const relatedLink = links[entry.target.id];
+            if (entry.isIntersecting) {
+              relatedLink.classList.add('active');
+            } else {
+              relatedLink.classList.remove('active');
+            }
+          });
+        },
+        { threshold: [0.1, 0.3, 0.5] } // Trigger when 50% of the element is visible
+      );
+
+      sections.forEach((section) => observer.observe(section));
+    } {% endcomment %}
+    function scrollSpy{{fn}}() {
+      const sections = document.querySelectorAll('.page-faq-right .section-spy');
+      const isMobile = window.innerWidth < 1024;
+
+      let links = isMobile
+        ? {
+            {% for block in sb %}
+            '{{block.settings.section_id}}': document.querySelector(`.nav-each-mobile[href="#{{block.settings.section_id}}"]`),
+            {% endfor %}
+          }
+        : {
+            {% for block in sb %}
+            '{{block.settings.section_id}}': document.querySelector(`.nav-each[href="#{{block.settings.section_id}}"]`),
+            {% endfor %}
+          };
+
+      function updateSpy() {
+        const viewportCenter = window.innerHeight / 2;
+
+        let bestId = null;
+        let bestDistance = Infinity;
+        let selectedFaq = document.querySelector('.selected-div-text');
+
+        sections.forEach(section => {
+          const rect = section.getBoundingClientRect();
+          
+          // distance from section's center to screen center
+          const sectionCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(sectionCenter - viewportCenter);
+
+          if (distance < bestDistance) {
+            bestDistance = distance;
+            bestId = section.id;
+          }
+        });
+
+        // clear previous
+        Object.values(links).forEach(link => link?.classList.remove('active'));
+
+        // activate the closest-to-center section
+        if (bestId) {
+          links[bestId]?.classList.add('active');
+          selectedFaq.innerHTML = links[bestId].innerHTML;
+        }
+      }
+
+      // call on scroll, resize, and initial load
+      window.addEventListener('scroll', updateSpy);
+      window.addEventListener('resize', updateSpy);
+      updateSpy();
+    }
+
+    document.addEventListener("DOMContentLoaded", () => {
+      setTopNav{{fn}}()
+      scrollSpy{{fn}}()
+    });
+    window.addEventListener("resize", () => {
+      setTopNav{{fn}}()
+      scrollSpy{{fn}}()
+      {% comment %} let overlay = document.querySelector('.faq-overlay');
+      overlay.classList.remove('active'); {% endcomment %}
+    });
+    let lastScrollTop = 0;
+    window.addEventListener("scroll", () => {
+      let st = window.pageYOffset || document.documentElement.scrollTop; // Credits: "https://github.com/qeremy/so/blob/master/so.dom.js#L426"
+      if (st > lastScrollTop) {
+        setTopNav{{fn}}('down')
+      } else if (st < lastScrollTop) {
+        setTopNav{{fn}}('up')
+      }
+      lastScrollTop = st <= 0 ? 0 : st; // For Mobile or negative scrolling
+    });
+    document.addEventListener('shopify:section:load', () => {
+      setTopNav{{fn}}()
+      scrollSpy{{fn}}()
+    });
+    {% comment %} window.addEventListener("click", () => {
+      let overlay = document.querySelector('.faq-overlay');
+      if(overlay.classList.contains('active')) {
+        overlay.classList.remove('active');
+      }
+    }); {% endcomment %}
+</script>
+{% schema %}
+{
+  "name": "FAQ Navigation",
+  "settings": [],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "text",
+          "id": "section_id",
+          "label": "Section ID"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "FAQ Navigation",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

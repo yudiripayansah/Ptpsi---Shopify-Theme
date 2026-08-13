@@ -1,0 +1,31 @@
+{%- assign el_id = 'search-top-section-' | append: section.id -%}
+{% if request.visual_preview_mode %}
+    <img src="{{ 'search-top-section.PNG' | asset_url }}" width="100%" height="100%" />
+{% else %}
+<div id="{{ el_id }}" class="d-pt-60 d-pb-120 pt-40 pb-56 bg-background-main">
+	<div class="container">
+		<h1 class="h1 c-green">
+			{% if search.results.size > 0 %}
+      Search Result for 
+      {% else %}
+      No Results for
+      {% endif %} 
+      “{{ search.terms | escape }}”
+		</h1>
+	</div>
+</div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Search Top Section",
+  "settings": [],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Search Top Section",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,802 @@
+{%- assign subtotal = 0 -%}
+{%- assign total_savings = 0 -%}
+{%- if cart.item_count == 0 -%}
+  <div class="empty-message-wrapper header-con__cart-box absolute zi-2 right-0 top-0 h-full w-full d-max-465 bg-background-main flex flex-column jc-between">
+    <div class="header-con__cart-heading d-pl-40 pl-16 d-pr-40 pr-16 flex ai-center jc-between w-full">
+      <div class="bb-1 b-main flex ai-center jc-between w-full d-pt-24 pt-20 pb-12">
+        <div class="p1 c-green">{{'general.header.cart' | t}}</div>
+        <div
+          class="header-con__cart-close cursor absolute ai-center jc-center d-pt-28 pt-20 pb-12 d-pb-12 d-pl-40 pl-16 d-pr-40 pr-16 top-0 right-0"
+          onclick="$360.hideHeaderCart()"
+        >
+          {{ settings.icon_close }}
+        </div>
+      </div>
+    </div>
+    <div class="header-con__cart-main d-pl-40 pl-16 d-pr-40 pr-16 flex flex-column jc-between ai-end d-pt-24 d-pb-24 pt-20 pb-20 h-full">
+      <div class="message-wrapper">
+        {%- if settings.cart_empty_message != blank -%}
+          <h3 class="p2 c-green">{{ settings.cart_empty_message | newline_to_br }}</h3>
+        {%- endif -%}
+        <div class="flex flex-column d-mt-40 mt-32 rowgap-12 header-con__empty-links">
+          {% assign link_counter = 0 %}
+          {% for i in (1..6) %}
+            {%liquid 
+              assign slabel = 'cart_empty_link_label_' | append: i
+              assign surl = 'cart_empty_links_' | append: i 
+              assign label = settings[slabel]
+              assign url = settings[surl]
+            %}
+            {% if label != blank %}
+            {% assign link_counter = link_counter | plus: 1 %}
+            <a href="{{url}}" class="pb-12 colgap-4 hcel-link flex ai-center d-jc-start jc-between bb-1 b-main {% if link_counter < 2 %}active{% endif %}" data-index="{{i}}" onmouseover="headerVue.toggleEmptyProduct(event)">
+              <div class="flex ai-center colgap-8">
+                <span class="p4 c-label">
+                  {% if link_counter < 10 %}0{% endif %}{{link_counter}}
+                </span>
+                <span class="p1 c-green">
+                  {{label}}
+                </span>
+                <span class="icon d-flex hide-m ai-center jc-center ml-4 icon-active">
+                  {{settings.icon_orange_circle}}
+                </span>
+              </div>
+              <span class="icon hide-d global-flex ai-center jc-center">
+                {{settings.icon_arrow_up_right}}
+              </span>
+            </a>
+            {% endif %}
+          {% endfor %}
+        </div>
+      </div>
+      <div class="header-con__empty-product d-max-180 w-full hide-m d-flex flex-column d-mt-24">
+        {% assign p_counter = 0 %}
+        {% for j in (1..6) %}
+          {%liquid 
+          assign sproduct = 'cart_empty_product_' | append: j
+          assign tproduct = all_products[settings[sproduct]]
+          %}
+          {% if settings[sproduct] != blank %}
+            {% assign p_counter = p_counter | plus: 1 %}
+            <a href="{{tproduct.url}}" class="{% if p_counter < 2 %}flex{% else %}hide-m{% endif %} flex-column hcep-product" data-index="{{j}}">
+              {%- render 'global-image-wrapper',
+                image: tproduct.featured_image,
+                additional_class: 'no-bg',
+                image_id: 'product-image-cart-empty'
+              %}
+              <div class="flex ai-start jc-between w-full d-mt-8">
+                <span class="p4 c-label dont-break">
+                  {{tproduct.metafields.custom.image_code}}
+                </span>
+                <span class="p4 c-label tr">
+                  {{tproduct.title}}
+                </span>
+              </div>
+            </a>
+          {% endif %}
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+{%- else -%}
+  {%liquid 
+    assign enable_gift_wrap = settings.enable_gift_wrap
+    assign gift_wrap_product = settings.gift_wrap_product
+    assign total_gwp = 0
+    for cg in cart.items
+      if cg.properties['_gift_wrap']
+          assign total_gwp = total_gwp | plus: cg.price | times: cg.quantity
+      endif
+    endfor
+  %}
+  <form
+    action="/cart"
+    method="post"
+    id="header-cart-form"
+    class="header-con__cart-box absolute zi-2 right-0 top-0 h-full w-full d-max-465 bg-background-main flex flex-column jc-between"
+  >
+    <div class="header-cart-loading absolute top-0 left-0 w-full h-full zi-5 bg-white opacity-5">&nbsp;</div>
+    <div class="header-con__cart-heading d-pl-40 pl-16 d-pr-40 pr-16">
+      <div class="flex ai-center jc-between w-full d-pt-24 pt-20 pb-12">
+        <div class="p1 c-green cart-title">{{'general.header.cart'|t}}</div>
+        <div class="p1 c-green delivery-title flex ai-center colgap-8" >
+          <span class="icon flex p-4 ai-center jc-center cursor" onclick="headerVue.toggleCartPageDrawer()">
+            {{ settings.icon_slide_left }}
+          </span>
+          {{'general.header.delivery_options'|t}}
+        </div>
+        <div
+          class="header-con__cart-close cursor absolute ai-center jc-center d-pt-28 pt-20 pb-12 d-pb-12 d-pl-40 pl-16 d-pr-40 pr-16 top-0 right-0"
+          onclick="$360.hideHeaderCart()"
+        >
+          {{ settings.icon_close }}
+        </div>
+      </div>
+      {%- render 'free-shipping-info', wrapper_class: 'w-full pb-16' -%}
+    </div>
+    <div class="header-con__cart-main d-pb-24 pt-16 pb-16 d-pl-40 pl-16 d-pr-40 pr-16 h-full">
+      <div class="header-con__cm_cart flex flex-column">
+        <ul class="header-cart-items flex flex-column d-rowgap-24 rowgap-20">
+          {% assign loop = 0 %}
+          {%- for item in cart.items -%}
+            <!--
+            is parent {{item.properties['_is_parent']}} zz
+            parent relationship {{item.parent_relationship}} zz
+            -->
+            {% if item.properties['_is_parent'] %}
+              {% unless item.parent_relationship %}
+                {% assign loop = loop | plus: 1 %}
+                {%- assign group_id = false -%}
+                {%- assign key = false -%}
+                {%- assign group_parent = 'true' -%}
+                {%- assign is_gwp = false -%}
+                {%- if item.properties._isGWP != blank -%}
+                  {%- assign is_gwp = true -%}
+                {%- endif -%}
+                {%- if item.properties._group_id != blank -%}
+                  {%- assign group_id = item.properties._group_id -%}
+                {%- endif -%}
+                {%- assign key = item.key -%}
+                {%- assign parent_id = item.properties._parent_id | default: 'null' -%}
+                {%- if item.variant.compare_at_price > item.variant.price -%}
+                  {%- assign subtotal = subtotal | plus: item.variant.compare_at_price -%}
+                  {%- assign diff = item.variant.compare_at_price | minus: item.variant.price -%}
+                  {%- assign savings = diff | times: item.quantity -%}
+                  {%- assign total_savings = total_savings | plus: savings -%}
+                {%- else -%}
+                  {%- assign subtotal = subtotal | plus: item.variant.price -%}
+                {%- endif -%}
+    
+                <li class="flex relative flex-column">
+                  {%- assign allow_edit = true -%}
+                  {%- if group_id != false and group_parent == 'false' -%}
+                    {%- assign allow_edit = false -%}
+                  {%- endif -%}
+    
+                  {%- if is_gwp == true -%}
+                    {%- assign allow_edit = false -%}
+                  {%- endif -%}
+                  <div class="flex ai-center colgap-8 pb-8 bb-1 b-green">
+                    <span class="p4 c-label">
+                      {% if loop < 10 %}0{% endif %}{{ loop }}
+                    </span>
+                    {% liquid 
+                      assign parts = item.product.title | split: ' - '
+
+                      if parts.size > 1
+                        assign new_size = parts.size | minus: 1
+                        assign the_title = parts | slice: 0, new_size | join: ' - '
+                      else
+                        assign the_title = item.product.title
+                      endif 
+                    %}
+                    {%- if item.product.tags contains 'hidden' -%}
+                      <h6 class="p2 c-green">{{ the_title }}</h6>
+                    {%- else -%}
+                      <h6 class="p2 c-green">
+                        <a href="{{ item.url }}" class="p2 c-green">{{ the_title }}</a>
+                      </h6>
+                    {%- endif -%}
+                  </div>
+                  <div class="flex colgap-16 mt-12">
+                    <div class="image-con w-full max-90">
+                      {%- capture item_img -%}
+                        {%- if item.image == blank -%}
+                          <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.image.alt | escape }}" class="image">
+                        {%- else -%}
+                          {%- render 'global-image-wrapper', image: item.image, size: 200, preload: true -%}
+                        {%- endif -%}
+                      {%- endcapture -%}
+                      {%- if item.product.tags contains 'hidden' -%}
+                        {{ item_img }}
+                      {%- else -%}
+                        <a href="{{ item.url }}" title="{{ item.title | escape }}">{{ item_img }}</a>
+                      {%- endif -%}
+                    </div>
+                    <div class="details-con flex flex-column jc-between ai-start w-full">
+                      <div class="top-part w-full flex ai-start jc-between colgap-16 d-colgap-24">
+                        <div class="variant-options flex flex-column rowgap-2">
+                          {%- liquid
+                            # Workshops have no size, so never print one even if the
+                            # metafield came along from a duplicated plant product.
+                            assign item_is_workshop = false
+                            assign item_title_check = item.product.title | default: '' | downcase
+                            if item_title_check contains 'workshop'
+                              assign item_is_workshop = true
+                            endif
+                          -%}
+                          {% if item_is_workshop == false and item.product.metafields.custom.size and item.product.metafields.custom.size != blank and item.product.metafields.custom.size != 0 %}
+                            <span class="p4 c-green">Size: {{item.product.metafields.custom.size}}</span>
+                          {% endif %}
+                          {% assign displayed_opt = '' %}
+                          {% assign total_child_price = 0 %}
+                          {% for child in cart.items %}
+                            {% unless child.properties['_is_parent'] %}
+                              {% if child.parent_relationship.parent.key == item.key or item.properties['_parent_id'] == child.properties['_parent_id'] %}
+                                {% if child.product.tags contains 'saucers' %}
+                                  {%- if child.options_with_values[0].value != 'Default Title' -%}
+                                    {%- for opt in child.options_with_values -%}
+                                      {% unless displayed_opt contains opt.name %}
+                                        <span class="p4 c-green">
+                                          {{ opt.name }}: {{ opt.value -}}
+                                        </span>
+                                        {% if displayed_opt != blank %}
+                                          {% assign displayed_opt = displayed_opt | append: ',' %}
+                                        {% endif %}
+                                        {% assign displayed_opt = displayed_opt | append: opt.name %}
+                                      {% endunless %}
+                                    {%- endfor -%}
+                                  {%- endif -%}
+                                  {% assign total_child_price = total_child_price | plus: child.line_price %}
+                                  <span class="p4 c-green">
+                                    {% comment %} Saucers: {{ child.product.metafields.custom.size -}} {% endcomment %}
+                                    Saucers: {{ child.product.title -}}
+                                  </span>
+                                {% endif %}
+                                {% if child.product.tags contains 'planters' %}
+                                  {%- if child.options_with_values[0].value != 'Default Title' -%}
+                                    {%- for opt in child.options_with_values -%}
+                                      {% unless displayed_opt contains opt.name %}
+                                        <span class="p4 c-green">
+                                          {{ opt.name }}: {{ opt.value -}}
+                                        </span>
+                                        {% if displayed_opt != blank %}
+                                          {% assign displayed_opt = displayed_opt | append: ',' %}
+                                        {% endif %}
+                                        {% assign displayed_opt = displayed_opt | append: opt.name %}
+                                      {% endunless %}
+                                    {%- endfor -%}
+                                  {%- endif -%}
+                                  {% assign total_child_price = total_child_price | plus: child.line_price %}
+                                  
+                                  <span class="p4 c-green">
+                                    {% comment %} Planters: {{ child.product.metafields.custom.size -}} {% endcomment %}
+                                    Planters: {{ child.product.title -}}
+                                  </span>
+                                {% endif %}
+                              {% endif %}
+                            {% endunless %}
+                          {% endfor %}
+                          {%- if item.options_with_values[0].value != 'Default Title' -%}
+                            {%- for opt in item.options_with_values -%}
+                              <span class="p4 c-green">
+                                {% if item.product.type == 'Gift Card' -%}
+                                  {{- 'cart.general.denomination' | t }}: 
+                                {% else %}
+                                  {{ opt.name }}: 
+                                {% endif %}
+                                {{ opt.value -}}
+                              </span>
+                            {%- endfor -%}
+                          {%- endif -%}
+                          {%- assign prop_num = 0 -%}
+                          {%- for prop in item.properties -%}
+                            {%- assign ff = prop | first -%}
+                            {%- assign fl = prop | last -%}
+                            {%- unless ff contains '_' -%}
+                              {% if fl != blank %}
+                                {%- assign prop_num = prop_num | plus: 1 -%}
+                                <span class="p4 c-green">{{ ff }}: {{ fl }}</span>
+                              {% endif %}
+                            {%- endunless -%}
+                          {%- endfor -%}
+                        </div>
+                        <div class="price-wrapper p3 flex flex-column tr rowgap-2">
+                          {%- assign compare_at_price = item.variant.compare_at_price -%}
+                          {%- assign price = item.line_price -%}
+                          {%- assign total_price = price | plus: total_child_price -%}
+                          {%- assign total_compare_price = item.original_line_price | plus: total_child_price -%}
+                          {%- if compare_at_price > item.variant.price -%}
+                            <span class="c-green">S{{ total_price | money }}</span>
+                            {%- if item.line_price < item.original_line_price -%}
+                              <strike class="c-placeholder">S{{ total_compare_price | money }}</strike>
+                            {%- else -%}
+                              <strike class="c-placeholder">
+                                {% assign compare_at_price = compare_at_price | times: item.quantity %}
+                                {% assign total_compare_price = compare_at_price | plus: total_child_price %}
+                                S{{- total_compare_price | money -}}
+                              </strike>
+                            {%- endif -%}
+                          {%- else -%}
+                            {%- if item.line_price < item.original_line_price -%}
+                              <span class="c-green">S{{ total_price | money }}</span>
+                              <strike class="c-placeholder">S{{ total_compare_price | money }}</strike>
+                            {%- else -%}
+                              <span class="c-green">S{{ total_price | money }}</span>
+                            {%- endif -%}
+                          {%- endif -%}
+                        </div>
+                      </div>
+                      <div class="bottom-part w-full flex jc-between ai-center mt-auto pt-12">
+                        {%- if allow_edit == true -%}
+                          <div class="global-form-qty small">
+                            <button type="button" class="toggle global-minus p-4 flex ai-center jc-center">
+                              {{ settings.icon_minus }}
+                            </button>
+                            <input
+                              type="number"
+                              class="global-qty-text p2 c-green"
+                              name="quantity"
+                              value="{{ item.quantity }}"
+                              min="0"
+                              {% if item.variant.inventory_management == 'shopify' %}
+                                max="{{ item.variant.inventory_quantity }}"
+                              {% endif %}
+                              oninput="headerVue.showLoading();$360.updateItemQty({index: {{ forloop.index }}, qty: this.value, key: '{{key}}',parentId: {{parent_id}},groupId: {{ group_id }}, removeSameGroup: {{ group_parent }}}, function() { $360.showHeaderCart();/* setTimeout(()=>{initSwiperYmal();},1000); */})"
+                              readonly
+                            >
+                            <button
+                              type="button"
+                              class="toggle global-plus p-4 flex ai-center jc-center"
+                              {% if item.variant.inventory_management == 'shopify' %}
+                                data-max="{{ item.variant.inventory_quantity }}"
+                              {% endif %}
+                              {% if item.quantity == item.variant.inventory_quantity
+                                and item.variant.inventory_management == 'shopify'
+                              %}
+                                disabled
+                              {% endif %}
+                            >
+                              {{ settings.icon_plus }}
+                            </button>
+                          </div>
+                          <div class="global-form-remove">
+                            <div class="cursor cart-remove-item p-4 flex ai-center jc-center" onclick="headerVue.showLoading();$360.updateItemQty({index: {{ forloop.index }}, qty: 0, key: '{{key}}',parentId: {{parent_id}},groupId: {{ group_id }}, removeSameGroup: {{ group_parent }}}, function() { $360.showHeaderCart();/*setTimeout(()=>{initSwiperYmal();},1000);*/})">
+                              {{settings.icon_trash}}
+                            </div>
+                          </div>
+                        {%- else -%}
+                          <div></div>
+                        {%- endif -%}
+                      </div>
+                    </div>
+                  </div>
+                </li>
+              {% endunless %}
+            {% endif %}
+          {%- endfor -%}
+        </ul>
+        {%liquid 
+          assign hide_ymal = ''
+          unless settings.cart_cross_sell_products != blank
+          assign hide_ymal = 'hide-m'
+          endunless
+        %}
+        <div class="ymal-box d-mt-40 mt-32 d-pl-40 pl-16 d-pr-40 pr-16 overflow {{hide_ymal}}">
+          <div class="ymal-heading flex ai-center jc-between">
+            <div class="p2 c-black">
+              {{settings.cart_cross_sell_section_title}}
+            </div>
+            <div class="ymal-nav relative flex ai-center colgap-8">
+              <div class="ymal-nav-prev cursor p-5 relative flex ai-center jc-center">
+                {{ settings.icon_slide_left }}
+              </div>
+              <div class="ymal-nav-next cursor p-5 relative flex ai-center jc-center">
+                {{ settings.icon_slide_right }}
+              </div>
+            </div>
+          </div>
+          <div class="ymal-swiper swiper mt-12 hide-m">
+            <div class="swiper-wrapper">
+              {%- for pro in settings.cart_cross_sell_products -%}
+                <div class="swiper-slide">
+                  {% render 'product-each', product: pro, hide_color_option: true, hide_info_label: true %}
+                </div>
+              {%- endfor -%}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-con__cm_zapiet flex-column">
+        <div class="header-con__delivery-options">
+          <div class="p2 c-green">Select Delivery Method:</div>
+          <div class="flex ai-center jc-between d-colgap-12 colgap-16 mt-12">
+            <div class="delivery-option-item active cursor flex ai-center jc-center tc p2 c-green b-1 b-green pt-12 pb-12 pl-24 pr-24" onclick="headerVue.chooseDelivery(this)" data-method="Shipping">
+              Shipping
+            </div>
+            <div class="delivery-option-item cursor flex ai-center jc-center tc p2 c-green b-1 b-green pt-12 pb-12 pl-24 pr-24" onclick="headerVue.chooseDelivery(this)" data-method="Pickup">
+              Store Pickup
+            </div>
+          </div>
+          <div class="shipping-options d-pt-24 d-mt-24 mt-20 pt-20 bt-1 b-main">
+            <div class="p2 c-green">Select Shipping Option:</div>
+            <div class="shipping-option-box flex flex-column d-rowgap-24 d-mt-24 mt-20 rowgap-20">
+              <label onclick="headerVue.selectShippingOption(this)" class="shipping-option cursor flex ai-start colgap-8">
+                <input type="radio" name="shipping-option" value="Local" class="hide-m">
+                <div class="so-checkbox y3 flex ai-center jc-center b-1 b-secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" viewBox="0 0 9 8" fill="none">
+                    <path d="M8.35547 0.352539L2.3892 6.35254L0.355469 4.3073" stroke="#19341E"/>
+                  </svg>
+                </div>
+                <div class="so-text">
+                  <div class="p2 c-green">Local Standard Delivery (From S$20.00)</div>
+                  <div class="p3 c-green mt-4">
+                    Your order arrives within 3–5 working days, with delivery scheduled automatically for the earliest available slot.
+                  </div>
+                </div>
+              </label>
+              <label onclick="headerVue.selectShippingOption(this)" class="shipping-option cursor flex ai-start colgap-8">
+                <input type="radio" name="shipping-option" value="Specific" class="hide-m">
+                <div class="so-checkbox y3 flex ai-center jc-center b-1 b-secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" viewBox="0 0 9 8" fill="none">
+                    <path d="M8.35547 0.352539L2.3892 6.35254L0.355469 4.3073" stroke="#19341E"/>
+                  </svg>
+                </div>
+                <div class="so-text">
+                  <div class="p2 c-green">Specific Delivery Date ( From S$35.00)</div>
+                  <div class="p3 c-green mt-4">
+                    Choose your preferred delivery date, with the earliest slot available within 12 hours. 
+                  </div>
+                </div>
+              </label>
+              {%liquid 
+                assign show_van_lorry = 'hide-m'
+                for item in cart.items
+                  if item.product.tags contains 'van delivery' or item.product.tags contains 'lorry delivery'
+                    assign show_van_lorry = 'flex'
+                    break
+                  endif
+                endfor
+              %}
+              <label onclick="headerVue.selectShippingOption(this)" class="shipping-option shipping-option-van-lorry {{show_van_lorry}} cursor ai-start colgap-8">
+                <input type="radio" name="shipping-option" value="Van" class="hide-m">
+                <div class="so-checkbox y3 flex ai-center jc-center b-1 b-secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" viewBox="0 0 9 8" fill="none">
+                    <path d="M8.35547 0.352539L2.3892 6.35254L0.355469 4.3073" stroke="#19341E"/>
+                  </svg>
+                </div>
+                <div class="so-text">
+                  <div class="p2 c-green">Van Delivery (From S$55.00)</div>
+                  <div class="p3 c-green mt-4">
+                    For medium-sized plants that need extra care in transit. Choose your preferred delivery date, with the earliest slot available within 12 hours. For same-day delivery, please place your order before 12pm.
+                  </div>
+                </div>
+              </label>
+              <label onclick="headerVue.selectShippingOption(this)" class="shipping-option shipping-option-van-lorry {{show_van_lorry}} cursor ai-start colgap-8">
+                <input type="radio" name="shipping-option" value="Lorry" class="hide-m">
+                <div class="so-checkbox y3 flex ai-center jc-center b-1 b-secondary">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="8" viewBox="0 0 9 8" fill="none">
+                    <path d="M8.35547 0.352539L2.3892 6.35254L0.355469 4.3073" stroke="#19341E"/>
+                  </svg>
+                </div>
+                <div class="so-text">
+                  <div class="p2 c-green">Lorry Delivery (From S$95.00)</div>
+                  <div class="p3 c-green mt-4">
+                    For tall or oversized plants that need extra care in transit. Choose your preferred delivery date, with the earliest slot available within 12 hours. For same-day delivery, please place your order before 12pm.
+                  </div>
+                </div>
+              </label>
+            </div>
+          </div>
+          <div class="pickup-options hide-m pt-12">
+            <div class="p3 c-green">
+              Please click the checkout button to continue.
+            </div>
+          </div>
+        </div>
+        <button type="submit" name="checkout" class="hide-m" value="Checkout" ></button>
+      </div>
+    </div>
+    <div class="header-con__cart-bottom d-pb-24 pb-20 d-pl-40 pl-16 d-pr-40 pr-16 bt-1 b-main pt-16 zi-2">
+      {%liquid 
+        assign gwp_size = ''
+        for option in gift_wrap_product.options_with_values
+          if option.name == 'Size'
+            for val in option.values
+              assign gwp_size = gwp_size | append: val | downcase
+              unless forloop.last
+              assign gwp_size = gwp_size | append: ','
+              endunless
+            endfor
+          endif
+        endfor
+
+        assign gwp_sizes = gwp_size | split: ','
+        assign able_gwp = false
+        for item in cart.items 
+          if item.properties['_is_parent']
+            unless item.properties['_gift_wrap'] or item.parent_relationship
+                assign has_gwp_size = false
+                for gwps in gwp_sizes
+                  assign is = item.product.metafields.custom.size | downcase
+                  if gwps == is
+                    assign has_gwp_size = true
+                    break
+                  endif 
+                endfor
+              if has_gwp_size
+                assign able_gwp = true
+                break
+              endif
+            endunless
+          endif
+          endfor 
+      %}
+      <div class="add-gift-wrap ai-center jc-between cursor pb-16 {% unless able_gwp %}hide-m{% else %}flex{% endunless %}" onclick="headerVue.toggleGiftWrap()">
+        <div class="p2 c-green">
+          {% if total_gwp > 0 %}
+          {{'general.gift_wrap.gift_wrapping'|t}} <span class="underline">({{'cart.general.edit' | t}})</span>
+          {% else %}
+          {{'general.gift_wrap.add_gift_wrapping'|t}} (+S{{gift_wrap_product.price | money}})
+          {% endif %}
+        </div>
+        {% if total_gwp > 0 %}
+          <div class="p2 c-green">
+            S{{total_gwp | money}}
+          </div>
+        {% else %}
+          <span class="icon flex ai-center jc-center">
+            {{ settings.icon_plus }}
+          </span>
+        {% endif %}
+      </div>
+      <div class="flex flex-column rowgap-8 d-rowgap-12">
+        <div>
+          <div class="w-full tc bg-green button-next c-white p2 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 cursor" onclick="headerVue.toggleCartPageDrawer()">
+            <span>{{'cart.general.next' | t}}</span>
+            <span>S{{ cart.total_price | money }}</span>
+          </div>
+          <div class="w-full tc bg-green button-checkout c-white p2 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 cursor disabled" onclick="headerVue.goCheckout(this)">
+            <span>{{'cart.general.checkout' | t}}</span>
+            <span>S{{ cart.total_price | money }}</span>
+          </div>
+        </div>
+        <span class="p3 c-green">
+          {{'cart.general.shipping_at_checkout' | t}}
+        </span>
+      </div>
+    </div>
+    {% if enable_gift_wrap and gift_wrap_product != blank %}
+    <div class="header-con__gift-wrap absolute h-full w-full top-0 left-0 bg-background-main flex flex-column jc-between zi-2">
+      <input type="hidden" class="gift-wrap-product-data" data-price="{{gift_wrap_product.first_available_variant.price}}" data-format-money="{{ shop.money_format }}">
+      <div class="header-con__gift-wrap-heading d-pl-40 pl-16 d-pr-40 pr-16">
+        <div class="flex ai-center jc-between w-full d-pt-24 pt-20 pb-12 bb-1 b-main">
+          <div class="flex ai-center colgap-8">
+            <span class="icon flex p-4 ai-center jc-center cursor" onclick="headerVue.toggleGiftWrap()">
+              {{ settings.icon_slide_left }}
+            </span>
+            <div class="p1 c-green">Add Gift Wrapping </div>
+          </div>
+          <div
+            class="header-con__gift-wrap-close cursor absolute ai-center jc-center d-pt-28 pt-20 pb-12 d-pb-12 d-pl-40 pl-16 d-pr-40 pr-16 top-0 right-0"
+            onclick="headerVue.toggleGiftWrap()"
+          >
+            {{ settings.icon_close }}
+          </div>
+        </div>
+      </div>
+      <div class="header-con__gift-wrap-main d-pt-24 pt-20 d-pl-40 pl-16 d-pr-40 pr-16 h-full">
+        <div class="header-con__gift-wrap-banner d-pb-24 pb-20 bb-1 b-main">
+          {% assign image_id = "gift-wrap-banner" | append: section.id%}
+          {%- render 'global-image-wrapper-responsive',
+            image_id: image_id,
+            desktop_image: settings.gift_wrap_banner_desktop,
+            mobile_image: settings.gift_wrap_banner_mobile,
+            additional_class: 'no-bg'
+          %}
+          <div class="p2 d-mt-24 mt-20 c-green">
+            {{settings.gift_wrap_banner_text}}
+          </div>
+        </div>
+        <div class="header-con__gift-wrap-products pt-20 pb-20 d-pt-24 d-pb-24 flex flex-column d-rowgap-24 rowgap-20">
+          {%liquid 
+            assign total_gwp = 0
+            assign loop = 0
+            assign any_has_gwp = false
+            assign gwp_size = ''
+            for option in gift_wrap_product.options_with_values
+              if option.name == 'Size'
+                for val in option.values
+                  assign gwp_size = gwp_size | append: val | downcase
+                  unless forloop.last
+                  assign gwp_size = gwp_size | append: ','
+                  endunless
+                endfor
+              endif
+            endfor
+
+            assign gwp_sizes = gwp_size | split: ','
+          %}
+          {%- for item in cart.items -%}
+            {% if item.properties['_is_parent'] %}
+              {% unless item.properties['_gift_wrap'] or item.parent_relationship %}
+                {% assign loop = loop | plus: 1 %}
+                {%liquid 
+                  assign has_gwp = false
+                  assign gwp_sender_name = ''
+                  assign gwp_recipient_name = ''
+                  assign gwp_message = ''
+                  assign gwp_leave_blank = ''
+                  assign gwp_variant_id = ''
+                  assign all_field_blank = false
+                  assign parent_qty = item.quantity
+                  for cg in cart.items
+                    if cg.properties['_gift_wrap']
+                      if cg.parent_relationship.parent.key == item.key or cg.properties['_parent_id'] == item.properties['_parent_id']
+                        assign has_gwp = true
+                        assign any_has_gwp = true
+                        assign gwp_sender_name = cg.properties['Sender name'] | default: ''
+                        assign gwp_recipient_name = cg.properties['Recipient name'] | default: ''
+                        assign gwp_message = cg.properties['Message'] | default: ''
+                        assign gwp_leave_blank = cg.properties['Leave blank']
+                        assign gwp_variant_id = cg.variant_id
+                        assign gwp_id = cg.id
+                        assign gwp_option1 = cg.variant.option1
+                        assign gwp_option2 = cg.variant.option2
+                        assign gwp_option3 = cg.variant.option3
+                        assign total_gwp = total_gwp | plus: cg.price | times: cg.quantity
+                        if gwp_sender_name == '' and gwp_recipient_name == '' and gwp_message == ''
+                          assign all_field_blank = true
+                        endif
+                        unless cg.properties != blank
+                          assign all_field_blank = true
+                        endunless
+                        break
+                      endif
+                    endif
+                  endfor
+
+                  assign has_gwp_size = false
+                  for gwps in gwp_sizes
+                    assign is = item.product.metafields.custom.size | downcase
+                    if gwps == is
+                      assign has_gwp_size = true
+                      break
+                    endif 
+                  endfor
+                %}
+                {% if has_gwp_size %}
+                  <div class="hc__gw-item {% if has_gwp %}active{% endif %}" data-qty="{{parent_qty}}">
+                    <div class="flex ai-start jc-between colgap-16 pl-16 pr-16 d-pl-0 d-pr-0">
+                      <div class="hc__gwi-image w-full max-80">
+                        {%- if item.image == blank -%}
+                          <img src="{{ item.image | img_url: '200x' }}" alt="{{ item.image.alt | escape }}" class="image">
+                        {%- else -%}
+                          {%- render 'global-image-wrapper', image: item.image, size: 200, preload: true -%}
+                        {%- endif -%}
+                      </div>
+                      <div class="w-full">
+                        <div class="p2 c-green">
+                          {% liquid 
+                            assign parts = item.product.title | split: ' - '
+
+                            if parts.size > 1
+                              assign new_size = parts.size | minus: 1
+                              assign the_title = parts | slice: 0, new_size | join: ' - '
+                            else
+                              assign the_title = item.product.title
+                            endif 
+                          %}
+                          {{the_title}}
+                        </div>
+                        <label class="flex ai-center colgap-8 mt-8 hc-checkbox cursor" onclick="headerVue.toggleGiftWrapProduct(event)">
+                          {% assign this_gwp_var = '' %}
+                          {% for gwp_var in gift_wrap_product.variants %}
+                            {%liquid 
+                            assign opt1 = gwp_var.option1 | downcase
+                            assign opt2 = gwp_var.option2 | downcase
+                            assign opt3 = gwp_var.option3 | downcase
+                            %}
+                            {% if opt1 == is or opt2 == is or opt3 == is %}
+                              {% assign this_gwp_var = gwp_var %}
+                              <input type="hidden" value="{{gwp_var.id}}" data-opt1="{{gwp_var.option1}}" data-opt2="{{gwp_var.option2}}" data-opt3="{{gwp_var.option3}}" data-price="{{gwp_var.price}}" class="gwp-var">
+                            {% endif %}
+                          {% endfor %}
+                          <input type="checkbox" value="{{item.variant_id}}" data-title="{{the_title}}" data-id="{{item.properties['_parent_id']}}" data-qty="{{item.quantity}}" {% if has_gwp %}checked{% endif %} data-index="{{forloop.index}}" data-key="{{item.key}}" class="hide-m gift-wrap-main-product">
+                          {% if has_gwp %}
+                            <input type="hidden" value="{{gwp_id}}" class="gift-wrap-id" data-id="{{}}" data-parent="{{item.key}}" data-variant="{{gwp_variant_id}}" data-sender="{{gwp_sender_name}}" data-recipient="{{gwp_recipient_name}}" data-message="{{gwp_message}}">
+                          {% endif %}
+                          <div class="hc__gwi-checkbox hc-icon relative b-1 b-secondary flex ai-start jc-center">
+                            <span class="icon absolute ai-center jc-center">
+                              {{settings.icon_checkmark}}
+                            </span>
+                          </div>
+                          <div class="p2 c-green">
+                            {{'general.gift_wrap.add_gift_wrapping' | t}} (+S{{this_gwp_var.price | money}})
+                          </div>
+                        </label>
+                      </div>
+                    </div>
+                  </div>
+                {% endif %}
+              {% endunless %}
+            {% endif %}
+          {%- endfor -%}
+          <div class="hc__gwi-details overflow d-pt-24 bt-1 b-green{% unless any_has_gwp %} hide{% endunless %}">
+            <input type="hidden" value="{{gift_wrap_product.first_available_variant.id}}" data-price="{{gift_wrap_product.first_available_variant.price}}" class="gift-wrap-design-default">
+            {% if gift_wrap_product.variants.size > 1 %}
+            <div class="p2 c-green pl-16 pr-16 d-pl-0 d-pr-0">
+              {{'general.gift_wrap.select_a_card_design' | t}}:
+            </div>
+            <div class="flex ai-start jc-between colgap-8 mt-12 hc-gwi-design d-flex-wrap gift-wrap-design-box pl-16 pr-16 d-pl-0 d-pr-0">
+              {% for opt in gift_wrap_product.options_with_values %}
+                {% if opt.name == 'Design' %}
+
+                  {% assign option_index = forloop.index %}
+
+                  {% for optval in opt.values %}
+
+                    {% assign matched_variant = nil %}
+
+                    {% for var in gift_wrap_product.variants %}
+                      {% if option_index == 1 and var.option1 == optval %}
+                        {% assign matched_variant = var %}
+                        {% break %}
+                      {% elsif option_index == 2 and var.option2 == optval %}
+                        {% assign matched_variant = var %}
+                        {% break %}
+                      {% elsif option_index == 3 and var.option3 == optval %}
+                        {% assign matched_variant = var %}
+                        {% break %}
+                      {% endif %}
+                    {% endfor %}
+
+                    <label class="hc__gwi-design cursor" onclick="headerVue.selectGiftWrapDesign(event)">
+                      <input 
+                        type="radio" 
+                        name="gift_wrap_design" 
+                        value="{{ optval }}" 
+                        class="hide-m gift-wrap-design"
+                        {% if gwp_option1 == optval or gwp_option2 == optval or gwp_option3 == optval %}
+                          checked
+                        {% endif %}
+                      >
+
+                      <div class="design-image b-1">
+                        {% assign image_id = 'gift-wrap-image-' | append: forloop.index %}
+                        {%- render 'global-image-wrapper',
+                          image: matched_variant.featured_image,
+                          additional_class: '',
+                          image_id: image_id
+                        -%}
+                      </div>
+                    </label>
+
+                  {% endfor %}
+
+                {% endif %}
+              {% endfor %}
+            </div>
+            {% endif %}
+            <div class="mt-16 flex flex-column rowgap-12 pl-16 pr-16 d-pl-0 d-pr-0">
+              <input type="text" placeholder="{{'products.product.recipient_name' | t}}" class="gift-wrap-recipient-name pt-8 pb-8 bb-1 b-main p2 c-green" oninput="headerVue.uncheckLeaveblank(event)" value="{{gwp_recipient_name}}">
+              <input type="text" placeholder="{{'products.product.sender_name' | t}}" class="gift-wrap-sender-name pt-8 pb-8 bb-1 b-main p2 c-green" oninput="headerVue.uncheckLeaveblank(event)" value="{{gwp_sender_name}}">
+              <div class="relative w-full gift-wrap-message-box">
+                <textarea placeholder="{{'products.product.message' | t}}" rows="4" maxlength="200" class="gift-wrap-message block pt-8 pb-8 bb-1 b-main p2 c-green w-full {% if gwp_message == blank %}empty{% endif %}" oninput="headerVue.countGiftWrapMsg(event);headerVue.uncheckLeaveblank(event)" onchange="headerVue.countGiftWrapMsg(event);headerVue.uncheckLeaveblank(event);">{{gwp_message}}</textarea>
+                <span class="absolute pb-8 right-0 bottom-0 gift-wrap-text-counter">
+                  <span class="counter">0</span> / <span class="max">200</span>
+                </span>
+              </div>
+              <label class="flex colgap-8 ai-center hc-checkbox cursor" onclick="headerVue.clearGiftWrapMessage(event)">
+                <input type="checkbox" class="gift-leave-blank hide-m" {% if all_field_blank %}checked{% endif %} onchange="headerVue.uncheckLeaveblank(event);">
+                <div class="leave-blank-checkbox hc-icon relative b-1 b-secondary flex ai-start jc-center">
+                  <span class="icon absolute ai-center jc-center">
+                    {{settings.icon_checkmark}}
+                  </span>
+                </div>
+                <div class="p2 c-green">
+                  {{'general.gift_wrap.leave_a_card_blank' | t}}
+                </div>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="header-con__gift-wrap-bottom d-pb-24 pt-16 pb-20 d-pl-40 pl-16 d-pr-40 pr-16 bt-1 b-main">
+        <button type="button" class="pt-12 pb-12 pl-24 pr-24 colgap-48 c-white p2 bg-green {% unless total_gwp > 0 %}disabled{% endunless %} w-full flex ai-center jc-between btn-add-gift-wrap" onclick="headerVue.processGiftWrapProduct(event)">
+          <div class="gift-wrap-total-label p2">
+            {% if total_gwp > 0 %}
+              {{'general.gift_wrap.edit_gift_wrapping' | t}}
+            {% else %}
+              {{'general.gift_wrap.add_gift_wrapping' | t}}
+            {% endif %}
+          </div>
+          <div class="gift-wrap-total-price p2">
+            +{%- if total_gwp > 0 -%}S{{total_gwp | money}}{%- else -%}S{{gift_wrap_product.price | money}}{%- endif -%}
+          </div>
+        </button>
+      </div>
+    </div>
+    {% endif %}
+  </form>
+{% endif %}

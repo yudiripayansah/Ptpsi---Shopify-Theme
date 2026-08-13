@@ -1,0 +1,1327 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'installation-landing-' | append: section.id
+  assign showcase_id = 'il-showcase-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  assign mo_type = ss.metaobject_type | default: 'installation'
+  render 'section-padding', el_id: showcase_id, section: section
+
+  assign track_d = ss.scroll_length_d | default: 150
+  assign track_m = ss.scroll_length_m | default: 125
+
+  assign sizes_sm = '(min-width: 1024px) 32vw, 74vw'
+  assign sizes_lg = '(min-width: 1024px) 64vw, 100vw'
+
+  assign video_url_d = blank
+  assign video_url_m = blank
+  if ss.media_type == 'video'
+    for vid_source in ss.video_d.sources
+      if vid_source.mime_type == 'video/mp4'
+        assign video_url_d = vid_source.url
+      endif
+    endfor
+    for vid_source in ss.video_m.sources
+      if vid_source.mime_type == 'video/mp4'
+        assign video_url_m = vid_source.url
+      endif
+    endfor
+  endif
+%}
+
+<style>
+  /* One section carries the whole page: hero track + showcase. The end
+     title, menu, bar and CTA live in sticky height-0 layers at the top of
+     the section, so they follow the viewport for the entire page — sticky
+     keeps working where position:fixed breaks under the theme's AOS
+     transforms. */
+  #{{ el_id }} {
+    position: relative;
+    background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .il-persist-back,
+  #{{ el_id }} .il-persist-front {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 0;
+  }
+  #{{ el_id }} .il-persist-back {
+    z-index: 1;
+  }
+  #{{ el_id }} .il-persist-front {
+    z-index: 90;
+  }
+
+  /* ---- Hero track + stage ---- */
+  #{{ el_id }} .ilh-track {
+    position: relative;
+    height: {{ track_m | plus: 100 }}vh;
+  }
+  #{{ el_id }} .ilh-stage {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow: hidden;
+  }
+  @supports (height: 100svh) {
+    #{{ el_id }} .ilh-stage {
+      height: 100svh;
+    }
+  }
+  #{{ el_id }} .ilh-media {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: 1;
+  }
+  #{{ el_id }} .ilh-media img,
+  #{{ el_id }} .ilh-media video {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  {% if video_url_m != blank %}
+    #{{ el_id }} .ilh-video--d {
+      display: none;
+    }
+  {% endif %}
+
+  /* ---- Start layer: white text over the full-bleed media ---- */
+  #{{ el_id }} .ilh-start {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 3;
+  }
+  #{{ el_id }} .ilh-start.is-off {
+    pointer-events: none;
+  }
+  #{{ el_id }} .ilh-start-title {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    left: 16px;
+    right: 16px;
+    color: #ffffff;
+  }
+  #{{ el_id }} .ilh-start-title .line-1,
+  #{{ el_id }} .ilh-start-title .line-2 {
+    font-size: 19.7vw;
+    line-height: 1.1;
+    letter-spacing: -0.02em;
+    color: #ffffff;
+  }
+  #{{ el_id }} .ilh-start-title .line-2 {
+    text-align: right;
+  }
+  #{{ el_id }} .ilh-start-bottom {
+    position: absolute;
+    bottom: 40px;
+    left: 16px;
+    right: 16px;
+  }
+  #{{ el_id }} .ilh-start-text {
+    color: #ffffff;
+    font-size: 16px;
+  }
+  #{{ el_id }} .ilh-start-btn {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 4px;
+    padding: 6px 12px;
+    background-color: #ffffff;
+  }
+  #{{ el_id }} .ilh-button .icon,
+  #{{ el_id }} .ilh-button .icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  #{{ el_id }} .ilh-button .icon svg path {
+    stroke: currentColor;
+  }
+
+  /* ---- Background title: sticky behind the page content ---- */
+  #{{ el_id }} .ilh-end-title {
+    position: absolute;
+    top: 43vh;
+    left: 16px;
+    right: 16px;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #{{ el_id }} .ilh-end-title .line-1,
+  #{{ el_id }} .ilh-end-title .line-2 {
+    font-size: inherit;
+    line-height: inherit;
+    letter-spacing: inherit;
+  }
+  #{{ el_id }} .ilh-end-title .line-2 {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  #{{ el_id }} .ilh-slot {
+    aspect-ratio: 143 / 87;
+    width: 143px;
+    flex: 0 0 auto;
+    order: 2;
+    align-self: flex-end;
+    margin-top: 12px;
+  }
+
+  /* ---- Menu, filter bar, CTA: arrive last, follow the whole page ---- */
+  #{{ el_id }} .il-persist-front .ilh-late {
+    opacity: 0;
+    pointer-events: none;
+  }
+  #{{ el_id }} .il-persist-front .ilh-late.is-on {
+    pointer-events: auto;
+  }
+  #{{ el_id }} .ilh-menu {
+    position: absolute;
+    top: 80px;
+    right: 24px;
+    width: 212px;
+    display: none;
+    /* Follows the header's hide-on-scroll-down, same timing as the header. */
+    transition: top 0.3s ease;
+  }
+  #{{ el_id }} .ilh-menu.header-hidden {
+    top: 24px;
+  }
+  #{{ el_id }} .ilh-menu-item {
+    padding-top: 12px;
+    padding-bottom: 12px;
+  }
+  #{{ el_id }} .ilh-menu-num {
+    flex: 0 0 16px;
+  }
+  #{{ el_id }} .ilh-menu-dot,
+  #{{ el_id }} .ilh-bar-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 100px;
+    background-color: #B35E34;
+    flex: 0 0 auto;
+  }
+  #{{ el_id }} .ilh-menu-dot {
+    margin-left: 8px;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+  #{{ el_id }} .ilh-menu-item:hover .ilh-menu-dot,
+  #{{ el_id }} .ilh-menu-item.active .ilh-menu-dot {
+    opacity: 1;
+  }
+  #{{ el_id }} .ilh-menu-button {
+    margin-top: 16px;
+  }
+  #{{ el_id }} .ilh-bar {
+    position: absolute;
+    top: 54px;
+    left: 0;
+    right: 0;
+    /* Follows the header's hide-on-scroll-down: same duration/easing as
+       #shopify-section-header so the two move as one. */
+    transition: top 0.3s ease;
+    background-color: {{ ss.bar_bg_color | default: '#19341E' }};
+    display: flex;
+    align-items: center;
+    column-gap: 16px;
+    padding: 16px;
+    overflow-x: auto;
+    white-space: nowrap;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  #{{ el_id }} .ilh-bar.header-hidden {
+    top: 0;
+  }
+  #{{ el_id }} .ilh-bar::-webkit-scrollbar {
+    display: none;
+  }
+  #{{ el_id }} .ilh-bar a {
+    display: inline-flex;
+    align-items: center;
+    column-gap: 4px;
+    color: {{ ss.bar_text_color | default: '#FFF9F2' }};
+    font-size: 14px;
+    line-height: 1.4;
+  }
+  #{{ el_id }} .ilh-cta-m {
+    position: absolute;
+    top: calc(100vh - 76px);
+    left: 16px;
+    right: 16px;
+  }
+  @supports (height: 100svh) {
+    #{{ el_id }} .ilh-cta-m {
+      top: calc(100svh - 76px);
+    }
+  }
+
+  /* ---- Showcase grid: scrolls over the sticky background title ---- */
+  #{{ showcase_id }} .container:after,
+  #{{ showcase_id }} .container:before {
+    display: none;
+  }
+  #{{ el_id }} .ilc-grid {
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+    position: relative;
+    z-index: 2;
+  }
+  #{{ el_id }} .ilc-row {
+    display: flex;
+    flex-direction: column;
+    row-gap: 40px;
+  }
+  #{{ el_id }} .ilc-card {
+    width: 100%;
+  }
+  #{{ el_id }} .ilc-img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  #{{ el_id }} .ilc-caption {
+    margin-top: 8px;
+    column-gap: 16px;
+  }
+  #{{ el_id }} .ilc-caption-label {
+    flex: 0 0 50px;
+  }
+  /* Mobile: cards alternate left / right at 74% width, the large card runs
+     full width — the same rhythm as the desktop patterns. */
+  #{{ el_id }} .ilc-card--m-left {
+    width: 74%;
+    align-self: flex-start;
+  }
+  #{{ el_id }} .ilc-card--m-right {
+    width: 74%;
+    align-self: flex-end;
+  }
+  {% if ss.hide_footer %}
+    #shopify-section-footer {
+      display: none !important;
+    }
+  {% endif %}
+
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .ilh-track {
+      height: {{ track_d | plus: 100 }}vh;
+    }
+    {% if video_url_m != blank %}
+      #{{ el_id }} .ilh-video--d {
+        display: block;
+      }
+    {% endif %}
+    #{{ el_id }} .ilh-video--m {
+      display: none;
+    }
+    #{{ el_id }} .ilh-start-title {
+      top: 33.5%;
+      transform: none;
+      left: 24px;
+      right: 24px;
+    }
+    #{{ el_id }} .ilh-start-title .line-1,
+    #{{ el_id }} .ilh-start-title .line-2 {
+      font-size: 8.28vw;
+    }
+    #{{ el_id }} .ilh-start-bottom {
+      bottom: 60px;
+      left: 24px;
+      right: 24px;
+    }
+    #{{ el_id }} .ilh-start-text {
+      font-size: 18px;
+      max-width: 566px;
+    }
+    #{{ el_id }} .ilh-start-btn {
+      display: flex;
+      width: 100%;
+      max-width: 330px;
+      justify-content: space-between;
+      column-gap: 48px;
+      padding: 12px 24px;
+    }
+    #{{ el_id }} .ilh-end-title {
+      top: 43.75vh;
+      left: 20.5%;
+      right: auto;
+      width: 55.7%;
+      max-width: 802px;
+    }
+    #{{ el_id }} .ilh-end-title .line-2 {
+      flex-direction: row;
+      justify-content: flex-end;
+      align-items: center;
+      column-gap: 8px;
+    }
+    #{{ el_id }} .ilh-slot {
+      aspect-ratio: 142 / 79;
+      width: 142px;
+      order: 0;
+      align-self: auto;
+      margin-top: 0;
+    }
+    #{{ el_id }} .ilh-menu {
+      display: block;
+    }
+    /* While a showcase card scrolls under the menu, the menu flips to white
+       for legibility over the image (toggled by JS, desktop only). */
+    #{{ el_id }} .ilh-menu .ilh-menu-item,
+    #{{ el_id }} .ilh-menu .ilh-menu-item span,
+    #{{ el_id }} .ilh-menu .ilh-menu-button {
+      transition: color 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
+    }
+    #{{ el_id }} .ilh-menu.on-image .ilh-menu-item .p1,
+    #{{ el_id }} .ilh-menu.on-image .ilh-menu-item .p4 {
+      color: #ffffff;
+    }
+    #{{ el_id }} .ilh-menu.on-image .ilh-menu-item {
+      border-color: #ffffff;
+    }
+    #{{ el_id }} .ilh-menu.on-image .ilh-menu-button {
+      background-color: #ffffff;
+      color: var(--green);
+    }
+    #{{ el_id }} .ilh-bar,
+    #{{ el_id }} .ilh-cta-m {
+      display: none;
+    }
+    #{{ el_id }} .ilc-grid {
+      row-gap: 60px;
+    }
+    #{{ el_id }} .ilc-row {
+      flex-direction: row;
+      row-gap: 0;
+    }
+    #{{ el_id }} .ilc-card--m-left,
+    #{{ el_id }} .ilc-card--m-right {
+      align-self: auto;
+    }
+    #{{ el_id }} .ilc-card--sm {
+      width: {{ ss.small_card_width | default: 32 }}%;
+    }
+    #{{ el_id }} .ilc-card--lg {
+      width: {{ ss.large_card_width | default: 66 }}%;
+    }
+    /* Pattern A: one card each side. */
+    #{{ el_id }} .ilc-row--a {
+      justify-content: space-between;
+    }
+    /* Pattern B: large card left, small card right, bottom aligned. */
+    #{{ el_id }} .ilc-row--b {
+      justify-content: space-between;
+      align-items: flex-end;
+    }
+    /* Pattern C: two cards side by side on the left. */
+    #{{ el_id }} .ilc-row--c {
+      justify-content: flex-start;
+      column-gap: 24px;
+    }
+    #{{ el_id }} .ilc-caption {
+      column-gap: 24px;
+    }
+    #{{ el_id }} .ilc-caption-label {
+      flex: 0 0 94px;
+    }
+  }
+  {%- if ss.invert_header -%}
+    /* The hero runs full bleed under the fixed header, so the header goes
+       transparent and light only while the untouched full-screen media
+       covers it — it reverts as soon as the shrink starts. */
+    body.ilh-header-light .site-header:not(.dropdown-shown) .header-con-outer {
+      background-color: transparent;
+    }
+    body.ilh-header-light .site-header:not(.dropdown-shown) .header-con__dropdown {
+      background-color: transparent;
+    }
+    body.ilh-header-light .site-header:not(.dropdown-shown) .header-con .c-green {
+      color: {{ ss.header_text_color | default: '#ffffff' }};
+    }
+    body.ilh-header-light .site-header:not(.dropdown-shown) .header-con .logo-black {
+      -webkit-filter: brightness(0) invert(1);
+      filter: brightness(0) invert(1);
+    }
+  {%- endif -%}
+  @media (prefers-reduced-motion: reduce) {
+    /* No pin, no morph: full-bleed hero, menu links in normal flow, then the
+       showcase — nothing is lost. */
+    #{{ el_id }} .ilh-track {
+      height: auto !important;
+    }
+    #{{ el_id }} .ilh-stage {
+      position: static;
+      height: auto;
+    }
+    #{{ el_id }} .ilh-media {
+      position: relative;
+      height: 100vh;
+    }
+    #{{ el_id }} .il-persist-back {
+      display: none;
+    }
+    #{{ el_id }} .il-persist-front {
+      position: static;
+      height: auto;
+    }
+    #{{ el_id }} .il-persist-front .ilh-late {
+      opacity: 1 !important;
+      pointer-events: auto;
+    }
+    #{{ el_id }} .ilh-menu {
+      position: static;
+      width: auto;
+      padding: 24px 16px;
+    }
+    #{{ el_id }} .ilh-bar {
+      position: static;
+    }
+    #{{ el_id }} .ilh-cta-m {
+      position: static;
+      top: auto;
+      padding: 16px;
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'installation-hero-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div
+    id="{{ el_id }}"
+    data-il-landing
+    data-invert-header="{% if ss.invert_header %}true{% else %}false{% endif %}"
+    data-loop="{% if ss.infinite_loop %}true{% else %}false{% endif %}"
+    data-max-loops="{{ ss.max_loops | default: 30 }}"
+  >
+    <div class="il-persist-back">
+      <{{ ss.title_dom_type }} class="ilh-end-title h1 no-anim c-green">
+        <div class="line-1">{{ ss.title_1 }}</div>
+        <div class="line-2">
+          <span class="ilh-slot"></span>
+          <span>{{ ss.title_2 }}</span>
+        </div>
+      </{{ ss.title_dom_type }}>
+    </div>
+    <div class="il-persist-front">
+      {% if sb.size > 0 %}
+        <div class="ilh-menu ilh-late">
+          {% for block in sb %}
+            <a
+              href="{{ block.settings.url }}"
+              class="ilh-menu-item flex ai-center colgap-4 bb-1 b-main {% if block.settings.active %}active{% endif %}"
+              {{ block.shopify_attributes }}
+            >
+              <span class="p4 c-label ilh-menu-num">
+                {%- if forloop.index < 10 %}0{% endif -%}
+                {{- forloop.index -}}
+              </span>
+              <span class="p1 c-green">{{ block.settings.label }}</span>
+              <span class="ilh-menu-dot"></span>
+            </a>
+          {% endfor %}
+          {% if ss.button_label != blank %}
+            <a
+              href="{{ ss.button_url }}"
+              class="ilh-menu-button ilh-button p2 flex ai-center jc-between pt-8 pb-8 pl-16 pr-16 bg-green c-white"
+            >
+              {{ ss.button_label }}
+              <span class="icon flex ai-center jc-center">
+                {{ settings.icon_arrow_up_right }}
+              </span>
+            </a>
+          {% endif %}
+        </div>
+        <div class="ilh-bar ilh-late">
+          {% for block in sb %}
+            <a href="{{ block.settings.url }}">
+              {{ block.settings.label }}
+              {% if block.settings.active %}<span class="ilh-bar-dot"></span>{% endif %}
+            </a>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {% if ss.button_label != blank %}
+        <div class="ilh-cta-m ilh-late">
+          <a
+            href="{{ ss.button_url }}"
+            class="ilh-button w-full p2 flex ai-center jc-between pt-12 pb-12 pl-24 pr-24 bg-green c-white"
+          >
+            {{ ss.button_label }}
+            <span class="icon flex ai-center jc-center">
+              {{ settings.icon_arrow_up_right }}
+            </span>
+          </a>
+        </div>
+      {% endif %}
+    </div>
+    <div class="ilh-track">
+      <div class="ilh-stage">
+        <div class="ilh-media">
+          {% if ss.media_type == 'video' %}
+            {% if video_url_d != blank %}
+              <video
+                class="ilh-video--d"
+                data-src="{{ video_url_d }}"
+                {% if ss.desktop_image != blank %}poster="{{ ss.desktop_image | image_url: width: 1600 }}"{% endif %}
+                preload="none"
+                autoplay
+                muted
+                loop
+                playsinline
+                webkit-playsinline
+              ></video>
+            {% endif %}
+            {% if video_url_m != blank %}
+              <video
+                class="ilh-video--m"
+                data-src="{{ video_url_m }}"
+                {% if ss.mobile_image != blank %}poster="{{ ss.mobile_image | image_url: width: 800 }}"{% endif %}
+                preload="none"
+                autoplay
+                muted
+                loop
+                playsinline
+                webkit-playsinline
+              ></video>
+            {% endif %}
+          {% elsif ss.desktop_image != blank or ss.mobile_image != blank %}
+            {% liquid
+              assign hero_image = ss.desktop_image | default: ss.mobile_image
+              assign preload = false
+              if section.index == 1
+                assign preload = true
+              endif
+            %}
+            <picture>
+              {% if ss.mobile_image != blank and ss.desktop_image != blank %}
+                <source media="(max-width: 1023px)" srcset="{{ ss.mobile_image | image_url: width: 1200 }}">
+              {% endif %}
+              {{ hero_image | image_url: width: 2400 | image_tag: preload: preload, sizes: '100vw', alt: hero_image.alt }}
+            </picture>
+          {% endif %}
+        </div>
+        <div class="ilh-start">
+          <div class="ilh-start-title no-anim">
+            <div class="line-1">{{ ss.title_1 }}</div>
+            <div class="line-2">{{ ss.title_2 }}</div>
+          </div>
+          <div class="ilh-start-bottom">
+            {% if ss.text != blank %}
+              <div class="ilh-start-text">{{ ss.text | newline_to_br }}</div>
+            {% endif %}
+            {% if ss.button_label != blank %}
+              <a href="{{ ss.button_url }}" class="ilh-button ilh-start-btn p2 d-mt-32 mt-24 c-green">
+                {{ ss.button_label }}
+                <span class="icon flex ai-center jc-center">
+                  {{ settings.icon_arrow_up_right }}
+                </span>
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="{{ showcase_id }}" class="il-showcase">
+      {% paginate shop.metaobjects[mo_type].values by 50 %}
+        {% liquid
+          assign entries = shop.metaobjects[mo_type].values
+          assign total_entries = entries.size
+        %}
+        <div class="container">
+          {% if total_entries == 0 %}
+            {% if request.design_mode %}
+              <p class="p2 c-label">
+                No "{{ mo_type }}" metaobject entries found. Add entries with card_image, reference_number and title fields in Admin &gt; Content &gt; Metaobjects.
+              </p>
+            {% endif %}
+          {% else %}
+            <div class="ilc-grid">
+              {% comment %}
+                MetaobjectValuesDrop is iterable but not index-addressable, so the
+                6-slot pattern cycle is driven by the loop position: rows open on
+                slots 0 / 2 / 4 and close on slots 1 / 3 / 5 (or when entries run out).
+              {% endcomment %}
+              {% for entry in entries %}
+                {% assign slot = forloop.index0 | modulo: 6 %}
+                {% case slot %}
+                  {% when 0 %}
+                    <div class="ilc-row ilc-row--a">
+                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-left', sizes: sizes_sm %}
+                    {% if forloop.last %}</div>{% endif %}
+                  {% when 1 %}
+                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-right', sizes: sizes_sm %}
+                    </div>
+                  {% when 2 %}
+                    <div class="ilc-row ilc-row--b">
+                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--lg', sizes: sizes_lg %}
+                    {% if forloop.last %}</div>{% endif %}
+                  {% when 3 %}
+                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-right', sizes: sizes_sm %}
+                    </div>
+                  {% when 4 %}
+                    <div class="ilc-row ilc-row--c">
+                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-left', sizes: sizes_sm %}
+                    {% if forloop.last %}</div>{% endif %}
+                  {% when 5 %}
+                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-right', sizes: sizes_sm %}
+                    </div>
+                {% endcase %}
+              {% endfor %}
+            </div>
+            <div class="ilc-sentinel" aria-hidden="true"></div>
+          {% endif %}
+        </div>
+      {% endpaginate %}
+    </div>
+  </div>
+
+  <script>
+    (function () {
+      var SECTION_ID = '{{ el_id }}';
+
+      function clamp(v, min, max) {
+        return v < min ? min : (v > max ? max : v);
+      }
+      function easeInOut(t) {
+        return t < 0.5 ? 4 * t * t * t : 1 - Math.pow(-2 * t + 2, 3) / 2;
+      }
+      function lerp(a, b, t) {
+        return a + (b - a) * t;
+      }
+
+      function initHero(root) {
+        var track = root.querySelector('.ilh-track');
+        var stage = root.querySelector('.ilh-stage');
+        var media = root.querySelector('.ilh-media');
+        var slot = root.querySelector('.ilh-slot');
+        var startLayer = root.querySelector('.ilh-start');
+        var endTitle = root.querySelector('.ilh-end-title');
+        var lates = Array.prototype.slice.call(root.querySelectorAll('.ilh-late'));
+        if (!track || !stage || !media || !slot) return;
+
+        var invertHeader = root.getAttribute('data-invert-header') === 'true';
+        var stageH = 0;
+        var total = 0;
+        var ticking = false;
+        var activeVideo = null;
+
+        // Right-column showcase cards, re-collected whenever the infinite
+        // loop appends clones. The menu flips to white while one of these
+        // sits under it.
+        var menu = root.querySelector('.ilh-menu');
+        var rightCards = [];
+        root.ilCollectRightCards = function () {
+          rightCards = Array.prototype.slice.call(root.querySelectorAll('.ilc-card--m-right'));
+        };
+        root.ilCollectRightCards();
+
+        function loadVideo() {
+          var video = null;
+          if (window.innerWidth < 1024) video = root.querySelector('.ilh-video--m');
+          if (!video) video = root.querySelector('.ilh-video--d');
+          if (!video) return;
+          if (video !== activeVideo && activeVideo && !activeVideo.paused) activeVideo.pause();
+          activeVideo = video;
+          activeVideo.muted = true;
+          if (video.getAttribute('data-src')) {
+            video.src = video.getAttribute('data-src');
+            video.removeAttribute('data-src');
+            video.load();
+          }
+        }
+
+        function measure() {
+          stageH = stage.offsetHeight;
+          var isDesktop = window.innerWidth >= 1024;
+          total = ((isDesktop ? {{ track_d }} : {{ track_m }}) / 100) * stageH;
+          track.style.height = (total + stageH) + 'px';
+        }
+
+        function update() {
+          var rect = track.getBoundingClientRect();
+          var inView = rect.top < window.innerHeight && rect.bottom > 0;
+          var p = total ? clamp(-rect.top / total, 0, 1) : 0;
+          var e = easeInOut(p);
+
+          // Media rect: full stage -> the slot in the sticky title. The stage
+          // top is clamped to its pinned position so that, once the track
+          // ends and the stage scrolls away, the docked media leaves with it
+          // instead of chasing the sticky slot.
+          var stR = stage.getBoundingClientRect();
+          var sR = slot.getBoundingClientRect();
+          var stTop = Math.max(stR.top, 0);
+          media.style.top = lerp(0, sR.top - stTop, e) + 'px';
+          media.style.left = lerp(0, sR.left - stR.left, e) + 'px';
+          media.style.width = lerp(stR.width, sR.width, e) + 'px';
+          media.style.height = lerp(stR.height, sR.height, e) + 'px';
+
+          // Start text leaves first, the background title arrives, then the
+          // menu / bar / CTA land and follow the rest of the page.
+          startLayer.style.opacity = 1 - clamp(p / 0.4, 0, 1);
+          startLayer.classList.toggle('is-off', p > 0.2);
+          if (endTitle) endTitle.style.opacity = clamp((p - 0.5) / 0.3, 0, 1);
+          var lateOpacity = clamp((p - 0.82) / 0.18, 0, 1);
+          for (var i = 0; i < lates.length; i++) {
+            lates[i].style.opacity = lateOpacity;
+            lates[i].classList.toggle('is-on', p > 0.85);
+          }
+
+          // Desktop only: flip the menu to white while a right-column card
+          // image passes underneath it. Cards are in top-to-bottom DOM order,
+          // so the scan stops at the first card below the menu band.
+          if (menu && window.innerWidth >= 1024) {
+            var onImage = false;
+            if (p > 0.5) {
+              var mR = menu.getBoundingClientRect();
+              for (var c = 0; c < rightCards.length; c++) {
+                var cR = rightCards[c].getBoundingClientRect();
+                if (cR.top > mR.bottom) break;
+                if (cR.bottom > mR.top && cR.left < mR.right && cR.right > mR.left) {
+                  onImage = true;
+                  break;
+                }
+              }
+            }
+            menu.classList.toggle('on-image', onImage);
+          }
+
+          // Header only inverts while the untouched full screen media covers
+          // it; it reverts as soon as the shrink starts.
+          if (invertHeader) {
+            document.body.classList.toggle(
+              'ilh-header-light',
+              rect.top >= -10 && p < 0.1 && rect.bottom > 0
+            );
+          }
+
+          if (activeVideo && activeVideo.src) {
+            if (inView && activeVideo.paused) {
+              var playing = activeVideo.play();
+              if (playing && playing.catch) playing.catch(function () {});
+            } else if (!inView && !activeVideo.paused) {
+              activeVideo.pause();
+            }
+          }
+        }
+
+        function onScroll() {
+          if (ticking) return;
+          ticking = true;
+          window.requestAnimationFrame(function () {
+            ticking = false;
+            update();
+          });
+        }
+
+        function onResize() {
+          measure();
+          loadVideo();
+          update();
+        }
+
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) {
+          track.style.height = 'auto';
+          loadVideo();
+          if (activeVideo) {
+            var playing = activeVideo.play();
+            if (playing && playing.catch) playing.catch(function () {});
+          }
+          return;
+        }
+
+        measure();
+        loadVideo();
+        update();
+
+        // The theme header hides on scroll-down (a .scroll-down class on
+        // .site-header); the mobile bar and desktop menu mirror it so no gap
+        // opens above them.
+        var headerFollowers = Array.prototype.slice.call(root.querySelectorAll('.ilh-bar, .ilh-menu'));
+        var siteHeader = document.querySelector('.site-header');
+        var headerObserver = null;
+        if (headerFollowers.length && siteHeader && 'MutationObserver' in window) {
+          var syncHeaderFollowers = function () {
+            var hidden = siteHeader.classList.contains('scroll-down');
+            headerFollowers.forEach(function (el) {
+              el.classList.toggle('header-hidden', hidden);
+            });
+          };
+          headerObserver = new MutationObserver(syncHeaderFollowers);
+          headerObserver.observe(siteHeader, { attributes: true, attributeFilter: ['class'] });
+          syncHeaderFollowers();
+        }
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize);
+        window.addEventListener('orientationchange', onResize);
+        window.addEventListener('load', onResize);
+
+        root.ilhDestroy = function () {
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('resize', onResize);
+          window.removeEventListener('orientationchange', onResize);
+          window.removeEventListener('load', onResize);
+          if (headerObserver) headerObserver.disconnect();
+          document.body.classList.remove('ilh-header-light');
+          if (activeVideo && !activeVideo.paused) activeVideo.pause();
+        };
+      }
+
+      function initShowcase(root) {
+        if (root.getAttribute('data-loop') !== 'true') return;
+
+        var grid = root.querySelector('.ilc-grid');
+        var sentinel = root.querySelector('.ilc-sentinel');
+        if (!grid || !sentinel || !('IntersectionObserver' in window)) return;
+
+        // The initial server-rendered rows are the loop source: appending
+        // clones keeps the 3-pattern rhythm intact for any entry count.
+        var sourceRows = Array.prototype.slice.call(grid.querySelectorAll('.ilc-row'));
+        if (!sourceRows.length) return;
+
+        var maxLoops = parseInt(root.getAttribute('data-max-loops'), 10);
+        if (isNaN(maxLoops) || maxLoops < 1) maxLoops = 30;
+        var appended = 0;
+        var limit = sourceRows.length * maxLoops;
+
+        var observer = new IntersectionObserver(function (observerEntries) {
+          observerEntries.forEach(function (observerEntry) {
+            if (!observerEntry.isIntersecting) return;
+            for (var i = 0; i < 3 && appended < limit; i++) {
+              var clone = sourceRows[appended % sourceRows.length].cloneNode(true);
+              grid.appendChild(clone);
+              appended++;
+            }
+            if (root.ilCollectRightCards) root.ilCollectRightCards();
+            if (appended >= limit) observer.disconnect();
+          });
+        }, { rootMargin: '150% 0px' });
+
+        observer.observe(sentinel);
+
+        root.ilcDestroy = function () {
+          observer.disconnect();
+        };
+      }
+
+      function initIlLanding(root) {
+        if (!root || root.ilInited) return;
+        root.ilInited = true;
+        initHero(root);
+        initShowcase(root);
+      }
+
+      function boot() {
+        initIlLanding(document.getElementById(SECTION_ID));
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+
+      if (window.Shopify && window.Shopify.designMode) {
+        document.addEventListener('shopify:section:load', function (event) {
+          var el = event.target.querySelector('[data-il-landing]');
+          if (el) initIlLanding(el);
+        });
+        document.addEventListener('shopify:section:unload', function (event) {
+          var el = event.target.querySelector('[data-il-landing]');
+          if (el) {
+            if (el.ilhDestroy) el.ilhDestroy();
+            if (el.ilcDestroy) el.ilcDestroy();
+          }
+        });
+      }
+    })();
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Installation Landing",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#FFF9F2",
+      "info": "Shown once the media has shrunk into the title, and behind the showcase."
+    },
+    {
+      "type": "text",
+      "id": "title_1",
+      "label": "Title Line 1"
+    },
+    {
+      "type": "text",
+      "id": "title_2",
+      "label": "Title Line 2",
+      "info": "The shrinking media docks next to this line, and the title stays behind the page content."
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "div", "label": "Div" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text",
+      "info": "Shown over the full-screen media, disappears with the scroll."
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button Label",
+      "info": "Used on the overlay button, the desktop menu button and the mobile bottom button."
+    },
+    {
+      "type": "url",
+      "id": "button_url",
+      "label": "Button URL"
+    },
+    {
+      "type": "header",
+      "content": "Media"
+    },
+    {
+      "type": "select",
+      "id": "media_type",
+      "label": "Media Type",
+      "options": [
+        { "value": "image", "label": "Image" },
+        { "value": "video", "label": "Video" }
+      ],
+      "default": "image"
+    },
+    {
+      "type": "image_picker",
+      "id": "desktop_image",
+      "label": "Image (Desktop)",
+      "info": "Also used as the desktop video poster."
+    },
+    {
+      "type": "image_picker",
+      "id": "mobile_image",
+      "label": "Image (Mobile)",
+      "info": "Optional. Falls back to the desktop image. Also used as the mobile video poster."
+    },
+    {
+      "type": "video",
+      "id": "video_d",
+      "label": "Video (Desktop)",
+      "info": "Used when Media Type is Video. Plays muted and looped."
+    },
+    {
+      "type": "video",
+      "id": "video_m",
+      "label": "Video (Mobile)",
+      "info": "Optional. Falls back to the desktop video."
+    },
+    {
+      "type": "header",
+      "content": "Mobile Menu Bar"
+    },
+    {
+      "type": "color",
+      "id": "bar_bg_color",
+      "label": "Bar Background Color",
+      "default": "#19341E"
+    },
+    {
+      "type": "color",
+      "id": "bar_text_color",
+      "label": "Bar Text Color",
+      "default": "#FFF9F2"
+    },
+    {
+      "type": "header",
+      "content": "Scroll Animation"
+    },
+    {
+      "type": "range",
+      "id": "scroll_length_d",
+      "label": "Scroll Length (Desktop)",
+      "info": "How much scrolling the shrink animation takes, as a share of screen height.",
+      "min": 100,
+      "max": 400,
+      "step": 25,
+      "unit": "vh",
+      "default": 150
+    },
+    {
+      "type": "range",
+      "id": "scroll_length_m",
+      "label": "Scroll Length (Mobile)",
+      "min": 100,
+      "max": 400,
+      "step": 25,
+      "unit": "vh",
+      "default": 125
+    },
+    {
+      "type": "checkbox",
+      "id": "invert_header",
+      "label": "Light header over this section",
+      "info": "Makes the header transparent with light text while the full-screen media covers it.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header Text Color (start)",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Showcase"
+    },
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Metaobject Type",
+      "default": "installation",
+      "info": "Entries need card_image, reference_number and title fields."
+    },
+    {
+      "type": "range",
+      "id": "small_card_width",
+      "label": "Small Card Width (Desktop)",
+      "min": 20,
+      "max": 50,
+      "step": 1,
+      "unit": "%",
+      "default": 32,
+      "info": "Card heights follow each image's own ratio."
+    },
+    {
+      "type": "range",
+      "id": "large_card_width",
+      "label": "Large Card Width (Desktop)",
+      "min": 40,
+      "max": 100,
+      "step": 1,
+      "unit": "%",
+      "default": 66
+    },
+    {
+      "type": "checkbox",
+      "id": "infinite_loop",
+      "label": "Loop Showcase Infinitely",
+      "default": true,
+      "info": "Keeps appending the showcase in a loop as the visitor scrolls."
+    },
+    {
+      "type": "number",
+      "id": "max_loops",
+      "label": "Maximum Loops",
+      "default": 30,
+      "info": "Safety cap on how many times the full showcase can repeat."
+    },
+    {
+      "type": "checkbox",
+      "id": "hide_footer",
+      "label": "Hide Footer On This Page",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Showcase Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "link",
+      "name": "Menu Link",
+      "settings": [
+        {
+          "type": "text",
+          "id": "label",
+          "label": "Label"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "URL"
+        },
+        {
+          "type": "checkbox",
+          "id": "active",
+          "label": "Show Active Dot",
+          "default": false
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installation Landing",
+      "blocks": [
+        { "type": "link" },
+        { "type": "link" },
+        { "type": "link" },
+        { "type": "link" }
+      ]
+    }
+  ]
+}
+{% endschema %}

@@ -1,0 +1,62 @@
+<style>
+    #shopify-section-{{ section.id }} .horizontal-line {
+        position: relative;
+        width: 100%;
+        height: {{ section.settings.height }}px;
+        background-color: {{ section.settings.bg_color }};
+    }
+
+    {%- if section.settings.show_on == 'mobile_tablet' -%}
+      @media screen and (min-width: 1024px) {
+        #shopify-section-{{ section.id }} .horizontal-line {
+          display: none;
+        }
+      }
+    {%- endif -%}
+</style>
+{% if request.visual_preview_mode %}
+    <img src="{{ 'horizontal-line-figma.PNG' | asset_url }}" width="100%" height="100%" />
+{% else %}
+<section class="horizontal-line"></section>
+{% endif %}
+
+{% schema %}
+    {
+      "name": "Horizontal Line",
+      "settings": [
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color"
+        },
+        {
+          "type": "number",
+          "id": "height",
+          "label": "Height",
+          "info": "in px"
+        },
+        {
+          "type": "select",
+          "id": "show_on",
+          "label": "Show on",
+          "options": [
+            {
+              "value": "all_screen",
+              "label": "All Screen"
+            },
+            {
+              "value": "mobile_tablet",
+              "label": "Mobile & Tablet"
+            }
+          ],
+          "default": "all_screen"
+        }
+      ],
+      "blocks": [],
+      "presets": [
+        {
+          "name": "Horizontal Line"
+        }
+      ]
+    }
+  {% endschema %}

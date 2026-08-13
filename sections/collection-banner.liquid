@@ -1,0 +1,357 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'collection-banner-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #{{el_id}} .container:after,
+  #{{el_id}} .container:before,
+  #{{el_id}} .row:after,
+  #{{el_id}} .row:before {
+    display: none;
+  }
+  #{{el_id}} .collection-banner-desc {
+    {% if ss.max_width > 0 %}
+      max-width: {{ ss.max_width }}px;
+    {% endif %}
+  }
+  @media screen and (min-width: 600px){
+    #{{el_id}} .collection-banner-desc {
+      {% if ss.max_width_t > 0 %}
+        max-width: {{ ss.max_width_t }}px;
+      {% endif %}
+    }
+  }
+  @media screen and (min-width: 1024px){
+    #{{el_id}} .collection-banner-desc {
+      {% if ss.max_width_d > 0 %}
+        max-width: {{ ss.max_width_d }}px;
+      {% endif %}
+    }
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'collection-banner-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      <div class="collection-banner-image">
+        {% liquid
+          assign banner_id = 'split-hero-accordion-image-acc-' | append: section.id
+          assign banner_mobile = collection.metafields.custom.banner_image_mobile.value
+          assign banner_desktop = collection.metafields.custom.banner_image_desktop.value
+          assign banner_video_mobile = collection.metafields.custom.banner_video_mobile
+          assign banner_video_desktop = collection.metafields.custom.banner_video_desktop
+          assign video_url_desktop = ''
+          for vid_source in banner_video_desktop.sources
+            if vid_source.mime_type == 'video/mp4'
+              assign video_url_desktop = vid_source.url
+            endif
+          endfor
+          assign autoplay = true
+          assign muted = true
+          assign video_url_mobile = ''
+          for vid_source in banner_video_mobile.sources
+            if vid_source.mime_type == 'video/mp4'
+              assign video_url_mobile = vid_source.url
+            endif
+          endfor
+          if banner_mobile == blank
+            assign banner_mobile = ss.banner_mobile
+          endif
+          if banner_desktop == blank
+            assign banner_desktop = ss.banner_desktop
+          endif
+        %}
+        {% if banner_video_desktop == blank and banner_video_mobile == blank %}
+          {% if banner_desktop != blank or banner_mobile != blank %}
+            {%- render 'global-image-wrapper-responsive',
+              image_id: banner_id,
+              desktop_image: banner_desktop,
+              mobile_image: banner_mobile,
+              additional_class: 'no-bg',
+              preload: true
+            %}
+          {% endif %}
+        {% else %}
+          {%- render 'global-video-wrapper-responsive',
+            desktop_image: banner_desktop,
+            mobile_image: banner_mobile,
+            desktop_video_url: video_url_desktop,
+            mobile_video_url: video_url_mobile,
+            video_id: banner_id,
+            autoplay: autoplay,
+            preload: true,
+            muted: muted,
+            loop: true,
+            load_inside_vue: false
+          -%}
+        {% endif %}
+      </div>
+      {% if banner_mobile == blank and banner_desktop == blank and banner_video_desktop == blank and banner_video_mobile == blank %}
+        {% assign cbt_class = 'd-pt-80 pt-48'  %}
+      {% endif %}
+      <div class="collection-banner-text flex d-flex-row flex-column rowgap-16 mt-20 ai-start jc-between d-mt-24 {{ cbt_class }}">
+        <div class="collection-banner-title">
+          {% liquid
+            assign coll_title = collection.title
+            if collection.metafields.custom.collection_display_name != blank
+              assign coll_title = collection.metafields.custom.collection_display_name
+            endif
+            assign words = coll_title | split: ' '
+            assign first = words[0]
+            assign second = ''
+            for w in words offset: 1
+              if forloop.first
+                assign second = w
+              else
+                assign second = second | append: ' ' | append: w
+              endif
+            endfor
+          %}
+          <{{ ss.title_dom_type }} class="{{ss.title_size}} flex ai-center flex-wrap c-green colgap-48 d-colgap-80">
+            <span class="{{ss.title_size}} c-green flex ai-start">
+              {{ first }}
+              {% if second == blank %}
+                <sup class="p4 c-label">{{ collection.products_count }}</sup>
+              {% endif %}
+            </span>
+            {% if second != blank %}
+              <span class="{{ss.title_size}} c-green flex ai-start">
+                {{ second }}
+                <sup class="p4 c-label">{{ collection.products_count }}</sup>
+              </span>
+            {% endif %}
+          </{{ ss.title_dom_type }}>
+        </div>
+        <div class="collection-banner-desc p1 c-green d-tr d-pt-12">
+          {% liquid
+            assign desc = collection.description
+            if collection.metafields.custom.short_description != blank
+              assign desc = collection.metafields.custom.short_description.value
+            endif
+          %}
+          {{ desc }}
+        </div>
+      </div>
+    </div>
+  </div>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collection Banner",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_desktop",
+      "label": "Banner Desktop"
+    },
+    {
+      "type": "image_picker",
+      "id": "banner_mobile",
+      "label": "Banner Mobile"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "number",
+      "id": "max_width",
+      "label": "Max Width (Mobile)",
+      "default": 448
+    },
+    {
+      "type": "number",
+      "id": "max_width_t",
+      "label": "Max Width (Tablet)",
+      "default": 448
+    },
+    {
+      "type": "number",
+      "id": "max_width_d",
+      "label": "Max Width (Desktop)",
+      "default": 448
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collection Banner",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

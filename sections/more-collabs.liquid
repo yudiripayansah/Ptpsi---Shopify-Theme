@@ -1,0 +1,373 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'more-collabs-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    {% if ss.bg_color != blank %}
+      background-color: {{ ss.bg_color }};
+    {% endif %}
+  }
+  #{{ el_id }} .mcl-top-title {
+    margin-bottom: 32px;
+  }
+  #{{ el_id }} .mcl-row {
+    display: flex;
+    align-items: flex-start;
+    gap: 16px;
+  }
+  #{{ el_id }} .mcl-side {
+    display: none;
+  }
+  #{{ el_id }} .mcl-swiper {
+    flex: 1;
+    min-width: 0;
+    overflow: visible;
+  }
+  #{{ el_id }} .mcl-swiper:not(.swiper-initialized) .swiper-wrapper {
+    display: flex;
+  }
+  #{{ el_id }} .mcl-swiper:not(.swiper-initialized) .swiper-slide {
+    flex-shrink: 0;
+    width: calc((100% - 19.2px) / 2.2);
+    margin-right: 16px;
+  }
+  #{{ el_id }} .mcl-card {
+    display: block;
+    text-decoration: none;
+  }
+  #{{ el_id }} .mcl-card-media {
+    position: relative;
+    aspect-ratio: 448 / 597;
+    overflow: hidden;
+  }
+  #{{ el_id }} .mcl-card-media img {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #{{ el_id }} .mcl-card-title {
+    margin-top: 16px;
+  }
+  #{{ el_id }} .swiper-grid-arrow {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: 0.3s ease all;
+  }
+  #{{ el_id }} .swiper-grid-arrow svg {
+    width: 12px;
+    height: 12px;
+  }
+  #{{ el_id }} .swiper-grid-arrow.swiper-button-disabled {
+    opacity: 0.3;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .mcl-top-title {
+      display: none;
+    }
+    #{{ el_id }} .mcl-row {
+      gap: 24px;
+    }
+    #{{ el_id }} .mcl-side {
+      display: flex;
+      flex-direction: column;
+      width: 23.7%;
+      flex-shrink: 0;
+    }
+    #{{ el_id }} .mcl-side--right {
+      align-items: flex-end;
+      row-gap: 32px;
+    }
+    #{{ el_id }} .mcl-swiper {
+      overflow: hidden;
+    }
+    #{{ el_id }} .mcl-swiper:not(.swiper-initialized) .swiper-slide {
+      width: calc((100% - 24px) / 2);
+      margin-right: 24px;
+    }
+  }
+</style>
+
+{% if sb.size > 0 %}
+  <div id="{{ el_id }}" class="overflow">
+    <div class="container">
+      <div class="mcl-top-title flex jc-between">
+        <div class="h1 c-green">{{ ss.left_title }}</div>
+        <div class="h1 c-green tr">{{ ss.right_title }}</div>
+      </div>
+      <div class="mcl-row">
+        <div class="mcl-side">
+          <div class="h1 c-green">{{ ss.left_title }}</div>
+        </div>
+        <div class="swiper mcl-swiper">
+          <div class="swiper-wrapper">
+            {% for block in sb %}
+              {% assign bs = block.settings %}
+              <div class="swiper-slide" {{ block.shopify_attributes }}>
+                <{% if bs.url != blank %}a href="{{ bs.url }}"{% else %}div{% endif %} class="mcl-card">
+                  {% if bs.image != blank %}
+                    <div class="mcl-card-media">
+                      {{ bs.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '300, 450, 600, 900', sizes: '(min-width: 1024px) 24vw, 44vw' }}
+                    </div>
+                  {% endif %}
+                  {% if bs.title != blank %}
+                    <div class="mcl-card-title p1 c-green">{{ bs.title }}</div>
+                  {% endif %}
+                </{% if bs.url != blank %}a{% else %}div{% endif %}>
+              </div>
+            {% endfor %}
+          </div>
+        </div>
+        <div class="mcl-side mcl-side--right">
+          <div class="h1 c-green tr">{{ ss.right_title }}</div>
+          <div class="flex ai-center colgap-8">
+            <div class="swiper-grid-arrow left">
+              {{ settings.icon_slide_left }}
+            </div>
+            <div class="swiper-grid-arrow right">
+              {{ settings.icon_slide_right }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function initMoreCollabs{{ fn }}() {
+      new Swiper('#{{ el_id }} .mcl-swiper', {
+        slidesPerView: 2.2,
+        spaceBetween: 16,
+        loop: false,
+        breakpoints: {
+          1024: {
+            slidesPerView: 2,
+            spaceBetween: 24,
+          },
+        },
+        navigation: {
+          nextEl: '#{{ el_id }} .swiper-grid-arrow.right',
+          prevEl: '#{{ el_id }} .swiper-grid-arrow.left',
+        },
+      });
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initMoreCollabs{{ fn }}();
+    });
+    document.addEventListener('shopify:section:load', function (e) {
+      if (e.target.querySelector('#{{ el_id }}')) {
+        initMoreCollabs{{ fn }}();
+      }
+    });
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "More Collabs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "text",
+      "id": "left_title",
+      "label": "Left Title",
+      "default": "More"
+    },
+    {
+      "type": "text",
+      "id": "right_title",
+      "label": "Right Title",
+      "default": "Collabs"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collab",
+      "name": "Collab",
+      "settings": [
+        {
+          "type": "image_picker",
+          "id": "image",
+          "label": "Image",
+          "info": "Portrait crop, roughly 448x597."
+        },
+        {
+          "type": "text",
+          "id": "title",
+          "label": "Title"
+        },
+        {
+          "type": "url",
+          "id": "url",
+          "label": "Link"
+        }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "More Collabs",
+      "blocks": [
+        { "type": "collab" },
+        { "type": "collab" }
+      ]
+    }
+  ]
+}
+{% endschema %}

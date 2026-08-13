@@ -1,0 +1,330 @@
+<style>
+{%- for block in section.blocks -%}
+{%- if block.settings.h1_rte or block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%}
+{%- if block.settings.h1_rte -%}.rte h1, .rte.h1 *{%- if block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h2_rte -%}.rte h2, .rte.h2 *{%- if block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h3_rte -%}.rte h3, .rte.h3 *{%- if block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h4_rte -%}.rte h4, .rte.h4 *{%- if block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h5_rte -%}.rte h5, .rte.h5 *{%- if block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h6_rte -%}.rte h6, .rte.h6 *{%- endif -%} {
+  margin-bottom: 5px;
+}
+{%- endif -%}
+.h{{ block.settings.title }}{%- if block.settings.h1_rte or block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},
+{%- if block.settings.h1_rte -%}.rte h1, .rte.h1 *{%- if block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h2_rte -%}.rte h2, .rte.h2 *{%- if block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h3_rte -%}.rte h3, .rte.h3 *{%- if block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h4_rte -%}.rte h4, .rte.h4 *{%- if block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h5_rte -%}.rte h5, .rte.h5 *{%- if block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+{%- if block.settings.h6_rte -%}.rte h6, .rte.h6 *{%- endif -%}{%- endif -%} {
+  {%- assign key = "font" | append: block.settings.family -%}
+  font-family: {{ section.settings[key] }};
+  {%- if block.settings.uppercase -%}text-transform:uppercase;{%- endif -%}
+  {%- if block.settings.capitalize -%}text-transform:capitalize;{%- endif -%}
+  font-weight: {{ block.settings.font-weight }};
+  font-size:{{ block.settings.mobile-size }}px;
+  font-size:{{ block.settings.mobile-size | divided_by: 16.0 }}rem;
+  line-height:{{ block.settings.mobile-height }};
+  {%- if block.settings.mobile-spacing != blank -%}letter-spacing:{{ block.settings.mobile-spacing }}px;{%- endif -%}
+}
+{%- if block.settings.tablet-size != blank or block.settings.tablet-height != blank -%}
+@media only screen and (min-width: 600px){
+  .h{{ block.settings.title }}{%- if block.settings.h1_rte or block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},
+  {%- if block.settings.h1_rte -%}.rte h1, .rte.h1 *{%- if block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h2_rte -%}.rte h2, .rte.h2 *{%- if block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h3_rte -%}.rte h3, .rte.h3 *{%- if block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h4_rte -%}.rte h4, .rte.h4 *{%- if block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h5_rte -%}.rte h5, .rte.h5 *{%- if block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h6_rte -%}.rte h6, .rte.h6 *{%- endif -%}{%- endif -%} {
+    {%- if block.settings.tablet-size != blank -%}font-size:{{ block.settings.tablet-size }}px;
+    font-size:{{ block.settings.tablet-size | divided_by: 16.0 }}rem;{%- endif -%}
+    {%- if block.settings.tablet-height != blank -%}line-height:{{ block.settings.tablet-height }};{%- endif -%}
+    {%- if block.settings.tablet-spacing != blank -%}letter-spacing:{{ block.settings.tablet-spacing }}px;{%- endif -%}
+
+  }
+}
+{%- endif -%}
+{%- if block.settings.desktop-size != blank or block.settings.desktop-height != blank -%}
+@media only screen and (min-width: 1024px){
+  .h{{ block.settings.title }}{%- if block.settings.h1_rte or block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},
+  {%- if block.settings.h1_rte -%}.rte h1, .rte.h1 *{%- if block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h2_rte -%}.rte h2, .rte.h2 *{%- if block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h3_rte -%}.rte h3, .rte.h3 *{%- if block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h4_rte -%}.rte h4, .rte.h4 *{%- if block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h5_rte -%}.rte h5, .rte.h5 *{%- if block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h6_rte -%}.rte h6, .rte.h6 *{%- endif -%}{%- endif -%} {
+    {%- if block.settings.desktop-size != blank -%}font-size:{{ block.settings.desktop-size }}px;
+    font-size:{{ block.settings.desktop-size | divided_by: 16.0 }}rem;{%- endif -%}
+    {%- if block.settings.desktop-height != blank -%}line-height:{{ block.settings.desktop-height }};{%- endif -%}
+    {%- if block.settings.desktop-spacing != blank -%}letter-spacing:{{ block.settings.desktop-spacing }}px;{%- endif -%}
+  }
+}
+{%- endif -%}
+{%- for i in (1..3) -%}
+{%- assign width = "point" | append:i | append:"-width" -%}
+{%- assign size = "point" | append:i | append:"-size" -%}
+{%- assign height = "point" | append:i | append:"-height" -%}
+{%- assign spacing = "point" | append:i | append:"-spacing" -%}
+{%- if block.settings[width] != blank -%}
+@media only screen and (min-width: {{ block.settings[width]}}px){
+  .h{{ block.settings.title }}{%- if block.settings.h1_rte or block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},
+  {%- if block.settings.h1_rte -%}.rte h1, .rte.h1 *{%- if block.settings.h2_rte or block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h2_rte -%}.rte h2, .rte.h2 *{%- if block.settings.h3_rte or block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h3_rte -%}.rte h3, .rte.h3 *{%- if block.settings.h4_rte or block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h4_rte -%}.rte h4, .rte.h4 *{%- if block.settings.h5_rte or block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h5_rte -%}.rte h5, .rte.h5 *{%- if block.settings.h6_rte -%},{%- endif -%}{%- endif -%}
+  {%- if block.settings.h6_rte -%}.rte h6, .rte.h6 *{%- endif -%}{%- endif -%} {
+    {%- if block.settings[size] != blank -%}font-size:{{ block.settings[size] }}px;
+    font-size:{{ block.settings[size] | divided_by: 16.0 }}rem;{%- endif -%}
+    {%- if block.settings[height] != blank -%}line-height:{{ block.settings[height] }};{%- endif -%}
+    {%- if block.settings[spacing] != blank -%}letter-spacing:{{ block.settings[spacing] }}px;{%- endif -%}
+  }
+}
+{%- endif -%}
+{%- endfor -%}
+{%- endfor -%}
+{%- if section.settings.custom != blank %}{{ section.settings.custom }}{%- endif -%}
+</style>
+{% schema %}
+{
+  "name": "Typography - Header",
+  "settings": [
+  {
+    "type": "textarea",
+    "id": "font1",
+    "label": "Font Family 1"
+  },
+  {
+    "type": "textarea",
+    "id": "font2",
+    "label": "Font Family 2"
+  },
+  {
+    "type": "textarea",
+    "id": "font3",
+    "label": "Font Family 3"
+  },
+  {
+    "type": "textarea",
+    "id": "custom",
+    "label": "Custom CSS rules",
+    "info":"Enter any custom CSS rules here if needed"
+  }
+  ],
+  "blocks" : [
+  {
+    "type": "style",
+    "name": "Style",
+    "settings": [
+    {
+      "type": "header",
+      "content": "RTE Header Style",
+      "info": "Select more to apply same styles to different Headers"
+    },
+    {
+      "type": "checkbox",
+      "id": "h1_rte",
+      "label": "H1 for rte"
+    },
+    {
+      "type": "checkbox",
+      "id": "h2_rte",
+      "label": "H2 for rte"
+    },
+    {
+      "type": "checkbox",
+      "id": "h3_rte",
+      "label": "H3 for rte"
+    },
+    {
+      "type": "checkbox",
+      "id": "h4_rte",
+      "label": "H4 for rte"
+    },
+    {
+      "type": "checkbox",
+      "id": "h5_rte",
+      "label": "H5 for rte"
+    },
+    {
+      "type": "checkbox",
+      "id": "h6_rte",
+      "label": "H6 for rte"
+    },
+    {
+      "type": "header",
+      "content": "General"
+    },
+    {
+      "type":"range",
+      "id":"title",
+      "label":"Suffix",
+      "info":"You will be able to use the CSS class in your liquid files. E.g. if the suffix is 1, the CSS class will be h1.",
+      "min":1,
+      "max":15,
+      "default":1,
+      "step":1
+    },
+    {
+        "type":"radio",
+        "id":"family",
+        "label":"Family",
+        "options":[
+        {"value":"1","label":"Family 1"},
+        {"value":"2","label":"Family 2"},
+        {"value":"3","label":"Family 3"}
+        ]
+      },
+    {
+      "type": "checkbox",
+      "id": "uppercase",
+      "label": "Uppercase"
+    },
+    {
+      "type": "checkbox",
+      "id": "capitalize",
+      "label": "Capitalize"
+    },
+    {
+      "type": "text",
+      "id": "font-weight",
+      "label": "Font Weight",
+      "default":"400"
+    },
+    {
+      "type": "header",
+      "content": "Mobile"
+    },
+    {
+      "type": "text",
+      "id": "mobile-size",
+      "label": "Font Size"
+    },
+    {
+      "type": "text",
+      "id": "mobile-height",
+      "label": "Line Height"
+    },
+    {
+      "type": "text",
+      "id": "mobile-spacing",
+      "label": "Letter Spacing"
+    },
+    {
+      "type": "header",
+      "content": "Tablet (600px)"
+    },
+    {
+      "type": "text",
+      "id": "tablet-size",
+      "label": "Font Size"
+    },
+    {
+      "type": "text",
+      "id": "tablet-height",
+      "label": "Line Height"
+    },
+    {
+      "type": "text",
+      "id": "tablet-spacing",
+      "label": "Letter Spacing"
+    },
+    {
+      "type": "header",
+      "content": "Desktop (1024px)"
+    },
+    {
+      "type": "text",
+      "id": "desktop-size",
+      "label": "Font Size"
+    },
+    {
+      "type": "text",
+      "id": "desktop-height",
+      "label": "Line Height"
+    },
+    {
+      "type": "text",
+      "id": "desktop-spacing",
+      "label": "Letter Spacing"
+    },
+    {
+      "type": "header",
+      "content": "Break Point 1"
+    },
+    {
+      "type": "text",
+      "id": "point1-width",
+      "label": "Screen Width",
+      "info":"Must be bigger than the previous breakpoint"
+    },
+    {
+      "type": "text",
+      "id": "point1-size",
+      "label": "Font Size"
+    },
+    {
+      "type": "text",
+      "id": "point1-height",
+      "label": "Line Height"
+    },
+    {
+      "type": "text",
+      "id": "point1-spacing",
+      "label": "Letter Spacing"
+    },
+    {
+      "type": "header",
+      "content": "Break Point 2"
+    },
+    {
+      "type": "text",
+      "id": "point2-width",
+      "label": "Screen Width",
+      "info":"Must be bigger than the previous breakpoint"
+    },
+    {
+      "type": "text",
+      "id": "point2-size",
+      "label": "Font Size"
+    },
+    {
+      "type": "text",
+      "id": "point2-height",
+      "label": "Line Height"
+    },
+    {
+      "type": "text",
+      "id": "point2-spacing",
+      "label": "Letter Spacing"
+    },
+    {
+      "type": "header",
+      "content": "Break Point 3"
+    },
+    {
+      "type": "text",
+      "id": "point3-width",
+      "label": "Screen Width",
+      "info":"Must be bigger than the previous breakpoint"
+    },
+    {
+      "type": "text",
+      "id": "point3-size",
+      "label": "Font Size"
+    },
+    {
+      "type": "text",
+      "id": "point3-height",
+      "label": "Line Height"
+    },
+    {
+      "type": "text",
+      "id": "point3-spacing",
+      "label": "Letter Spacing"
+    }
+    ]
+  }
+  ] 
+}
+{% endschema %} 

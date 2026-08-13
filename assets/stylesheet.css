@@ -1,0 +1,13 @@
+@font-face {
+    font-family: 'Perpetua';
+    src: url('Perpetua.eot');
+    src: url('Perpetua.eot?#iefix') format('embedded-opentype'),
+        url('Perpetua.woff2') format('woff2'),
+        url('Perpetua.woff') format('woff'),
+        url('Perpetua.ttf') format('truetype');
+    font-weight: 500;
+    font-style: normal;
+    font-display: swap;
+}
+
+

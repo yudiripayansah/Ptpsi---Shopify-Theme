@@ -1,0 +1,199 @@
+{%- comment -%}
+Description:
+Snippet for displaying different video for mobile and desktop
+
+Variables:
+- desktop_image: video preview image object for desktop
+- mobile_image: video preview image object for mobile
+- desktop_video: video object for desktop
+- mobile_video: video object for mobile
+- autoplay: true / empty means false
+- muted: true / empty means false
+- loop: true / empty means false
+{%- endcomment -%}
+
+{%- if desktop_size == blank -%}
+    {%- assign desktop_size = '2000x' -%}
+{%- endif -%}
+{%- if mobile_size == blank -%}
+    {%- assign mobile_size = '800x' -%}
+{%- endif -%}
+
+{%- assign hh = mobile_image.height | times: 1.00 -%}
+{%- assign ww = mobile_image.width | times: 1.00 -%}
+
+{%- if mobile_acc != blank -%}
+    {%- assign mobile_img = mobile_image.src -%}
+{%- endif -%}
+{%- if desktop_acc != blank -%}
+    {%- assign desktop_img = desktop_image.src -%}
+{%- endif -%}
+
+{%- if load_inside_vue -%}
+    <component :is="'style'" type="text/css">
+{%- else -%}
+    <style>
+{%- endif -%}
+    #{{ video_id }}{padding-bottom:{{ hh | divided_by: ww | times:100.00 }}%;}
+    {%- if image_url_desktop != blank -%}
+        {%- assign hh = image_desktop_height | times: 1.00 -%}
+        {%- assign ww = image_desktop_width | times: 1.00 -%}
+    {%- else -%}
+        {%- assign hh = desktop_image.height | times: 1.00 -%}
+        {%- assign ww = desktop_image.width | times: 1.00 -%}
+    {%- endif -%}
+    #{{ video_id }} .global-image-wrapper {
+        transition: opacity 0.3s ease, visibility 0.3s ease;
+    }
+    
+    @media screen and (min-width:600px)
+    {
+        #{{ video_id }}{padding-bottom:{{ hh | divided_by: ww | times:100.00 }}%;}
+    }
+{%- if load_inside_vue -%}
+    </component>
+{%- else -%}
+    </style>
+{%- endif -%}
+
+{%- assign source_desktop = '' -%}
+{%- for source in desktop_video.sources -%}
+    {%- if source.format == 'mp4' -%}
+        {%- assign source_desktop = source.url -%}
+    {%- endif -%}
+{%- endfor -%}
+
+{%- if desktop_video_url != blank -%}
+    {%- assign source_desktop = desktop_video_url -%}
+{%- endif -%}
+
+{%- assign source_mobile = '' -%}
+{%- for source in mobile_video.sources -%}
+    {%- if source.format == 'mp4' -%}
+        {%- assign source_mobile = source.url -%}
+    {%- endif -%}
+{%- endfor -%}
+
+{%- if mobile_video_url != blank -%}
+    {%- assign source_mobile = mobile_video_url -%}
+{%- endif -%}
+
+<div class="global-image-wrapper global-video-wrapper {{ additional_class }} {% if youtube_iframe != blank %} youtube {% endif %}" id="{{ video_id }}">
+    {%- if youtube_iframe != blank -%}
+        {% if desktop_image != blank and mobile_image != blank %}
+        {%- assign image_id = 'image_' | append: video_id -%}
+        {%- render 'global-image-wrapper-responsive',
+            image_id: image_id,
+            desktop_image: desktop_image,
+            mobile_image: mobile_image
+        -%}
+        {% endif %}
+        {{ youtube_iframe }}
+    {%- else -%}
+        {% if desktop_image != blank and mobile_image != blank %}
+        {%- assign image_id = 'image_' | append: video_id -%}
+        {%- render 'global-image-wrapper-responsive',
+            image_id: image_id,
+            desktop_image: desktop_image,
+            mobile_image: mobile_image,
+            additional_class: "zi-1",
+            preload: preload
+        -%}
+        {% endif %}
+        <video 
+            {% if autoplay %}
+            autoplay 
+            {% endif %}
+            playsinline 
+            {% if muted %}
+            muted 
+            {% endif %}
+            {% if loop %}
+            loop 
+            {% endif %}
+            preload="auto" 
+           
+            data-video-desktop="{{ source_desktop }}"
+            data-video-mobile="{{ source_mobile }}"
+            class="lazy"
+            >
+            <source type="video/mp4">
+        </video>
+    {%- endif -%}
+</div>
+
+{%- if play_on_popup -%}
+    <div class="popup-wrapper-video-global" id="popup-{{ video_id }}">
+        <div class="container w-full t-p-50 d-p-90">
+            <div class="inner-wrapper relative bg-white b-radius-10 overflow pt-50 pl-30 pr-30 pb-30">
+                <a href="#" onclick="$360.hideGlobalVideoPopup(event)" rel="nofollow" class="close-button">{{ settings.icon_close }}</a>
+
+                {%- if youtube_iframe != blank -%}
+                    {{ youtube_iframe }}
+                {%- else -%}
+                    <video 
+                        {% if autoplay %}
+                        autoplay 
+                        {% endif %}
+                        playsinline 
+                        {% if muted %}
+                        muted 
+                        {% endif %}
+                        {% if loop %}
+                        loop 
+                        {% endif %}
+                        controls
+                        preload="auto" 
+                       
+                        data-video-desktop="{{ source_desktop }}"
+                      
+                        data-video-mobile="{{ source_mobile }}"
+                        class="lazy w-full"
+                        data-src="{{ source_desktop }}"
+                        >
+                        <source type="video/mp4">
+                    </video>
+                {%- endif -%}
+            </div>
+        </div>
+    </div>
+{%- endif -%}
+
+{%- if load_inside_vue -%}
+    <component :is="'script'" type="text/javascript">
+{%- else -%}
+    <script>
+{%- endif -%}
+
+    {%- if youtube_iframe == blank -%}
+        var video_element{{ video_id | replace: '-','' }} = document.querySelector('#{{video_id}} video');
+        var source_element{{ video_id | replace: '-','' }} = document.querySelector('#{{video_id}} video source');
+        var data_video_desktop{{ video_id | replace: '-','' }} = video_element{{ video_id | replace: '-','' }}.getAttribute('data-video-desktop');
+        var data_video_mobile{{ video_id | replace: '-','' }} = video_element{{ video_id | replace: '-','' }}.getAttribute('data-video-mobile');
+        var globalImageWrapper{{ video_id | replace: '-','' }} = document.querySelector('#{{ video_id }} .global-image-wrapper');
+        
+        source_element{{ video_id | replace: '-','' }}.setAttribute('data-src', 'red');
+        if(video_element{{ video_id | replace: '-','' }} && source_element{{ video_id | replace: '-','' }} && window.innerWidth < 600) {
+            
+            source_element{{ video_id | replace: '-','' }}.setAttribute('data-src', data_video_mobile{{ video_id | replace: '-','' }});
+        }else if(video_element{{ video_id | replace: '-','' }} && source_element{{ video_id | replace: '-','' }} && window.innerWidth >= 600){
+             source_element{{ video_id | replace: '-','' }}.setAttribute('data-src', data_video_desktop{{ video_id | replace: '-','' }});
+        }
+        if (video_element{{ video_id | replace: '-','' }} && globalImageWrapper{{ video_id | replace: '-','' }}) {
+            video_element{{ video_id | replace: '-','' }}.addEventListener('play', function() {
+                globalImageWrapper{{ video_id | replace: '-','' }}.style.opacity = '0';
+                globalImageWrapper{{ video_id | replace: '-','' }}.style.visibility = 'hidden';
+            });
+    
+            video_element{{ video_id | replace: '-','' }}.addEventListener('pause', function() {
+                globalImageWrapper{{ video_id | replace: '-','' }}.style.opacity = '1';
+                globalImageWrapper{{ video_id | replace: '-','' }}.style.visibility = 'visible';
+            });
+        }
+    {%- endif -%}
+    
+{%- if load_inside_vue -%}
+    </component>
+{%- else -%}
+    </script>
+{%- endif -%}

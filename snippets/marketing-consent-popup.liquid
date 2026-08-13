@@ -1,0 +1,317 @@
+{% comment %}
+  Marketing Consent Popup
+  - Shows popup to ask users to opt-in for marketing
+  - Uses cookies to remember user's choice
+  - Won't show if user is already subscribed
+  - Includes smooth animations and transitions
+{% endcomment %}
+{% if customer != blank %}
+{% if customer.accepts_marketing != true %}
+<div id="marketing-consent-popup" class="marketing-popup-wrapper" style="display: none;">
+  <!-- Overlay -->
+  <div class="marketing-popup-overlay"></div>
+  
+  <!-- Popup Content -->
+  <div class="marketing-popup-content">
+    <!-- Close Button -->
+    
+
+    <!-- Popup Body -->
+    <div class="marketing-popup-body">
+        <div class="flex">
+            <h2 class="h3 no-anim c-green">Stay Connected with Soilboy</h2>
+            <button type="button" class="marketing-popup-close ml-16" aria-label="Close popup">
+                <svg xmlns="http://www.w3.org/2000/svg" width="13" height="13" viewBox="0 0 13 13" fill="none">
+                    <path d="M12.0202 0.353518L0.353516 12.0202M12.0202 12.0202L0.353516 0.353516" stroke="#19341E"/>
+                </svg>
+            </button>
+        </div>
+        <p class="p2 c-green mt-16">Opt in to receive updates, launches, and a little plant joy in your inbox.</p>
+        <!--{{ customer.accepts_marketing }}-->
+        {% form 'customer', id: 'marketing-consent-form' %}
+            <input type="hidden" name="contact[tags]" value="newsletter">
+            <input type="email" name="contact[email]" value="{{ customer.email }}" required style="height:1px;opacity:0;">
+            <input type="hidden" name="contact[accepts_marketing]" value="1">
+            
+            <div class="marketing-popup-buttons mt-24 d-mt-32">
+            <button type="submit" class="btn1 marketing-popup-btn-accept w-full" name="commit">
+                Yes, keep me updated
+            </button>
+            <button type="button" class="btn3 marketing-popup-btn-decline w-full">
+                No thanks
+            </button>
+            </div>
+        {% endform %}
+    </div>
+  </div>
+</div>
+
+<style>
+  /* Popup Wrapper */
+  .marketing-popup-wrapper {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 99999;
+    opacity: 0;
+    visibility: hidden;
+    transition: opacity 0.3s ease, visibility 0.3s ease;
+  }
+
+  .marketing-popup-wrapper.active {
+    opacity: 1;
+    visibility: visible;
+  }
+
+  /* Overlay */
+  .marketing-popup-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.6);
+    backdrop-filter: blur(4px);
+    transition: opacity 0.3s ease;
+  }
+
+  /* Popup Content */
+  .marketing-popup-content {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%) scale(0.9);
+    background: #ffffff;
+    max-width: 460px;
+    width: calc(100% - 32px);
+    padding: 32px 24px;
+    border-radius: 0;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  }
+
+  .marketing-popup-wrapper.active .marketing-popup-content {
+    transform: translate(-50%, -50%) scale(1);
+  }
+
+  /* Close Button */
+  .marketing-popup-close {
+    background: transparent;
+    border: none;
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+    line-height: 1;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .marketing-popup-close:hover {
+    opacity: 0.6;
+  }
+
+  /* Popup Body */
+  .marketing-popup-body {
+    text-align: left;
+  }
+
+  .marketing-popup-title {
+    font-size: 32px;
+    line-height: 1.2;
+    font-weight: 400;
+    color: #1E1E1F;
+    margin: 0 0 16px 0;
+    letter-spacing: -0.02em;
+  }
+
+  .marketing-popup-text {
+    font-size: 14px;
+    line-height: 1.6;
+    color: #1E1E1F;
+    margin: 0 0 32px 0;
+    opacity: 0.8;
+  }
+
+  /* Form */
+  #marketing-consent-form {
+    margin: 0;
+  }
+
+  /* Buttons */
+  .marketing-popup-buttons {
+    display: flex;
+    gap: 12px;
+    flex-direction: row;
+  }
+
+  .marketing-popup-btn {
+    flex: 1;
+    padding: 14px 24px;
+    font-size: 14px;
+    font-weight: 400;
+    border: 1px solid #1E1E1F;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: center;
+    white-space: nowrap;
+  }
+
+  /* Mobile Responsive */
+  @media (max-width: 768px) {
+    .marketing-popup-content {
+      padding: 20px 16px;
+      max-width: calc(100% - 32px);
+    }
+
+    .marketing-popup-title {
+      font-size: 24px;
+    }
+
+    .marketing-popup-text {
+      font-size: 13px;
+      margin-bottom: 24px;
+    }
+
+    .marketing-popup-buttons {
+      flex-direction: column;
+    }
+
+    .marketing-popup-btn {
+      width: 100%;
+    }
+  }
+</style>
+
+<script>
+  (function() {
+    'use strict';
+
+    // Cookie helper functions
+    function setCookie(name, value, days) {
+      const date = new Date();
+      date.setTime(date.getTime() + (days * 24 * 60 * 60 * 1000));
+      const expires = "expires=" + date.toUTCString();
+      document.cookie = name + "=" + value + ";" + expires + ";path=/";
+    }
+
+    function getCookie(name) {
+      const nameEQ = name + "=";
+      const ca = document.cookie.split(';');
+      for (let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+      }
+      return null;
+    }
+
+    // Check if popup should be shown
+    function shouldShowPopup() {
+      // Don't show if user has already made a choice
+      const hasDeclined = getCookie('marketing_consent_declined');
+      //const hasAccepted = getCookie('marketing_consent_accepted');
+      
+      //if (hasDeclined || hasAccepted) {
+      if (hasDeclined) {
+        return false;
+      }
+
+      return true;
+    }
+
+    // Show popup
+    function showPopup() {
+      const popup = document.getElementById('marketing-consent-popup');
+      if (popup && shouldShowPopup()) {
+        popup.style.display = 'block';
+        // Trigger animation after display
+        setTimeout(function() {
+          popup.classList.add('active');
+        }, 10);
+      }
+    }
+
+    // Hide popup
+    function hidePopup() {
+      const popup = document.getElementById('marketing-consent-popup');
+      if (popup) {
+        popup.classList.remove('active');
+        setTimeout(function() {
+          popup.style.display = 'none';
+        }, 300);
+      }
+    }
+
+    // Initialize popup
+    function initMarketingPopup() {
+      const popup = document.getElementById('marketing-consent-popup');
+      if (!popup) return;
+
+      const closeBtn = popup.querySelector('.marketing-popup-close');
+      const declineBtn = popup.querySelector('.marketing-popup-btn-decline');
+      const overlay = popup.querySelector('.marketing-popup-overlay');
+      const form = document.getElementById('marketing-consent-form');
+
+      // Close button handler
+      if (closeBtn) {
+        closeBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          hidePopup();
+        });
+      }
+
+      // Overlay click handler
+      if (overlay) {
+        overlay.addEventListener('click', function() {
+          hidePopup();
+        });
+      }
+
+      // Decline button handler
+      if (declineBtn) {
+        declineBtn.addEventListener('click', function(e) {
+          e.preventDefault();
+          setCookie('marketing_consent_declined', 'true', 365); // Remember for 1 year
+          hidePopup();
+        });
+      }
+
+      // Form submit handler
+      if (form) {
+        form.addEventListener('submit', function(e) {
+          // Let the form submit naturally to Shopify
+          // Captcha should already be initialized from popup appearance
+          hidePopup();
+        });
+      }
+
+      // Show popup after a delay (3 seconds)
+      setTimeout(function() {
+        showPopup();
+        
+        // Trigger interaction on email field to initialize captcha
+        setTimeout(function() {
+          const emailInput = form ? form.querySelector('input[name="contact[email]"]') : null;
+          if (emailInput) {
+            // Trigger focus and blur to simulate user interaction
+            emailInput.focus();
+            emailInput.blur();
+          }
+        }, 500);
+      }, 3000);
+    }
+
+    // Initialize when DOM is ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initMarketingPopup);
+    } else {
+      initMarketingPopup();
+    }
+  })();
+</script>
+{% endif %}
+{% endif %}

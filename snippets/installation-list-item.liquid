@@ -1,0 +1,85 @@
+{%- comment -%}
+Soilboy
+
+One installation card, rendered as either a grid card or a list row.
+
+Variables:
+- entry: installation metaobject entry (title, category, year, card_image)
+- mode: String. 'grid' or 'list'
+- index: Integer. forloop.index0 within the current mode's item list, used for
+  progressive reveal (data-ill-item + data-index) and the category filter
+  (data-category)
+- is_hidden: Boolean. Server-render the item already past the initial
+  items-per-page reveal, so the JS pagination doesn't have to hide it after
+  first paint (avoids a flash of every item before JS clips the list)
+
+Always links to the entry's own metaobject page (entry.system.url) —
+cta_url is only used for the featured banner's separate CTA button, not
+here.
+{%- endcomment -%}
+{%- liquid
+  assign card_title = entry.title.value
+  assign category = entry.category.value
+  assign category_name = category.name.value
+  assign category_handle = category.system.handle
+  assign card_image = entry.card_image.value
+  assign url = entry.system.url
+  assign tag = 'div'
+  if url != blank
+    assign tag = 'a'
+  endif
+  assign hidden_class = ''
+  if is_hidden
+    assign hidden_class = ' is-hidden'
+  endif
+-%}
+{% if mode == 'list' %}
+  <{{ tag }}
+    class="ill-row flex ai-center{{ hidden_class }}"
+    data-ill-item
+    data-index="{{ index }}"
+    data-category="{{ category_handle }}"
+    {% if card_image != blank %}data-preview-src="{{ card_image | image_url: width: 400 }}"{% endif %}
+    {% if url != blank %}href="{{ url }}"{% endif %}
+  >
+    <span class="ill-row-year p3 c-label">{{ entry.year.value }}</span>
+    <span class="ill-row-main">
+      {% if category_name != blank %}
+        <span class="ill-row-eyebrow p3 c-label">{{ category_name }}</span>
+      {% endif %}
+      <span class="ill-row-title p1">{{ card_title }}</span>
+    </span>
+    <span class="ill-row-arrow icon flex ai-center jc-center">
+      {{ settings.icon_arrow_up_right }}
+    </span>
+  </{{ tag }}>
+{% else %}
+  <{{ tag }}
+    class="ill-card{{ hidden_class }}"
+    data-ill-item
+    data-index="{{ index }}"
+    data-category="{{ category_handle }}"
+    {% if url != blank %}href="{{ url }}"{% endif %}
+  >
+    {% if card_image != blank %}
+      <div class="ill-card-media">
+        {{
+          card_image
+          | image_url: width: 900
+          | image_tag:
+            loading: 'lazy',
+            widths: '400, 600, 800, 900',
+            sizes: '(min-width: 1024px) 30vw, 90vw',
+            class: 'ill-card-img',
+            alt: card_title
+        }}
+      </div>
+    {% endif %}
+    <div class="ill-card-caption">
+      {% if category_name != blank %}
+        <p class="ill-card-eyebrow p3 c-label">{{ category_name }}</p>
+      {% endif %}
+      <p class="ill-card-title p1 c-green">{{ card_title }}</p>
+    </div>
+  </{{ tag }}>
+{% endif %}

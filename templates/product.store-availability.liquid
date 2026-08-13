@@ -1,0 +1,157 @@
+{% layout none %}
+
+    <div class="sapc-content d-pl-25 d-pr-25 pl-20 pr-20">
+        <div class="sap-option d-pt-25 d-pb-25 pt-20 pb-30 bb-1 b-border">
+          {%- for option in product.options_with_values -%}
+            {%- assign index = forloop.index -%}
+            <div class="variant-each {% unless forloop.last %} mb-15 d-mb-20 {% endunless %}">
+              <div class="option-wrapper">
+                {%- if option.name == 'Size' or option.name == 'size' -%}
+                  <div class="variant-wrapper global-flex jc-between">
+                    <div data-index="{{ index }}" class="variant-each-wrapper pb-3">
+                      {%- assign current_option = 'option' | append: index -%}
+                      {%- for opt in option.values -%}
+                        {%- assign disabled = 'not-available' -%}
+                        {%- for var in product.variants -%}
+                          {%- if var.available == true -%}
+                            {%- if var.options[0] == opt -%}
+                              {%- assign disabled = '' -%}
+                            {%- endif -%}
+                          {%- endif -%}
+                        {%- endfor -%}
+
+                        <div
+                          data-option-name="{{ option.name | escape }}"
+                          class="{{ disabled }} {% if forloop.first == true %}link3{% endif %} pb-3 pointer size-button-vue variant-each-button p2 mr-20 show-m-inline-block hover-underline {% if variant[current_option] == opt %} active {% endif %}"
+                          data-value="{{ opt | escape }}"
+                          data-index="{{ forloop.index }}"
+                          onclick="changeSizeAvailability(event, {{ forloop.index }})"
+                        >
+                          {{ opt }}
+                        </div>
+                      {%- endfor -%}
+                    </div>
+                  </div>
+                {%- else -%}
+                  <div data-index="{{ index }}" class="variant-each-wrapper pb-3">
+                    {%- assign current_option = 'option' | append: index -%}
+                    {%- for opt in option.values -%}
+                      {%- assign disabled = 'not-available' -%}
+                      {%- for var in product.variants -%}
+                        {%- if var.available == true -%}
+                          {%- if var.options[0] == opt -%}
+                            {%- assign disabled = '' -%}
+                          {%- endif -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      <div
+                        data-option-name="{{ option.name | escape }}"
+                        class="{{ disabled }} {% if forloop.index == true %}link3{% endif %} pointer variant-each-button p2 mr-20 show-m-inline-block hover-underline {% if variant[current_option] == opt %} active {% endif %}"
+                        data-value="{{ opt | escape }}"
+                      >
+                        {{ opt }}
+                      </div>
+                    {%- endfor -%}
+                  </div>
+                {%- endif -%}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+        {% for variant in product.variants %}
+          {% assign size_id = forloop.index %}
+          {%- for storeShow in variant.metafields.custom.inventory.value -%}
+            {% assign store_code = storeShow | split: '"' %}
+            {%- assign store_code_json = storeShow | json_parse -%}
+
+            {%- for store in shop.metaobjects.store_list.values -%}
+              {% if store.store_code == store_code[1] %}
+                {%- assign availability = 'true' -%}
+                {%- for s in store_code_json -%}
+                  {%- if s[0] == store.store_code and s[1] == 0 -%}
+                    {%- assign availability = 'false' -%}
+                  {%- endif -%}
+                  {%- if s[1] > 5 -%}
+                    {%- assign stockwarning = 'products.store_availability.available' | t -%}
+                  {% else %}
+                    {%- if s[1] == 0 -%}
+                      {%- assign stockwarning = 'products.store_availability.unavailable' | t -%}
+                    {%- else -%}
+                      {%- assign stockwarning = 'products.store_availability.low_in_stock' | t -%}
+                    {%- endif -%}
+                  {%- endif -%}
+                {%- endfor -%}
+
+                {% if availability == 'true' %}
+                  <div v-if="indexSize === {{ size_id }}" data-size-id="{{ size_id }}" class="sap-available sap-availability bb-1 b-border hide-m">
+                    {% assign store_name = store.store_name %}
+                    {% assign store_details = store.store_details | newline_to_br %}
+                    {%- assign title = '<span class=""p2 medium-500>'
+                      | append: store_name
+                      | append: '</span> <div class="flex ai-center p2 medium-500"><span class="mr-8"></span>'
+                      | append: stockwarning
+                      | append: '</div>'
+                    -%}
+                    {%- assign desc_html = '<div class="pb-20">' | append: store_details | append: '</div>' -%}
+                    {%- render 'accordion',
+                      wrapper_class: 'pt-20',
+                      title_class: 'w-full p2 flex ai-center jc-between',
+                      title_wrapper_class: '',
+                      title_no_pt: true,
+                      desc_no_pt: true,
+                      default_active: false,
+                      desc_class: 'rte p2 c-grey',
+                      title: title,
+                      desc_html: desc_html
+                    -%}
+                  </div>
+                {% elsif availability == 'false' %}
+                  {% assign store_name = store.store_name %}
+                  {% assign store_details = store.store_details | newline_to_br %}
+                  <div v-if="indexSize === {{ size_id }}" data-size-id="{{ size_id }}" class="sap-unavailable sap-availability bb-1 b-border hide-m">
+                    {%- assign title = '<span class="p2 medium-500">'
+                      | append: store_name
+                      | append: '</span> <div class="flex ai-center p2 medium-500"><span class="mr-8"></span>'
+                      | append: stockwarning
+                      | append: '</div>'
+                    -%}
+                    {%- assign desc_html = '<div class="pb-17">' | append: store_details | append: '</div>' -%}
+                    {%- render 'accordion',
+                      wrapper_class: 'pt-17',
+                      title_class: 'w-full p2 flex ai-center jc-between',
+                      title_wrapper_class: '',
+                      title_no_pt: true,
+                      desc_no_pt: true,
+                      default_active: false,
+                      desc_class: 'rte p2 c-grey',
+                      title: title,
+                      desc_html: desc_html
+                    -%}
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          {% endfor %}
+        {% endfor %}
+        <div class="sap-info mt-20">
+          <div class="p2 c-grey">{{ 'products.store_availability.info' | t }}</div>
+        </div>
+    </div>
+
+    <script>
+        function changeSizeAvailability(e, index) {
+            e.preventDefault();
+            Array.from(document.querySelectorAll('.size-button-vue')).forEach(
+				(el) => el.classList.remove('link3')
+			);
+            event.target.classList.add('link3');
+
+            Array.from(document.querySelectorAll('.sap-availability')).forEach(
+				(el) => el.classList.add('hide-m')
+			);
+
+            Array.from(document.querySelectorAll(`.sap-availability[data-size-id="${index}"]`)).forEach(
+				(el) => el.classList.remove('hide-m')
+			);
+        }
+    </script>

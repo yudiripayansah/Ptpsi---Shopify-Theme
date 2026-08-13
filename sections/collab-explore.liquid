@@ -1,0 +1,444 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'collab-explore-' | append: section.id
+  assign ss = section.settings
+  render 'section-padding', el_id: el_id, section: section
+
+  assign limit = ss.product_limit | default: 8
+  if ss.products.count > 0
+    assign items = ss.products
+  else
+    assign items = ss.collection.products
+  endif
+
+  assign shop_all_url = ss.btn_url
+  if shop_all_url == blank
+    assign shop_all_url = ss.collection.url
+  endif
+%}
+
+<style>
+  #{{ el_id }} {
+    {% if ss.bg_color != blank %}
+      background-color: {{ ss.bg_color }};
+    {% endif %}
+  }
+  #{{ el_id }} .cle-swiper {
+    overflow: visible;
+  }
+  #{{ el_id }} .cle-swiper:not(.swiper-initialized) .swiper-wrapper {
+    display: flex;
+  }
+  #{{ el_id }} .cle-swiper:not(.swiper-initialized) .swiper-slide {
+    flex-shrink: 0;
+    width: calc((100% - 4.8px) / 1.3);
+    margin-right: 16px;
+  }
+  #{{ el_id }} .cle-actions {
+    column-gap: 24px;
+  }
+  #{{ el_id }} .shs-button {
+    border: 1px solid var(--green);
+    justify-content: space-between;
+    text-decoration: none;
+  }
+  #{{ el_id }} .shs-button .icon,
+  #{{ el_id }} .shs-button .icon svg {
+    width: 16px;
+    height: 16px;
+    display: block;
+  }
+  #{{ el_id }} .swiper-grid-arrow {
+    position: relative;
+    width: 18px;
+    height: 18px;
+    cursor: pointer;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
+    transition: 0.3s ease all;
+  }
+  #{{ el_id }} .swiper-grid-arrow svg {
+    width: 12px;
+    height: 12px;
+  }
+  #{{ el_id }} .swiper-grid-arrow.swiper-button-disabled {
+    opacity: 0.3;
+  }
+  #{{ el_id }} .cle-border {
+    border-bottom: 1px solid var(--main);
+    margin-top: 48px;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .cle-swiper {
+      overflow: hidden;
+    }
+    #{{ el_id }} .cle-swiper:not(.swiper-initialized) .swiper-slide {
+      width: calc((100% - 72px) / 4);
+      margin-right: 24px;
+    }
+    #{{ el_id }} .shs-button:hover {
+      background-color: var(--green);
+      color: #fff;
+    }
+    #{{ el_id }} .shs-button:hover .icon svg path {
+      stroke: #fff;
+    }
+    #{{ el_id }} .cle-border {
+      margin-top: 80px;
+    }
+  }
+</style>
+
+{% if items.size > 0 %}
+  <div id="{{ el_id }}" class="overflow">
+    <div class="container">
+      <div class="flex ai-center jc-between">
+        <{{ ss.title_dom_type | default: 'h2' }} class="{{ ss.title_size | default: 'h3' }} c-green">{{ ss.title }}</{{ ss.title_dom_type | default: 'h2' }}>
+        <div class="cle-actions flex ai-center">
+          {% if ss.btn_label != blank %}
+            <a href="{{ shop_all_url }}" class="shs-button p2 c-green pt-12 pb-12 pl-24 pr-24 hide-m show-d-flex ai-center colgap-48">
+              {{ ss.btn_label }}
+              <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                </svg>
+              </div>
+            </a>
+          {% endif %}
+          <div class="flex ai-center colgap-8">
+            <div class="swiper-grid-arrow hide-m show-d-flex left">
+              {{ settings.icon_slide_left }}
+            </div>
+            <div class="swiper-grid-arrow hide-m show-d-flex right">
+              {{ settings.icon_slide_right }}
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="swiper cle-swiper mt-32 d-mt-40">
+        <div class="swiper-wrapper">
+          {% for product in items limit: limit %}
+            <div class="swiper-slide">
+              <div class="cle-product-item h-full">
+                {% render 'product-each', product: product %}
+              </div>
+            </div>
+          {% endfor %}
+        </div>
+      </div>
+      {% if ss.btn_label != blank %}
+        <a href="{{ shop_all_url }}" class="shs-button mt-24 p2 c-green pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d ai-center w-full">
+          {{ ss.btn_label }}
+          <div class="icon">
+            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+              <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+            </svg>
+          </div>
+        </a>
+      {% endif %}
+      {% if ss.border_bottom %}
+        <div class="cle-border"></div>
+      {% endif %}
+    </div>
+  </div>
+
+  <script>
+    function initCollabExplore{{ fn }}() {
+      var swiperEl = document.querySelector('#{{ el_id }} .cle-swiper');
+      if (!swiperEl) return;
+
+      new Swiper('#{{ el_id }} .cle-swiper', {
+        slidesPerView: 1.3,
+        spaceBetween: 16,
+        loop: false,
+        breakpoints: {
+          1024: {
+            slidesPerView: 4,
+            spaceBetween: 24,
+          },
+        },
+        navigation: {
+          nextEl: '#{{ el_id }} .swiper-grid-arrow.right',
+          prevEl: '#{{ el_id }} .swiper-grid-arrow.left',
+        },
+        on: {
+          init: function () {
+            if (window.$360 && $360.lazyLoadInstance) $360.lazyLoadInstance.update();
+          },
+          slideChange: function () {
+            if (window.$360 && $360.lazyLoadInstance) $360.lazyLoadInstance.update();
+          },
+        },
+      });
+
+      if (typeof gsap !== 'undefined' && !swiperEl._gsapInit) {
+        swiperEl._gsapInit = true;
+        var cards = swiperEl.querySelectorAll('.swiper-slide');
+        gsap.set(cards, { y: 60, opacity: 0, force3D: true });
+        requestAnimationFrame(function () {
+          ScrollTrigger.refresh();
+          ScrollTrigger.create({
+            trigger: swiperEl,
+            start: 'top 85%',
+            once: true,
+            onEnter: function () {
+              gsap.to(cards, {
+                y: 0,
+                opacity: 1,
+                duration: 1.0,
+                ease: 'power3.out',
+                stagger: 0.15,
+              });
+            },
+          });
+        });
+      }
+    }
+
+    document.addEventListener('DOMContentLoaded', function () {
+      initCollabExplore{{ fn }}();
+    });
+    document.addEventListener('shopify:section:load', function (e) {
+      if (e.target.querySelector('#{{ el_id }}')) {
+        initCollabExplore{{ fn }}();
+      }
+    });
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Collab Explore",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Font Size",
+      "options": [
+        { "value": "h1", "label": "h1" },
+        { "value": "h2", "label": "h2" },
+        { "value": "h3", "label": "h3" },
+        { "value": "h4", "label": "h4" }
+      ],
+      "default": "h3"
+    },
+    {
+      "type": "header",
+      "content": "Products"
+    },
+    {
+      "type": "product_list",
+      "id": "products",
+      "label": "Products",
+      "info": "Hand-picked products. Takes priority over the collection below."
+    },
+    {
+      "type": "collection",
+      "id": "collection",
+      "label": "Collection",
+      "info": "Used when no products are hand-picked above."
+    },
+    {
+      "type": "range",
+      "id": "product_limit",
+      "label": "Maximum Products",
+      "min": 4,
+      "max": 12,
+      "step": 1,
+      "default": 8
+    },
+    {
+      "type": "header",
+      "content": "Button"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label",
+      "default": "Shop All"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button Url",
+      "info": "Leave blank to link to the selected collection."
+    },
+    {
+      "type": "header",
+      "content": "Border"
+    },
+    {
+      "type": "checkbox",
+      "id": "border_bottom",
+      "label": "Show Bottom Border",
+      "default": true
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Collab Explore"
+    }
+  ]
+}
+{% endschema %}

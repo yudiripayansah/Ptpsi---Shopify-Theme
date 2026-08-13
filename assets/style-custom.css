@@ -1,0 +1,325 @@
+/* global input */
+.global-input::placeholder {
+  opacity: .3;
+  color: #171717;
+}
+.global-input {
+  padding-left: 0;
+  padding-top: 0;
+  padding-bottom: 8px;
+  background-color: transparent;
+  color: #19341E;
+}
+.global-select-div {
+  background-color: transparent;
+}
+.global-select-div .options {
+  width: 100%;
+}
+.global-radio input {
+  display: none;
+}
+.global-radio .gr-mark {
+  min-width: 14px;
+  min-height: 14px;
+  max-width: 14px;
+  max-height: 14px;
+  border: 1px solid var(--black);
+  position: relative;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.global-radio .gr-mark:after {
+  width: 6px;
+  height: 6px;
+  background-color: transparent;
+  content: " ";
+  position: absolute;
+}
+.global-radio input:checked + .gr-mark:after {
+  background-color: var(--black);
+}
+.global-placeholder {
+  font-size: 8px;
+  padding-bottom: 8px; 
+  transform: translateY(100%);
+  transition: 0.3s ease all;
+}
+.global-input:focus::placeholder {
+  color: transparent;
+}
+.global-input:focus + .global-placeholder,
+.global-input:not(:placeholder-shown) + .global-placeholder {
+  transform: translateY(-1px);
+}
+.header-cart .discount-warning-text em {
+  font-style: italic;
+}
+@media screen and (min-width: 600px) {
+  .header-cart .header-cart-wrapper,
+  .header-cart .header-cart-wrapper .header-cart-bottom,
+  .header-cart.no-cross-sell {
+    width: 360px;
+  }
+  .header-cart.no-cross-sell.active {
+    right: 360px;
+  }
+}
+@media screen and (min-width: 1024px) {
+  .global-placeholder {
+    font-size: 9px;
+  }
+  .header-cart .header-cart-wrapper,
+  .header-cart .header-cart-wrapper .header-cart-bottom,
+  .header-cart.no-cross-sell {
+    width: 400px;
+  }
+  .header-cart.no-cross-sell.active {
+    right: 400px;
+  }
+}
+@media screen and (min-width: 1800px) {
+  .header-cart .header-cart-wrapper,
+  .header-cart .header-cart-wrapper .header-cart-bottom,
+  .header-cart.no-cross-sell {
+    width: 450px;
+  }
+  .header-cart.no-cross-sell.active {
+    right: 450px;
+  }
+}
+/* input date */
+#register-register .datepicker-picker .datepicker-controls .button, 
+#register-register .datepicker .dow,
+.datepicker span {
+  font-family: Studio Pro;
+  letter-spacing: 0px;
+  font-weight: 500;
+  font-size: 12px !important;
+  font-size: 0.75rem;
+  line-height: 1.6;
+}
+/* article */
+.article-each .global-image-wrapper {
+  padding-bottom: 0 !important;
+  height: auto !important;
+}
+.article-each .global-image-wrapper img {
+  aspect-ratio: 7/10;
+  height: auto !important;
+  position: relative;
+  width: 100%;
+  object-fit: cover;
+}
+/* header cart */
+.header-cart .header-cart-wrapper .header-cart-close {
+  width: auto;
+  height: auto;
+}
+.header-cart .header-cart-wrapper .header-cart-close svg {
+  width: 12px;
+  height: 12px;
+}
+.header-cart .global-form-qty.small {
+  width: auto;
+  height: 32px;
+  border: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  padding: 0;
+}
+.header-cart .global-form-qty.small button {
+  width: 32px;
+  height: 32px;
+  border: none;
+}
+.header-cart .global-form-qty.small button svg {
+  width: 8px;
+  height: 8px;
+}
+.header-cart .global-form-qty.small button svg * {
+  stroke: var(--black);
+}
+.header-cart .global-form-qty.small .global-qty-text {
+  width: 25px;
+  text-align: center;
+  height: 32px;
+  line-height: 32px;
+  border: none;
+  border-radius: 0;
+}
+.header-cart .header-cart-wrapper .cart-items-wrapper {
+  overflow-x: hidden;
+}
+.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .details-con {
+  flex: unset;
+  flex-direction: column;
+}
+.header-cart.no-cross-sell .header-cart-wrapper .header-cart-bottom {
+  box-shadow: unset;
+}
+.hbc-gifting .global-input {
+  padding-bottom: 0;
+}
+.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .image-con {
+  width: 80px;
+  flex: 0 0 80px;
+}
+.ymal-swiper .swiper-slide {
+  width: 235px;
+}
+.product-ymal .pymal-image {
+  width: 80px;
+}
+.product-ymal .pymal-content {
+  width: calc(100% - 80px);
+}
+.you-may-also-like .swiper {
+  overflow: visible !important;
+  clip-path: inset(-100vw -100vw -100vw -100vw);
+}
+.header-cart.no-cross-sell .header-cart-wrapper .empty-message-wrapper {
+  height: 100%;
+  overflow-y: auto;
+}
+.header-cart .emwi-caption-item {
+  width: 50%;
+}
+.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .bottom-part > .button-wrapper,
+.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .bottom-part .close,
+.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .bottom-part .close svg {
+  width: 12px;
+  height: 12px;
+}
+.header-cart .message-wrapper {
+  height: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+.header-cart .emwi-overlay {
+  background: linear-gradient(to top, rgba(30, 30, 31, 0.7), rgba(30, 30, 31, 0.2));
+  opacity: .4;
+}
+.hcm-page {
+  opacity: 1;
+  visibility: visible;
+  position: relative;
+  z-index: 2;
+}
+.header-cart-top .back-btn {
+  cursor: pointer;
+}
+/* rte styling override */
+.rte h1,
+.rte h2 {
+  margin-bottom: 10px !important;
+}
+
+/** OOS popup **/
+.pdp-oos-popup,
+.pdp-coming-soon-popup {
+  transition: 0.5s ease all;
+  visibility: hidden;
+  opacity: 0;
+  will-change: opacity;
+}
+.pdp-oos-popup.active,
+.pdp-coming-soon-popup.active {
+  visibility: visible;
+  opacity: 1;
+}
+.pdp-oos-popup.active .content-wrapper,
+.pdp-coming-soon-popup.active .content-wrapper {
+  transform: translateY(0);
+}
+.pdp-oos-popup .overlay,
+.pdp-coming-soon-popup .overlay {
+  background: rgba(23, 23, 23, 0.5);
+}
+.pdp-oos-popup .close-icon,
+.pdp-coming-soon-popup .close-icon {
+  width: 50px;
+  height: 50px;
+}
+.pdp-oos-popup .close-icon svg,
+.pdp-coming-soon-popup .close-icon svg {
+  width: 10px;
+  height: 10px;
+}
+.pdp-oos-popup .content-wrapper,
+.pdp-coming-soon-popup .content-wrapper {
+  width: 100%;
+  transform: translateY(100%);
+  transition: 0.5s ease all;
+}
+.pdp-oos-popup .btn-notify {
+  padding-left: 20px;
+  padding-right: 20px;
+}
+@media (min-width: 600px) {
+  .pdp-oos-popup .content-wrapper,
+  .pdp-coming-soon-popup .content-wrapper {
+    width: 400px;
+    transform: translateY(0);
+  }
+}
+@media (min-width: 1024px) {
+  .pdp-oos-popup .content-wrapper,
+  .pdp-coming-soon-popup .content-wrapper {
+    width: 400px;
+  }
+}
+
+/* iwish app custom styling */
+.iw-count-bubble {
+  position: absolute;
+  font-size: 9px;
+  right: -8px;
+  top: -2px;
+  font-weight: 400;
+}
+
+/* h0 - display heading, one step above h1.
+   Not generated by the Typography - Header section because its suffix field
+   is min:1, so h0 cannot be added from the customiser.
+   74px mobile is from the design spec; 120px at 1440 measured off the Figma.
+   Tablet follows mobile, as h1 and h2 do. The 1024 value is interpolated:
+   h1 and h2 both sit at roughly 72-77% of their 1440 size at that breakpoint.
+   -0.02em reproduces the spec's -1.48px at 74px and holds at every size. */
+.h0 {
+  font-family: 'PP Object Sans';
+  font-weight: 400;
+  font-synthesis: none;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  font-size: 74px;
+  font-size: 4.625rem;
+  line-height: 110%;
+  letter-spacing: -0.02em;
+}
+@media only screen and (min-width: 1024px) {
+  .h0 {
+    font-size: 90px;
+    font-size: 5.625rem;
+  }
+}
+@media only screen and (min-width: 1440px) {
+  .h0 {
+    font-size: 120px;
+    font-size: 7.5rem;
+  }
+}
+/* Workshop-only note above the PDP add-to-cart button. */
+.workshop-atc-note {
+  /* p3 according to client's Figma design; the theme has no .p3 class. */
+  font-size: 12px;
+}
+/* The button carries mt-12 for the gap from the variant options above it; when
+   the note is present the note takes over that gap, and the button sits 16px
+   below it. */
+.workshop-atc-note + .pdp-top-atc {
+  margin-top: 16px;
+}

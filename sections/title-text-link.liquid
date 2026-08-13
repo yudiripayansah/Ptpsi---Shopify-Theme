@@ -1,0 +1,254 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'title-text-link-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    background-color: {{ section.settings.bg_color }};
+  }
+  #{{el_id}} .container:after,
+  #{{el_id}} .container:before,
+  #{{el_id}} .row:after,
+  #{{el_id}} .row:before {
+    display: none;
+  }
+  #{{el_id}} .text-content {
+    overflow: hidden;
+    transition: max-height 0.4s ease;
+  }
+
+  #{{el_id}} .text-content.collapsed {
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    max-height: 4.5em; /* kira-kira 3 baris */
+  }
+
+  #{{el_id}} .text-content.expanded {
+    display: block;
+    max-height: 1000px; /* cukup besar */
+  }
+  #{{el_id}} .toggle-show {
+    display: inline-block;
+  }
+  @media screen and (min-width: 1024px){
+    
+  }
+</style>
+
+{% if request.visual_preview_mode %}
+  <img src="{{ 'title-text-link-figma.png' | asset_url }}" width="100%" height="100%">
+{% else %}
+  <div id="{{ el_id }}" class="relative">
+    <div class="container">
+      <div class="d-max-680">
+        <div class="p1">{{ss.title}}</div>
+        <div class="p2 mt-12 text-content collapsed">{{ss.text}}</div>
+        <a href="#" rel="nofollow" class="p2 underline mt-8 cursor toggle-show">{{ss.link_label}}</a>
+      </div>
+    </div>
+  </div>
+  <script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const toggleBtn = document.querySelector("#{{el_id}} .toggle-show");
+    const content = document.querySelector("#{{el_id}} .text-content");
+
+    if (!toggleBtn || !content) return;
+
+    toggleBtn.addEventListener("click", function (e) {
+      e.preventDefault()
+      if (content.classList.contains("collapsed")) {
+        content.classList.remove("collapsed");
+        content.classList.add("expanded");
+        toggleBtn.textContent = "{{ss.link_label_less}}";
+      } else {
+        content.classList.remove("expanded");
+        content.classList.add("collapsed");
+        toggleBtn.textContent = "{{ss.link_label}}";
+      }
+    });
+  });
+  </script>
+{% endif %}
+
+{% schema %}
+{
+  "name": "Title Text Link",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "text",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "text",
+      "id": "link_label",
+      "label": "Show More Label"
+    },
+    {
+      "type": "text",
+      "id": "link_label_less",
+      "label": "Show Less Label"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_m",
+        "label": "Top padding (Mobile)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_m",
+        "label": "Bottom padding (Mobile)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_t",
+        "label": "Top padding (Tablet)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_t",
+        "label": "Bottom padding (Tablet)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding",
+        "label": "Top padding (Desktop)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding",
+        "label": "Bottom padding (Desktop)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_hd",
+        "label": "Top padding (HD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_hd",
+        "label": "Bottom padding (HD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "top_padding_hhd",
+        "label": "Top padding (HHD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    },
+    {
+        "type": "select",
+        "id": "bottom_padding_hhd",
+        "label": "Bottom padding (HHD)",
+        "options": [
+            { "value": "nopadding", "label": "No padding" },
+            { "value": "extrasmall", "label": "Extra Small" },
+            { "value": "small", "label": "Small" },
+            { "value": "medium", "label": "Medium" },
+            { "value": "large", "label": "Large" }
+        ],
+        "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Title Text Link",
+      "blocks": []
+    }
+  ]
+}
+{% endschema %}

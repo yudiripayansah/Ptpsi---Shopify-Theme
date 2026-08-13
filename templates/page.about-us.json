@@ -1,0 +1,353 @@
+{
+  "wrapper": "div.bg-background-main",
+  "sections": {
+    "parallax_scroll_hero": {
+      "type": "parallax-scroll",
+      "blocks": {
+        "block_intro": {
+          "type": "block",
+          "settings": {
+            "label": "",
+            "text_1": "Hi, We're",
+            "text_1_size": "h0",
+            "text_1_v": "center",
+            "text_1_align": "left",
+            "text_2": "Soilboy",
+            "text_2_size": "h0",
+            "text_2_v": "bottom",
+            "text_2_align": "right",
+            "text_color": "#ffffff",
+            "mobile_group": true,
+            "mobile_group_v": "bottom",
+            "mobile_group_gap": 0,
+            "bg_color": "#642b10",
+            "media_type": "images",
+            "media_fit": "cover",
+            "image_1": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_1_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "image_2": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_2_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "scroll_length_d": 200,
+            "scroll_length_m": 150
+          }
+        },
+        "block_studio": {
+          "type": "block",
+          "settings": {
+            "label": "",
+            "text_1": "We're a Singapore plant design studio.",
+            "text_1_size": "h2",
+            "text_1_v": "center",
+            "text_1_align": "left",
+            "text_2": "We believe plants aren't just decorations — they're living reminders to pause, wonder, and reconnect with nature.",
+            "text_2_size": "p1",
+            "text_2_v": "bottom",
+            "text_2_align": "left",
+            "text_color": "#ffffff",
+            "mobile_group": true,
+            "mobile_group_v": "bottom",
+            "mobile_group_gap": 16,
+            "bg_color": "#642b10",
+            "media_type": "images",
+            "media_fit": "cover",
+            "image_1": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_1_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "image_2": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_2_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "image_3": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_3_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "scroll_length_d": 200,
+            "scroll_length_m": 150
+          }
+        },
+        "block_mission": {
+          "type": "block",
+          "settings": {
+            "label": "Our mission is simple:",
+            "text_1": "To inspire a sense of curiosity for the greener things in life.",
+            "text_1_size": "h2",
+            "text_1_v": "center",
+            "text_1_align": "left",
+            "text_2": "Every plant we choose, every pot we design, and every tip we share is rooted in that idea. Whether you're a first-time plant parent or a seasoned grower, we want you to discover the joy of watching something thrive under your care.",
+            "text_2_size": "p1",
+            "text_2_v": "bottom",
+            "text_2_align": "left",
+            "text_color": "#ffffff",
+            "mobile_group": false,
+            "mobile_group_v": "bottom",
+            "mobile_group_gap": 16,
+            "bg_color": "#642b10",
+            "media_type": "images",
+            "media_fit": "cover",
+            "image_1": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_1_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "image_2": "shopify:\/\/shop_images\/Frame_4_700fa001-341c-47fe-a25d-bb8bf96da67d.png",
+            "image_2_m": "shopify:\/\/shop_images\/about_us_background_mobile.png",
+            "scroll_length_d": 200,
+            "scroll_length_m": 150
+          }
+        }
+      },
+      "block_order": [
+        "block_intro",
+        "block_studio",
+        "block_mission"
+      ],
+      "name": "Parallax Scroll",
+      "settings": {
+        "bg_color": "#642b10",
+        "text_travel": 50,
+        "invert_header": true,
+        "header_text_color": "#ffffff"
+      }
+    },
+    "alternating_content_story": {
+      "type": "alternating-content",
+      "blocks": {
+        "row_sourcing": {
+          "type": "row",
+          "settings": {
+            "image_position": "image_first",
+            "label": "Sourcing",
+            "title": "Where Our Plants Begin Their Journey",
+            "title_dom_type": "h2",
+            "title_size": "h2",
+            "body": "<p>Behind every Soilboy plant is a dedicated sourcing process that spans regions and climates. We work directly with trusted growers overseas and carefully select each specimen for form, health, and character. Once they arrive in our warehouse, every plant is acclimatised, nurtured, and prepared with the same design-led care you’ll experience in our studio.<\/p>",
+            "desktop_image": "shopify:\/\/shop_images\/Frame_8_e415aefe-bb96-4916-8046-9138541e8ccb.png",
+            "mobile_image": "shopify:\/\/shop_images\/Frame_8_1_f3a1a8ce-7962-417d-b908-dccd3956a23b.png",
+            "caption_label": "OBJ 01.",
+            "caption_text": "Soilboy Flat Pot Small, Speckled"
+          }
+        },
+        "row_warehouse": {
+          "type": "row",
+          "settings": {
+            "image_position": "text_first",
+            "label": "Warehouse",
+            "title": "From Farms Abroad to Our Warehouse Oasis",
+            "title_dom_type": "h2",
+            "title_size": "h2",
+            "body": "<p>Our plants travel from specialised growers around the world to our temperature-controlled warehouse, where they are tended to with patience and precision. This is where we acclimatise, style, and prepare each plant—ensuring you receive greenery that’s healthy, resilient, and ready to thrive in your space.<\/p>",
+            "desktop_image": "shopify:\/\/shop_images\/Frame_8_2.png",
+            "mobile_image": "shopify:\/\/shop_images\/Frame_8_3.png",
+            "caption_label": "OBJ 01.",
+            "caption_text": "Soilboy Flat Pot Small, Speckled"
+          }
+        }
+      },
+      "block_order": [
+        "row_sourcing",
+        "row_warehouse"
+      ],
+      "name": "Alternating Content",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "top_padding_m": "large",
+        "bottom_padding_m": "large",
+        "top_padding_t": "large",
+        "bottom_padding_t": "large",
+        "top_padding": "large",
+        "bottom_padding": "large",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "large",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "large"
+      }
+    },
+    "border_top": {
+      "type": "border",
+      "name": "Border",
+      "settings": {
+        "bg_color": "",
+        "b_color": "#304835",
+        "hascon": true
+      }
+    },
+    "about_us_visit": {
+      "type": "about-us",
+      "blocks": {
+        "entry_contact": {
+          "type": "entry",
+          "settings": {
+            "contact_label": "Contact Us",
+            "contact_url": "#"
+          }
+        },
+        "entry_instagram": {
+          "type": "entry",
+          "settings": {
+            "contact_label": "Instagram",
+            "contact_url": "#"
+          }
+        }
+      },
+      "block_order": [
+        "entry_contact",
+        "entry_instagram"
+      ],
+      "name": "About Us",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "subtitle": "About Us",
+        "title": "Soilboy is a Singapore plant design studio that transforms greenery into living sculptures, pairing curated plants with handmade pottery to bring nature closer to home.",
+        "title_dom_type": "h2",
+        "title_size": "h2",
+        "btn_label": "Learn More",
+        "btn_url": "#",
+        "address": "<p>Soilboy Experience Store<br\/>46 Kim Yam Road, #02-07\/08<br\/>Singapore 239351<\/p>",
+        "details": "<p>Opening Hours:<br\/>Daily: 10am - 7pm<\/p>",
+        "contact_image": "shopify:\/\/shop_images\/Frame_255b756b-7282-4116-8a0d-4bd393bca041.png",
+        "top_padding_m": "medium",
+        "bottom_padding_m": "small",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "small",
+        "top_padding": "medium",
+        "bottom_padding": "small",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "small",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "small"
+      }
+    },
+    "homepage_banner_gallery": {
+      "type": "homepage-banner",
+      "blocks": {
+        "entry_2": {
+          "type": "entry",
+          "settings": {
+            "overlay": false,
+            "overlay_color": "linear-gradient(180deg, rgba(0, 0, 0, 0.2), rgba(0, 0, 0, 0) 100%)",
+            "banner_url": "",
+            "text_color": "white",
+            "text_align": "jc-center tc text-center",
+            "text_align_d": "d-jc-center d-tc d-text-center",
+            "title_v_align": "jc-end relative",
+            "title_v_align_d": "d-jc-end d-relative",
+            "title": "",
+            "title_dom_type": "h1",
+            "title_size": "h1",
+            "text": "",
+            "text_max_width_mobile": 450,
+            "text_max_width_tablet": 450,
+            "text_max_width_desktop": 450,
+            "text_max_width_hd": 450,
+            "text_max_width_fullhd": 450,
+            "button_label_1": "",
+            "button_url_1": "",
+            "button_label_2": "",
+            "button_url_2": "",
+            "link_label": "",
+            "link_url": "",
+            "desktop_image": "shopify:\/\/shop_images\/Image_41.png",
+            "mobile_image": "shopify:\/\/shop_images\/Image_43.png",
+            "autoplay": false,
+            "youtube_embed_code": ""
+          }
+        }
+      },
+      "block_order": [
+        "entry_2"
+      ],
+      "name": "Homepage Banner",
+      "settings": {
+        "section_id": "",
+        "bg_color": "#fff9f2",
+        "disable_lazyload": false,
+        "text_over_image": false,
+        "enable_parallax": false,
+        "enable_sticky": false,
+        "section_width": "container",
+        "screen_image_height_m": "image",
+        "hbl_title": "",
+        "hbl_label": "",
+        "hbl_url": "",
+        "screen_image_height_t": "image",
+        "screen_image_height_d": "image",
+        "top_padding_hd": "",
+        "bottom_padding_hd": "",
+        "top_padding_hhd": "",
+        "bottom_padding_hhd": ""
+      }
+    },
+    "text_and_links_socials": {
+      "type": "text-and-links",
+      "blocks": {
+        "entry_instagram": {
+          "type": "entry",
+          "settings": {
+            "label": "Instagram",
+            "url": "#"
+          }
+        },
+        "entry_tiktok": {
+          "type": "entry",
+          "settings": {
+            "label": "Tiktok",
+            "url": "#"
+          }
+        },
+        "entry_facebook": {
+          "type": "entry",
+          "settings": {
+            "label": "Facebook",
+            "url": "#"
+          }
+        }
+      },
+      "block_order": [
+        "entry_instagram",
+        "entry_tiktok",
+        "entry_facebook"
+      ],
+      "name": "Text and Links",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title": "Socials"
+      }
+    },
+    "border_bottom": {
+      "type": "border",
+      "name": "Border",
+      "settings": {
+        "bg_color": "",
+        "b_color": "#304835",
+        "hascon": true
+      }
+    },
+    "split_showcase_links": {
+      "type": "split-showcase",
+      "name": "Split Showcase",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "big_image_desktop": "shopify:\/\/shop_images\/Frame_6_3bd3578a-9c51-4475-bd08-49742bf45282.png",
+        "big_image_mobile": "shopify:\/\/shop_images\/Frame_6_3bd3578a-9c51-4475-bd08-49742bf45282.png",
+        "big_image_title": "Bestsellers",
+        "big_image_url": "#",
+        "small_image_desktop": "shopify:\/\/shop_images\/Frame_7_e5969d95-ab73-47f2-bdc4-391b6d9d7632.png",
+        "small_image_mobile": "shopify:\/\/shop_images\/Frame_7_e5969d95-ab73-47f2-bdc4-391b6d9d7632.png",
+        "small_image_title": "Installations",
+        "small_image_url": "#",
+        "top_padding_m": "large",
+        "bottom_padding_m": "large",
+        "top_padding_t": "large",
+        "bottom_padding_t": "large",
+        "top_padding": "large",
+        "bottom_padding": "large",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "large",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "large"
+      }
+    }
+  },
+  "order": [
+    "parallax_scroll_hero",
+    "alternating_content_story",
+    "border_top",
+    "about_us_visit",
+    "homepage_banner_gallery",
+    "text_and_links_socials",
+    "border_bottom",
+    "split_showcase_links"
+  ]
+}

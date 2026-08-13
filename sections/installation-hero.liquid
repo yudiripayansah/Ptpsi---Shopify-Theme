@@ -1,0 +1,242 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'installation-hero-' | append: section.id
+  assign ss = section.settings
+  assign entry = metaobject
+  render 'section-padding', el_id: el_id, section: section
+
+  comment
+    An unset url-type setting resolves to shop.url rather than truly blank,
+    so `| default:` alone won't catch it — same quirk fixed in
+    installation-intro.liquid and installation-list-item-featured.liquid.
+  endcomment
+  assign back_link_url = ss.back_link_url
+  if back_link_url == blank or back_link_url == shop.url
+    assign back_link_url = '/pages/installation-case-study'
+  endif
+%}
+
+<style>
+  #{{el_id}} .container:before,
+  #{{el_id}} .container:after {
+    display: none;
+  }
+  #{{ el_id }} .ih-image {
+    overflow: hidden;
+  }
+  #{{ el_id }} .ih-image img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  #{{ el_id }} .ih-back {
+    column-gap: 4px;
+    text-decoration: underline;
+  }
+  #{{ el_id }} .ih-back-icon svg {
+    width: 16px;
+    height: 16px;
+  }
+  #{{ el_id }} .ih-back-icon svg {
+    width: 9px;
+    height: 9px;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .ih-image {
+      aspect-ratio: 1392 / 550;
+    }
+    #{{ el_id }} .ih-back {
+    }
+  }
+</style>
+
+<div id="{{ el_id }}">
+  {% if entry == blank %}
+    {% if request.design_mode %}
+      <div class="container">
+        <p class="p2 c-label">This section only renders on an Installation metaobject page.</p>
+      </div>
+    {% endif %}
+  {% else %}
+    <div class="container flex flex-column rowgap-16 pt-16 d-pt-0">
+      {% if entry.hero_image.value != blank %}
+        <div class="ih-image">
+          {% assign image_id = "ih-hero" | append: el_id %}
+          {%- render 'global-image-wrapper-responsive',
+              image_id: image_id,
+              desktop_image: entry.hero_image.value,
+              mobile_image: entry.card_image.value
+          %}
+        </div>
+      {% endif %}
+      <a href="{{ back_link_url }}" class="ih-back p2 c-green flex ai-center colgap-4">
+        <span class="icon flex ai-center jc-center ih-back-icon">{{ settings.icon_slide_left }}</span>
+        {{ ss.back_link_label | default: 'Back to Installations' }}
+      </a>
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Installation Hero",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "text",
+      "id": "back_link_label",
+      "label": "Back Link Label",
+      "default": "Back to Installations"
+    },
+    {
+      "type": "url",
+      "id": "back_link_url",
+      "label": "Back Link URL",
+      "info": "Defaults to /pages/installation-case-study if left empty."
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "small"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installation Hero"
+    }
+  ]
+}
+{% endschema %}

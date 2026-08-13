@@ -1,0 +1,23 @@
+{% comment %}
+  Soilboy
+
+  Metaobject templates only support the .liquid + {% section %} format —
+  the JSON template format (with inline per-section settings/blocks) is an
+  Online Store 2.0 feature that isn't available for metaobject types. That
+  means, unlike a JSON template, this file can't pre-seed content into the
+  reused work-with-us-form / pdp-faq sections below — configure their
+  title/text/topic/FAQ entries once in the theme editor after this is live.
+{% endcomment %}
+<style>
+  .installation-details-page .shopify-section {
+    background-color: #fff9f2;
+  }
+</style>
+<div class="bg-background-main global-content-top-margin installation-details-page">
+  {% section 'installation-hero' %}
+  {% section 'installation-intro' %}
+  {% section 'installation-body' %}
+  {% section 'installation-testimonial' %}
+  {% section 'work-with-us-form' %}
+  {% section 'installation-next' %}
+</div>

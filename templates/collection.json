@@ -1,214 +1,207 @@
 {
+  "wrapper": "div.collection-con.global-content-top-margin",
   "sections": {
-    "section": {
-      "type": "section",
+    "collection_banner_7TQ8nQ": {
+      "type": "collection-banner",
+      "name": "Collection Banner",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title_dom_type": "h1",
+        "title_size": "h1",
+        "max_width": 448,
+        "max_width_t": 448,
+        "max_width_d": 448,
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "large",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "large",
+        "top_padding": "nopadding",
+        "bottom_padding": "large",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "large",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "large"
+      }
+    },
+    "collection_and_search_products_qYGFKd": {
+      "type": "collection-and-search-products",
+      "settings": {
+        "hide_filter": false,
+        "hide_sort": false,
+        "hide_pagination": false,
+        "disable_add_to_cart": false,
+        "hide_additional_quick_filter": false,
+        "hide_specific_filter": "filter.p.m.custom.collection_type",
+        "pagination_type": "show_more",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "medium",
+        "top_padding": "nopadding",
+        "bottom_padding": "medium",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "medium"
+      }
+    },
+    "collection_recommendation_L6e4xX": {
+      "type": "collection-recommendation",
+      "name": "Slide Recommendations",
+      "settings": {
+        "border_top": true,
+        "border_bottom": false,
+        "top_padding_m": "medium",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "medium",
+        "top_padding": "medium",
+        "bottom_padding": "medium",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "medium",
+        "title": "You May Also Like",
+        "title_size": "h3",
+        "title_dom_type": "h3"
+      }
+    },
+    "collection_faq_fQtxNb": {
+      "type": "collection-faq",
       "blocks": {
-        "text_tqQTNE": {
-          "type": "text",
-          "name": "t:names.title",
+        "entry_TxdhHf": {
+          "type": "entry",
           "settings": {
-            "text": "<h1>{{ closest.collection.title }}<\/h1>",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "h2",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "link_label": "",
+            "link_url": ""
+          }
         },
-        "text_twGGkJ": {
-          "type": "text",
-          "name": "t:names.description",
+        "entry_hKKnUk": {
+          "type": "entry",
           "settings": {
-            "text": "{{ closest.collection.description }}",
-            "width": "fit-content",
-            "max_width": "normal",
-            "alignment": "left",
-            "type_preset": "rte",
-            "font": "var(--font-body--family)",
-            "line_height": "normal",
-            "letter_spacing": "normal",
-            "case": "none",
-            "wrap": "pretty",
-            "background": false,
-            "background_color": "#00000026",
-            "corner_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {}
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "entry_Ux4rby": {
+          "type": "entry",
+          "settings": {
+            "title": "Sed at elementum odio?",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "entry_GcLq4A": {
+          "type": "entry",
+          "settings": {
+            "title": "In semper tortor pharetra vitae?",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "entry_n88NN6": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "link_label": "",
+            "link_url": ""
+          }
+        },
+        "entry_EVDnwc": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+            "link_label": "",
+            "link_url": ""
+          }
         }
       },
       "block_order": [
-        "text_tqQTNE",
-        "text_twGGkJ"
+        "entry_TxdhHf",
+        "entry_hKKnUk",
+        "entry_Ux4rby",
+        "entry_GcLq4A",
+        "entry_n88NN6",
+        "entry_EVDnwc"
       ],
-      "name": "t:names.heading",
+      "name": "Collection FAQ",
       "settings": {
-        "content_direction": "column",
-        "vertical_on_mobile": true,
-        "horizontal_alignment": "flex-start",
-        "vertical_alignment": "center",
-        "align_baseline": false,
-        "horizontal_alignment_flex_direction_column": "flex-start",
-        "vertical_alignment_flex_direction_column": "center",
-        "gap": 12,
-        "section_width": "page-width",
-        "section_height_custom": 50,
-        "background_media": "none",
-        "background_color": "{{ settings.color_palette.background }}",
-        "video_position": "cover",
-        "background_image_position": "cover",
-        "border": "none",
-        "border_width": 1,
-        "border_opacity": 100,
-        "border_radius": 0,
-        "toggle_overlay": false,
-        "overlay_color": "#00000026",
-        "overlay_style": "solid",
-        "gradient_direction": "to top",
-        "padding-block-start": 48,
-        "padding-block-end": 48
+        "border_top": true,
+        "border_bottom": false,
+        "bg_color": "#fff9f2",
+        "title": "FAQ",
+        "text": "Got a question?\nWe’re here to help.",
+        "title_size": "h3",
+        "title_dom_type": "h3",
+        "parag_title": "",
+        "parag_text": "",
+        "link_label": "",
+        "link_url": "",
+        "top_padding_m": "medium",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "medium",
+        "bottom_padding": "small",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "small",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "small"
       }
     },
-    "main": {
-      "type": "main-collection",
-      "blocks": {
-        "filters": {
-          "type": "filters",
-          "static": true,
-          "settings": {
-            "enable_filtering": true,
-            "filter_style": "horizontal",
-            "filter_width": "centered",
-            "text_label_case": "default",
-            "show_swatch_label": false,
-            "show_filter_label": false,
-            "enable_sorting": true,
-            "enable_grid_density": true,
-            "padding-block-start": 8,
-            "padding-block-end": 8,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0,
-            "facets_margin_bottom": 8,
-            "facets_margin_right": 20
-          },
-          "blocks": {}
-        },
-        "product-card": {
-          "type": "_product-card",
-          "static": true,
-          "settings": {
-            "product_card_gap": 4,
-            "border": "none",
-            "border_width": 1,
-            "border_opacity": 100,
-            "border_radius": 0,
-            "padding-block-start": 0,
-            "padding-block-end": 0,
-            "padding-inline-start": 0,
-            "padding-inline-end": 0
-          },
-          "blocks": {
-            "card-gallery": {
-              "type": "_product-card-gallery",
-              "settings": {
-                "image_ratio": "adapt",
-                "border": "none",
-                "border_width": 1,
-                "border_opacity": 100,
-                "border_radius": 0,
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "product_title_4nY4eT": {
-              "type": "product-title",
-              "name": "t:names.product_title",
-              "settings": {
-                "width": "100%",
-                "max_width": "normal",
-                "alignment": "left",
-                "type_preset": "rte",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "wrap": "pretty",
-                "background": false,
-                "background_color": "#00000026",
-                "corner_radius": 0,
-                "padding-block-start": 4,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            },
-            "price_EzJzMm": {
-              "type": "price",
-              "settings": {
-                "show_sale_price_first": true,
-                "show_installments": false,
-                "show_tax_info": false,
-                "type_preset": "h6",
-                "width": "100%",
-                "alignment": "left",
-                "font": "var(--font-body--family)",
-                "font_size": "1rem",
-                "line_height": "normal",
-                "letter_spacing": "normal",
-                "case": "none",
-                "padding-block-start": 0,
-                "padding-block-end": 0,
-                "padding-inline-start": 0,
-                "padding-inline-end": 0
-              },
-              "blocks": {}
-            }
-          },
-          "block_order": [
-            "card-gallery",
-            "product_title_4nY4eT",
-            "price_EzJzMm"
-          ]
-        }
-      },
+    "title_text_link_qA78Ke": {
+      "type": "title-text-link",
+      "name": "Title Text Link",
       "settings": {
-        "layout_type": "grid",
-        "product_card_size": "medium",
-        "mobile_product_card_size": "small",
-        "product_grid_width": "centered",
-        "full_width_on_mobile": true,
-        "columns_gap_horizontal": 16,
-        "columns_gap_vertical": 24,
-        "padding-inline-start": 0,
-        "padding-inline-end": 0,
-        "background_color": "{{ settings.color_palette.background }}",
-        "padding-block-start": 0,
-        "padding-block-end": 32
+        "bg_color": "#fff9f2",
+        "title": "Plants",
+        "text": "Explore the enchanting world of nature with Soilboy, your ultimate destination for a vibrant plant lifestyle. Immerse yourself in the lush beauty of greenery as you nurture your very own indoor oasis. Our thoughtfully curated collection of plants and accessories is designed to inspire you to craft a tranquil environment that embodies your passion for nature. Become a part of the Soilboy community and elevate your space into a flourishing sanctuary, where each leaf narrates a tale of growth, vitality, and connection to the earth.",
+        "link_label": "Show More",
+        "link_label_less": "Show Less",
+        "top_padding_m": "small",
+        "bottom_padding_m": "small",
+        "top_padding_t": "small",
+        "bottom_padding_t": "small",
+        "top_padding": "small",
+        "bottom_padding": "small",
+        "top_padding_hd": "small",
+        "bottom_padding_hd": "small",
+        "top_padding_hhd": "small",
+        "bottom_padding_hhd": "small"
+      }
+    },
+    "product_breadcrumbs_WUf7ib": {
+      "type": "product-breadcrumbs",
+      "name": "Product Breadcrumbs",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "top_padding_m": "nopadding",
+        "bottom_padding_m": "nopadding",
+        "top_padding_t": "nopadding",
+        "bottom_padding_t": "nopadding",
+        "top_padding": "nopadding",
+        "bottom_padding": "nopadding",
+        "top_padding_hd": "nopadding",
+        "bottom_padding_hd": "nopadding",
+        "top_padding_hhd": "nopadding",
+        "bottom_padding_hhd": "nopadding"
       }
     }
   },
   "order": [
-    "section",
-    "main"
+    "collection_banner_7TQ8nQ",
+    "collection_and_search_products_qYGFKd",
+    "collection_recommendation_L6e4xX",
+    "collection_faq_fQtxNb",
+    "title_text_link_qA78Ke",
+    "product_breadcrumbs_WUf7ib"
   ]
 }

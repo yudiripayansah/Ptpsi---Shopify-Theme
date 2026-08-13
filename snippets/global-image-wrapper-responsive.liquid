@@ -1,0 +1,213 @@
+{%- comment -%}
+Description:
+Snippet for displaying different lazy load image for mobile and desktop
+
+Variables:
+- image_id: String. element id for the wrapper
+- desktop_image: image object for desktop
+- mobile_image: image object for mobile
+- image_url_desktop: String of image url for desktop, use this if not using image object
+- image_url_mobile: String of image url for mobile, use this if not using image object
+- image_desktop_height: Numeric. Desktop image height, if using image_url_desktop
+- image_desktop_width: Numeric. Desktop image width, if using image_url_desktop
+- image_mobile_height: Numeric. Mobile image height, if using image_url_mobile
+- image_mobile_width: Numeric. Mobile image width, if using image_url_mobile
+- mobile_acc: Boolean, if mobile image is from accentuate
+- desktop_acc: Boolean, if desktop image is from accentuate
+- desktop_size: String, desktop image size, if using image object from section
+- mobile_size: String, mobile image size, if using image object from section
+- sizes_set: ...
+- additional_class: String Additional classes to the wrapper
+- preload: Boolean, if dont want to use lazy load
+- overlay: Boelean to activate overlay infront of image
+- overlay_class: Class for overlay
+- image_change_breakpoint: String. Change image breakpoint. default is tablet. tablet or desktop
+{%- endcomment -%}
+{%- if desktop_size == blank -%}
+    {%- assign desktop_size = '2000x' -%}
+{%- endif -%}
+{%- if mobile_size == blank -%}
+    {%- assign mobile_size = '800x' -%}
+{%- endif -%}
+{%- if image_url_mobile != blank -%}
+    {%- assign hh = image_mobile_height | times: 1.00 -%}
+    {%- assign ww = image_mobile_width | times: 1.00 -%}
+{%- else -%}
+    {%- assign hh = mobile_image.height | times: 1.00 -%}
+    {%- assign ww = mobile_image.width | times: 1.00 -%}
+{%- endif -%}
+{%- if sizes_set == blank -%}
+    {%- assign sizes_set = '' -%}
+{%- endif -%}
+
+{%- if image_change_breakpoint == blank -%}
+    {%- assign image_change_breakpoint = 'tablet' -%}
+{%- endif -%}
+
+{%- if image_change_breakpoint == 'tablet' -%}
+    {%- assign mobile_class = 'hide-t' -%}
+    {%- assign desktop_class = 'hide-m show-t' -%}
+{%- else -%}
+    {%- assign mobile_class = 'hide-d' -%}
+    {%- assign desktop_class = 'hide-m show-d' -%}
+{%- endif -%}
+
+{%- if load_inside_vue -%}
+    <component :is="'style'" type="text/css">
+{%- else -%}
+    <style>
+{%- endif -%}
+#{{ image_id }}{padding-bottom:{{ hh | divided_by: ww | times:100.00 }}%;}
+{%- if image_url_desktop != blank -%}
+    {%- assign hh = image_desktop_height | times: 1.00 -%}
+    {%- assign ww = image_desktop_width | times: 1.00 -%}
+{%- else -%}
+    {%- assign hh = desktop_image.height | times: 1.00 -%}
+    {%- assign ww = desktop_image.width | times: 1.00 -%}
+{%- endif -%}
+
+{%- if image_change_breakpoint == 'tablet' -%}
+@media screen and (min-width:600px){
+{%- else -%}
+@media screen and (min-width:1024px){
+{%- endif -%}
+
+    #{{ image_id }}{padding-bottom:{{ hh | divided_by: ww | times:100.00 }}%;}
+}
+
+{%- if load_inside_vue -%}
+    </component>
+{%- else -%}
+    </style>
+{%- endif -%}
+
+
+{%- if mobile_acc != blank -%}
+    {%- assign mobile_img = mobile_image.src -%}
+{%- elsif image_url_mobile != blank -%}
+    {%- assign mobile_img = image_url_mobile -%}
+{%- else -%}
+    {%- assign mobile_size = mobile_size | replace: 'x', '' | plus: 0 -%}
+    {%- assign mobile_img = mobile_image | image_url: width: mobile_size -%}
+{%- endif -%}
+{%- if desktop_acc != blank -%}
+    {%- assign desktop_img = desktop_image.src -%}
+{%- elsif image_url_desktop != blank -%}
+    {%- assign desktop_img = image_url_desktop -%}
+{%- else -%}
+    {%- assign desktop_size = desktop_size | replace: 'x', '' | plus: 0 -%} 
+    {%- assign desktop_img = desktop_image | image_url: width: desktop_size -%}
+{%- endif -%}
+{%- if overlay == blank -%}
+    {%- assign overlay = false -%}
+{%- endif -%}
+
+{%- if preload == '' -%}
+    {%- assign preload = false -%}
+{%- endif -%}
+
+<div class="global-image-wrapper {{ additional_class }}" id="{{ image_id }}">
+    {%- if request.design_mode or preload -%}
+        <div class="{{ mobile_class }}">
+            {%- if overlay -%}
+                <div class="overlay {{ overlay_class }}"></div>
+            {%- endif -%}
+            
+            {%- assign alt = mobile_image.alt | escape_once -%}
+            {%- if alt == blank -%}
+                {%- assign alt = mobile_image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first -%}
+            {%- endif -%}
+
+            <img src="{{ mobile_img }}" loading="eager" fetchpriority="high" alt="{{ alt | escape_once }}" class="image loaded">
+        </div>
+        <div class="{{ desktop_class }}">
+            {%- if overlay -%}
+                <div class="overlay {{ overlay_class }}"></div>
+            {%- endif -%}
+
+            {%- assign alt = desktop_image.alt | escape_once -%}
+            {%- if alt == blank -%}
+                {%- assign alt = desktop_image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first -%}
+            {%- endif -%}
+            <img src="{{ desktop_img }}" loading="eager" fetchpriority="high" alt="{{ alt | escape_once }}" class="image loaded">
+        </div>
+    {%- else -%}
+        {%- if desktop_acc != blank -%}
+            <div class="{{ mobile_class }}">
+                {%- if overlay -%}
+                    <div class="overlay {{ overlay_class }}"></div>
+                {%- endif -%}
+
+                {%- assign alt = mobile_image.alt | escape_once -%}
+                {%- if alt == blank -%}
+                    {%- assign alt = mobile_image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first -%}
+                {%- endif -%}
+                <img data-src="{{ mobile_img }}" alt="{{ alt | escape_once }}" class="image lazy">
+            </div>
+            <div class="{{ desktop_class }}">
+                {%- if overlay -%}
+                    <div class="overlay {{ overlay_class }}"></div>
+                {%- endif -%}
+
+                {%- assign alt = desktop_image.alt | escape_once -%}
+                {%- if alt == blank -%}
+                    {%- assign alt = desktop_image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first -%}
+                {%- endif -%}
+                <img data-src="{{ desktop_img }}" alt="{{ alt | escape_once }}" class="image lazy">
+            </div>
+        {%- elsif image_url_desktop != blank -%}
+            <div class="{{ mobile_class }}">
+                {%- if overlay -%}
+                    <div class="overlay {{ overlay_class }}"></div>
+                {%- endif -%}
+                <img data-src="{{ mobile_img }}" class="image lazy">
+            </div>
+            <div class="{{ desktop_class }}">
+                {%- if overlay -%}
+                    <div class="overlay {{ overlay_class }}"></div>
+                {%- endif -%}
+                <img data-src="{{ desktop_img }}" class="image lazy">
+            </div>
+        {%- else -%}
+            {%- assign srcset = "" %}
+            {%- assign sizes = "100,200,300,400,500,600,700,800,900,1000,1100,1200,1500,2000" | split:"," -%}
+            {%- for s in sizes -%}
+                {%- assign ss = s | remove: 'px' | times: 1 | remove:".0" -%}
+                {%- assign w = '_' | append:ss | append:"x." %}
+                {%- assign t = mobile_image | image_url: width: ss | append:" " | append:s | append:"w" -%}
+                {%- assign srcset = srcset | append:"," | append: t %}
+            {%- endfor -%}
+
+            <div class="{{ mobile_class }}">
+                {%- if overlay -%}
+                    <div class="overlay {{ overlay_class }}"></div>
+                {%- endif -%}
+
+                {%- assign alt = mobile_image.alt | escape_once -%}
+                {%- if alt == blank -%}
+                    {%- assign alt = mobile_image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first -%}
+                {%- endif -%}
+                <img data-src="{{ mobile_img }}" sizes="{{ sizes_set }}" data-srcset="{{ srcset | remove_first:"," | trim }}" alt="{{ alt }}" class="image lazy">
+            </div>
+            
+            {%- assign srcset = "" %}
+            {%- for s in sizes -%}
+                {%- assign ss = s | remove: 'px' | times: 1 | remove:".0" -%}
+                {%- assign w = '_' | append:ss | append:"x." %}
+                {%- assign t = desktop_image | image_url: width: ss | append:" " | append:s | append:"w" -%}
+                {%- assign srcset = srcset | append:"," | append: t %}
+            {%- endfor -%}
+            <div class="{{ desktop_class }}">
+                {%- if overlay -%}
+                    <div class="overlay {{ overlay_class }}"></div>
+                {%- endif -%}
+
+                {%- assign alt = desktop_image.alt | escape_once -%}
+                {%- if alt == blank -%}
+                    {%- assign alt = desktop_image.src | split: '/' | last | split: '.jpg' | first | split: '.png' | first -%}
+                {%- endif -%}
+                <img data-src="{{ desktop_img }}" sizes="{{ sizes_set }}" data-srcset="{{ srcset | remove_first:"," | trim }}" alt="{{ alt | escape_once }}" class="image lazy">
+            </div>
+        {%- endif -%}
+    {%- endif -%}
+</div>

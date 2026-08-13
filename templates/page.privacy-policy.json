@@ -1,0 +1,64 @@
+{
+  "wrapper": "div.global-content-top-margin",
+  "sections": {
+    "title_text_LBdbCG": {
+      "type": "title-text",
+      "blocks": {
+        "entry_ibHrf7": {
+          "type": "entry",
+          "settings": {
+            "title": "Section 1",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras tempus risus nec aliquet consequat. Suspendisse sit amet nulla metus. Ut nisl magna, imperdiet consequat fringilla quis, pellentesque id ipsum. Duis placerat tellus dapibus lorem faucibus, vel consequat felis dignissim. Aliquam in porta sem, at ultrices justo. Nam maximus nulla sagittis turpis aliquet, nec ultricies mauris posuere. Duis scelerisque erat sit amet odio aliquam, ac pretium lectus vestibulum.<\/p>"
+          }
+        },
+        "entry_kgFKG6": {
+          "type": "entry",
+          "settings": {
+            "title": "Section 2",
+            "text": "<p>Cras fringilla congue imperdiet. Ut vestibulum in est eget porta. Etiam in elit erat. Nullam rhoncus ex quam, nec convallis ligula iaculis ut. Phasellus at est sit amet justo maximus volutpat eget vitae quam. Fusce faucibus mattis magna ut fermentum.<br\/><br\/>Sub-Section 2.1<br\/><br\/>Curabitur nec elit elementum, accumsan mi a, pellentesque massa. Donec mollis dui sapien, et tristique massa iaculis a. Nullam sagittis elit pretium, tempus ante pharetra, malesuada quam. Aenean et lacus auctor, sollicitudin turpis et, euismod nisl. Phasellus lacus libero, pellentesque ac maximus vitae, aliquet nec mauris. Maecenas at auctor dui, sit amet ultricies sem. Donec consequat nisi ac elit feugiat sollicitudin.<br\/><br\/>Sub-Section 2.2<br\/><br\/>Aliquam consequat libero eget lacus convallis, et feugiat dolor euismod. Cras sed sapien quam. Sed blandit quam at mi interdum aliquam. Ut ligula nisl, rhoncus in tincidunt non, molestie in diam. Integer non mollis lectus.<\/p><ul><li>In porttitor dolor rutrum purus sodales venenatis<\/li><li>Nulla ac nunc risus<\/li><li>Integer quis urna volutpat ante dapibus interdum<\/li><li>Cras at risus convallis<\/li><\/ul><p>Sub-Section 2.3<br\/><br\/>Praesent congue magna id leo feugiat varius. Maecenas id mi ac metus porttitor tempor. Nulla ultrices pellentesque velit ac ultrices. Nunc vitae facilisis ante, eu finibus lorem. Donec fringilla hendrerit turpis eget ornare. Quisque pretium tellus erat, venenatis molestie dui blandit nec. Praesent quis tristique velit. Quisque vehicula fringilla tincidunt. Etiam quis felis sed leo eleifend commodo. Nam varius tellus ut metus volutpat auctor. Quisque blandit metus tellus, eget dapibus diam tempus nec.<\/p>"
+          }
+        },
+        "entry_LX7hCa": {
+          "type": "entry",
+          "settings": {
+            "title": "Section 3",
+            "text": "<p>Morbi non odio sit amet odio sagittis hendrerit vitae eu metus. In porta sed turpis non pretium. Duis venenatis imperdiet dapibus. Suspendisse luctus quam erat, eleifend rhoncus nulla iaculis nec. Sed urna tellus, porttitor nec lectus sit amet, mattis bibendum tellus. Sed tincidunt dui sit amet lobortis iaculis. Nam porta orci gravida massa iaculis euismod. Etiam vel venenatis tellus. Quisque vitae eleifend dui. Nunc eleifend hendrerit mattis. Praesent porttitor egestas tristique.<br\/><br\/>Integer volutpat neque sed porttitor sollicitudin. Donec luctus nec ante sed egestas. Vestibulum mattis malesuada lectus sed tristique. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Mauris sollicitudin augue vel dolor venenatis congue. Proin sit amet convallis leo. Vestibulum dictum maximus nunc quis aliquet. Morbi sollicitudin dignissim mi vel pulvinar. Duis vehicula id nulla ac lacinia. Proin nec convallis diam, vel pellentesque eros. Suspendisse vel molestie velit.<\/p>"
+          }
+        },
+        "entry_DYk9ke": {
+          "type": "entry",
+          "settings": {
+            "title": "Section 4",
+            "text": "<p>Praesent lobortis fringilla faucibus. Aliquam mattis rutrum elit, in rutrum tortor fringilla sed. Etiam interdum erat vel nibh egestas, a iaculis tortor elementum. Proin euismod nibh eget felis vulputate mattis.<br\/><br\/>Aenean pellentesque turpis fermentum, dapibus mi quis, gravida ipsum. Phasellus vitae justo eu lectus imperdiet vulputate id in lacus. Morbi dui diam, pulvinar ut tempor dignissim, ornare nec arcu. Donec scelerisque aliquet ipsum et pretium.<\/p><ul><li>Aliquam et mollis mi, nec laoreet enim. Maecenas cursus consectetur lorem, a tincidunt nulla cursus nec. In eleifend, lectus in ornare scelerisque, eros est ullamcorper elit, in dictum arcu nisi nec velit.<\/li><li>Maecenas viverra posuere hendrerit. Cras quis dapibus magna. Vestibulum in urna fermentum, suscipit orci et, rhoncus ante. Etiam vitae nibh in eros varius dignissim. Aliquam feugiat vestibulum metus gravida congue.<\/li><li>Nulla sit amet est id eros laoreet accumsan. Ut tincidunt auctor mauris id fringilla. Nullam nec dignissim lectus. Curabitur porta massa in dui dignissim, id rutrum dui sodales. Ut id sodales metus.<\/li><\/ul>"
+          }
+        }
+      },
+      "block_order": [
+        "entry_ibHrf7",
+        "entry_kgFKG6",
+        "entry_LX7hCa",
+        "entry_DYk9ke"
+      ],
+      "name": "Title & Text",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title_size": "h2",
+        "title_dom_type": "h1",
+        "title": "Privacy Policy",
+        "top_padding_m": "medium",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "medium",
+        "bottom_padding_t": "medium",
+        "top_padding": "medium",
+        "bottom_padding": "medium",
+        "top_padding_hd": "medium",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "medium",
+        "bottom_padding_hhd": "medium"
+      }
+    }
+  },
+  "order": [
+    "title_text_LBdbCG"
+  ]
+}

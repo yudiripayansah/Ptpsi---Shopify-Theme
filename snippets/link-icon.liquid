@@ -1,0 +1,49 @@
+{%- comment -%}
+Love&Co Theme
+Description:
+Snippet for displaying link with arrow icon
+
+Variables:
+- left_arrow: Boolean, is it arrow left?
+- url: Link url
+- text_class: Additional text classes
+- border_class: Border color class
+- label: Link label
+- icon_svg: SVG code for icon 
+- id: identifier, no spacing no #
+{%- endcomment -%} 
+
+{%- if load_inside_vue -%}
+    <component :is="'style'" type="text/css">
+{%- else -%}
+    <style>
+{%- endif -%}
+    #{{id}}.link-icon svg * {
+        stroke: {{icon_color}} !important;
+    }
+    #{{id}}.link-icon:hover svg * {
+        stroke: {{icon_color_hover}} !important;
+    }
+    #{{id}}.link-icon:hover {
+        color: {{icon_color_hover}};
+        transition: color .3s ease; 
+    } 
+{%- if load_inside_vue -%}
+    </component>
+{%- else -%}
+    </style>
+{%- endif -%}
+
+{%- if left_arrow == blank -%}
+    {%- if url == blank -%}
+        <div id="{{id}}" class="link-icon {{ border_class }} {{ additional_classes }} "><span class="text mr-4 {{ text_class }}">{{ label }}</span> <span class="icon">{{ icon_svg }}</span></div>
+    {%- else -%}
+        <a id="{{id}}" {% if target != blank %}target="{{ target }}"{% endif %} {{ event }} href="{{ url }}" class="link-icon {{ border_class }} {{ additional_classes }}"><span class="text mr-4 {{ text_class }}">{{ label }}</span> <span class="icon">{{ icon_svg }}</span></a>
+    {%- endif -%}
+{%- else -%}
+    {%- if url == blank -%}
+        <div id="{{id}}" class="link-icon link-icon--left {{ border_class }} {{ additional_classes }}"><span class="icon mr-8">{{ icon_svg }}</span> <span class="text {{ text_class }}">{{ label }}</span></div>
+    {%- else -%}
+        <a id="{{id}}" {% if target != blank %}target="{{ target }}"{% endif %} href="{{ url }}" class="link-icon link-icon--left {{ border_class }} {{ additional_classes }}"><span class="icon mr-8">{{ icon_svg }}</span> <span class="text {{ text_class }}">{{ label }}</span></a>
+    {%- endif -%}
+{%- endif -%}

@@ -1,0 +1,289 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'installation-body-' | append: section.id
+  assign entry = metaobject
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    /* border-top: 1px solid var(--main); */
+  }
+  #{{ el_id }} .ib-block + .ib-block.ib-block-media {
+    padding-top: 56px;
+    padding-bottom: 56px;
+  }
+  #{{ el_id }} .ib-block + .ib-block.ib-block-text .ibt-columns {
+    padding-bottom: 56px;
+  }
+  #{{ el_id }} .ibm-full img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  #{{ el_id }} .ibm-pair {
+    column-gap: 16px;
+    align-items: flex-start;
+  }
+  #{{ el_id }} .ibm-pair--large-small {
+    flex-direction: column;
+    row-gap: 40px;
+  }
+  #{{ el_id }} .ibm-pair--equal {
+    flex-direction: row;
+  }
+  #{{ el_id }} .ibm-pair-col {
+    width: 100%;
+    max-width: 140px;
+  }
+  #{{ el_id }} .ibm-pair-col.ibm-pair-col--lg {
+    width: 100%;
+    max-width: 100%;
+  }
+  #{{ el_id }} .ibm-pair-col.ibm-pair-col--sm {
+    width: 100%;
+    max-width: 253px;
+    align-self: flex-end;
+  }
+  #{{ el_id }} .ibm-pair-col img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  #{{ el_id }} .ipc-caption {
+    margin-top: 8px;
+  }
+  #{{ el_id }} .ipc-caption-label {
+    flex: 0 0 50px;
+  }
+  #{{ el_id }} .ibt-wide {
+    max-width: 920px;
+  }
+  #{{ el_id }} .ibt-columns {
+    flex-direction: column;
+    row-gap: 24px;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .ib-block + .ib-block.ib-block-media {
+      padding-top: 120px;
+      padding-bottom: 120px;
+    }
+    #{{ el_id }} .ib-block + .ib-block.ib-block-text .ibt-columns {
+      padding-bottom: 120px;
+    }
+    #{{ el_id }} .ibm-pair {
+      column-gap: 24px;
+      align-items: flex-end;
+    }
+    #{{ el_id }} .ibm-pair--large-small,
+    #{{ el_id }} .ibm-pair--equal {
+      flex-direction: row;
+    }
+    #{{ el_id }} .ibm-pair--large-small .ibm-pair-col--lg {
+      width: 100%;
+      max-width: 920px;
+    }
+    #{{ el_id }} .ibm-pair--large-small .ibm-pair-col--sm {
+      width: 100%;
+      max-width: 330px;
+      align-self: flex-start;
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+    }
+    #{{ el_id }} .ibm-pair--equal .ibm-pair-col {
+      width: 50%;
+      max-width: 566px;
+    }
+    #{{ el_id }} .ipc-caption-label {
+      flex: 0 0 94px;
+    }
+    #{{ el_id }} .ibt-wide {
+      margin-left: auto;
+    }
+    #{{ el_id }} .ibt-columns {
+      flex-direction: row;
+      column-gap: 24px;
+    }
+    #{{ el_id }} .ibt-col {
+      width: 100%;
+      max-width: 448px;
+    }
+  }
+</style>
+
+<div id="{{ el_id }}">
+  {% if entry != blank and entry.body.value.size > 0 %}
+    <div class="container">
+      {% liquid
+        assign credit_counter = 0
+        for block in entry.body.value
+          case block.system.type
+            when 'installation_media_block'
+              assign credit_counter = credit_counter | plus: 1
+              assign idx_1 = credit_counter
+              assign idx_2 = 0
+              if block.image_2.value != blank
+                assign credit_counter = credit_counter | plus: 1
+                assign idx_2 = credit_counter
+              endif
+              echo '<div class="ib-block ib-block-media">'
+              render 'installation-body-media', block: block, credit_index_1: idx_1, credit_index_2: idx_2
+              echo '</div>'
+            when 'installation_text_block'
+              echo '<div class="ib-block ib-block-text">'
+              render 'installation-body-text', block: block
+              echo '</div>'
+          endcase
+        endfor
+      %}
+    </div>
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Installation Body",
+  "settings": [
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installation Body"
+    }
+  ]
+}
+{% endschema %}

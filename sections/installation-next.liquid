@@ -1,0 +1,270 @@
+{% comment %} Soilboy {% endcomment %}
+{% liquid
+  assign el_id = 'installation-next-' | append: section.id
+  assign ss = section.settings
+  assign entry = metaobject
+  assign mo_type = ss.metaobject_type | default: 'installation'
+  render 'section-padding', el_id: el_id, section: section
+%}
+
+<style>
+  #{{ el_id }} {
+    /* border-top: 1px solid var(--main); */
+  }
+  #{{ el_id }} a.container {
+    display: block;
+  }
+  #{{ el_id }} .in-wrap {
+    display: flex;
+    flex-direction: column;
+  }
+  #{{ el_id }} .in-titles {
+    display: flex;
+    justify-content: space-between;
+  }
+  #{{ el_id }} .in-title-right {
+    text-align: right;
+  }
+  #{{ el_id }} .in-media img {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  #{{ el_id }} .in-caption {
+    margin-top: 8px;
+    column-gap: 16px;
+  }
+  #{{ el_id }} .in-caption-label {
+    flex: 0 0 50px;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{ el_id }} .in-wrap {
+      flex-direction: row;
+      column-gap: 24px;
+    }
+    #{{ el_id }} .in-titles {
+      display: contents;
+    }
+    #{{ el_id }} .in-title-right {
+      order: 2;
+    }
+    #{{ el_id }} .in-media {
+      order: 1;
+      flex: 1 0 0;
+      min-width: 0;
+      max-width: 684px;
+    }
+    #{{ el_id }} .in-caption-label {
+      flex: 0 0 94px;
+    }
+  }
+</style>
+<div class="container">
+  <div class="bt-1 b-main"></div>
+</div>
+<div id="{{ el_id }}">
+  {% if entry != blank %}
+    {% liquid
+      assign next_entry = entry.next_project.value
+      if next_entry == blank
+        assign all_entries = shop.metaobjects[mo_type].values | sort: 'sort_order'
+        assign take_next = false
+        for candidate in all_entries
+          if take_next
+            assign next_entry = candidate
+            break
+          endif
+          if candidate == entry
+            assign take_next = true
+          endif
+        endfor
+        if next_entry == blank
+          assign next_entry = all_entries | first
+        endif
+      endif
+    %}
+    {% if next_entry != blank and next_entry != entry %}
+      {% liquid
+        assign next_ref = next_entry.reference_number.value
+        assign next_ref_padded = next_ref
+        if next_ref < 10
+          assign next_ref_padded = '0' | append: next_ref
+        endif
+      %}
+      <a href="{{ next_entry.system.url }}" class="container">
+        <div class="in-wrap rowgap-32 d-jc-between">
+          <div class="in-titles">
+            <p class="h1 c-green">Next</p>
+            <p class="h1 c-green in-title-right">Project</p>
+          </div>
+          <div class="in-media">
+            {% if next_entry.banner_image.value != blank %}
+              {{
+                next_entry.banner_image.value
+                | image_url: width: 1400
+                | image_tag: loading: 'lazy', sizes: '(min-width: 1024px) 49vw, 100vw', alt: next_entry.title.value
+              }}
+            {% endif %}
+            <div class="in-caption flex p4 c-label">
+              <span class="in-caption-label">INS. {{ next_ref_padded }}</span>
+              <span>{{ next_entry.title.value }}</span>
+            </div>
+          </div>
+        </div>
+      </a>
+    {% endif %}
+  {% endif %}
+</div>
+
+{% schema %}
+{
+  "name": "Installation Next Project",
+  "settings": [
+    {
+      "type": "text",
+      "id": "metaobject_type",
+      "label": "Metaobject Type",
+      "default": "installation"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Installation Next Project"
+    }
+  ]
+}
+{% endschema %}

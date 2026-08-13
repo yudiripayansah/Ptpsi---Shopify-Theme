@@ -1,0 +1,27 @@
+{%- comment -%}
+Soilboy
+
+Renders one Installation Text Block: a single wide statement paragraph, or
+two side-by-side columns.
+
+Layout is inferred from whether Column 2 is filled in, rather than an exact
+match on the block's `layout` value, since the dropdown's real option
+values weren't confirmed against the live store. `ponytail: data-presence
+guess; switch to an exact `layout` match once the real option values are
+confirmed.`
+
+Variables:
+- block: installation_text_block metaobject entry (column_1, column_2)
+{%- endcomment -%}
+{%- liquid
+  assign column_1 = block.column_1.value
+  assign column_2 = block.column_2.value
+-%}
+{% if column_2 != blank %}
+  <div class="ibt-columns flex jc-end">
+    <div class="ibt-col p1 c-green">{{ column_1 | newline_to_br }}</div>
+    <div class="ibt-col p1 c-green">{{ column_2 | newline_to_br }}</div>
+  </div>
+{% else %}
+  <div class="ibt-wide h4 c-green">{{ column_1 | newline_to_br }}</div>
+{% endif %}

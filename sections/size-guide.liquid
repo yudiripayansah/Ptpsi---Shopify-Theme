@@ -1,0 +1,281 @@
+{% comment %} JCO Theme - junio - done {% endcomment %}
+{%- if template contains 'product' -%}
+    <style>
+        #shopify-section-{{ section.id }} .overlay-wrapper {
+            position: fixed;
+            display: flex;
+            justify-content: flex-end;
+            width: 100%;
+            height: 100%;
+            z-index: 20000000;
+            top: 0;
+            left: 0;
+            background: rgba(43,43,43,.6);
+            opacity: 0;
+            visibility: hidden;
+            transition: 0.3s ease all;
+        }
+        #shopify-section-{{ section.id }} .overlay-wrapper.show {
+            opacity: 1;
+            visibility: visible;
+        }
+        #shopify-section-{{ section.id }} .content-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow-y: auto;
+            background: #fff;
+            transition: 0.5s ease all;
+            transform: translateX(100%);
+        }
+        #shopify-section-{{ section.id }} .content-wrapper.show {
+            transform: translateX(0);
+        }
+        #shopify-section-{{ section.id }} .top-section {
+            z-index: 1;
+        }
+        #shopify-section-{{ section.id }} table {
+            width: 100%;
+        }
+        #shopify-section-{{ section.id }} table th {
+            font-weight: 400;
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+            border-bottom: 1px solid var(--border);
+        }
+        #shopify-section-{{ section.id }} table td {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            text-align: center;
+            vertical-align: middle;
+            padding: 15px;
+        }
+        #shopify-section-{{ section.id }} table td sup {
+            font-size: x-small;
+        }
+        #shopify-section-{{ section.id }} .close-size-guide {
+            width: 10px;
+            height: 10px;
+            font-size: 0;
+        }
+        #shopify-section-{{ section.id }} .close-size-guide svg {
+            display: block;
+            width: 10px;
+            height: 10px;
+        }
+        #shopify-section-{{ section.id }} .content-each {
+            flex-direction: column-reverse;
+        }
+        #shopify-section-{{ section.id }} .table-wrapper .table-content {
+            overflow-x: auto;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        #shopify-section-{{ section.id }} .table-wrapper .table-content .global-image-wrapper {
+            height: 100%;
+        }
+        #shopify-section-{{ section.id }} .table-wrapper .table-content .global-image-wrapper img {
+            height: 100%;
+            object-fit: cover;
+        }
+        #shopify-section-{{ section.id }} .table-wrapper-inner table {
+            height: 100%;
+        }
+        #shopify-section-{{ section.id }} .two-col-wrapper .row {
+            margin: 0 -5px;
+        }
+
+        @media screen and (min-width: 1024px) {
+            #shopify-section-{{ section.id }} .close-size-guide {
+                width: 15px;
+                height: 15px;
+            }
+            #shopify-section-{{ section.id }} .close-size-guide svg {
+                width: 15px;
+                height: 15px;
+            }
+            #shopify-section-{{ section.id }} .content-wrapper {
+                width: 400px;
+            }
+            #shopify-section-{{ section.id }} .content-each {
+                flex-direction: unset;
+            }
+            #shopify-section-{{ section.id }} table td {
+                padding: 15px 20px;
+            }
+        }
+    </style>
+
+    <div id="size-guide-drawer">
+        <div v-if="showSizeGuideDrawer" class="overlay-wrapper" :class="{ 'show': fadeSizeGuideDrawer }">
+            <div style="background: {{ section.settings.bottom_bg_color }};" class="content-wrapper global-flex flex-column pb-30" :class="{ 'show': fadeSizeGuideDrawer }">
+                {%- comment -%} Top Section {%- endcomment -%}
+                <div class="top-section pl-15 pr-15 pt-22 pb-22 t-p-25 global-flex jc-between ai-center bg-white bb-1 b-border">
+                    <h6 class="h6 spacing-2 uppercase">{{ 'products.product.size_guide' | t }}</h6>
+                    <a href="javascript:void(0)" @click="toggleSizeGuideDrawer()" class="close-size-guide" rel="nofollow">{{ settings.icon_close }}</a>
+                </div>
+                {%- comment -%} end Top Section {%- endcomment -%}
+
+                {%- for pdp_size_guide in shop.metaobjects.pdp_size_guide.values -%}
+                    {%- assign tags = pdp_size_guide.tags.value | split: ',' -%}
+                    {%- assign counted = false -%}
+                
+                    {%- for tag in tags -%}
+                        {%- if counted == false -%}
+                            {%- if product.tags contains tag -%}
+                                {%- comment -%} Table {%- endcomment -%}
+                                {%- if pdp_size_guide.table.value != blank -%}
+                                    <div class="table-wrapper pl-15 pr-15 t-pl-25 t-pr-25 p3 mb-5">
+                                        {{ pdp_size_guide.table.value }}
+                                    </div>
+                                {%- endif -%}
+                                {%- comment -%} end Table {%- endcomment -%}
+
+                                {% comment %} Steps {% endcomment %}
+                                {%- if pdp_size_guide.text_image_title_1.value != blank -%}
+                                    <div class="content pl-15 pr-15 t-pl-25 t-pr-25"> 
+                                        {%- for i in (1..3) -%}
+                                            {%- assign title = 'text_image_title_' | append: i -%}
+                                            {%- assign title = pdp_size_guide[title].value -%}
+                                            {%- assign counter =  'text_image_counter_' | append: i -%}
+                                            {%- assign counter = pdp_size_guide[counter].value -%}
+                                            {%- assign desc =  'text_image_description_' | append: i -%}
+                                            {%- assign desc = pdp_size_guide[desc].value -%}
+                                            {%- assign image =  'text_image_image_' | append: i -%}
+                                            {%- assign image = pdp_size_guide[image].value -%}
+        
+                                            {%- if title != blank -%}
+                                                <div class="content-each w-full relative mt-35">
+                                                    <div class="global-flex">
+                                                        {%- if counter != blank -%}
+                                                            <span class="counter mr-10 p6 uppercase regular-400 y2">{{ counter }}</span>
+                                                        {%- endif -%}
+
+                                                        <div class="title-wrapper">
+                                                            <p class="p1 medium-500 spacing-1">{{ title }}</p>
+                                                            {%- if desc != blank -%}
+                                                                <p class="p3 mt-8 light-300">{{ desc }}</p>
+                                                            {%- endif -%} 
+                                                        </div>
+                                                    </div>
+
+                                                    {%- if image != blank -%}
+                                                        <div class="image-wrapper mt-20 relative w-full">
+                                                            {%- render 'global-image-wrapper' 
+                                                                image: image
+                                                            -%}
+                                                        </div>
+                                                    {%- endif -%}
+                                                </div>
+                                            {%- endif -%}
+                                        {%- endfor -%}
+                                    </div>
+                                {%- endif -%}
+                                {% comment %} end Steps {% endcomment %}
+
+                                {% comment %} 2 col images {% endcomment %}
+                                {%- if pdp_size_guide.two_column_image_1.value != blank -%}
+                                    <div class="two-col-wrapper pl-15 pr-15 t-pl-25 t-pr-25 mt-10">
+                                        <div class="row">
+                                            <div class="global-flex flex-wrap w-full">
+                                                {%- for i in (1..2) -%}
+                                                    {%- assign image = 'two_column_image_' | append: i -%}
+                                                    {%- assign image = pdp_size_guide[image].value -%}
+                                                    {%- assign title = 'two_column_image_title_' | append: i -%}
+                                                    {%- assign title = pdp_size_guide[title].value -%}
+    
+                                                    {%- if image != blank -%}
+                                                        <div class="col-6 pl-5 pr-5">
+                                                            <div class="image-wrapper w-full relative">
+                                                                {%- render 'global-image-wrapper' 
+                                                                    image: image
+                                                                -%}
+                                                            </div>
+                                                            {%- if title != blank -%}
+                                                                <p class="mt-10 p3 regular-400 tc">{{ title }}</p>
+                                                            {%- endif -%}
+                                                        </div>
+                                                    {%- endif -%}
+                                                {%- endfor -%}
+                                            </div>
+                                        </div>
+                                    </div>
+                                {%- endif -%}
+                                {% comment %} end 2 col images {% endcomment %}
+                                
+                                {%- assign counted = true -%}
+                            {%- endif -%}
+                        {%- endif -%}
+                    {%- endfor -%}
+                {%- endfor -%}
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const sizeGuideDrawerVue = Vue.createApp({
+            delimiters: ['${','}'],
+            data() {
+                return {
+                    activeTab: [true,false,false],
+                    showSizeGuideDrawer: false,
+                    fadeSizeGuideDrawer: false
+                }
+            },
+            mounted() {
+                /* add click listener for size guide button #link-size-guide */
+                const this_obj = this;
+
+                const delay = setTimeout(() => {
+                    const link_size_guide = document.querySelector('#link-size-guide');
+                    if(link_size_guide != null) {
+                        link_size_guide.addEventListener('click', function(event){
+                            event.preventDefault();
+                            this_obj.toggleSizeGuideDrawer();
+
+                            return false;
+                        });
+                    }
+                    
+                    clearTimeout(delay);
+                }, 1000);
+            },
+            methods: {
+                toggleSizeGuideDrawer() {
+                    if(!this.showSizeGuideDrawer) {
+                        this.showSizeGuideDrawer = true;
+
+                        setTimeout(() => {
+                            this.fadeSizeGuideDrawer = true;
+                            $360.lazyLoadInstance.update();
+                        }, 100);
+                    } else {
+                        this.fadeSizeGuideDrawer = false;
+
+                        setTimeout(() => {
+                            this.showSizeGuideDrawer = false;
+                        }, 500);
+                    }
+                },
+                setActiveTab(index) {
+                    this.activeTab.fill(false);
+                    this.activeTab[index] = true;
+                }
+            }
+        }).mount('#size-guide-drawer');
+    </script>
+{%- endif -%}
+
+{% schema %}
+    {
+        "name": "Size Guide",
+        "settings": [
+            {
+                "type": "paragraph",
+                "content": "The data will be take from Metaobject > PDP - Size Guide"
+            }
+        ],
+        "blocks": []
+    }
+{% endschema %}

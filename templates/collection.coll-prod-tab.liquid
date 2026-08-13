@@ -1,0 +1,8 @@
+{% layout none %}
+{% for pro in collection.products limit: 10 %}
+  <div class="swiper-slide">
+    <div class="pts-product-item h-full">
+      {% render 'product-each', product: pro %}
+    </div>
+  </div>
+{% endfor %}

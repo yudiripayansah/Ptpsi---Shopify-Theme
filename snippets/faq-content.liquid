@@ -1,0 +1,103 @@
+{% if section.settings.enable_faq == true %}
+  <style>
+    #shopify-section-{{ section.id }} {
+      margin: 0;
+    }
+    #shopify-section-{{ section.id }} .accordion .title-icon .icon,
+    #shopify-section-{{ section.id }} .accordion .title-icon .icon svg {
+      width: 14px;
+      height: 14px;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table {
+      width: 100%;
+      text-align: left;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table .first-td {
+      width: 38%;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table .second-td {
+      width: 29%;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table .third-td {
+      width: 33%;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .rte ul br {
+      content: '';
+      display: block;
+      height: 0;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .rte ul li {
+      margin-bottom: 0;
+    }
+    #shopify-section-{{ section.id }} .faq-wrapper .rte ul li:before {
+      margin-top: 0;
+      top: 50%;
+      transform: translateY(-50%);
+    }
+    @media screen and (min-width: 600px) {
+      #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table .first-td {
+        width: unset;
+      }
+      #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table .second-td {
+        width: unset;
+      }
+      #shopify-section-{{ section.id }} .faq-wrapper .accordion-table table .third-td {
+        width: unset;
+      }
+    }
+  </style>
+  <section class="{%if nopadding %}d-pt-0 {% else %}d-pt-80 {% endif %}pt-48 section-spy" id="{{ section.settings.id_faq }}">
+    <h3 class="h3 d-pb-40 pb-32">{{ section.settings.title }}</h3>
+    <div class="faq-wrapper bb-1 b-secondary">
+      {% for block in section.blocks %}
+        {% liquid
+          assign description = block.settings.text
+          assign table = block.settings.table_html_code
+        %}
+        {% assign wrapper_class = 'bt-1 b-secondary d-mb-16 mb-16' %}
+        {% assign twc = 'd-pt-16 pt-16' %}
+        {% assign defaultactive = false %}
+        {% if forloop.first %}
+          {% assign defaultactive = true %}
+          {% assign wrapper_class = 'b-secondary d-mb-16 mb-16' %}
+          {% assign twc = 'd-pt-0 pt-0' %}
+        {% endif %}
+        {%- render 'accordion',
+          wrapper_class: wrapper_class,
+          title: block.settings.title,
+          table: table,
+          description: description,
+          title_class: 'p1',
+          title_wrapper_class: twc,
+          title_no_pb: true,
+          title_no_pt: true,
+          icon_rotate: false,
+          desc_class: 'p2',
+          default_active: defaultactive,
+          desc_no_pt: true,
+          desc_no_pb: true,
+          desc_text_class: ' pt-16 p2 c-green'
+        -%}
+      {% endfor %}
+    </div>
+  </section>
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org",
+      "@type": "FAQPage",
+      "@id": "{{ store.url }}",
+      "mainEntity": [
+      {% for block in section.blocks %}
+          {
+          "@type": "Question",
+          "name": "{{ block.settings.title | escape }}",
+          "acceptedAnswer": {
+              "@type": "Answer",
+              "text": "{{ block.settings.text | escape }}"
+          }
+          }{% unless forloop.last %},{% endunless %}
+      {% endfor %}
+      ]
+    }
+  </script>
+{% endif %}

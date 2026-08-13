@@ -1,0 +1,174 @@
+{% comment %} In Good Company Theme - refinements Adi {% endcomment %}
+<style>
+    .section-product-details .description.rte br {
+        content: '';
+        display: block;
+        height: 0;
+    }
+    .section-product-details .description.rte p {
+        font-weight: 300;
+    }
+    .section-product-details .description.rte strong {
+        font-weight: 500;
+    }
+    .section-product-details .material-each:last-child {
+        margin-bottom: 0;
+    }
+    .section-product-details .material-each .img-wrapper {
+        width: 70px;
+        height: 70px;
+        border-radius: 50%;
+        overflow: hidden;
+    }
+    .section-product-details .material-each .text-wrapper {
+        width: calc(100% - 100px);
+    }
+    .section-product-details .accordion-title.active .title {
+        font-weight: 500;
+    }
+    .section-product-details .accordion:last-of-type .accordion-title {
+        padding-bottom: 0;
+    }
+    .section-product-details .accordion:last-of-type .desc-wrapper {
+        padding-top: 20px;
+    }
+    .section-product-details .shipping-returns .icon,
+    .section-product-details .shipping-returns .icon svg {
+        width: 20px;
+        height: 20px;
+        font-size: 0;
+        flex: 0 0 20px;
+    }
+    .section-product-details .rte a::before {
+        background: var(--grey);
+    }
+    .section-product-details .rte .desc-wrapper ul li {
+        margin-bottom: 7px;
+    }
+    .section-product-details .rte ul {
+        padding-bottom: 0;
+    }
+    .section-product-details .rte a:before {
+        bottom: 1px;
+    }
+
+    @media screen and (min-width: 1024px) {
+        .section-product-details .shipping-returns .icon,
+        .section-product-details .shipping-returns .icon svg {
+            width: 28px;
+            height: 28px;
+            flex: 0 0 28px;
+        }
+    }
+</style>
+
+<section class="section-product-details mt-30 d-mt-40 hd-mt-50">
+    {% comment %} Product description {% endcomment %}
+    {%- if product.description != blank -%}
+        <div class="product-description">
+            {%- if product.description.size > 322 -%}
+                <div class="rte p1 truncated">
+                    {{ product.description | truncate: 322 }} <a href="#" onclick="readMoreProductDesc(event)" rel="nofollow" class="link1 active read-more-desc">{{ 'blogs.article.read_more' | t }}</a>
+                </div>
+
+                <div class="rte p1 all-content hide-m">
+                    {{ product.description }}
+                </div>
+            {%- else -%}
+                <div class="rte p1">
+                    {{ product.description }}
+                </div>
+            {%- endif -%}
+        </div>
+    {%- endif -%}
+    {% comment %} end Product description {% endcomment %}
+    
+    <div class="w-full relative">
+        {%- for i in (1..2) -%}
+            {% assign title = "accordion_title_" | append: i %}
+            {% assign text = "accordion_text_" | append: i %}
+            
+            {%- assign no_pt = false -%}
+            {%- assign default_active = false -%}
+            {%- if forloop.first -%}
+                {%- assign no_pt = true -%}
+            {%- endif -%}
+
+            {%- if product.metafields.product[title] != blank -%}
+                {%- assign desc = product.metafields.product[text] -%}
+                {%- assign desc_html = '<div class="desc-wrapper pb-17">' | append: desc | append: '</div>' -%}
+                {%- render 'accordion',
+                    wrapper_class: 'pt-0',
+                    title_class: 'h4',
+                    title_no_pt: no_pt,
+                    desc_no_pt: true,
+                    desc_no_pb: true,
+                    default_active: default_active,
+                    desc_class: 'rte p2',
+                    title: product.metafields.product[title],
+                    description: desc_html
+                -%}
+            {%- endif -%}
+        {%- endfor -%}
+
+        {% comment %} Shipping & Returns {% endcomment %}
+        {%- unless product.gift_card? or product.type == 'Gift Card' -%}
+            {%- if settings.pro_ship_enable -%}
+                {%- capture shipping_return_html -%}
+                    <div class="shipping-returns pt-17">
+                        {%- for i in (1..3) -%}
+                            {%- assign icon = 'pro_ship_icon_' | append: i -%}
+                            {%- assign title = 'pro_ship_title_' | append: i -%}
+                            {%- assign desc = 'pro_ship_desc_' | append: i -%}
+                            {%- assign image_id = 'the_icon_' | append: i -%}
+    
+                            {%- if settings[title] != blank -%}
+                                <div class="shipping-each global-flex ai-center w-full {% unless forloop.first %} mt-20 {% endunless %}">
+                                    {% if settings[icon] != blank %}
+                                    <div class="icon mr-15">
+                                        {%- render 'global-image-wrapper',
+                                            image: settings[icon],
+                                            additional_class: '',
+                                            image_id: image_id
+                                        %}
+                                    </div>
+                                    {% endif %}
+                                    <div class="text-wrapper">
+                                        <p class="p2">{{ settings[title] }}</p>
+                                        <div class="rte p2 c-grey">
+                                            {{ settings[desc] }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {%- endif -%}
+                        {%- endfor -%}
+                    </div>
+                {%- endcapture -%}
+    
+                {%- render 'accordion',
+                    wrapper_class: 'pt-0',
+                    title_class: 'h4',
+                    title_no_pt: false,
+                    desc_no_pt: true,
+                    default_active: false,
+                    desc_class: '',
+                    title: settings.pro_ship_title,
+                    desc_html: shipping_return_html
+                -%}
+            {%- endif -%}
+        {%- endunless -%}
+        {% comment %} end Shipping & Returns {% endcomment %}
+    </div>
+</section>
+
+<script>
+    function readMoreProductDesc(e) {
+        e.preventDefault();
+
+        const parent = e.target.closest('.product-description');
+        if(parent != null) {
+            parent.querySelector('.truncated').classList.add('hide-m');
+            parent.querySelector('.all-content').classList.remove('hide-m');
+        }
+    }
+</script>

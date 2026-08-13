@@ -1,0 +1,236 @@
+{% if request.page_type == 'index' %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "Organization",
+    "name": "{{ shop.name | escape }}",
+    "url": "{{ shop.secure_url }}",
+    "logo": "https:{{ settings.home_jsonld_logo | image_url: width: 300 }}",
+    "address": {
+        "@type": "PostalAddress",
+        "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 != blank %} {{ shop.address.address2 | escape }}{% endif %}",
+        {% if shop.address.province != blank %}"addressLocality": "{{ shop.address.province | escape }}",{% endif %}
+        "addressRegion": "{{ shop.address.city | escape }}",
+        "postalCode": "{{ shop.address.zip }}",
+        "addressCountry": "{{ shop.address.country_code }}"
+    },
+    "contactPoint": {
+        "@type": "ContactPoint",
+        "contactType": "customer support",
+        "telephone": "{{ shop.phone }}",
+        "email": "{{ shop.email }}"
+    },
+    "sameAs": [
+        {% if settings.facebook-url != blank %}"{{ settings.facebook-url }}",{% endif %}
+        {% if settings.instagram-url != blank %}"{{ settings.instagram-url }},"{% endif %}
+        {% if settings.pinterest-url != blank %}"{{ settings.pinterest-url }},"{% endif %}
+        {% if settings.youtube-url != blank %}"{{ settings.youtube-url }},"{% endif %}
+        {% if settings.twitter-url != blank %}"{{ settings.twitter-url }},"{% endif %}
+    ]
+}
+</script>
+{% if settings.settings.home_jsonld_video_thumb != blank %}
+<script type="application/ld+json">
+{
+    "@context": "https://schema.org",
+    "@type": "VideoObject",
+    "name": "{{ settings.home_jsonld_video_name | escape }}",
+    "description": "{{ settings.home_jsonld_video_description | escape }}",
+    "thumbnailUrl": "https:{{ settings.home_jsonld_video_thumb | image_url: width: 720 }}",
+    "contentUrl": "{{ settings.home_jsonld_video.sources[0].url }}"
+}
+</script>
+{% endif %}
+{% endif %}
+
+{% if request.page_type == 'product' %}
+{% assign variant = product.selected_or_first_available_variant %}
+<script type="application/ld+json">
+{
+    "@context": "http://schema.org/",
+    "@type": "Product",
+    "name": "{{ product.title | escape }}",
+    "brand": {
+        "@type": "Brand",
+        "name": "{{ product.vendor | escape }}"
+    },
+    "description": "{{ page_description | escape }}",
+    "image": "{{ product.featured_image | image_url: width: 1000 }}",
+    "sku": "{{ variant.sku }}",
+    "gtin14": "{{ variant.barcode }}",
+    "offers": {
+        "@type": "Offer",
+        "priceCurrency": "{{ shop.currency }}",
+        "url":"{{ request.origin }}{{ product.url }}",
+        "price": "{{ product.price | money_without_currency | strip_html | replace: ',', '' }}",
+        "itemCondition" : "http://schema.org/NewCondition",
+        "availability" : "{% if product.available == true %}http://schema.org/InStock{% else %}http://schema.org/OutOfStock{% endif %}"
+    }
+}
+</script>
+{% endif %}
+
+{% comment %} Breadcrumb {% endcomment %}
+{% if template.name == 'product'
+    or template.name == 'list-collections'
+    or template.name == 'collection'
+    or template.name == 'blog'
+    or template.name == 'article'
+    or template.name == 'search'
+    or template.name == 'cart'
+    or template.name == 'page'
+%}
+    <script type="application/ld+json">
+    {
+        "@context": "http://schema.org",
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+            {
+                "@type": "ListItem",
+                "position": 1,
+                "name": "{{ 'structured_data.breadcrumbs.home' | t | escape }}",
+                "item": "{{ shop.secure_url }}"
+            },
+            {% case template.name %}
+                {% when 'product' %}
+                    {% if product.collections.size >= 1 %}
+                        {
+                            "@type": "ListItem",
+                            "position": 2,
+                            "name": "{{ product.collections.first.title | escape }}",
+                            "item": "{{ product.collections.first.url }}"
+                        },
+                    {% endif %}
+                    {
+                        "@type": "ListItem",
+                        "position": {% if product.collections.size >= 1 %}3{% else %}2{% endif %},
+                        "name": "{{ product.title | escape }}",
+                        "item": "{{ product.url }}"
+                    }
+                {% when 'list-collections' %}
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ 'structured_data.breadcrumbs.collections' | t | escape }}",
+                        "item": "{{ shop.secure_url }}/collections"
+                    }
+                {% when 'collection' %}
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ collection.title | escape }}",
+                        "item": "{{ collection.url }}"
+                    }
+                    {% if current_tags %}
+                        ,
+                        {
+                            "@type": "ListItem",
+                            "position": 3,
+                            "name": "{{ collection.title | escape }}: {{ tag_names | escape }}",
+                            "item": "{{ collection.url }}/{{- tag_handles | split: '|' | join: '+' -}}"
+                        }
+                    {% endif %}
+                    {% if current_page != 1 %}
+                        {% if current_tags %}
+                            {% assign position = 5 %}
+                        {% else %}
+                            {% assign position = 4 %}
+                        {% endif %}
+                        ,
+                        {
+                            "@type": "ListItem",
+                            "position": {{ position }},
+                            "name": "{{ 'structured_data.breadcrumbs.collection.page' | t: title: {{ collection.title | escape }}, page: current_page }}",
+                            "item": "{{ collection.url }}/?page={{ current_page }}"
+                        }
+                    {% endif %}
+                {% when 'blog' or 'article' %}
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ blog.title | escape }}",
+                        "item": "{{ blog.url }}"
+                    }
+                    {% if template.name == 'article' %}
+                        ,
+                        {
+                            "@type": "ListItem",
+                            "position": 3,
+                            "name": "{{ article.title | escape }}",
+                            "item": "{{ article.url }}"
+                        }
+                    {% elsif current_tags %}
+                        ,
+                        {
+                            "@type": "ListItem",
+                            "position": 3,
+                            "name": "{{ blog.title | escape }}: {{ tag_names | escape }}",
+                            "item": "{{ blog.url }}/tagged/{{- tag_handles | split: '|' | join: '+' -}}"
+                        }
+                    {% endif %}
+                    {% if current_page != 1 %}
+                        {% if current_tags %}
+                            {% assign position = 4 %}
+                            {%- capture url -%}
+                                {{ blog.url }}/tagged/{{ tag_handles | split: '|' | join: '+' }}?page={{ current_page }}
+                            {%- endcapture -%}
+                        {% else %}
+                            {% assign position = 3 %}
+                            {%- capture url -%}
+                                {{ blog.url }}?page={{ current_page }}
+                            {%- endcapture -%}
+                        {% endif %}
+                        ,
+                        {
+                            "@type": "ListItem",
+                            "position": {{ position }},
+                            "name": "{{ 'structured_data.breadcrumbs.blog.page' | t: title: {{ blog.title | escape }}, page: current_page }}",
+                            "item": "{{ url }}"
+                        }
+                    {% endif %}
+                {% when 'search' %}
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ 'structured_data.breadcrumbs.search.title' | t | escape }}",
+                        "item": "{{ shop.url }}/search"
+                    }
+                    {% if search.performed %}
+                        ,
+                        {
+                            "@type": "ListItem",
+                            "position": 3,
+                            "name": "{{ search.terms | escape }}",
+                            "item": "{{ shop.url }}/search?q={{ search.terms }}"
+                        }
+                        {% if current_page != 1 %}
+                            ,
+                            {
+                                "@type": "ListItem",
+                                "position": 4,
+                                "name": "{{ 'structured_data.breadcrumbs.search.page' | t: terms: {{ search.terms }}, page: current_page | escape }}",
+                                "item": "{{ shop.url }}/search?page={{ current_page }}&q={{ search.terms }}"
+                            }
+                        {% endif %}
+                    {% endif %}
+                {% when 'cart' %}
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ 'structured_data.breadcrumbs.cart.title' | t | escape }}",
+                        "item": "{{ routes.cart_url }}"
+                    }
+                {% when 'page' %}
+                    {
+                        "@type": "ListItem",
+                        "position": 2,
+                        "name": "{{ page.title | escape }}",
+                        "item": "{{ page.url }}"
+                    }
+                {% else %}
+            {% endcase %}
+        ]
+    }
+    </script>
+{% endif %}
+{% comment %} End Breadcrumb {% endcomment %}

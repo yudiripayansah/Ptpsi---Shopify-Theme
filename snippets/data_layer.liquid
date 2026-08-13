@@ -1,0 +1,364 @@
+<script>
+  // Function to create a cookie
+  function createCookie(name, value, daysToExpire) {
+    const date = new Date();
+    date.setTime(date.getTime() + (daysToExpire * 24 * 60 * 60 * 1000));
+    const expires = "expires=" + date.toUTCString();
+    document.cookie = name + "=" + value + "; " + expires + "; path=/";
+  }
+
+  // Function to read a cookie
+  function readCookie(name) {
+    const cookieName = name + "=";
+    const cookies = document.cookie.split(';');
+    
+    for (let i = 0; i < cookies.length; i++) {
+      let cookie = cookies[i];
+      while (cookie.charAt(0) === ' ') {
+        cookie = cookie.substring(1);
+      }
+      if (cookie.indexOf(cookieName) === 0) {
+        return cookie.substring(cookieName.length, cookie.length);
+      }
+    }
+    
+    return null;
+  }
+
+  // Function to delete a cookie
+  function deleteCookie(name) {
+    document.cookie = name + "=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
+  }
+
+  /* PDP Page */
+  {%- if request.page_type == 'product' -%}
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'shopify_view_item', /* name of the event. In this case, it always must be view_item */
+      user_data: {
+        fname: '{{ customer.first_name }}',
+        lname: '{{ customer.last_name }}',
+        phone: '{{ customer.phone }}',
+        email: '{{ customer.email }}',
+        country: '{{ customer.default_address.country }}',
+        zip: '{{ customer.default_address.zip }}',
+        city: '{{ customer.default_address.city }}'
+      },
+      ecommerce: {
+        currency: '{{ localization.country.currency.iso_code }}',
+        items: [{ /* an array with a product */
+          item_name: '{{ product.title | escape }}', /* insert an actual product name */
+          item_id: '{{ product.id }}', /* insert an actual product ID */
+          price: '{{ product.price | money_without_currency }}', /* insert an actual product price. Number or a string. Don't include the currency code */
+          item_brand: '{{ product.vendor | escape }}', /* insert an actual product price */
+          item_category: '{{ product.collections[0].title | escape }}', /* insert an actual product top-level category */
+          item_category2: '{{ product.collections[1].title | escape }}', /* if it is possible to drill down the categories (e.g. Apparel, then T-shirt, then Men), use item_category2, item_category3, etc. Can use from item_category up to item_category5 */
+          item_variant: '{{ product.selected_or_first_available_variant.title | escape }}', /* insert an actual product variant */
+          quantity: '1' /* product quantity. In this case, it will usually be equal to 1 */
+        }]
+      },
+      remarketing: {
+          items: [
+              {
+                id: 'shopify_{{ localization.country.iso_code }}_{{ product.id }}_{{ product.selected_or_first_available_variant.id }}',
+                google_business_vertical: 'retail',
+              }
+          ]
+      }
+    });
+  {%- endif -%}
+
+  /* Collection */
+  {%- if request.page_type == 'collection' -%}
+    window.dataLayer = window.dataLayer || [];
+    window.dataLayer.push({
+      event: 'shopify_view_item_list', /* name of the event. In this case, it always must be view_item_list */
+      user_data: {
+        fname: '{{ customer.first_name }}',
+        lname: '{{ customer.last_name }}',
+        phone: '{{ customer.phone }}',
+        email: '{{ customer.email }}',
+        country: '{{ customer.default_address.country }}',
+        zip: '{{ customer.default_address.zip }}',
+        city: '{{ customer.default_address.city }}'
+      },
+      ecommerce: {
+        currency: '{{ localization.country.currency.iso_code }}',
+        items: [
+          {%- for product in collection.products -%}
+            { /* an array where all currently viewed products must be included */
+              item_name: '{{ product.title | escape }}', /* insert an actual product name */
+              item_id: '{{ product.id }}', /* insert an actual product ID */
+              price: '{{ product.price | money_without_currency }}', /* insert an actual product price. Number or a string. Don't include currency code */
+              item_brand: '{{ product.vendor }}', /* insert an actual product price */
+              item_category: '{{ product.collections[0].title | escape }}', /* insert an actual product top-level category */
+              item_category2: '{{ product.collections[1].title | escape }}', /* if it is possible to drill down the categories (e.g. Apparel, then T-shirt, then Men), use item_category2, item_category3, etc. Can use from item_category up to item_category5 */
+              item_variant: '{{ product.selected_or_first_available_variant.title | escape }}', /* insert an actual product variant */
+              item_list_name: '{{ collection.title | escape }}', /* insert the name of the list where the product is currently displayed */
+              item_list_id: '{{ collection.id }}', /* insert the list id where the product is currently displayed */
+              index: '{{ forloop.index }}', /* insert product's position in that list */
+              quantity: '1' /* product quantity. In case of view_item_list, it will usually be equal to 1 */
+          }{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%} 
+        ]
+      },
+      remarketing: {
+          items: [
+            {%- for product in collection.products -%}
+              {
+                id: 'shopify_{{ localization.country.iso_code }}_{{ product.id }}_{{ product.selected_or_first_available_variant.id }}',
+                google_business_vertical: 'retail',
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+      }
+    });
+  {%- endif -%}
+
+  /* Push data layer on click event */
+  document.addEventListener('click', function(event){
+    if(event.target.closest('.cart-action-remove')) {
+      const this_btn = event.target.closest('.cart-action-remove');
+      if(this_btn.getAttribute('data-product-name') != null) {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push({
+          event: 'shopify_remove_from_cart', /* name of the event. In this case, it always must be remove_from_cart */
+          user_data: {
+            fname: '{{ customer.first_name }}',
+            lname: '{{ customer.last_name }}',
+            phone: '{{ customer.phone }}',
+            email: '{{ customer.email }}',
+            country: '{{ customer.default_address.country }}',
+            zip: '{{ customer.default_address.zip }}',
+            city: '{{ customer.default_address.city }}'
+          },
+          ecommerce: {
+            currency: '{{ localization.country.currency.iso_code }}',
+            items: [{ /* an array with a product (or multiple products) that was removed from a cart */
+              item_name: this_btn.getAttribute('data-product-name'), /* insert an actual product name */
+              item_id: this_btn.getAttribute('data-product-id'), /* insert an actual product ID */
+              price: this_btn.getAttribute('data-product-price'), /* insert an actual product price. Number or a string. Don't include currency code */
+              item_brand: this_btn.getAttribute('data-product-vendor'), /* insert an actual product price */
+              item_category: this_btn.getAttribute('data-product-category'), /* insert an actual product top-level category */
+              item_category2: this_btn.getAttribute('data-product-category-2'), /* if it is possible to drill down the categories (e.g. Apparel, then T-shirt, then Men), use item_category2, item_category3, etc. Can use from item_category up to item_category5 */
+              item_variant: `${this_btn.getAttribute('data-product-variant')}`, /* insert an actual product variant */
+              quantity: this_btn.getAttribute('data-product-quantity') /* product quantity of how many products were removed from cart */
+            }]
+          },
+          remarketing: {
+              items: [
+                  {
+                    id: `shopify_{{ localization.country.iso_code }}_${this_btn.getAttribute('data-product-id')}_${this_btn.getAttribute('data-product-variant-id')}`,
+                    google_business_vertical: 'retail',
+                  }
+              ]
+          }
+        });
+      }
+    } else if (event.target.closest('.cart-drawer-crosssell')) {
+      /* cart drawer cross sell */
+      const atc_button = event.target.closest('.cart-drawer-crosssell');
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'shopify_add_to_cart',  			
+        user_data: {
+          fname: '{{ customer.first_name }}',
+          lname: '{{ customer.last_name }}',
+          phone: '{{ customer.phone }}',
+          email: '{{ customer.email }}',
+          country: '{{ customer.default_address.country }}',
+          zip: '{{ customer.default_address.zip }}',
+          city: '{{ customer.default_address.city }}'
+        },
+        ecommerce: {	
+          currency: '{{ localization.country.currency.iso_code }}',				
+          items: [{
+            item_name: atc_button.getAttribute('data-product-name'),
+            item_id: atc_button.getAttribute('data-product-id'),
+            price: atc_button.getAttribute('data-product-price'),
+            item_brand: atc_button.getAttribute('data-product-vendor'), 
+            item_category: atc_button.getAttribute('data-product-category'),
+            item_category2: atc_button.getAttribute('data-product-category-2'),
+            item_variant: `${atc_button.getAttribute('data-product-variant')}`,
+            item_list_name: '',
+            item_list_id: '',
+            index: 0,
+            quantity: 1
+          }]
+        },
+        remarketing: {
+          items: [
+              {
+                id: `shopify_{{ localization.country.iso_code }}_${atc_button.getAttribute('data-product-id')}_${atc_button.getAttribute('data-product-variant-id')}`,
+                google_business_vertical: 'retail',
+              }
+          ]
+        }
+      });
+    } else if (event.target.closest('button.needsclick')) {
+        /* Klaviyo sign up */
+        const this_btn = event.target.closest('button.needsclick');
+        const email_input = this_btn.closest('div[data-testid="POPUP"]').querySelector('input[type="email"]');
+        const email_value = email_input.value;
+
+        const delay = setTimeout(function(){
+          if(email_input.getAttribute('aria-invalid') == 'false') {
+            window.dataLayer = window.dataLayer || [];
+            window.dataLayer.push({
+              event: 'Sign_up',  			
+              user_data: {
+                fname: '{{ customer.first_name }}',
+                lname: '{{ customer.last_name }}',
+                phone: '{{ customer.phone }}',
+                email: email_value,
+                country: '{{ customer.default_address.country }}', 
+                zip: '{{ customer.default_address.zip }}',
+                city: '{{ customer.default_address.city }}'
+              }
+            });
+          }
+            
+          clearTimeout(delay);
+        }, 300);
+    }
+  });
+
+  /* Cart Page */
+  {%- if request.page_type == 'cart' -%}
+      /* delete checkout cookie */
+      deleteCookie('shopify_begin_checkout');
+      deleteCookie('shopify_add_payment_info');
+      deleteCookie('shopify_add_shipping_info');
+
+      window.dataLayer = window.dataLayer || [];
+      window.dataLayer.push({
+        event: 'shopify_view_cart',
+        user_data: {
+          fname: '{{ customer.first_name }}',
+          lname: '{{ customer.last_name }}',
+          phone: '{{ customer.phone }}',
+          email: '{{ customer.email }}',
+          country: '{{ customer.default_address.country }}',
+          zip: '{{ customer.default_address.zip }}',
+          city: '{{ customer.default_address.city }}'
+        },
+
+        total_value: '{{ cart.total_price | money_without_currency }}',
+        item_id_array: [
+          {%- for item in cart.items -%}
+            '{{ item.product.id }}'{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ],
+        item_name_array:[
+          {%- for item in cart.items -%}
+            '{{ item.product.title }}'{%- unless forloop.last -%},{%- endunless -%}
+          {%- endfor -%}
+        ],
+        ecommerce: {
+          currency: '{{ localization.country.currency.iso_code }}',
+          items: [
+            {%- for item in cart.items -%}
+              {
+                item_name: '{{ item.title }}',
+                item_id: '{{ item.product.id }}',
+                price: '{{ item.final_price | money_without_currency }}', 
+                item_brand: '{{ item.product.vendor }}',
+                item_category: '{{ item.product.collections[0].title }}',
+                item_category2: '{{ item.product.collections[1].title }}',
+                item_category3: '{{ item.product.collections[2].title }}',
+                item_category4: '{{ item.product.collections[3].title }}',
+                item_variant: '{{ item.variant.title | escape }}',
+                quantity: '{{ item.quantity }}'
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        },
+        remarketing: {
+          items: [
+            {%- for item in cart.items -%}
+              {
+                id: 'shopify_{{ localization.country.iso_code }}_{{ item.product.id }}_{{ item.variant.id }}',
+                google_business_vertical: 'retail',
+              }{%- unless forloop.last -%},{%- endunless -%}
+            {%- endfor -%}
+          ]
+        }
+      });
+  {%- endif -%}
+
+  /** Wishlist **/
+  window.addEventListener("DOMContentLoaded", (event) => {
+    const wishlist_selector = '.wishlist-handler-p-each, .wishlist-handler';
+    waitForElmFpd(wishlist_selector).then((e) => {
+      const dd = document.querySelectorAll(wishlist_selector);
+      dd.forEach((ws) => {
+        ws.addEventListener('click', function(event) {
+          if (ws.classList.contains('wishlist-handler-p-each')) {
+            const delay = setTimeout(function(){
+              if(ws.classList.contains("swym-added")) {
+                const this_btn = ws;
+                window.dataLayer = window.dataLayer || []; 
+                window.dataLayer.push({
+                  event: 'shopify_add_to_wishlist', /* name of the event. In this case, it always must be add_to_cart */
+                  user_data: {
+                    fname: '{{ customer.first_name }}',
+                    lname: '{{ customer.last_name }}',
+                    phone: '{{ customer.phone }}',
+                    email: '{{ customer.email }}',
+                    country: '{{ customer.default_address.country }}',
+                    zip: '{{ customer.default_address.zip }}',
+                    city: '{{ customer.default_address.city }}'
+                  },
+                  ecommerce: {	
+                    currency: Shopify.currency.active,						
+                    items: [{	/* an array with a product (or multiple products) that was added to a cart */
+                      item_name: this_btn.getAttribute('data-product-name'),
+                      item_id: this_btn.getAttribute('data-product-id'),
+                      price: this_btn.getAttribute('data-product-price'),
+                      item_brand: this_btn.getAttribute('data-product-vendor'), 
+                      item_category: this_btn.getAttribute('data-product-category'),
+                      item_category2: this_btn.getAttribute('data-product-category-2'),
+                      item_variant: `${this_btn.getAttribute('data-product-variant')}`,
+                      item_list_name: '', 
+                      item_list_id: '', 
+                      index: 0, 
+                      quantity: '1'
+                    }]
+                  },
+                  remarketing: {
+                      items: [
+                          {
+                            id: `shopify_{{ localization.country.iso_code }}_${this_btn.getAttribute('data-product-id')}_${this_btn.getAttribute('data-product-variant-id')}`,
+                            google_business_vertical: 'retail',
+                          }
+                      ]
+                  }
+                });
+              }
+          
+              clearTimeout(delay);
+            }, 1500);
+          }
+        });
+      });
+    });
+  });
+
+  function waitForElmFpd(selector) {
+    return new Promise(resolve => {
+        if (document.querySelector(selector)) {
+            return resolve(document.querySelector(selector));
+        }
+        const observer = new MutationObserver(mutations => {
+            if (document.querySelector(selector)) {
+                resolve(document.querySelector(selector));
+                observer.disconnect();
+            }
+        });
+        observer.observe(document.body, {
+            childList: true,
+            subtree: true
+        });
+    });
+  }
+</script>

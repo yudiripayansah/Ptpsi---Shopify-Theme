@@ -1,0 +1,24 @@
+{% layout none %}
+{%- for media in product.media -%}
+        {% assign ids = '' %}
+        {% for v in product.variants %}
+            {% if v.featured_image and v.featured_image.src == media.src %}
+                {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
+                {% assign ids = ids | append: v.id %}
+            {% endif %}
+        {% endfor %}
+    {% if media.media_type == 'image' %}
+        <div class="swiper-slide" data-variant-ids="{{ ids }}">
+        {%- render 'global-image-wrapper',
+            image: media,
+            preload: true
+        -%}
+        </div>
+    {% elsif media.media_type == 'video' %}
+        <div class="swiper-slide" data-variant-ids="{{ ids }}">
+            <div class="video-wrapper">
+                {{ media | video_tag: controls: false, image_size: '1500x', autoplay: true, loop: true }}
+            </div>
+        </div>
+    {% endif %}
+{% endfor %}

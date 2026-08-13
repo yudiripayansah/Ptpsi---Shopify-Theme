@@ -1,0 +1,25 @@
+<style>
+  .account .shopify-section {
+    background-color: #fff9f2;
+  }
+  @media only screen and (min-width: 1024px) {
+    .d-pt-85 {
+      padding-top: 85px;
+    }
+  }
+</style>
+<div class="account global-content-top-margin bg-background-main">
+  <div class="container">
+    <div class="show-m-flex hide-d ai-center jc-between d-jc-start pt-16 pb-32">
+      <h4 class="h4 account-menu-name-mw">Hi, {{ customer.first_name }}</h4>
+    </div>
+    <div class="flex flex-column d-flex-row row">
+      <div class="col-d-2 col-12 push-d-1 account-sticky-mobile">
+        {% section 'account-menu' %}
+      </div>
+      <div class="col-d-7 col-12 d-pt-85 push-d-2">
+        {% section 'account-address' %}
+      </div>
+    </div>
+  </div>
+</div>

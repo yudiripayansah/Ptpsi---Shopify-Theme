@@ -1,0 +1,311 @@
+{% comment %}
+  Description:
+  Snippet for displaying collection and search result product list
+
+  Variables:
+  section: section object
+{% endcomment %}
+{% liquid
+  assign block_position = 0
+  assign item_per_page = settings.collection_number
+  assign featured_product_1 = collection.metafields.custom.featured_product_block_1.value
+  assign featured_product_1_position_mobile = collection.metafields.custom.featured_index_mobile_block_1
+  assign featured_product_1_position_desktop = collection.metafields.custom.featured_index_desktop_block_1
+  assign featured_product_2 = collection.metafields.custom.featured_product_block_2.value
+  assign featured_product_2_position_mobile = collection.metafields.custom.featured_index_mobile_block_2
+  assign featured_product_2_position_desktop = collection.metafields.custom.featured_index_desktop_block_2
+  assign featured_workshop_subtitle = collection.metafields.custom.featured_workshop_subtitle
+  assign featured_workshop_name = collection.metafields.custom.featured_workshop_name
+  assign featured_workshop_button_label = collection.metafields.custom.featured_workshop_button_label
+  assign featured_workshop_button_url = collection.metafields.custom.featured_workshop_button_url
+  assign featured_workshop_image_mobile = collection.metafields.custom.featured_workshop_image_mobile
+  assign featured_workshop_image_desktop = collection.metafields.custom.featured_workshop_image_desktop
+  assign featured_workshop_video_mobile = collection.metafields.custom.featured_workshop_video_mobile
+  assign featured_workshop_video_desktop = collection.metafields.custom.featured_workshop_video_desktop
+  assign featured_workshop_label_1 = collection.metafields.custom.featured_workshop_label_1
+  assign featured_workshop_label_2 = collection.metafields.custom.featured_workshop_label_2
+  assign featured_workshop_index_mobile = collection.metafields.custom.featured_workshop_index_mobile
+  assign featured_workshop_index_desktop = collection.metafields.custom.featured_workshop_index_desktop
+-%}
+
+{%- if request.page_type == 'collection' -%}
+  {%- if collection.products.size > 0 -%}
+    {%- paginate collection.products by item_per_page -%}
+      {%- for product in collection.products -%}
+        {%- assign block_position = block_position | plus: 1 -%}
+        {% unless show_more %}
+          {% if featured_product_1 != blank %}
+            {% if block_position == featured_product_1_position_mobile %}
+              <div class="col-d-3 col-12 featured-product product-col hide-d">
+                <div
+                  class="product-card-wrapper"
+                  data-total-products="{{ collection.products_count }}"
+                  data-id="{{ product.id }}"
+                  data-position="{{ block_position }}"
+                >
+                  {%- render 'product-each', product: featured_product_1, fade: false -%}
+                </div>
+              </div>
+            {% endif %}
+            {% if block_position == featured_product_1_position_desktop %}
+              <div class="col-d-6 col-6 featured-product product-col hide-m show-d">
+                <div
+                  class="product-card-wrapper"
+                  data-total-products="{{ collection.products_count }}"
+                  data-id="{{ product.id }}"
+                  data-position="{{ block_position }}"
+                >
+                  {%- render 'product-each', product: featured_product_1, fade: false -%}
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+          {% if featured_product_2 != blank %}
+            {% if block_position == featured_product_2_position_mobile %}
+              <div class="col-d-3 col-12 featured-product product-col hide-d">
+                <div
+                  class="product-card-wrapper"
+                  data-total-products="{{ collection.products_count }}"
+                  data-id="{{ product.id }}"
+                  data-position="{{ block_position }}"
+                >
+                  {%- render 'product-each', product: featured_product_2, fade: false -%}
+                </div>
+              </div>
+            {% endif %}
+            {% if block_position == featured_product_2_position_desktop %}
+              <div class="col-d-6 col-6 featured-product product-col hide-m show-d">
+                <div
+                  class="product-card-wrapper"
+                  data-total-products="{{ collection.products_count }}"
+                  data-id="{{ product.id }}"
+                  data-position="{{ block_position }}"
+                >
+                  {%- render 'product-each', product: featured_product_2, fade: false -%}
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+          {% if featured_workshop_image_mobile != blank or featured_workshop_image_desktop != blank or featured_workshop_name != blank %}
+            {% if block_position == featured_workshop_index_mobile %}
+              <div class="col-d-12 col-12 featured-workshop product-col hide-d">
+                <div class="workshop-wrapper flex rowgap-32 flex-column" >
+                  <div class="workshop-text w-full">
+                    {% if featured_workshop_subtitle != blank %}
+                    <div class="p3 c-label">
+                      {{featured_workshop_subtitle}}
+                    </div>
+                    {% endif %}
+                    {% if featured_workshop_name != blank %}
+                    <div class="h3 c-green mt-12">
+                      {{featured_workshop_name}}
+                    </div>
+                    {% endif %}
+                    {% if featured_workshop_button_label != blank and featured_workshop_button_url != blank %}
+                    <a href="{{ featured_workshop_button_url }}" class="mt-24 pt-12 pb-12 pl-24 pr-24 flex ai-center colgap-24 b-1 b-green p2 jc-between max-330">
+                      {{featured_workshop_button_label}}
+                      <span class="icon p-2 flex ai-center jc-center">
+                        {{ settings.icon_arrow_up_right }}
+                      </span>
+                    </a>
+                    {% endif %}
+                  </div>
+                  <div class="workshop-image w-full max-800">
+                    {% liquid
+                      assign banner_id = 'workshop-banner-' | append: forloop.index
+                      assign banner_mobile = featured_workshop_image_mobile.value
+                      assign banner_desktop = featured_workshop_image_desktop.value
+                      assign banner_video_mobile =  featured_workshop_video_mobile
+                      assign banner_video_desktop =  featured_workshop_video_desktop
+                      assign video_url_desktop = ''
+                      for vid_source in banner_video_desktop.sources
+                        if vid_source.mime_type == 'video/mp4'
+                          assign video_url_desktop = vid_source.url
+                        endif
+                      endfor
+                      assign autoplay = true
+                      assign muted = true
+                      assign video_url_mobile = ''
+                      for vid_source in banner_video_mobile.sources
+                        if vid_source.mime_type == 'video/mp4'
+                          assign video_url_mobile = vid_source.url
+                        endif
+                      endfor
+                    %}
+                    {% if banner_video_desktop == blank and banner_video_mobile == blank %}
+                      {% if banner_desktop != blank or banner_mobile != blank %}
+                        {%- render 'global-image-wrapper-responsive',
+                          image_id: banner_id,
+                          desktop_image: banner_desktop,
+                          mobile_image: banner_mobile,
+                          additional_class: 'no-bg',
+                          preload: true,
+                          load_inside_vue: true
+                        %}
+                      {% endif %}
+                    {% else %}
+                      {%- render 'global-video-wrapper-responsive',
+                        desktop_image: banner_desktop,
+                        mobile_image: banner_mobile,
+                        desktop_video_url: video_url_desktop,
+                        mobile_video_url: video_url_mobile,
+                        video_id: banner_id,
+                        autoplay: autoplay,
+                        preload: true,
+                        muted: muted,
+                        loop: true,
+                        load_inside_vue: true
+                      -%}
+                    {% endif %}
+                    <div class="workshop-banner-caption flex colgap-16 mt-8">
+                      {% if featured_workshop_label_1 != blank %}
+                        <span class="c-label p4 dont-break label-1">
+                          {{featured_workshop_label_1}}
+                        </span>
+                      {% endif %}
+                      {% if featured_workshop_label_2 != blank %}
+                        <span class="c-label p4 label-2">
+                          {{featured_workshop_label_2}}
+                        </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+            {% if block_position == featured_workshop_index_desktop %}
+              <div class="col-d-12 col-12 featured-workshop product-col hide-m show-d">
+                <div class="workshop-wrapper flex d-colgap-140 ai-end jc-between">
+                  <div class="workshop-text">
+                    {% if featured_workshop_subtitle != blank %}
+                    <div class="p3 c-label">
+                      {{featured_workshop_subtitle}}
+                    </div>
+                    {% endif %}
+                    {% if featured_workshop_name != blank %}
+                    <div class="h3 c-green d-mt-16">
+                      {{featured_workshop_name}}
+                    </div>
+                    {% endif %}
+                    {% if featured_workshop_button_label != blank and featured_workshop_button_url != blank %}
+                    <a href="{{ featured_workshop_button_url }}" class="d-mt-32 d-pt-12 d-pb-12 d-pl-24 d-pr-24 flex ai-center d-colgap-24 b-1 b-green p2 jc-between max-330">
+                      {{featured_workshop_button_label}}
+                      <span class="icon p-2 flex ai-center jc-center">
+                        {{ settings.icon_arrow_up_right }}
+                      </span>
+                    </a>
+                    {% endif %}
+                  </div>
+                  <div class="workshop-image w-full max-800">
+                    {% liquid
+                      assign banner_id = 'workshop-banner-' | append: forloop.index
+                      assign banner_mobile = featured_workshop_image_mobile.value
+                      assign banner_desktop = featured_workshop_image_desktop.value
+                      assign banner_video_mobile =  featured_workshop_video_mobile
+                      assign banner_video_desktop =  featured_workshop_video_desktop
+                      assign video_url_desktop = ''
+                      for vid_source in banner_video_desktop.sources
+                        if vid_source.mime_type == 'video/mp4'
+                          assign video_url_desktop = vid_source.url
+                        endif
+                      endfor
+                      assign autoplay = true
+                      assign muted = true
+                      assign video_url_mobile = ''
+                      for vid_source in banner_video_mobile.sources
+                        if vid_source.mime_type == 'video/mp4'
+                          assign video_url_mobile = vid_source.url
+                        endif
+                      endfor
+                    %}
+                    {% if banner_video_desktop == blank and banner_video_mobile == blank %}
+                      {% if banner_desktop != blank or banner_mobile != blank %}
+                        {%- render 'global-image-wrapper-responsive',
+                          image_id: banner_id,
+                          desktop_image: banner_desktop,
+                          mobile_image: banner_mobile,
+                          additional_class: 'no-bg',
+                          preload: true,
+                          load_inside_vue: true
+                        %}
+                      {% endif %}
+                    {% else %}
+                      {%- render 'global-video-wrapper-responsive',
+                        desktop_image: banner_desktop,
+                        mobile_image: banner_mobile,
+                        desktop_video_url: video_url_desktop,
+                        mobile_video_url: video_url_mobile,
+                        video_id: banner_id,
+                        autoplay: autoplay,
+                        preload: true,
+                        muted: muted,
+                        loop: true,
+                        load_inside_vue: true
+                      -%}
+                    {% endif %}
+                    <div class="workshop-banner-caption flex d-colgap-24 d-mt-8">
+                      {% if featured_workshop_label_1 != blank %}
+                        <span class="c-label p4 label-1">
+                          {{featured_workshop_label_1}}
+                        </span>
+                      {% endif %}
+                      {% if featured_workshop_label_2 != blank %}
+                        <span class="c-label p4 label-2">
+                          {{featured_workshop_label_2}}
+                        </span>
+                      {% endif %}
+                    </div>
+                  </div>
+                </div>
+              </div>
+            {% endif %}
+          {% endif %}
+        {% endunless %}
+        <div class="col-d-3 col-6 product-col">
+          <div
+            class="product-card-wrapper"
+            data-total-products="{{ collection.products_count }}"
+            data-id="{{ product.id }}"
+            data-position="{{ block_position }}"
+          >
+            {%- render 'product-each', product: product, fade: false -%}
+          </div>
+        </div>
+      {%- endfor -%}
+    {%- endpaginate -%}
+  {%- else -%}
+    <div class="container empty-result-container tc d-pt-60 pt-40 pb-120 d-pb-240 flex flex-column ai-center">
+      <div class="p2 c-green max-390 mx-auto">{{ 'collections.general.empty_collection_text' | t }}</div>
+      <div class="cursor p2 c-green b-1 b-green pt-12 pb-12 pl-24 pr-24 d-mt-32 mt-24 no-result-clear-filter">Clear Filters</div>
+    </div>
+  {%- endif -%}
+{%- else -%}
+  {% if search.results.size > 0 %}
+  {%- paginate search.results by item_per_page -%}
+    {%- for product in search.results -%}
+      <div class="col-d-3 col-6 product-col">
+        <div
+          class="product-card-wrapper"
+          data-total-products="{{ search.results_count }}"
+          data-id="{{ product.id }}"
+          data-position="{{ block_position }}"
+        >
+          {%- render 'product-each', product: product, fade: false -%}
+        </div>
+      </div>
+    {%- endfor -%}
+  {%- endpaginate -%}
+  {% else %}
+    <div class="container empty-result-container tc d-pt-30 pt-40 pb-120 d-pb-200 flex flex-column ai-center">
+      <div class="p2 c-green max-750 mx-auto">{{ 'collections.general.empty_search_text' | t }}</div>
+      <div class="flex flex-column rowgap-12 d-mt-32 mt-24 d-max-330 w-full">
+        <a href="/collections/all" class="no-search-collection-link p2 c-white bg-green b-1 b-green flex ai-center jc-between colgap-48 pt-12 pb-12 pl-24 pr-24">
+          Shop All <span class="icon flex ai-center jc-center p-2">{{settings.icon_arrow_up_right}}</span>
+        </a>
+        <a href="/pages/contact-us" class="no-search-contact-link p2 c-green b-1 b-green flex ai-center jc-between colgap-48 pt-12 pb-12 pl-24 pr-24">
+          Contact Us <span class="icon flex ai-center jc-center p-2">{{settings.icon_arrow_up_right}}</span>
+        </a>
+      </div>
+    </div>
+  {% endif %}
+{%- endif -%}

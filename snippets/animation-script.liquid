@@ -1,0 +1,235 @@
+<script defer>
+  document.addEventListener('DOMContentLoaded', () => {
+    gsap.registerPlugin(SplitText, ScrollTrigger);
+
+    /* --------------------------------------------------------------
+       1. RE-USABLE animation function (returns the timeline)
+       -------------------------------------------------------------- */
+    function animateHeading(heading, options = {}) {
+        const {
+            duration = 0.5,
+            stagger = 0.08
+        } = options;
+
+        const split = new SplitText(heading, {
+            type: 'words',
+            tag: 'span',
+            wordsClass: 'word'
+        });
+
+        gsap.set(split.words, {
+            y: 60,
+            opacity: 0,
+            force3D: true
+        });
+
+        const tl = gsap.timeline();
+        tl.to(split.words, {
+            y: 0,
+            opacity: 1,
+            duration,
+            ease: 'power3.out',
+            stagger
+        });
+
+        return { split, tl };
+    }
+
+    /* --------------------------------------------------------------
+       2. SCROLL-TRIGGERED HEADINGS (everything except dropdowns)
+       -------------------------------------------------------------- */
+    function initScrollTriggeredHeadings(container) {
+      container.querySelectorAll(`
+        .h1:not(.no-anim):not(.dropdown-anim),
+        .h2:not(.no-anim):not(.dropdown-anim),
+        .h3:not(.no-anim):not(.dropdown-anim),
+        .h4:not(.no-anim):not(.dropdown-anim),
+        .h5:not(.no-anim):not(.dropdown-anim)
+      `).forEach(heading => {
+        if (heading._gsapInit) return;
+        heading._gsapInit = true;
+
+        const split = new SplitText(heading, { type: 'words', tag: 'span', wordsClass: 'word' });
+        gsap.set(split.words, { y: 60, opacity: 0, force3D: true });
+
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: heading,
+            start: 'top 85%',
+            end: 'bottom 70%',
+            toggleActions: 'play none none reverse',
+            once: true
+          }
+        }).to(split.words, {
+          y: 0,
+          opacity: 1,
+          duration: 0.57,
+          ease: 'power3.out',
+          stagger: 0.08
+        });
+      });
+    }
+
+    initScrollTriggeredHeadings(document.body);
+
+    /* --------------------------------------------------------------
+       5. SCROLL-TRIGGERED PRODUCT CARDS
+       -------------------------------------------------------------- */
+    function initProductEachAnimation(container) {
+      // Cards inside a swiper — stagger together when the swiper enters view
+      const swipers = new Set();
+      // container itself may be the swiper (e.g. when called from product-carousel)
+      if (container.classList.contains('swiper')) swipers.add(container);
+      container.querySelectorAll('.swiper').forEach(s => swipers.add(s));
+
+      swipers.forEach(swiper => {
+        if (swiper._gsapInit) return;
+        const cards = swiper.querySelectorAll('.product-each');
+        if (!cards.length) return;
+        swiper._gsapInit = true;
+        gsap.set(cards, { y: 60, opacity: 0, force3D: true });
+        gsap.timeline({
+          scrollTrigger: {
+            trigger: swiper,
+            start: 'top 85%',
+            once: true
+          }
+        }).to(cards, {
+          y: 0,
+          opacity: 1,
+          duration: 1.0,
+          ease: 'power3.out',
+          stagger: 0.15
+        });
+      });
+
+      // Cards outside swipers — group by row so each row staggers left-to-right
+      // and rows below the fold only fire when they scroll into view
+      const newCards = [];
+      container.querySelectorAll('.product-each').forEach(card => {
+        if (card.closest('.swiper')) return;
+        if (card._gsapInit) return;
+        card._gsapInit = true;
+        newCards.push(card);
+      });
+
+      if (newCards.length) {
+        gsap.set(newCards, { y: 60, opacity: 0, force3D: true });
+
+        // Group into rows by vertical position (10px tolerance for sub-pixel)
+        const rows = [];
+        newCards.forEach(card => {
+          const cardTop = card.getBoundingClientRect().top + window.scrollY;
+          const existingRow = rows.find(row => Math.abs(row.top - cardTop) < 10);
+          if (existingRow) {
+            existingRow.cards.push(card);
+          } else {
+            rows.push({ top: cardTop, cards: [card] });
+          }
+        });
+
+        rows.forEach(function(row) {
+          gsap.timeline({
+            scrollTrigger: {
+              trigger: row.cards[0],
+              start: 'top 90%',
+              once: true
+            }
+          }).to(row.cards, {
+            y: 0,
+            opacity: 1,
+            duration: 1.0,
+            ease: 'power3.out',
+            stagger: 0.1
+          });
+        });
+      }
+
+      ScrollTrigger.refresh();
+    }
+
+    window.initProductEachAnimation = initProductEachAnimation;
+    initProductEachAnimation(document.body);
+
+    // Shopify theme editor integration
+    if (typeof Shopify !== 'undefined' && Shopify.designMode) {
+      document.addEventListener('shopify:section:load', (event) => {
+        const section = event.target;
+        initScrollTriggeredHeadings(section);
+        initProductEachAnimation(section);
+        ScrollTrigger.refresh();
+      });
+      document.addEventListener('shopify:section:reorder', () => {
+        ScrollTrigger.refresh();
+      });
+      document.addEventListener('shopify:section:unload', (event) => {
+        const section = event.target;
+        ScrollTrigger.getAll().forEach(trigger => {
+          if (section.contains(trigger.trigger)) {
+            trigger.kill();
+          }
+        });
+        ScrollTrigger.refresh();
+      });
+    }
+
+    /* --------------------------------------------------------------
+        3. DROPDOWN HEADINGS + PARAGRAPHS + LINKS – trigger on .dropdown-shown
+        -------------------------------------------------------------- */
+    const header = document.querySelector('.site-header');
+    if (!header) return; // safety
+
+    const animated = new WeakMap(); // heading → {tl, split}
+
+    const observer = new MutationObserver(mutations => {
+    mutations.forEach(mutation => {
+        if (mutation.attributeName !== 'class') return;
+
+        const isOpen = header.classList.contains('dropdown-shown');
+
+        if (isOpen) {
+            setTimeout(function(){
+                // === HEADINGS (slower, finish last) ===
+                header.querySelectorAll('.dropdown-anim.h1, .dropdown-anim.h2, .dropdown-anim.h3, .dropdown-anim.h4, .dropdown-anim.h5, .dropdown-anim.p1, .dropdown-anim.p4')
+                    .forEach(heading => {
+                    if (!animated.has(heading)) {
+                        const anim = animateHeading(heading, { duration: 1.0, stagger: 0.1 });
+                        animated.set(heading, anim);
+                    } else {
+                        //animated.get(heading).tl.restart();
+                    }
+                    });
+
+                // === P2 & LINK1 (faster, finish earlier) ===
+                header.querySelectorAll('.dropdown-anim.p2, .dropdown-anim.link1')
+                    .forEach(el => {
+                    if (!animated.has(el)) {
+                        const anim = animateHeading(el, { duration: 1.0, stagger: 0.1 });
+                        animated.set(el, anim);
+                    } else {
+                        //animated.get(el).tl.restart();
+                    }
+                    });
+            }, 100);
+        }
+    });
+    });
+
+    observer.observe(header, { attributes: true, attributeFilter: ['class'] });
+
+    /* --------------------------------------------------------------
+       4. OPTIONAL: manual public function (call from your own code)
+       -------------------------------------------------------------- */
+    window.triggerDropdownAnim = function () {
+      header.querySelectorAll('.dropdown-anim.h1, .dropdown-anim.h2, .dropdown-anim.h3, .dropdown-anim.h4, .dropdown-anim.h5')
+            .forEach(heading => {
+              if (!animated.has(heading)) {
+                const anim = animateHeading(heading);
+                animated.set(heading, anim);
+              } else {
+                animated.get(heading).tl.restart();
+              }
+            });
+    };
+  });
+</script>

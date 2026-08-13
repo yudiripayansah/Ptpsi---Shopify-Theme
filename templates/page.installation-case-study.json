@@ -1,0 +1,275 @@
+{
+  "wrapper": "div.bg-background-main.installation-landing-page.global-content-top-margin",
+  "sections": {
+    "installation_heading_xyhzct": {
+      "type": "installation-heading",
+      "name": "Installation Heading",
+      "settings": {
+        "bg_color": "",
+        "title_dom_type": "h1",
+        "title_dom_size": "h1",
+        "title": "Installations",
+        "text": "<p>A showcase of living installations that transform homes, workplaces, and landscapes through thoughtful plant design.<\/p>",
+        "top_padding_m": "small",
+        "bottom_padding_m": "small",
+        "top_padding_t": "small",
+        "bottom_padding_t": "small",
+        "top_padding": "small",
+        "bottom_padding": "small",
+        "top_padding_hd": "small",
+        "bottom_padding_hd": "small",
+        "top_padding_hhd": "small",
+        "bottom_padding_hhd": "small"
+      }
+    },
+    "installation_list_MfWnKp": {
+      "type": "installation-list",
+      "name": "Installation List",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "metaobject_type": "installation",
+        "default_view": "grid",
+        "items_per_page": 9,
+        "load_more_label": "Load More",
+        "top_padding_m": "small",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "small",
+        "bottom_padding_t": "medium",
+        "top_padding": "small",
+        "bottom_padding": "medium",
+        "top_padding_hd": "small",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "small",
+        "bottom_padding_hhd": "medium"
+      }
+    },
+    "how_it_works": {
+      "type": "how-it-works-parallax",
+      "blocks": {
+        "set_consultation": {
+          "type": "set",
+          "settings": {
+            "title": "Consultation",
+            "text": "We start by understanding your space, style, and needs — from office environments to event settings — to ensure the greenery complements your vision.",
+            "image_1": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_2": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_3": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_4": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_5": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_6": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_7": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_8": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_9": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_10": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "scroll_length_d": 150,
+            "scroll_length_m": 125
+          }
+        },
+        "set_curation": {
+          "type": "set",
+          "settings": {
+            "title": "Curation & Design",
+            "text": "We translate your vision into a tailored proposal — selecting plants, planters, and finishes that suit your space, brand, and budget.",
+            "image_1": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_2": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_3": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_4": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_5": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_6": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_7": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_8": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_9": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_10": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "scroll_length_d": 150,
+            "scroll_length_m": 125
+          }
+        },
+        "set_installation": {
+          "type": "set",
+          "settings": {
+            "title": "Installation & Aftercare",
+            "text": "Our team handles delivery, styling, and setup from end to end, and shares simple care guidance so the greenery keeps thriving long after handover.",
+            "image_1": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_2": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_3": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_4": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_5": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_6": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_7": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_8": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "image_9": "shopify:\/\/shop_images\/Image_Animation_Testing_1.png",
+            "image_10": "shopify:\/\/shop_images\/Image_Animation_Testing_2.png",
+            "scroll_length_d": 150,
+            "scroll_length_m": 125
+          }
+        }
+      },
+      "block_order": [
+        "set_consultation",
+        "set_curation",
+        "set_installation"
+      ],
+      "name": "How It Works Parallax",
+      "settings": {
+        "bg_color": "#f2e9df",
+        "label": "How It Works",
+        "title": "From concept to completion, we make it seamless",
+        "title_dom_type": "h2",
+        "title_size": "h3",
+        "media_type": "frames",
+        "frame_fit": "contain",
+        "illustration_width": 42,
+        "illustration_width_m": 92
+      }
+    },
+    "testimonials": {
+      "type": "testimonial-carousel",
+      "blocks": {
+        "testimonial_1": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        },
+        "entry_weCqez": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        },
+        "entry_aBrTWr": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        },
+        "entry_4hCNqp": {
+          "type": "entry",
+          "settings": {
+            "quote": "“What impressed us most was the attention to detail. Soilboy listened to what we needed, customised the design beautifully, and even guided us on how to keep the plants thriving.”",
+            "author": "– Sarah S.",
+            "image": "shopify:\/\/shop_images\/cs-review.png",
+            "caption_label": "SP 01.",
+            "caption_text": "Everfresh Tree"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial_1",
+        "entry_weCqez",
+        "entry_aBrTWr",
+        "entry_4hCNqp"
+      ],
+      "name": "Testimonial Carousel",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "show_top_border": false,
+        "show_top_border_m": true,
+        "top_padding_m": "large",
+        "bottom_padding_m": "large",
+        "top_padding_t": "large",
+        "bottom_padding_t": "large",
+        "top_padding": "large",
+        "bottom_padding": "large",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "large",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "large"
+      }
+    },
+    "faq": {
+      "type": "pdp-faq",
+      "blocks": {
+        "faq_1": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_2": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_3": {
+          "type": "entry",
+          "settings": {
+            "title": "Sed at elementum odio?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_4": {
+          "type": "entry",
+          "settings": {
+            "title": "In semper tortor pharetra vitae?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_5": {
+          "type": "entry",
+          "settings": {
+            "title": "Lorem ipsum dolor sit amet?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        },
+        "faq_6": {
+          "type": "entry",
+          "settings": {
+            "title": "Suspendisse placerat porttitor fermentum?",
+            "text": "<p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse placerat porttitor fermentum.<\/p>"
+          }
+        }
+      },
+      "block_order": [
+        "faq_1",
+        "faq_2",
+        "faq_3",
+        "faq_4",
+        "faq_5",
+        "faq_6"
+      ],
+      "name": "PDP - FAQ",
+      "settings": {
+        "bg_color": "#fff9f2",
+        "title": "FAQ",
+        "text": "Got a question? We’re here to help.",
+        "link_label": "View All FAQ",
+        "link_url": "\/pages\/faq",
+        "show_product_faq": false,
+        "product_faq_position": "after",
+        "top_padding_m": "large",
+        "bottom_padding_m": "medium",
+        "top_padding_t": "large",
+        "bottom_padding_t": "medium",
+        "top_padding": "large",
+        "bottom_padding": "medium",
+        "top_padding_hd": "large",
+        "bottom_padding_hd": "medium",
+        "top_padding_hhd": "large",
+        "bottom_padding_hhd": "medium"
+      }
+    }
+  },
+  "order": [
+    "installation_heading_xyhzct",
+    "installation_list_MfWnKp",
+    "how_it_works",
+    "testimonials",
+    "faq"
+  ]
+}
