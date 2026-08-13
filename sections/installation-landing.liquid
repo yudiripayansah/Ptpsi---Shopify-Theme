@@ -578,7 +578,9 @@
               <video
                 class="ilh-video--d"
                 data-src="{{ video_url_d }}"
-                {% if ss.desktop_image != blank %}poster="{{ ss.desktop_image | image_url: width: 1600 }}"{% endif %}
+                {% if ss.desktop_image != blank %}
+                  poster="{{ ss.desktop_image | image_url: width: 1600 }}"
+                {% endif %}
                 preload="none"
                 autoplay
                 muted
@@ -591,7 +593,9 @@
               <video
                 class="ilh-video--m"
                 data-src="{{ video_url_m }}"
-                {% if ss.mobile_image != blank %}poster="{{ ss.mobile_image | image_url: width: 800 }}"{% endif %}
+                {% if ss.mobile_image != blank %}
+                  poster="{{ ss.mobile_image | image_url: width: 800 }}"
+                {% endif %}
                 preload="none"
                 autoplay
                 muted
@@ -612,7 +616,11 @@
               {% if ss.mobile_image != blank and ss.desktop_image != blank %}
                 <source media="(max-width: 1023px)" srcset="{{ ss.mobile_image | image_url: width: 1200 }}">
               {% endif %}
-              {{ hero_image | image_url: width: 2400 | image_tag: preload: preload, sizes: '100vw', alt: hero_image.alt }}
+              {{
+                hero_image
+                | image_url: width: 2400
+                | image_tag: preload: preload, sizes: '100vw', alt: hero_image.alt
+              }}
             </picture>
           {% endif %}
         </div>
@@ -647,7 +655,8 @@
           {% if total_entries == 0 %}
             {% if request.design_mode %}
               <p class="p2 c-label">
-                No "{{ mo_type }}" metaobject entries found. Add entries with card_image, reference_number and title fields in Admin &gt; Content &gt; Metaobjects.
+                No "{{ mo_type }}" metaobject entries found. Add entries with card_image, reference_number and title
+                fields in Admin &gt; Content &gt; Metaobjects.
               </p>
             {% endif %}
           {% else %}
@@ -662,24 +671,44 @@
                 {% case slot %}
                   {% when 0 %}
                     <div class="ilc-row ilc-row--a">
-                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-left', sizes: sizes_sm %}
-                    {% if forloop.last %}</div>{% endif %}
+                      {% render 'installation-card',
+                        entry: entry,
+                        card_class: 'ilc-card--sm ilc-card--m-left',
+                        sizes: sizes_sm
+                      %}
+                      {% if forloop.last %}</div>{% endif %}
                   {% when 1 %}
-                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-right', sizes: sizes_sm %}
+                    {% render 'installation-card',
+                      entry: entry,
+                      card_class: 'ilc-card--sm ilc-card--m-right',
+                      sizes: sizes_sm
+                    %}
                     </div>
                   {% when 2 %}
                     <div class="ilc-row ilc-row--b">
                       {% render 'installation-card', entry: entry, card_class: 'ilc-card--lg', sizes: sizes_lg %}
-                    {% if forloop.last %}</div>{% endif %}
+                      {% if forloop.last %}</div>{% endif %}
                   {% when 3 %}
-                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-right', sizes: sizes_sm %}
+                    {% render 'installation-card',
+                      entry: entry,
+                      card_class: 'ilc-card--sm ilc-card--m-right',
+                      sizes: sizes_sm
+                    %}
                     </div>
                   {% when 4 %}
                     <div class="ilc-row ilc-row--c">
-                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-left', sizes: sizes_sm %}
-                    {% if forloop.last %}</div>{% endif %}
+                      {% render 'installation-card',
+                        entry: entry,
+                        card_class: 'ilc-card--sm ilc-card--m-left',
+                        sizes: sizes_sm
+                      %}
+                      {% if forloop.last %}</div>{% endif %}
                   {% when 5 %}
-                      {% render 'installation-card', entry: entry, card_class: 'ilc-card--sm ilc-card--m-right', sizes: sizes_sm %}
+                    {% render 'installation-card',
+                      entry: entry,
+                      card_class: 'ilc-card--sm ilc-card--m-right',
+                      sizes: sizes_sm
+                    %}
                     </div>
                 {% endcase %}
               {% endfor %}
@@ -1315,12 +1344,7 @@
   "presets": [
     {
       "name": "Installation Landing",
-      "blocks": [
-        { "type": "link" },
-        { "type": "link" },
-        { "type": "link" },
-        { "type": "link" }
-      ]
+      "blocks": [{ "type": "link" }, { "type": "link" }, { "type": "link" }, { "type": "link" }]
     }
   ]
 }

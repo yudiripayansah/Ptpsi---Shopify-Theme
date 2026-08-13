@@ -1,40 +1,48 @@
 {% layout none %}
 {%- assign variant = product.selected_or_first_available_variant -%}
 <div class="pdp-top-sticky-mini">
-    <div class="ptsm-image">
-        {%- render 'global-image-wrapper',
-            image: product.images[0]
-        -%}
-    </div>
-    <div>
-        <p class="p2">{{ product.title }}</p>
-        <p class="p2 mt-2"><span class="atc-button-price" data-price="{{ variant.price }}">{{ variant.price | money_with_currency }}</span></p>
-    </div>
-    {% if product.variants.size == 1 and product.metafields.custom.planter.value == blank %}
-        <button onclick="pdpProductTop.submitForm(event)" class="bg-green c-white p2 pt-12 pb-12 pr-24 pl-24 p2">
-            Add to Cart
-        </button>
-    {% else %}
-        <a href="#" rel="nofollow" class="bg-green c-white p2">
-            Select Options
-        </a>
-    {% endif %}
+  <div class="ptsm-image">
+    {%- render 'global-image-wrapper', image: product.images[0] -%}
+  </div>
+  <div>
+    <p class="p2">{{ product.title }}</p>
+    <p class="p2 mt-2">
+      <span class="atc-button-price" data-price="{{ variant.price }}">{{ variant.price | money_with_currency }}</span>
+    </p>
+  </div>
+  {% if product.variants.size == 1 and product.metafields.custom.planter.value == blank %}
+    <button onclick="pdpProductTop.submitForm(event)" class="bg-green c-white p2 pt-12 pb-12 pr-24 pl-24 p2">
+      Add to Cart
+    </button>
+  {% else %}
+    <a href="#" rel="nofollow" class="bg-green c-white p2"> Select Options </a>
+  {% endif %}
 </div>
 <div class="pdp-top-atc-sticky-wrapper pt-16 pb-16 pl-16 pr-16 bt-1 b-background">
-    {% if product.gift_card? or product.type == 'Gift Card' %}
-    <button onclick="pdpProductTop.addToCartGC(event)" class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center" data-available="false" data-select-options="true">
-        <span>Add to Cart</span>
-        <span class="atc-button-price" data-price="{{ variant.price }}">{{ variant.price | money_with_currency }}</span>
+  {% if product.gift_card? or product.type == 'Gift Card' %}
+    <button
+      onclick="pdpProductTop.addToCartGC(event)"
+      class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center"
+      data-available="false"
+      data-select-options="true"
+    >
+      <span>Add to Cart</span>
+      <span class="atc-button-price" data-price="{{ variant.price }}">{{ variant.price | money_with_currency }}</span>
     </button>
-    {% else %}
-    <button onclick="pdpProductTop.submitForm(event)" class="pdp-top-atc pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white jc-between ai-center hidden{% if product.tags contains 'plants' %} hide-m{% else %} flex{% endif %}">
-        <span>Add to Cart</span>
-        <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
+  {% else %}
+    <button
+      onclick="pdpProductTop.submitForm(event)"
+      class="pdp-top-atc pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white jc-between ai-center hidden{% if product.tags contains 'plants' %} hide-m{% else %} flex{% endif %}"
+    >
+      <span>Add to Cart</span>
+      <span class="atc-button-price" data-price="{{ variant.price }}"
+        >S${{ variant.price | money_without_currency -}}
+      </span>
     </button>
     {% unless product.tags contains 'plants' %}
-        <button class="pdp-top-atc-dum pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-center ai-center hidden">
-            <span>Select Options</span>
-        </button>
+      <button class="pdp-top-atc-dum pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-center ai-center hidden">
+        <span>Select Options</span>
+      </button>
     {% endunless %}
-    {% endif %}
+  {% endif %}
 </div>

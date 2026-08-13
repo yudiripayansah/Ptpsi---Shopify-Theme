@@ -31,26 +31,22 @@
         <div class="row flex d-flex-row flex-column rowgap-24">
           <div class="col-12 col-d-6">
             <div class="site-footer-logo">
-              {%- render 'global-image-wrapper',
-                image: ss.logo,
-                additional_class: '',
-                image_id: 'footer-logo'
-              %}
+              {%- render 'global-image-wrapper', image: ss.logo, additional_class: '', image_id: 'footer-logo' %}
             </div>
             {% if ss.address != blank %}
-            <div class="site-footer-address p2 c-green d-mt-24 mt-20">
-              {{ss.address |  newline_to_br}}
-            </div>
+              <div class="site-footer-address p2 c-green d-mt-24 mt-20">
+                {{ ss.address | newline_to_br }}
+              </div>
             {% endif %}
             {% if ss.opening_hours != blank %}
-            <div class="site-footer-opening-hours p2 c-green d-mt-16 mt-12">
-              {{ss.opening_hours |  newline_to_br}}
-            </div>
+              <div class="site-footer-opening-hours p2 c-green d-mt-16 mt-12">
+                {{ ss.opening_hours | newline_to_br }}
+              </div>
             {% endif %}
           </div>
           <div class="col-12 col-d-6">
             <div class="h4 c-green site-footer-quote no-anim">
-              {{ss.footer_quote}}
+              {{ ss.footer_quote }}
             </div>
           </div>
         </div>
@@ -92,17 +88,17 @@
             <div class="row ml-0 mr-0 flex colgap-16">
               <div class="col-links col-4 pl-0 pr-0 flex flex-column ai-start rowgap-4">
                 {% for link in ss.link_list_1.links %}
-                  <a href="{{link.url}}" class="p2 c-green">{{link.title}}</a>
+                  <a href="{{link.url}}" class="p2 c-green">{{ link.title }}</a>
                 {% endfor %}
               </div>
               <div class="col-links col-4 pl-0 pr-0 flex flex-column ai-start rowgap-4">
                 {% for link in ss.link_list_2.links %}
-                  <a href="{{link.url}}" class="p2 c-green">{{link.title}}</a>
+                  <a href="{{link.url}}" class="p2 c-green">{{ link.title }}</a>
                 {% endfor %}
               </div>
               <div class="col-links col-4 pl-0 pr-0 flex flex-column ai-start rowgap-4">
                 {% for link in ss.link_list_3.links %}
-                  <a href="{{link.url}}" class="p2 c-green">{{link.title}}</a>
+                  <a href="{{link.url}}" class="p2 c-green">{{ link.title }}</a>
                 {% endfor %}
               </div>
             </div>
@@ -123,30 +119,37 @@
             endif
           -%}
           <div class="flex ai-center cursor pointer">
-            {% comment %} <span class="p3 c-green d-pr-8 pr-6">{{ default_label }}</span>
-            <div class="icon flex ai-center jc-center">
-              {{ settings.icon_select }}
-            </div> {% endcomment %}
+            {% comment %}
+              <span class="p3 c-green d-pr-8 pr-6">{{ default_label }}</span>
+              <div class="icon flex ai-center jc-center">
+                {{ settings.icon_select }}
+              </div>
+            {% endcomment %}
             {%- assign select_id = 'currency-switcher-' | append: section.id -%}
             {% if ss.country_list == 'markets' %}
               {% assign loop = 0 %}
               {% assign values = '' %}
               {% assign option_values = '' %}
-              {% assign vue_onchange = "changeCountry(this.value,$event)" %}
+              {% assign vue_onchange = 'changeCountry(this.value,$event)' %}
               {%- for country in localization.available_countries -%}
                 {% if loop > 0 %}
                   {% assign values = values | append: ',' %}
                   {% assign option_values = option_values | append: ',' %}
                 {% endif %}
                 {% assign loop = loop | plus: 1 %}
-                {% assign values = values | append: country.name | append: ' (' | append: country.currency.iso_code | append: ')' %}
+                {% assign values = values
+                  | append: country.name
+                  | append: ' ('
+                  | append: country.currency.iso_code
+                  | append: ')'
+                %}
                 {% assign option_values = option_values | append: country.currency.iso_code %}
               {%- endfor -%}
             {% else %}
               {% assign loop = 0 %}
               {% assign values = '' %}
               {% assign option_values = '' %}
-              {% assign vue_onchange = "window.location.href = this.value" %}
+              {% assign vue_onchange = 'window.location.href = this.value' %}
               {%- for block in sb -%}
                 {% assign bs = block.settings %}
                 {% if bs.url != blank and bs.title != blank %}
@@ -160,8 +163,8 @@
                 {% endif %}
               {%- endfor -%}
             {% endif %}
-            {% assign values = values| split: ',' %}
-            {% assign option_values = option_values| split: ',' %}
+            {% assign values = values | split: ',' %}
+            {% assign option_values = option_values | split: ',' %}
             {% assign default_text = default_label %}
             {%- render 'global-select',
               default_value: '',
@@ -229,8 +232,8 @@
           </Teleport>
         </div>
         <div class="sfbr-text flex ai-center colgap-16">
-          <span class="p3 c-green">{{ss.copy_text}}</span>
-          <span class="p3 c-green">{{ss.designed_text}}</span>
+          <span class="p3 c-green">{{ ss.copy_text }}</span>
+          <span class="p3 c-green">{{ ss.designed_text }}</span>
         </div>
         {% if ss.link_list_footer_bot != blank %}
           <div class="sfbr-links flex ai-center colgap-16">
@@ -244,13 +247,13 @@
   </div>
   <div class="sticky bottom-0 zi-1">
     <a href="{{ss.sticky_image_link_url}}">
-      {%assign image_id = "footer-sticky-image-" | append: section.id%}
+      {% assign image_id = 'footer-sticky-image-' | append: section.id %}
       {%- render 'global-image-wrapper-responsive',
-          image_id: image_id,
-          desktop_image: ss.image_desktop,
-          mobile_image: ss.image_mobile,
-          additional_class: 'no-bg',
-          load_inside_vue: true
+        image_id: image_id,
+        desktop_image: ss.image_desktop,
+        mobile_image: ss.image_mobile,
+        additional_class: 'no-bg',
+        load_inside_vue: true
       %}
     </a>
   </div>

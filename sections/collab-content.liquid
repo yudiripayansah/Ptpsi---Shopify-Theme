@@ -159,7 +159,14 @@
               {% if bs.image_1 != blank %}
                 <div class="cct-pair-1">
                   <div class="cct-media">
-                    {{ bs.image_1 | image_url: width: 1200 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1200', sizes: '(min-width: 1024px) 32vw, 74vw' }}
+                    {{
+                      bs.image_1
+                      | image_url: width: 1200
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 900, 1200',
+                        sizes: '(min-width: 1024px) 32vw, 74vw'
+                    }}
                   </div>
                   {% if bs.caption_1_label != blank or bs.caption_1_text != blank %}
                     <div class="cct-caption p4 c-label">
@@ -172,7 +179,14 @@
               {% if bs.image_2 != blank %}
                 <div class="cct-pair-2">
                   <div class="cct-media">
-                    {{ bs.image_2 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 74vw' }}
+                    {{
+                      bs.image_2
+                      | image_url: width: 1400
+                      | image_tag:
+                        loading: 'lazy',
+                        widths: '400, 600, 900, 1400',
+                        sizes: '(min-width: 1024px) 41vw, 74vw'
+                    }}
                   </div>
                   {% if bs.caption_2_label != blank or bs.caption_2_text != blank %}
                     <div class="cct-caption p4 c-label">
@@ -193,7 +207,11 @@
                     {% if bs.image_m != blank and bs.image != blank %}
                       <source media="(max-width: 1023px)" srcset="{{ bs.image_m | image_url: width: 1200 }}">
                     {% endif %}
-                    {{ full_image | image_url: width: 2400 | image_tag: loading: 'lazy', widths: '600, 1000, 1600, 2400', sizes: '100vw' }}
+                    {{
+                      full_image
+                      | image_url: width: 2400
+                      | image_tag: loading: 'lazy', widths: '600, 1000, 1600, 2400', sizes: '100vw'
+                    }}
                   </picture>
                 </div>
                 {% if bs.caption_label != blank or bs.caption_text != blank %}
@@ -219,12 +237,20 @@
             <div class="cct-duo {{ spacing }}" {{ block.shopify_attributes }}>
               {% if bs.image_1 != blank %}
                 <div class="cct-media">
-                  {{ bs.image_1 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 41vw' }}
+                  {{
+                    bs.image_1
+                    | image_url: width: 1400
+                    | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 41vw'
+                  }}
                 </div>
               {% endif %}
               {% if bs.image_2 != blank %}
                 <div class="cct-media">
-                  {{ bs.image_2 | image_url: width: 1400 | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 41vw' }}
+                  {{
+                    bs.image_2
+                    | image_url: width: 1400
+                    | image_tag: loading: 'lazy', widths: '400, 600, 900, 1400', sizes: '(min-width: 1024px) 41vw, 41vw'
+                  }}
                 </div>
               {% endif %}
             </div>

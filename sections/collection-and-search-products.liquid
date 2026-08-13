@@ -14,20 +14,20 @@
     if filter_mode != blank
       if filter_mode == 'exclude'
         assign exclude_filters = filter_data
-      else 
+      else
         for filter in collection.filters
-          unless filter_data contains filter.label 
-            assign exclude_filters = exclude_filters | append: filter.label | append: '|' 
+          unless filter_data contains filter.label
+            assign exclude_filters = exclude_filters | append: filter.label | append: '|'
           endunless
         endfor
         assign exclude_filters = exclude_filters | split: '|'
       endif
     endif
-  else 
-    assign products_count = search.results_count 
+  else
+    assign products_count = search.results_count
     assign exclude_filters = ''
     assign filters = search.filters
-  endif 
+  endif
 %}
 <style>
   .shopify-section:not(#shopify-section-header){
@@ -69,12 +69,12 @@
   }
 
   #{{el_id}} .product-card-wrapper {
-    
+
   }
   #{{el_id}} .product-card-wrapper.full {
   }
   #{{el_id}} .product-card-wrapper.many {
-    
+
   }
   #{{el_id}} .product-card-wrapper.many .hover-desktop,
   #{{el_id}} .product-card-wrapper.many .details-con,
@@ -94,7 +94,7 @@
   #{{el_id}} .filter-custom-each.active{
       border-color:var(--black) !important;
   }
-  
+
 
   #collection-filter .noUi-origin{
       width:100%;
@@ -294,12 +294,12 @@
           max-width:250px;
       }
       #{{el_id}} .product-card-wrapper {
-        
+
       }
       #{{el_id}} .product-card-wrapper.full {
       }
       #{{el_id}} .product-card-wrapper.many {
-        
+
       }
       #{{el_id}} .video-wrapper.h-full{
           height:calc(100% - 50px);
@@ -375,7 +375,7 @@
           margin: 0 -12px;
       }
       #{{el_id}} .product-card-wrapper {
-        
+
       }
       #{{el_id}} .banner-wrapper{
           padding-right: 12px;
@@ -392,92 +392,123 @@
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'collection-and-search-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'collection-and-search-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-{%- assign qfc = section.blocks | where: 'type', 'quick_filter_custom_2' -%}
-{%- if qfc.size > 0 -%}
-  {%- for block in qfc -%}
-    {%- for filter in filters -%}
-      {% if filter.param_name contains block.settings.filter_param_name %}
-        {%- for filter_value in filter.values -%}
-          {% assign fvv = filter_value.value | handleize %}
-          {% assign bfv = block.settings.filter_value | handleize %}
-          {% if fvv == bfv %}
-            {% assign has_quick_filter_custom = true %}
-            {% break %}
-          {% endif %}
-        {%- endfor -%}
-        {% break %}
-      {% endif %}
+  {%- assign qfc = section.blocks | where: 'type', 'quick_filter_custom_2' -%}
+  {%- if qfc.size > 0 -%}
+    {%- for block in qfc -%}
+      {%- for filter in filters -%}
+        {% if filter.param_name contains block.settings.filter_param_name %}
+          {%- for filter_value in filter.values -%}
+            {% assign fvv = filter_value.value | handleize %}
+            {% assign bfv = block.settings.filter_value | handleize %}
+            {% if fvv == bfv %}
+              {% assign has_quick_filter_custom = true %}
+              {% break %}
+            {% endif %}
+          {%- endfor -%}
+          {% break %}
+        {% endif %}
+      {%- endfor -%}
     {%- endfor -%}
-  {%- endfor -%}
-{%- endif -%}
+  {%- endif -%}
 
-{%- assign max_price_range_global = 0 -%}
-<div id="{{el_id}}" class="fade bg-background-main {% if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' or section.settings.hide_pagination %}hide-normal-pagination{% endif %}">
-  <div class="relative">
-    <div class="container overflow">
-      <div id="collection-filter" class="w-full pt-16 pb-16 bt-1 b-main {% if section.settings.hide_filter and section.settings.hide_sort %}hide-m{% endif %} zi-2">
-        <div class="collection-filter-bar flex ai-start jc-between d-colgap-24 flex-wrap flex-wrap colgap-16 rowgap-12">
-          <div class="filter-wrapper flex jc-start {% if section.settings.hide_filter %}hide-m{% endif %}">
-            <div class="flex ai-center">
-              <button type="button" @click="toggleFilterMobile" aria-label="{{ 'collections.filters.title' | t }}" class="p2 toggle-filter-mobile cursor">
-                <span class="p2 c-green">{{ 'collections.filters.title' | t }}</span>
-                <span v-if="filters.length" class="text p2 ml-4 c-green">
-                  <span>(</span> 
-                  <span v-html="filters.length < 10 ? '0'+filters.length : filters.length"></span>
-                  <span>)</span>
-                </span>
-              </button>
-              <teleport to="body">
-                <div id="collection-filter">
-                  <div class="filter-wrapper">
-                    <div
-                      class="page-overlay zi-6"
-                      @click="toggleFilterMobile"
-                      :class="{'active': filterActiveMobile}"
-                    ></div>
-                    <div
-                      class="main-filter bg-background-main zi-7 relative flex flex-column"
-                      :class="{'active-mobile': filterActiveMobile}"
-                      style="cursor:auto"
-                    >
-                      <div class="flex ai-center jc-between filter-header-mobile d-pl-24 d-pr-24 pl-16 pr-16">
-                        <div class="flex ai-center jc-between bb-1 b-main w-full pt-20 pb-12 d-pt-16 d-pb-12">
-                          <div class="p1 flex ai-start c-green">
-                            Filter
-                            <span v-if="filters.length" class="text p4 c-label ml-4 c-green">
-                              <span v-html="filters.length < 10 ? '0'+filters.length : filters.length"></span>
-                            </span>
+  {%- assign max_price_range_global = 0 -%}
+  <div
+    id="{{el_id}}"
+    class="fade bg-background-main {% if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' or section.settings.hide_pagination %}hide-normal-pagination{% endif %}"
+  >
+    <div class="relative">
+      <div class="container overflow">
+        <div
+          id="collection-filter"
+          class="w-full pt-16 pb-16 bt-1 b-main {% if section.settings.hide_filter and section.settings.hide_sort %}hide-m{% endif %} zi-2"
+        >
+          <div class="collection-filter-bar flex ai-start jc-between d-colgap-24 flex-wrap flex-wrap colgap-16 rowgap-12">
+            <div class="filter-wrapper flex jc-start {% if section.settings.hide_filter %}hide-m{% endif %}">
+              <div class="flex ai-center">
+                <button
+                  type="button"
+                  @click="toggleFilterMobile"
+                  aria-label="{{ 'collections.filters.title' | t }}"
+                  class="p2 toggle-filter-mobile cursor"
+                >
+                  <span class="p2 c-green">{{ 'collections.filters.title' | t }}</span>
+                  <span v-if="filters.length" class="text p2 ml-4 c-green">
+                    <span>(</span>
+                    <span v-html="filters.length < 10 ? '0'+filters.length : filters.length"></span>
+                    <span>)</span>
+                  </span>
+                </button>
+                <teleport to="body">
+                  <div id="collection-filter">
+                    <div class="filter-wrapper">
+                      <div
+                        class="page-overlay zi-6"
+                        @click="toggleFilterMobile"
+                        :class="{'active': filterActiveMobile}"
+                      ></div>
+                      <div
+                        class="main-filter bg-background-main zi-7 relative flex flex-column"
+                        :class="{'active-mobile': filterActiveMobile}"
+                        style="cursor:auto"
+                      >
+                        <div class="flex ai-center jc-between filter-header-mobile d-pl-24 d-pr-24 pl-16 pr-16">
+                          <div class="flex ai-center jc-between bb-1 b-main w-full pt-20 pb-12 d-pt-16 d-pb-12">
+                            <div class="p1 flex ai-start c-green">
+                              Filter
+                              <span v-if="filters.length" class="text p4 c-label ml-4 c-green">
+                                <span v-html="filters.length < 10 ? '0'+filters.length : filters.length"></span>
+                              </span>
+                            </div>
+                            <button
+                              @click="toggleFilterMobile"
+                              type="button"
+                              class="close font-0 flex ai-center jc-center p-4"
+                            >
+                              {{ settings.icon_close }}
+                            </button>
                           </div>
-                          <button @click="toggleFilterMobile" type="button" class="close font-0 flex ai-center jc-center p-4">
-                            {{ settings.icon_close }}
-                          </button>
                         </div>
-                      </div>
-      
-                      <div class="each-filter-wrapper flex-column flex d-rowgap-24 rowgap-20">
-                        <div class="active-filter-wrapper flex flex-wrap ai-center colgap-8 rowgap-8" v-if="filters.length > 0">
-                          <div class="b-1 b-cream pt-8 pb-8 pl-12 pr-12 flex ai-center colgap-6 cursor" v-for="(fil,idx) in filters">
-                            <span v-html="fil.split('=')[1]" class="p3 c-green"></span>
-                            <span class="icon flex ai-center jc-center p-3" @click="removeFilter(idx)">{{settings.icon_close}}</span>
+
+                        <div class="each-filter-wrapper flex-column flex d-rowgap-24 rowgap-20">
+                          <div
+                            class="active-filter-wrapper flex flex-wrap ai-center colgap-8 rowgap-8"
+                            v-if="filters.length > 0"
+                          >
+                            <div
+                              class="b-1 b-cream pt-8 pb-8 pl-12 pr-12 flex ai-center colgap-6 cursor"
+                              v-for="(fil,idx) in filters"
+                            >
+                              <span v-html="fil.split('=')[1]" class="p3 c-green"></span>
+                              <span class="icon flex ai-center jc-center p-3" @click="removeFilter(idx)">
+                                {{- settings.icon_close -}}
+                              </span>
+                            </div>
+                            <div class="cursor p3 c-green underline pl-4 pr-4" @click="filters=[];applyFilter()">
+                              Clear All
+                            </div>
                           </div>
-                          <div class="cursor p3 c-green underline pl-4 pr-4" @click="filters=[];applyFilter()">Clear All</div>
-                        </div>
-                        {% capture sort_opt_label %}
+                          {% capture sort_opt_label %}
                             {{ 'collections.sorting.date_descending' | t }}|{{ 'collections.sorting.featured' | t }}|{{ 'collections.sorting.price_ascending' | t }}|{{ 'collections.sorting.price_descending' | t }}
                         {% endcapture %}
-                        {%- assign sort_opt_label = sort_opt_label | split: '|' -%}
-                        {%- assign sort_opt_value = 'created-descending,featured,price-ascending,price-descending' | split: ',' -%}
-      
-                        <div class="each-filter relative w-full">
-                          <div class="p4 c-label">
-                            {{'collections.sorting.title'|t}}
-                          </div>
-                          <div class="filter-options flex flex-wrap mt-4" v-cloak>
-                            <div class="flex flex-wrap rowgap-2 flex-column">
-                              {%- for label in sort_opt_label -%}
-                                  <label type="button" aria-label="{{label}}" class="filter-opt cursor flex ai-center flex-row">
+                          {%- assign sort_opt_label = sort_opt_label | split: '|' -%}
+                          {%- assign sort_opt_value = 'created-descending,featured,price-ascending,price-descending'
+                            | split: ','
+                          -%}
+
+                          <div class="each-filter relative w-full">
+                            <div class="p4 c-label">
+                              {{ 'collections.sorting.title' | t }}
+                            </div>
+                            <div class="filter-options flex flex-wrap mt-4" v-cloak>
+                              <div class="flex flex-wrap rowgap-2 flex-column">
+                                {%- for label in sort_opt_label -%}
+                                  <label
+                                    type="button"
+                                    aria-label="{{label}}"
+                                    class="filter-opt cursor flex ai-center flex-row"
+                                  >
                                     <input
                                       type="radio"
                                       name="sort_by"
@@ -487,70 +518,55 @@
                                     >
                                     <span class="c-green p2">{{ label }}</span>
                                     <span class="icon flex ml-4 ai-center jc-center y-1">
-                                      {{settings.icon_orange_circle}}
+                                      {{ settings.icon_orange_circle }}
                                     </span>
                                   </label>
-                              {%- endfor -%}
+                                {%- endfor -%}
+                              </div>
                             </div>
                           </div>
-                        </div>
-      
-                        {%- for filter in filters -%}
-                          {%- assign max_price_range = filter.range_max | money_without_currency | replace: ',', '' -%}
-                          {%- assign param_name = filter.values[0].param_name -%}
-                          {%- assign cb_id = 'coll-filter-' | append: filter.label | handleize -%}
-      
-                          {%- unless exclude_filters contains filter.label -%}
-                            {%- assign label_text = filter.label -%}
-      
-                            {%- for rf in rename_filters -%}
-                              {%- assign rf_splitted = rf | split: '=' -%}
-                              {%- if rf_splitted[0] == filter.label -%}
-                                {%- assign label_text = rf_splitted[1] -%}
-                              {%- endif -%}
-                            {%- endfor -%}
-                            {%liquid 
-                              assign label_product_type = collection.metafields.custom.product_type_label.value
-                              if label_text == 'Product Type' and label_product_type != blank
-                                assign label_text = label_product_type
-                              endif
-                            %}
-                            <div
-                              class="each-filter relative w-full {% if section.settings.hide_specific_filter contains param_name %}hide-m{%endif %}"
-                              data-param-name="{{param_name}}"
-                            >
-                              <div class="p4 c-label">
-                                {{ label_text }}
-                              </div>
-                              {%- case filter.type -%}
-                                {%- when 'boolean', 'list' -%}
-                                  <div class="filter-options flex flex-wrap mt-4" v-cloak>
-                                    <div class="flex flex-wrap rowgap-2 flex-column">
-                                      {%- for filter_value in filter.values -%}
-                                        {% assign is_color_filter = false %}
-                                        {% if filter_value.param_name contains 'color' %}
-                                          {% assign is_color_filter = true %}
-                                        {% endif %}
-                                        {% if is_color_filter and false %}
-                                          <label class="block cb-container color-filter-option">
-                                            <input
-                                              type="checkbox"
-                                              id="{{ cb_id }}"
-                                              name="{{ param_name }}"
-                                              value="{{ param_name }}={{ filter_value.value }}"
-                                              v-model="filters"
-                                              @change="delayFilter"
-                                            >
-                                            <div class="flex ai-center">
-                                              <div
-                                                class="mr-5 checkmark-color swatch-{{filter_value.label | handleize}}"
-                                              ></div>
-                                              <div class="p5">{{ filter_value.label }}</div>
-                                            </div>
-                                          </label>
-                                        {% else %}
-                                          {% unless param_name == 'filter.v.availability' and filter_value.value == '0' %}
-                                            <label type="button" aria-label="{{filter_value.label}}" class="filter-opt cursor flex ai-center flex-row">
+
+                          {%- for filter in filters -%}
+                            {%- assign max_price_range = filter.range_max
+                              | money_without_currency
+                              | replace: ',', ''
+                            -%}
+                            {%- assign param_name = filter.values[0].param_name -%}
+                            {%- assign cb_id = 'coll-filter-' | append: filter.label | handleize -%}
+
+                            {%- unless exclude_filters contains filter.label -%}
+                              {%- assign label_text = filter.label -%}
+
+                              {%- for rf in rename_filters -%}
+                                {%- assign rf_splitted = rf | split: '=' -%}
+                                {%- if rf_splitted[0] == filter.label -%}
+                                  {%- assign label_text = rf_splitted[1] -%}
+                                {%- endif -%}
+                              {%- endfor -%}
+                              {% liquid
+                                assign label_product_type = collection.metafields.custom.product_type_label.value
+                                if label_text == 'Product Type' and label_product_type != blank
+                                  assign label_text = label_product_type
+                                endif
+                              %}
+                              <div
+                                class="each-filter relative w-full {% if section.settings.hide_specific_filter contains param_name %}hide-m{%endif %}"
+                                data-param-name="{{param_name}}"
+                              >
+                                <div class="p4 c-label">
+                                  {{ label_text }}
+                                </div>
+                                {%- case filter.type -%}
+                                  {%- when 'boolean', 'list' -%}
+                                    <div class="filter-options flex flex-wrap mt-4" v-cloak>
+                                      <div class="flex flex-wrap rowgap-2 flex-column">
+                                        {%- for filter_value in filter.values -%}
+                                          {% assign is_color_filter = false %}
+                                          {% if filter_value.param_name contains 'color' %}
+                                            {% assign is_color_filter = true %}
+                                          {% endif %}
+                                          {% if is_color_filter and false %}
+                                            <label class="block cb-container color-filter-option">
                                               <input
                                                 type="checkbox"
                                                 id="{{ cb_id }}"
@@ -559,171 +575,226 @@
                                                 v-model="filters"
                                                 @change="delayFilter"
                                               >
-                                              <span
-                                                
-                                                class="c-green p2"
-                                              >
-                                                {% if param_name == 'filter.v.availability' %}
-                                                  {{ 'collections.filters.in_stock' | t }}
-                                                {% else %}
-                                                  {{ filter_value.label }}
-                                                {% endif %}
-                                              </span>
-                                              <span class="icon flex ml-4 ai-center jc-center y-1">
-                                                {{settings.icon_orange_circle}}
-                                              </span>
+                                              <div class="flex ai-center">
+                                                <div
+                                                  class="mr-5 checkmark-color swatch-{{filter_value.label | handleize}}"
+                                                ></div>
+                                                <div class="p5">{{ filter_value.label }}</div>
+                                              </div>
                                             </label>
-                                          {% endunless %}
-                                        {% endif %}
-                                      {%- endfor -%}
-                                    </div>
-                                  </div>
-                                {%- when 'price_range' -%}
-                                  {%- assign max_price_range_global = filter.range_max
-                                    | money_without_currency
-                                    | replace: ',', ''
-                                  -%}
-                                  <div class="filter-options mt-8 zi-1">
-                                    <div id="price-slider" class="mb-16 pl-5 pr-5"></div>
-                                    <div class="flex ai-center jc-between">
-                                      <div class="p2 c-green">
-                                        {{ cart.currency.symbol -}}
-                                        <span class="filter-price-min">0</span>
+                                          {% else %}
+                                            {% unless param_name == 'filter.v.availability'
+                                              and filter_value.value == '0'
+                                            %}
+                                              <label
+                                                type="button"
+                                                aria-label="{{filter_value.label}}"
+                                                class="filter-opt cursor flex ai-center flex-row"
+                                              >
+                                                <input
+                                                  type="checkbox"
+                                                  id="{{ cb_id }}"
+                                                  name="{{ param_name }}"
+                                                  value="{{ param_name }}={{ filter_value.value }}"
+                                                  v-model="filters"
+                                                  @change="delayFilter"
+                                                >
+                                                <span
+                                                  class="c-green p2"
+                                                >
+                                                  {% if param_name == 'filter.v.availability' %}
+                                                    {{ 'collections.filters.in_stock' | t }}
+                                                  {% else %}
+                                                    {{ filter_value.label }}
+                                                  {% endif %}
+                                                </span>
+                                                <span class="icon flex ml-4 ai-center jc-center y-1">
+                                                  {{ settings.icon_orange_circle }}
+                                                </span>
+                                              </label>
+                                            {% endunless %}
+                                          {% endif %}
+                                        {%- endfor -%}
                                       </div>
-                                      <div class="p2 c-green">
-                                        {{ cart.currency.symbol -}}
-                                        <span class="filter-price-max">{{ max_price_range }}</span>
+                                    </div>
+                                  {%- when 'price_range' -%}
+                                    {%- assign max_price_range_global = filter.range_max
+                                      | money_without_currency
+                                      | replace: ',', ''
+                                    -%}
+                                    <div class="filter-options mt-8 zi-1">
+                                      <div id="price-slider" class="mb-16 pl-5 pr-5"></div>
+                                      <div class="flex ai-center jc-between">
+                                        <div class="p2 c-green">
+                                          {{ cart.currency.symbol -}}
+                                          <span class="filter-price-min">0</span>
+                                        </div>
+                                        <div class="p2 c-green">
+                                          {{ cart.currency.symbol -}}
+                                          <span class="filter-price-max">{{ max_price_range }}</span>
+                                        </div>
                                       </div>
                                     </div>
-                                  </div>
-                              {%- endcase -%}
-                            </div>
-                          {%- endunless -%}
-                        {%- endfor -%}
-                      </div>
-      
-                      <div class="bottom-con w-full absolute bottom-0 left-0 pt-16 pb-20 pl-16 pr-16 d-pt-16 d-pb-24 d-pr-24 d-pl-24 bt-1 b-main flex ai-center jc-between d-colgap-12">
-                        <button @click="clearFilter()" class="btn-filter-clear p2 pt-12 pb-12 pl-24 pr-24 tc c-green b-1 b-green">
-                          {{ 'collections.filters.clear_all' | t }}
-                        </button>
-                        <button
-                          @click="closeFilterMobile()"
-                          class="btn-filter-view p2 pt-12 pb-12 pl-16 pr-16 tc c-white b-1 b-green bg-green"
-                        >
-                          View Results (<span class="total-products"></span>)
-                        </button>
+                                {%- endcase -%}
+                              </div>
+                            {%- endunless -%}
+                          {%- endfor -%}
+                        </div>
+
+                        <div class="bottom-con w-full absolute bottom-0 left-0 pt-16 pb-20 pl-16 pr-16 d-pt-16 d-pb-24 d-pr-24 d-pl-24 bt-1 b-main flex ai-center jc-between d-colgap-12">
+                          <button
+                            @click="clearFilter()"
+                            class="btn-filter-clear p2 pt-12 pb-12 pl-24 pr-24 tc c-green b-1 b-green"
+                          >
+                            {{ 'collections.filters.clear_all' | t }}
+                          </button>
+                          <button
+                            @click="closeFilterMobile()"
+                            class="btn-filter-view p2 pt-12 pb-12 pl-16 pr-16 tc c-white b-1 b-green bg-green"
+                          >
+                            View Results (<span class="total-products"></span>)
+                          </button>
+                        </div>
                       </div>
                     </div>
                   </div>
-                </div>
-              </teleport>
+                </teleport>
+              </div>
             </div>
-          </div>
-          {%liquid 
-            for filter in filters
-              assign label_text = filter.label
-              unless exclude_filters contains filter.label
-                if label_text == 'Size' or label_text == 'size'
-                  assign show_filter_size = true
-                endif
-              endunless
-            endfor 
-          %}
-          {% if show_filter_size %}
-          <div class="filter-size-wrapper">
-            {%- for filter in filters -%}
-              {%- assign param_name = filter.values[0].param_name -%}
-              {%- assign cb_id = 'coll-filter-' | append: filter.label | handleize -%}
-              {%- assign label_text = filter.label -%}
-              {% if label_text == 'Size' or label_text == 'size' %}
-              <div class="each-filter relative w-full flex ai-start colgap-16" data-param-name="{{param_name}}">
-                <div class="p2 c-green">
-                  {{ label_text }}
-                </div>
-                {%- case filter.type -%}
-                  {%- when 'boolean', 'list' -%}
-                    <div class="filter-options flex flex-wrap" v-cloak>
-                      <div class="flex flex-wrap rowgap-2 flex-row colgap-16">
-                        {%- for filter_value in filter.values -%}
-                          <button class="filter-opt-btn" type="button" aria-label="{{filter_value.label}}">
-                            <label class="filter-opt cursor flex ai-center flex-row">
-                              <input
-                                type="checkbox"
-                                id="{{ cb_id }}"
-                                name="{{ param_name }}"
-                                value="{{ param_name }}={{ filter_value.value }}"
-                                v-model="filters"
-                                @change="delayFilter"
-                              >
-                              <span class="c-green p2">
-                                {{ filter_value.label }}
-                              </span>
-                              <span class="icon flex ml-4 ai-center jc-center y-1">
-                                {{settings.icon_orange_circle}}
-                              </span>
-                            </label>
-                          </button>
-                        {%- endfor -%}
+            {% liquid
+              for filter in filters
+                assign label_text = filter.label
+                unless exclude_filters contains filter.label
+                  if label_text == 'Size' or label_text == 'size'
+                    assign show_filter_size = true
+                  endif
+                endunless
+              endfor
+            %}
+            {% if show_filter_size %}
+              <div class="filter-size-wrapper">
+                {%- for filter in filters -%}
+                  {%- assign param_name = filter.values[0].param_name -%}
+                  {%- assign cb_id = 'coll-filter-' | append: filter.label | handleize -%}
+                  {%- assign label_text = filter.label -%}
+                  {% if label_text == 'Size' or label_text == 'size' %}
+                    <div class="each-filter relative w-full flex ai-start colgap-16" data-param-name="{{param_name}}">
+                      <div class="p2 c-green">
+                        {{ label_text }}
                       </div>
+                      {%- case filter.type -%}
+                        {%- when 'boolean', 'list' -%}
+                          <div class="filter-options flex flex-wrap" v-cloak>
+                            <div class="flex flex-wrap rowgap-2 flex-row colgap-16">
+                              {%- for filter_value in filter.values -%}
+                                <button class="filter-opt-btn" type="button" aria-label="{{filter_value.label}}">
+                                  <label class="filter-opt cursor flex ai-center flex-row">
+                                    <input
+                                      type="checkbox"
+                                      id="{{ cb_id }}"
+                                      name="{{ param_name }}"
+                                      value="{{ param_name }}={{ filter_value.value }}"
+                                      v-model="filters"
+                                      @change="delayFilter"
+                                    >
+                                    <span class="c-green p2">
+                                      {{ filter_value.label }}
+                                    </span>
+                                    <span class="icon flex ml-4 ai-center jc-center y-1">
+                                      {{ settings.icon_orange_circle }}
+                                    </span>
+                                  </label>
+                                </button>
+                              {%- endfor -%}
+                            </div>
+                          </div>
+                      {%- endcase -%}
                     </div>
-                {%- endcase -%}
+                  {% endif %}
+                {%- endfor -%}
               </div>
-              {% endif %}
-            {%- endfor -%}
-          </div>
-          {% endif %}
-          <div class="sort-wrapper flex jc-end {% if section.settings.hide_sort %}hide-m{% endif %}">
-            <div class="flex ai-center colgap-16">
-              <div class="p2 c-green">
-                {{ 'collections.general.view' | t }}:
+            {% endif %}
+            <div class="sort-wrapper flex jc-end {% if section.settings.hide_sort %}hide-m{% endif %}">
+              <div class="flex ai-center colgap-16">
+                <div class="p2 c-green">{{ 'collections.general.view' | t }}:</div>
+                <div class="flex ai-center colgap-4 cursor" @click="toggleView(4)">
+                  <button type="button" aria-label="View Count" class="hide-m show-d">04</button>
+                  <button type="button" aria-label="View Count" class="hide-d">02</button>
+                  <span class="icon ai-center jc-center y-1" :class="(viewMode == 4) ? 'flex': 'hide-m'">
+                    {{ settings.icon_orange_circle }}
+                  </span>
+                </div>
+                <div class="flex ai-center colgap-4 cursor" @click="toggleView(6)">
+                  <button type="button" aria-label="View Count" class="hide-m show-d">06</button>
+                  <button type="button" aria-label="View Count" class="hide-d">03</button>
+                  <span class="icon ai-center jc-center y-1" :class="(viewMode == 6) ? 'flex': 'hide-m'">
+                    {{ settings.icon_orange_circle }}
+                  </span>
+                </div>
               </div>
-              <div class="flex ai-center colgap-4 cursor" @click="toggleView(4)">
-                <button type="button" aria-label="View Count" class="hide-m show-d">04</button>
-                <button type="button" aria-label="View Count" class="hide-d">02</button>
-                <span class="icon ai-center jc-center y-1" :class="(viewMode == 4) ? 'flex': 'hide-m'">
-                  {{settings.icon_orange_circle}}
-                </span>
-              </div>
-              <div class="flex ai-center colgap-4 cursor" @click="toggleView(6)">
-                <button type="button" aria-label="View Count" class="hide-m show-d">06</button>
-                <button type="button" aria-label="View Count" class="hide-d">03</button>
-                <span class="icon ai-center jc-center y-1" :class="(viewMode == 6) ? 'flex': 'hide-m'">
-                  {{settings.icon_orange_circle}}
-                </span>
-              </div>
+              {% comment %}
+                {% if template == 'search' %}
+                  <div class="flex">
+                    <div class="p6 uppercase total-products"></div>
+                    <div class="p6 uppercase ml-4 total-products-text"></div>
+                  </div>
+                {% endif %}
+              {% endcomment %}
             </div>
-            {% comment %} {% if template == 'search' %}
-              <div class="flex">
-                <div class="p6 uppercase total-products"></div>
-                <div class="p6 uppercase ml-4 total-products-text"></div>
-              </div>
-            {% endif %} {% endcomment %}
           </div>
         </div>
-      </div>
-      <div class="overlay-container relative">
-        <div class="row flex flex-wrap products-outer-wrapper d-rowgap-40 rowgap-32" :class="viewMode == 4 ? 'col-four':'col-six'" ref="collection-products">
-          {%- if section.settings.disable_add_to_cart -%}
-            {%- render 'collection-and-search-products', load_inside_vue: true, first_load: true, section: section, disable_atc: true -%}
-          {%- else -%}
-            {%- render 'collection-and-search-products', load_inside_vue: true, first_load: true, section: section -%}
-          {%- endif -%}
+        <div class="overlay-container relative">
+          <div
+            class="row flex flex-wrap products-outer-wrapper d-rowgap-40 rowgap-32"
+            :class="viewMode == 4 ? 'col-four':'col-six'"
+            ref="collection-products"
+          >
+            {%- if section.settings.disable_add_to_cart -%}
+              {%- render 'collection-and-search-products',
+                load_inside_vue: true,
+                first_load: true,
+                section: section,
+                disable_atc: true
+              -%}
+            {%- else -%}
+              {%- render 'collection-and-search-products', load_inside_vue: true, first_load: true, section: section -%}
+            {%- endif -%}
+          </div>
+          <div v-if="expandedFilter != null || expandedSort != null" class="overlay" style="z-index:3"></div>
         </div>
-        <div v-if="expandedFilter != null || expandedSort != null" class="overlay" style="z-index:3"></div>
-      </div>
 
-      {% comment %} PAGINATION {% endcomment %}
-      {%- if request.page_type == 'collection' -%}
-        {%- if collection.metafields.banner_in_product_list.enable -%}
-          {%- if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' -%}
-            <div
-              v-if="productsDisplayedCount < totalProducts"
-              class="mt-40 d-mt-60 tc {% if section.settings.hide_pagination %}hide-m{% endif %}"
-            >
-              <button @click="showMore" class="pt-12 pb-12 pl-24 pr-24 b-1 b-green p2 c-green show-more-btn" ref="show-more-btn">
-                {{ 'collections.general.show_more' | t }}
-              </button>
-            </div>
+        {% comment %} PAGINATION {% endcomment %}
+        {%- if request.page_type == 'collection' -%}
+          {%- if collection.metafields.banner_in_product_list.enable -%}
+            {%- if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' -%}
+              <div
+                v-if="productsDisplayedCount < totalProducts"
+                class="mt-40 d-mt-60 tc {% if section.settings.hide_pagination %}hide-m{% endif %}"
+              >
+                <button
+                  @click="showMore"
+                  class="pt-12 pb-12 pl-24 pr-24 b-1 b-green p2 c-green show-more-btn"
+                  ref="show-more-btn"
+                >
+                  {{ 'collections.general.show_more' | t }}
+                </button>
+              </div>
+            {%- endif -%}
+          {%- else -%}
+            {%- if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' -%}
+              <div
+                v-if="productsDisplayedCount < totalProducts"
+                class="mt-40 d-mt-60 tc {% if section.settings.hide_pagination %}hide-m{% endif %}"
+              >
+                <button
+                  @click="showMore"
+                  class="pt-12 pb-12 pl-24 pr-24 b-1 b-green p2 c-green show-more-btn"
+                  ref="show-more-btn"
+                >
+                  {{ 'collections.general.show_more' | t }}
+                </button>
+              </div>
+            {%- endif -%}
           {%- endif -%}
         {%- else -%}
           {%- if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' -%}
@@ -731,47 +802,35 @@
               v-if="productsDisplayedCount < totalProducts"
               class="mt-40 d-mt-60 tc {% if section.settings.hide_pagination %}hide-m{% endif %}"
             >
-              <button @click="showMore" class="pt-12 pb-12 pl-24 pr-24 b-1 b-green p2 c-green show-more-btn" ref="show-more-btn">
+              <button @click="showMore" class="pt-12 pb-12 pl-24 pr-24 b-1 b-green p2 c-green" ref="show-more-btn">
                 {{ 'collections.general.show_more' | t }}
               </button>
             </div>
           {%- endif -%}
         {%- endif -%}
-      {%- else -%}
-        {%- if section.settings.pagination_type == 'show_more' or section.settings.pagination_type == 'infinite' -%}
-          <div
-            v-if="productsDisplayedCount < totalProducts"
-            class="mt-40 d-mt-60 tc {% if section.settings.hide_pagination %}hide-m{% endif %}"
-          >
-            <button @click="showMore" class="pt-12 pb-12 pl-24 pr-24 b-1 b-green p2 c-green" ref="show-more-btn">
-              {{ 'collections.general.show_more' | t }}
-            </button>
-          </div>
-        {%- endif -%}
-      {%- endif -%}
+      </div>
     </div>
   </div>
-</div>
 
-{%- if max_price_range == blank -%}
-  {%- assign max_price_range = 0 -%}
-{%- endif -%}
+  {%- if max_price_range == blank -%}
+    {%- assign max_price_range = 0 -%}
+  {%- endif -%}
 
-{%- if request.page_type == 'collection' -%}
-  {%- assign products_count = collection.products_count -%}
-  {%- assign product_displayed_count = collection.products.size -%}
-  {%- assign current_page = 1 -%}
-{%- else -%}
-  {%- assign products_count = search.results_count -%}
-  {%- assign product_displayed_count = search.results.size -%}
-{%- endif -%}
+  {%- if request.page_type == 'collection' -%}
+    {%- assign products_count = collection.products_count -%}
+    {%- assign product_displayed_count = collection.products.size -%}
+    {%- assign current_page = 1 -%}
+  {%- else -%}
+    {%- assign products_count = search.results_count -%}
+    {%- assign product_displayed_count = search.results.size -%}
+  {%- endif -%}
 {% endif %}
 
 {% if section.settings.pagination_type == 'infinite' %}
   <script>
     'use strict';
     var Ajaxinate = function t(e) {
-      (this.settings = Object.assign(
+      ((this.settings = Object.assign(
         {
           method: 'scroll',
           container: '#AjaxinateContainer',
@@ -780,7 +839,7 @@
           loadingText: 'Loading',
           callback: null,
         },
-        e || {}
+        e || {},
       )),
         (this.addScrollListeners = this.addScrollListeners.bind(this)),
         (this.addClickListener = this.addClickListener.bind(this)),
@@ -791,9 +850,9 @@
         (this.destroy = this.destroy.bind(this)),
         (this.containerElement = document.querySelector(this.settings.container)),
         (this.paginationElement = document.querySelector(this.settings.pagination)),
-        this.initialize();
+        this.initialize());
     };
-    (Ajaxinate.prototype.initialize = function t() {
+    ((Ajaxinate.prototype.initialize = function t() {
       this.containerElement &&
         { click: this.addClickListener, scroll: this.addScrollListeners }[this.settings.method]();
     }),
@@ -812,12 +871,12 @@
             this.nextPageLinkElement.addEventListener('click', this.stopMultipleClicks));
       }),
       (Ajaxinate.prototype.stopMultipleClicks = function t(e) {
-        e.preventDefault(),
+        (e.preventDefault(),
           this.clickActive &&
             ((this.nextPageLinkElement.innerHtml = this.settings.loadingText),
             (this.nextPageUrl = this.nextPageLinkElement.href),
             (this.clickActive = !1),
-            this.loadMore());
+            this.loadMore()));
       }),
       (Ajaxinate.prototype.checkIfPaginationInView = function t() {
         var e = this.paginationElement.getBoundingClientRect().top - this.settings.offset,
@@ -832,7 +891,7 @@
             this.loadMore()));
       }),
       (Ajaxinate.prototype.loadMore = function t() {
-        (this.request = new XMLHttpRequest()),
+        ((this.request = new XMLHttpRequest()),
           (this.request.onreadystatechange = function t() {
             if (4 === this.request.readyState && 200 === this.request.status) {
               var e = this.request.responseXML.querySelectorAll(this.settings.container)[0],
@@ -846,28 +905,28 @@
               }
 
               //this.containerElement.insertAdjacentHTML('beforeend', e.innerHTML),
-              (this.paginationElement.innerHTML = i.innerHTML),
+              ((this.paginationElement.innerHTML = i.innerHTML),
                 this.settings.callback &&
                   'function' == typeof this.settings.callback &&
                   this.settings.callback(this.request.responseXML),
-                this.initialize();
+                this.initialize());
             }
           }.bind(this)),
           this.request.open('GET', this.nextPageUrl),
           (this.request.responseType = 'document'),
-          this.request.send();
+          this.request.send());
       }),
       (Ajaxinate.prototype.removeClickListener = function t() {
         this.nextPageLinkElement.removeEventListener('click', this.stopMultipleClicks);
       }),
       (Ajaxinate.prototype.removeScrollListener = function t() {
-        document.removeEventListener('scroll', this.checkIfPaginationInView),
+        (document.removeEventListener('scroll', this.checkIfPaginationInView),
           window.removeEventListener('resize', this.checkIfPaginationInView),
-          window.removeEventListener('orientationchange', this.checkIfPaginationInView);
+          window.removeEventListener('orientationchange', this.checkIfPaginationInView));
       }),
       (Ajaxinate.prototype.destroy = function t() {
-        return { click: this.removeClickListener, scroll: this.removeScrollListener }[this.settings.method](), this;
-      });
+        return ({ click: this.removeClickListener, scroll: this.removeScrollListener }[this.settings.method](), this);
+      }));
   </script>
   <script>
     var endlessScroll = new Ajaxinate({

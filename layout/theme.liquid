@@ -1,12 +1,13 @@
 <!doctype html>
 <!--[if IE 9]> <html class="ie9 no-js" lang="{{ shop.locale }}"> <![endif]-->
-<!--[if (gt IE 9)|!(IE)]><!-->
-  <html class="no-js" lang="{{ shop.locale }}"> <!--<![endif]--> 
+<!-- [if (gt IE 9)|!(IE)]><! -->
+<html class="no-js" lang="{{ shop.locale }}">
+  <!-- <![endif] -->
   <head>
     {%- if template == 'list-collections' or template.suffix == 'set' -%}
-      <meta name="robots" content="noindex, nofollow"> 
+      <meta name="robots" content="noindex, nofollow">
     {%- endif -%}
-    
+
     <link rel="preconnect" href="//cdn.shopify.com" />
     <link rel="dns-prefetch" href="//cdn.shopify.com" />
     <link rel="preconnect" href="//v.shopify.com" />
@@ -15,12 +16,15 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
     <meta name="format-detection" content="telephone=no">
     <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
-        
+
     <link rel="canonical" href="{{ canonical_url }}">
-    {%- if settings.favicon != blank %}<link
+    {%- if settings.favicon != blank -%}
+      <link
         rel="shortcut icon"
         href="{{ settings.favicon | img_url:'100x' }}"
-        type="image/png">{%- endif -%}
+        type="image/png"
+      >
+    {%- endif -%}
     {%- capture seo_title -%}
       {{ page_title }}
       {%- if current_tags -%}
@@ -34,7 +38,7 @@
       {%- endunless -%}
     {%- endcapture -%}
     <title>{{ seo_title }}</title>
-    
+
     {%- if page_description -%}
       <meta name="description" content="{{ page_description | escape }}">
     {%- endif -%}
@@ -47,51 +51,56 @@
     {{ 'style-custom.css' | asset_url | stylesheet_tag: preload: true }}
 
     <style>
-      /* swatch color metaobject */
-    {%- paginate shop.metaobjects.shopify--color-pattern.values by 250 -%}
-      {%- for color in shop.metaobjects.shopify--color-pattern.values -%}
-          {%- assign color_label = color.label | handleize -%}
-          {%- assign color_color = color.color -%}
-          {%- assign color_image = color.image -%}
-          .swatch-{{ color_label }} .swatch-inner {
-              {%- unless color_color == blank -%} background-color: {{ color_color }} !important;{%- endunless -%}
-              {%- unless color_image == blank -%}background-image: url({{ color_image | image_url }});background-size:contain;{%- endunless -%}
-          }
-      {%- endfor -%}
-    {%- endpaginate -%}
+        /* swatch color metaobject */
+      {%- paginate shop.metaobjects.shopify--color-pattern.values by 250 -%}
+        {%- for color in shop.metaobjects.shopify--color-pattern.values -%}
+            {%- assign color_label = color.label | handleize -%}
+            {%- assign color_color = color.color -%}
+            {%- assign color_image = color.image -%}
+            .swatch-{{ color_label }} .swatch-inner {
+                {%- unless color_color == blank -%} background-color: {{ color_color }} !important;{%- endunless -%}
+                {%- unless color_image == blank -%}background-image: url({{ color_image | image_url }});background-size:contain;{%- endunless -%}
+            }
+        {%- endfor -%}
+      {%- endpaginate -%}
     </style>
 
-    {%- if request.page_type == "article" or request.page_type == "blog" -%}
+    {%- if request.page_type == 'article' or request.page_type == 'blog' -%}
       <link
         rel="preload"
         href="{{ 'blog.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    {%- elsif request.page_type contains "customers/" or template == 'page.orders' -%}
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+    {%- elsif request.page_type contains 'customers/' or template == 'page.orders' -%}
       <link
         rel="preload"
         href="{{ 'account.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    {%- elsif request.page_type == "cart" -%}
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+    {%- elsif request.page_type == 'cart' -%}
       <link
         rel="preload"
         href="{{ 'cart.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    {%- elsif request.page_type == "collection" or template.suffix == 'collection' or request.page_type == "search"-%}
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+    {%- elsif request.page_type == 'collection' or template.suffix == 'collection' or request.page_type == 'search' -%}
       <link
         rel="preload"
         href="{{ 'collection.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    {%- elsif request.page_type == "page" -%}
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+    {%- elsif request.page_type == 'page' -%}
       <link
         rel="preload"
         href="{{ 'page.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    {%- elsif request.page_type == "product" -%}
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+    {%- elsif request.page_type == 'product' -%}
       {% liquid
         assign image_limit = 2
         for tag in product.tags
@@ -114,7 +123,8 @@
             <link
               rel="preload"
               href="{{ image | image_url: width: 2000 }}"
-              as="image">
+              as="image"
+            >
           {% endif %}
         {% endfor %}
       {% endif %}
@@ -123,33 +133,35 @@
         rel="preload"
         href="{{ 'product.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
-    {%- elsif request.page_type == "search" -%}
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
+    {%- elsif request.page_type == 'search' -%}
       <link
         rel="preload"
         href="{{ 'search.css' | asset_url }}"
         as="style"
-        onload="this.onload=null;this.rel='stylesheet'">
+        onload="this.onload=null;this.rel='stylesheet'"
+      >
     {%- endif -%}
     <!-- Begin Recently Viewed Products -->
     {%- unless request.design_mode -%}
-      {{ 'product-recently-viewed.js' | asset_url | script_tag }} 
+      {{ 'product-recently-viewed.js' | asset_url | script_tag }}
       {% if template contains 'product' %}
         <script>
-          document.addEventListener("DOMContentLoaded", function() {
+          document.addEventListener('DOMContentLoaded', function () {
             Shopify.Products.recordRecentlyViewed();
           });
-        </script> 
+        </script>
       {% endif %}
     {%- endunless -%}
-    <!-- End Recently Viewed Products --> 
+    <!-- End Recently Viewed Products -->
 
     <script>
       var wishlistObj;
     </script>
-    
+
     <link rel="preload" href="{{ 'vendor.min.js' | asset_url }}" as="script">
-    
+
     <!-- 1. Preload GSAP (optional, for performance) -->
     <link rel="preload" href="{{ 'gsap.min.js' | asset_url }}" as="script">
     <link rel="preload" href="{{ 'SplitText.min.js' | asset_url }}" as="script">
@@ -165,16 +177,18 @@
     {{ 'vendor.min.js' | asset_url | script_tag }}
     {{ 'header.js' | asset_url | script_tag }}
     {{ 'footer.js' | asset_url | script_tag }}
-    {% comment %} {{ 'script-custom.js' | asset_url | script_tag }}
-    {{ 'custom-dl.js' | asset_url | script_tag }} {% endcomment %}
-    
-    {%- render 'social-meta-tags' -%} 
+    {% comment %}
+      {{ 'script-custom.js' | asset_url | script_tag }}
+      {{ 'custom-dl.js' | asset_url | script_tag }}
+    {% endcomment %}
+
+    {%- render 'social-meta-tags' -%}
     {%- render 'json-ld' -%}
     {{ content_for_header }}
-    
+
     <script>
       $360Shop = {
-        money_with_currency_format: '{{ shop.money_with_currency_format }}'
+        money_with_currency_format: '{{ shop.money_with_currency_format }}',
       };
 
       window.routes = {
@@ -190,45 +204,84 @@
 
     {%- if template == 'index' -%}
       <script type="application/ld+json">
-          {
-              "@context": "https:\/\/schema.org",
-              "@graph": [
-                  {
-                      "@type": "LocalBusiness",
-                      "name": "{{ shop.name }}",
-                      "url": "{{ shop.url }}",
-                      "openingHoursSpecification": [
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Monday"], "opens": "09:00", "closes": "17:00" },
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Tuesday"], "opens": "09:00", "closes": "17:00" },
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Wednesday"], "opens": "09:00", "closes": "17:00" },
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Thursday"], "opens": "09:00", "closes": "17:00" },
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Friday"], "opens": "09:00", "closes": "17:00" },
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Saturday"], "opens": "09:00", "closes": "17:00" },
-                          { "@type": "OpeningHoursSpecification", "dayOfWeek": ["https:\/\/schema.org\/Sunday"], "opens": "09:00", "closes": "17:00" }
-                      ]
-                  },
-                  {
-                      "@type": "Organization",
-                      "name": "{{ shop.name }}",
-                      "url": "{{ shop.url }}"
-                  },
-                  {
-                      "@type": "WebPage",
-                      "url": "{{ shop.url }}",
-                      "name": "{{ page_title | escape }}",
-                      "description": "{{ page_description | escape }}",
-                      "inLanguage": "{{ localization.language }}"
-                  },
-                  {
-                      "@type": "WebSite",
-                      "url": "{{ shop.url }}",
-                      "name": "{{ shop.name }}",
-                      "description": "{{ page_description | escape }}",
-                      "inLanguage": "{{ localization.language }}",
-                      "potentialAction": { "@type": "SearchAction", "target": { "@type": "EntryPoint", "urlTemplate": "{{ shop.url }}/search?q={search_term_string}" }, "query-input": "required name=search_term_string" }
-                  }
+        {
+          "@context": "https:\/\/schema.org",
+          "@graph": [
+            {
+              "@type": "LocalBusiness",
+              "name": "{{ shop.name }}",
+              "url": "{{ shop.url }}",
+              "openingHoursSpecification": [
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Monday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Tuesday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Wednesday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Thursday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Friday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Saturday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                },
+                {
+                  "@type": "OpeningHoursSpecification",
+                  "dayOfWeek": ["https:\/\/schema.org\/Sunday"],
+                  "opens": "09:00",
+                  "closes": "17:00"
+                }
               ]
-          }
+            },
+            {
+              "@type": "Organization",
+              "name": "{{ shop.name }}",
+              "url": "{{ shop.url }}"
+            },
+            {
+              "@type": "WebPage",
+              "url": "{{ shop.url }}",
+              "name": "{{ page_title | escape }}",
+              "description": "{{ page_description | escape }}",
+              "inLanguage": "{{ localization.language }}"
+            },
+            {
+              "@type": "WebSite",
+              "url": "{{ shop.url }}",
+              "name": "{{ shop.name }}",
+              "description": "{{ page_description | escape }}",
+              "inLanguage": "{{ localization.language }}",
+              "potentialAction": {
+                "@type": "SearchAction",
+                "target": { "@type": "EntryPoint", "urlTemplate": "{{ shop.url }}/search?q={search_term_string}" },
+                "query-input": "required name=search_term_string"
+              }
+            }
+          ]
+        }
       </script>
     {%- endif -%}
 
@@ -265,7 +318,7 @@
     {% endif %}
 
     {%- render 'data_layer' -%}
-</head>
+  </head>
 
   <body class="bg-background-main">
     {% section 'typography-header' %}
@@ -275,14 +328,14 @@
     {% section 'links' %}
     {% section 'size-guide' %}
     {% section 'selection-popup-subscription' %}
-    
+
     <div class="page-loading w-full h-full fixed top-0 left-0 bg-white opacity-7 zi-9">&nbsp;</div>
     {% comment %} <div class="page-overlay header-cart-overlay" onclick="$360.hideHeaderCart()">&nbsp;</div> {% endcomment %}
     <div class="page-overlay quick-add-overlay" onclick="$360.hideQuickAdd()">&nbsp;</div>
     <div id="product-each-theme-liquid"></div>
     {%- section 'header' -%}
-    
-    {% if canonical_url contains "challenge" %}
+
+    {% if canonical_url contains 'challenge' %}
       <section class="global-content-top-margin pt-20 t-pt-30 d-pt-50 pb-20 t-pb-30 d-pb-50">
         <div class="container">
           {{ content_for_layout }}
@@ -295,31 +348,32 @@
     <!-- back in stock -->
     {%- render 'back-in-stock-helper' -%}
     <!-- end back in stock -->
-    {% render 'marketing-consent-popup' %} 
+    {% render 'marketing-consent-popup' %}
     {% section 'marquee-text' %}
     {% section 'footer' %}
-</body>
+  </body>
 
-{% render 'animation-script' %}
+  {% render 'animation-script' %}
 
-{% comment %} <script>
-    /* sliding headers */
-    document.addEventListener('DOMContentLoaded', () => {
-        const headings = document.querySelectorAll('.h1, .h2, .h3, .h4, .h5, .h6');
+  {% comment %}
+    <script>
+        /* sliding headers */
+        document.addEventListener('DOMContentLoaded', () => {
+            const headings = document.querySelectorAll('.h1, .h2, .h3, .h4, .h5, .h6');
 
-        const observer = new IntersectionObserver((entries) => {
-            entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('is-visible');
-                observer.unobserve(entry.target);   // animate only once
-            }
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('is-visible');
+                    observer.unobserve(entry.target);   // animate only once
+                }
+                });
+            }, {
+                rootMargin: '0px 0px -100px 0px'      // trigger a little early
             });
-        }, {
-            rootMargin: '0px 0px -100px 0px'      // trigger a little early
+
+            headings.forEach(h => observer.observe(h));
         });
-
-        headings.forEach(h => observer.observe(h));
-    });
-</script> {% endcomment %}
-
+    </script>
+  {% endcomment %}
 </html>

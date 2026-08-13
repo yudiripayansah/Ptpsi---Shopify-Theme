@@ -120,13 +120,20 @@
                 <{% if bs.url != blank %}a href="{{ bs.url }}"{% else %}div{% endif %} class="mcl-card">
                   {% if bs.image != blank %}
                     <div class="mcl-card-media">
-                      {{ bs.image | image_url: width: 900 | image_tag: loading: 'lazy', widths: '300, 450, 600, 900', sizes: '(min-width: 1024px) 24vw, 44vw' }}
+                      {{
+                        bs.image
+                        | image_url: width: 900
+                        | image_tag:
+                          loading: 'lazy',
+                          widths: '300, 450, 600, 900',
+                          sizes: '(min-width: 1024px) 24vw, 44vw'
+                      }}
                     </div>
                   {% endif %}
                   {% if bs.title != blank %}
                     <div class="mcl-card-title p1 c-green">{{ bs.title }}</div>
                   {% endif %}
-                </{% if bs.url != blank %}a{% else %}div{% endif %}>
+                </{% if bs.url != blank %}a href="{{ bs.url }}"{% else %}div{% endif %}>
               </div>
             {% endfor %}
           </div>
@@ -363,10 +370,7 @@
   "presets": [
     {
       "name": "More Collabs",
-      "blocks": [
-        { "type": "collab" },
-        { "type": "collab" }
-      ]
+      "blocks": [{ "type": "collab" }, { "type": "collab" }]
     }
   ]
 }

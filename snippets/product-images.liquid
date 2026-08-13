@@ -127,7 +127,7 @@
   }
   .product-images-main .pis-zoom svg {
     width: 14px;
-    height: 14px;  
+    height: 14px;
   }
   .product-images-main .ab-section {
     {%- if product.media.size > 1 -%}
@@ -139,7 +139,7 @@
   @media screen and (min-width: 768px) {
     .product-images-main .ab-section {
       {%- if product.media.size > 1 -%}
-        width: calc(100% / 1.3); 
+        width: calc(100% / 1.3);
       {%- else -%}
         width: 100%;
       {%- endif -%}
@@ -229,9 +229,10 @@
                 {%- assign preload = true -%}
               {%- endif -%}
               <div
-              @click="togglePopup($event)"
-              data-alt="{{ media.alt }}"
-              data-image-url="{{ media | image_url }}">
+                @click="togglePopup($event)"
+                data-alt="{{ media.alt }}"
+                data-image-url="{{ media | image_url }}"
+              >
                 {% if media.media_type == 'image' %}
                   {%- render 'global-image-wrapper',
                     additional_class: 'no-bg relative zi-2',
@@ -276,27 +277,27 @@
             <div class="swiper swiper-popup-thumbnail">
               <div class="swiper-wrapper">
                 {%- for media in product.media -%}
-                  <div 
+                  <div
                     class="swiper-slide pip-thumbnail-each"
                     data-alt="{{ media.alt | remove: 'color:' | remove: 'color: ' | remove: 'Color:' | remove: 'Color: ' }}"
                   >
                     <div
-                        data-index="{{ forloop.index0 }}"
-                        class="pipt-image relative {% if forloop.first %} active {% endif %}"
-                        @click="pipSlideToThis($event)"
+                      data-index="{{ forloop.index0 }}"
+                      class="pipt-image relative {% if forloop.first %} active {% endif %}"
+                      @click="pipSlideToThis($event)"
                     >
-                        {% if media.media_type == 'image' %}
-                          {%- render 'global-image-wrapper',
-                            additional_class: 'no-bg',
-                            image: media,
-                            size: '500x',
-                            preload: true
-                          -%}
-                        {% elsif media.media_type == 'video' %}
-                          <div class="absolute w-full h-full top-0 left-0 pipt-video">
-                            {{ media | video_tag: controls: false, image_size: '2000x', autoplay: false, loop: false }}
-                          </div>
-                        {% endif %}
+                      {% if media.media_type == 'image' %}
+                        {%- render 'global-image-wrapper',
+                          additional_class: 'no-bg',
+                          image: media,
+                          size: '500x',
+                          preload: true
+                        -%}
+                      {% elsif media.media_type == 'video' %}
+                        <div class="absolute w-full h-full top-0 left-0 pipt-video">
+                          {{ media | video_tag: controls: false, image_size: '2000x', autoplay: false, loop: false }}
+                        </div>
+                      {% endif %}
                     </div>
                   </div>
                 {%- endfor -%}

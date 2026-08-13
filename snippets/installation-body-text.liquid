@@ -1,17 +1,17 @@
 {%- comment -%}
-Soilboy
+  Soilboy
 
-Renders one Installation Text Block: a single wide statement paragraph, or
-two side-by-side columns.
+  Renders one Installation Text Block: a single wide statement paragraph, or
+  two side-by-side columns.
 
-Layout is inferred from whether Column 2 is filled in, rather than an exact
-match on the block's `layout` value, since the dropdown's real option
-values weren't confirmed against the live store. `ponytail: data-presence
-guess; switch to an exact `layout` match once the real option values are
-confirmed.`
+  Layout is inferred from whether Column 2 is filled in, rather than an exact
+  match on the block's `layout` value, since the dropdown's real option
+  values weren't confirmed against the live store. `ponytail: data-presence
+  guess; switch to an exact `layout` match once the real option values are
+  confirmed.`
 
-Variables:
-- block: installation_text_block metaobject entry (column_1, column_2)
+  Variables:
+  - block: installation_text_block metaobject entry (column_1, column_2)
 {%- endcomment -%}
 {%- liquid
   assign column_1 = block.column_1.value

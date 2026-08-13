@@ -104,11 +104,7 @@
           }
         }
       },
-      "block_order": [
-        "set_consultation",
-        "set_curation",
-        "set_installation"
-      ],
+      "block_order": ["set_consultation", "set_curation", "set_installation"],
       "name": "How It Works Parallax",
       "settings": {
         "bg_color": "#f2e9df",
@@ -235,14 +231,7 @@
           }
         }
       },
-      "block_order": [
-        "faq_1",
-        "faq_2",
-        "faq_3",
-        "faq_4",
-        "faq_5",
-        "faq_6"
-      ],
+      "block_order": ["faq_1", "faq_2", "faq_3", "faq_4", "faq_5", "faq_6"],
       "name": "PDP - FAQ",
       "settings": {
         "bg_color": "#fff9f2",

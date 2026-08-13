@@ -1,86 +1,86 @@
 {% if request.page_type == 'index' %}
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "Organization",
-    "name": "{{ shop.name | escape }}",
-    "url": "{{ shop.secure_url }}",
-    "logo": "https:{{ settings.home_jsonld_logo | image_url: width: 300 }}",
-    "address": {
-        "@type": "PostalAddress",
-        "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 != blank %} {{ shop.address.address2 | escape }}{% endif %}",
-        {% if shop.address.province != blank %}"addressLocality": "{{ shop.address.province | escape }}",{% endif %}
-        "addressRegion": "{{ shop.address.city | escape }}",
-        "postalCode": "{{ shop.address.zip }}",
-        "addressCountry": "{{ shop.address.country_code }}"
-    },
-    "contactPoint": {
-        "@type": "ContactPoint",
-        "contactType": "customer support",
-        "telephone": "{{ shop.phone }}",
-        "email": "{{ shop.email }}"
-    },
-    "sameAs": [
-        {% if settings.facebook-url != blank %}"{{ settings.facebook-url }}",{% endif %}
-        {% if settings.instagram-url != blank %}"{{ settings.instagram-url }},"{% endif %}
-        {% if settings.pinterest-url != blank %}"{{ settings.pinterest-url }},"{% endif %}
-        {% if settings.youtube-url != blank %}"{{ settings.youtube-url }},"{% endif %}
-        {% if settings.twitter-url != blank %}"{{ settings.twitter-url }},"{% endif %}
-    ]
-}
-</script>
-{% if settings.settings.home_jsonld_video_thumb != blank %}
-<script type="application/ld+json">
-{
-    "@context": "https://schema.org",
-    "@type": "VideoObject",
-    "name": "{{ settings.home_jsonld_video_name | escape }}",
-    "description": "{{ settings.home_jsonld_video_description | escape }}",
-    "thumbnailUrl": "https:{{ settings.home_jsonld_video_thumb | image_url: width: 720 }}",
-    "contentUrl": "{{ settings.home_jsonld_video.sources[0].url }}"
-}
-</script>
-{% endif %}
+  <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "{{ shop.name | escape }}",
+        "url": "{{ shop.secure_url }}",
+        "logo": "https:{{ settings.home_jsonld_logo | image_url: width: 300 }}",
+        "address": {
+            "@type": "PostalAddress",
+            "streetAddress": "{{ shop.address.address1 | escape }}{% if shop.address.address2 != blank %} {{ shop.address.address2 | escape }}{% endif %}",
+            {% if shop.address.province != blank %}"addressLocality": "{{ shop.address.province | escape }}",{% endif %}
+            "addressRegion": "{{ shop.address.city | escape }}",
+            "postalCode": "{{ shop.address.zip }}",
+            "addressCountry": "{{ shop.address.country_code }}"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "contactType": "customer support",
+            "telephone": "{{ shop.phone }}",
+            "email": "{{ shop.email }}"
+        },
+        "sameAs": [
+            {% if settings.facebook-url != blank %}"{{ settings.facebook-url }}",{% endif %}
+            {% if settings.instagram-url != blank %}"{{ settings.instagram-url }},"{% endif %}
+            {% if settings.pinterest-url != blank %}"{{ settings.pinterest-url }},"{% endif %}
+            {% if settings.youtube-url != blank %}"{{ settings.youtube-url }},"{% endif %}
+            {% if settings.twitter-url != blank %}"{{ settings.twitter-url }},"{% endif %}
+        ]
+    }
+  </script>
+  {% if settings.settings.home_jsonld_video_thumb != blank %}
+    <script type="application/ld+json">
+      {
+        "@context": "https://schema.org",
+        "@type": "VideoObject",
+        "name": "{{ settings.home_jsonld_video_name | escape }}",
+        "description": "{{ settings.home_jsonld_video_description | escape }}",
+        "thumbnailUrl": "https:{{ settings.home_jsonld_video_thumb | image_url: width: 720 }}",
+        "contentUrl": "{{ settings.home_jsonld_video.sources[0].url }}"
+      }
+    </script>
+  {% endif %}
 {% endif %}
 
 {% if request.page_type == 'product' %}
-{% assign variant = product.selected_or_first_available_variant %}
-<script type="application/ld+json">
-{
-    "@context": "http://schema.org/",
-    "@type": "Product",
-    "name": "{{ product.title | escape }}",
-    "brand": {
+  {% assign variant = product.selected_or_first_available_variant %}
+  <script type="application/ld+json">
+    {
+      "@context": "http://schema.org/",
+      "@type": "Product",
+      "name": "{{ product.title | escape }}",
+      "brand": {
         "@type": "Brand",
         "name": "{{ product.vendor | escape }}"
-    },
-    "description": "{{ page_description | escape }}",
-    "image": "{{ product.featured_image | image_url: width: 1000 }}",
-    "sku": "{{ variant.sku }}",
-    "gtin14": "{{ variant.barcode }}",
-    "offers": {
+      },
+      "description": "{{ page_description | escape }}",
+      "image": "{{ product.featured_image | image_url: width: 1000 }}",
+      "sku": "{{ variant.sku }}",
+      "gtin14": "{{ variant.barcode }}",
+      "offers": {
         "@type": "Offer",
         "priceCurrency": "{{ shop.currency }}",
-        "url":"{{ request.origin }}{{ product.url }}",
+        "url": "{{ request.origin }}{{ product.url }}",
         "price": "{{ product.price | money_without_currency | strip_html | replace: ',', '' }}",
-        "itemCondition" : "http://schema.org/NewCondition",
-        "availability" : "{% if product.available == true %}http://schema.org/InStock{% else %}http://schema.org/OutOfStock{% endif %}"
+        "itemCondition": "http://schema.org/NewCondition",
+        "availability": "{% if product.available == true %}http://schema.org/InStock{% else %}http://schema.org/OutOfStock{% endif %}"
+      }
     }
-}
-</script>
+  </script>
 {% endif %}
 
 {% comment %} Breadcrumb {% endcomment %}
 {% if template.name == 'product'
-    or template.name == 'list-collections'
-    or template.name == 'collection'
-    or template.name == 'blog'
-    or template.name == 'article'
-    or template.name == 'search'
-    or template.name == 'cart'
-    or template.name == 'page'
+  or template.name == 'list-collections'
+  or template.name == 'collection'
+  or template.name == 'blog'
+  or template.name == 'article'
+  or template.name == 'search'
+  or template.name == 'cart'
+  or template.name == 'page'
 %}
-    <script type="application/ld+json">
+  <script type="application/ld+json">
     {
         "@context": "http://schema.org",
         "@type": "BreadcrumbList",
@@ -231,6 +231,6 @@
             {% endcase %}
         ]
     }
-    </script>
+  </script>
 {% endif %}
 {% comment %} End Breadcrumb {% endcomment %}

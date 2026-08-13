@@ -3,375 +3,383 @@
 {%- render 'section-padding', el_id: el_id, section: section -%}
 
 {% assign customer_id = 7411757973718 %}
-{% assign customer_email = "tham_brenda@yahoo.com.sg" %}
+{% assign customer_email = 'tham_brenda@yahoo.com.sg' %}
 
-  <style>
-    #{{el_id}} .account-menu {
-      flex-direction: row;
-    }
-    #{{el_id}} .b-transparent {
-      border-color: transparent;
+<style>
+  #{{el_id}} .account-menu {
+    flex-direction: row;
+  }
+  #{{el_id}} .b-transparent {
+    border-color: transparent;
+  }
+  #{{el_id}} .account-menu-mobile {
+    margin-left: -20px;
+    margin-right: -20px;
+  }
+  #{{el_id}} .poo-mobile > div div > div {
+    width: 30%;
+  }
+  #{{el_id}} .icon-back {
+    margin-top: -3px;
+  }
+  #{{el_id}} .icon-back,
+  #{{el_id}} .icon-back svg {
+    width: 10px;
+    height: 10px;
+  }
+  #{{el_id}} .ln-image {
+    width: 55px;
+  }
+  #{{el_id}} .table-online-order-details td {
+    vertical-align: top;
+  }
+  #{{el_id}} .aifs-bar-progress {
+    height: 2px;
+  }
+  #{{el_id}} .aicm-buttons {
+    flex-direction: column;
+  }
+  #{{el_id}} .av-mobile .row {
+    margin-left: 0;
+    margin-right: 0;
+  }
+  #{{el_id}} .av-mobile .row > div {
+    padding-left: 0;
+    padding-right: 0;
+  }
+  #{{el_id}} .c-pc {
+    width: 20%;
+  }
+  #{{el_id}} .c-d {
+    width: 23%;
+  }
+  #{{el_id}} .c-v {
+    width: 12%;
+  }
+  #{{el_id}} .c-e {
+    width: 15%;
+  }
+  #{{el_id}} .c-s {
+    width: 13%;
+  }
+  #{{el_id}} .c-rd {
+    width: 17%;
+  }
+  #{{el_id}} .account-menu-mobile .icon {
+    max-width: 8.31px;
+  }
+  #{{el_id}} .acm-cat {
+    max-height: 0px;
+    transition: all .3s ease;
+  }
+  #{{el_id}} .acm-cat.show {
+    max-height: 200px;
+  }
+  #{{el_id}} .loading-screen {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: #fff;
+    left: 0;
+    top: 0;
+    z-index: 2;
+  }
+  @media screen and (min-width: 1024px) {
+    #{{el_id}} .icon-back {
+      margin-top: -5px;
     }
     #{{el_id}} .account-menu-mobile {
-      margin-left: -20px;
-      margin-right: -20px;
+      margin-left: 0px;
+      margin-right: 0px;
     }
-    #{{el_id}} .poo-mobile > div div > div {
-      width: 30%;
-    }
-    #{{el_id}} .icon-back {
-      margin-top: -3px;
-    }
-    #{{el_id}} .icon-back,
-    #{{el_id}} .icon-back svg {
-      width: 10px;
-      height: 10px;
-    }
-    #{{el_id}} .ln-image {
-      width: 55px;
-    }
-    #{{el_id}} .table-online-order-details td {
-      vertical-align: top;
-    }
-    #{{el_id}} .aifs-bar-progress {
-      height: 2px;
-    }
-    #{{el_id}} .aicm-buttons {
+    #{{el_id}} .account-menu {
       flex-direction: column;
     }
-    #{{el_id}} .av-mobile .row {
-      margin-left: 0;
-      margin-right: 0;
+    #{{el_id}} .aicm-buttons {
+      flex-direction: row;
     }
-    #{{el_id}} .av-mobile .row > div {
-      padding-left: 0;
-      padding-right: 0;
+    #{{el_id}} .ln-image {
+      width: 60px;
     }
-    #{{el_id}} .c-pc {
-      width: 20%;
-    }
-    #{{el_id}} .c-d {
-      width: 23%;
-    }
-    #{{el_id}} .c-v {
-      width: 12%;
-    }
-    #{{el_id}} .c-e {
-      width: 15%;
-    }
-    #{{el_id}} .c-s {
-      width: 13%;
-    }
-    #{{el_id}} .c-rd {
-      width: 17%;
-    }
-    #{{el_id}} .account-menu-mobile .icon {
-      max-width: 8.31px;
-    }
-    #{{el_id}} .acm-cat {
-      max-height: 0px;
-      transition: all .3s ease;
-    }
-    #{{el_id}} .acm-cat.show {
-      max-height: 200px;
-    }
-    #{{el_id}} .loading-screen {
-      position: absolute;
-      width: 100%;
-      height: 100%;
-      background: #fff;
-      left: 0;
-      top: 0;
-      z-index: 2;
-    }
-    @media screen and (min-width: 1024px) {
-      #{{el_id}} .icon-back {
-        margin-top: -5px;
-      }
-      #{{el_id}} .account-menu-mobile {
-        margin-left: 0px;
-        margin-right: 0px;
-      }
-      #{{el_id}} .account-menu {
-        flex-direction: column;
-      }
-      #{{el_id}} .aicm-buttons {
-        flex-direction: row;
-      }
-      #{{el_id}} .ln-image {
-        width: 60px;
-      }
-    }
-  </style>
-  <div id="{{ el_id }}">
-    <div class="container">
-      <div class="row">
-        <div class="col-d-3 col-12">
-          {% render 'account-title' %}
-        </div>
-        {% render 'account-menu', active: 'account-info' %}
-        <div id="account-info" class="account-page col-d-5 col-12 mt-30 d-mt-0">
-          <div class="loading-screen p1">{{ 'customer.orders.loading' | t }}</div>
+  }
+</style>
+<div id="{{ el_id }}">
+  <div class="container">
+    <div class="row">
+      <div class="col-d-3 col-12">
+        {% render 'account-title' %}
+      </div>
+      {% render 'account-menu', active: 'account-info' %}
+      <div id="account-info" class="account-page col-d-5 col-12 mt-30 d-mt-0">
+        <div class="loading-screen p1">{{ 'customer.orders.loading' | t }}</div>
 
-          <div class="row"> 
-            <div class="ai-frequent-shopper col-12">
-              <div class="hide-m ai-center jc-between aifs-top-text">
-                <div class="p1 medium-500 aifs-remain-wrapper">
-                </div>
-                <div class="p1 medium-500">
-                  <span class="amount-spend"></span> / <span class="amount-needed"></span>
-                </div>
-              </div>
-              <div class="aifs-bar bg-border w-full mt-10 mb-10 hide-m">
-                <div class="aifs-bar-progress bg-black"></div>
-              </div>
-              <a href="#" rel="nofollow" class="c-grey p1 medium-500 hover-underline-grey hide-m"> 
-                {{- 'customer.account_info.progress_link_label' | t -}}
+        <div class="row">
+          <div class="ai-frequent-shopper col-12">
+            <div class="hide-m ai-center jc-between aifs-top-text">
+              <div class="p1 medium-500 aifs-remain-wrapper"></div>
+              <div class="p1 medium-500"><span class="amount-spend"></span> / <span class="amount-needed"></span></div>
+            </div>
+            <div class="aifs-bar bg-border w-full mt-10 mb-10 hide-m">
+              <div class="aifs-bar-progress bg-black"></div>
+            </div>
+            <a href="#" rel="nofollow" class="c-grey p1 medium-500 hover-underline-grey hide-m">
+              {{- 'customer.account_info.progress_link_label' | t -}}
+            </a>
+
+            {%- if settings.ai_label_customer != blank -%}
+              <a
+                href="{{ settings.ai_url_customer }}"
+                class="c-grey p1 medium-500 hover-underline-grey find-out-customer mt-10 mb-20 hide-m"
+              >
+                {{ settings.ai_label_customer }}
               </a>
+            {%- endif -%}
+            {%- if settings.ai_label_fs != blank -%}
+              <a
+                href="{{ settings.ai_url_fs }}"
+                class="c-grey p1 medium-500 hover-underline-grey find-out-fs mt-10 mb-20 hide-m"
+              >
+                {{ settings.ai_label_fs }}
+              </a>
+            {%- endif -%}
 
-              {%- if settings.ai_label_customer != blank -%}
-                <a href="{{ settings.ai_url_customer }}" class="c-grey p1 medium-500 hover-underline-grey find-out-customer mt-10 mb-20 hide-m">
-                  {{ settings.ai_label_customer }}
-                </a>
-              {%- endif -%}
-              {%- if settings.ai_label_fs != blank -%}
-                <a href="{{ settings.ai_url_fs }}" class="c-grey p1 medium-500 hover-underline-grey find-out-fs mt-10 mb-20 hide-m">
-                  {{ settings.ai_label_fs }}
-                </a>
-              {%- endif -%}
-
-              <div class="total-spending-wrapper">
-                <div class="accumulated-spend-wrapper">
-                  <span class="p1 c-grey medium-500 w-full max-120 show-m-inline-block">{{ 'customer.account_info.accumulated_spend' | t }}</span>
-                  <span class="p1 medium-500 ml-35 amount-accumulated-spend"></span>
-                </div>
-                <div> 
-                  <span class="p1 c-grey medium-500 w-full max-120 show-m-inline-block">{{ 'customer.account_info.progress_total_spending' | t }}</span>
-                  <span class="p1 medium-500 ml-35 amount-total-spend"></span>
-                </div>
+            <div class="total-spending-wrapper">
+              <div class="accumulated-spend-wrapper">
+                <span class="p1 c-grey medium-500 w-full max-120 show-m-inline-block">
+                  {{- 'customer.account_info.accumulated_spend' | t -}}
+                </span>
+                <span class="p1 medium-500 ml-35 amount-accumulated-spend"></span>
               </div>
-            </div>
-            <div class="ai-login-details col-12 d-mt-40 mt-25">
-              <div class="row">
-                <div class="col-12">
-                  <h6 class="h3 bold-600 pb-15 mb-18 bb-1 b-border">
-                    {{ 'customer.account_info.login_detail_title' | t }}
-                  </h6>
-                </div>
-                <div class="p1 c-grey medium-500 col-12">{{ 'customer.account_info.login_detail_email' | t }}</div>
-                <div class="col-12 col-d-5">
-                  <span class="p1 medium-500" id="customer-email">{{ customer.email }}</span>
-                </div>
-                <div class="col-12 col-d-7 mt-5 d-mt-0">
-                  <a href="#" rel="nofollow" class="link3" onclick="changePage('form-change-password',event)">
-                    {{- 'customer.account_info.login_detail_change_password' | t -}}
-                  </a>
-                </div>
-              </div>
-            </div>
-            <div class="ai-personal-details col-12 d-mt-50 mt-30">
-              <div class="row">
-                <div class="col-12">
-                  <h6 class="h3 bold-600 pb-20 mb-20 bb-1 b-border">{{ 'customer.account.personal_details' | t }}</h6>
-                </div>
-                <div class="col-12">
-                  <div class="p1 c-grey medium-500">{{ 'customer.register.salutation' | t }}</div>
-                  <div class="p1 medium-500 account-info-salutation">-</div>
-                </div>
-                <div class="col-6 col-d-5 mt-12">
-                  <div class="p1 c-grey medium-500">{{ 'customer.register.first_name' | t }}</div>
-                  <div class="p1 medium-500">{{ customer.first_name }}</div>
-                </div>
-                <div class="col-6 col-d-7 mt-12">
-                  <div class="p1 c-grey medium-500">{{ 'customer.register.last_name' | t }}</div>
-                  <div class="p1 medium-500">{% if customer.last_name != blank %}{{ customer.last_name }}{% else %}&nbsp;{% endif %}</div>
-                </div>
-                <div class="col-6 col-d-5 mt-12">
-                  <div class="p1 c-grey medium-500">{{ 'customer.register.dob' | t }}</div>
-                  <div class="p1 medium-500 account-info-birth">
-                    {% if customer.dob %}{{ customer.dob }}{% else %}-{% endif %}
-                  </div>
-                </div>
-                <div class="col-6 col-d-7 mt-12">
-                  <div class="p1 c-grey medium-500">{{ 'customer.register.gender' | t }}</div>
-                  <div class="p1 medium-500 account-info-gender">
-                    {% if customer.gender %}{{ customer.gender }}{% else %}-{% endif %}
-                  </div>
-                </div>
-                <div class="col-6 col-d-5 mt-12">
-                  <div class="p1 c-grey medium-500">{{ 'customer.register.contact' | t }}</div>
-                  <div class="p1 medium-500 phone-number">
-                    {% if customer.default_address.phone %}{{ customer.default_address.phone }}{% else %}-{% endif %}
-                  </div>
-                </div>
-              </div>
-            </div>
-            <div class="ai-contact-mode col-12 d-mt-50 mt-30 hide-m">
-              <div class="row">
-                <div class="col-12">
-                  <h6 class="h3 bold-600 pb-20 mb-20 bb-1 b-border">{{ 'customer.account.contact_mode' | t }}</h6>
-                </div>
-                <div class="col-12">
-                  <label class="global-radio flex ai-start">
-                    <input type="checkbox" name="customer['newsletter']" onchange="checkNewsLetter(event)">
-                    <div class="gr-mark mr-8 mt-3"></div>
-                    <div class="p1">{{ 'customer.register.newsletter' | t }}</div>
-                  </label>
-                </div>
-                <div class="col-12 acm-cat overflow">
-                  <div class="pl-20 pt-15">
-                    <div class="p1">{{ 'customer.register.interest' | t }}</div>
-                    <div class="flex ai-center mt-15">
-                      {% for tag in customer.tags %}
-                        {% assign tag = tag %}
-                      {% endfor %}
-                      <label class="global-radio flex ai-center">
-                        <input type="radio" name="customer['interest']" value="{{ 'customer.register.i_women' | t }}">
-
-                        <div class="gr-mark mr-8"></div>
-                        <div class="p1">{{ 'customer.register.i_women' | t }}</div>
-                      </label>
-                      <label class="global-radio flex ai-center ml-15">
-                        <input type="radio" name="customer['interest']" value="{{ 'customer.register.i_men' | t }}">
-
-                        <div class="gr-mark mr-8"></div>
-                        <div class="p1">{{ 'customer.register.i_men' | t }}</div>
-                      </label>
-                      <label class="global-radio flex ai-center ml-15">
-                        <input
-                          type="radio"
-                          name="customer['interest']"
-                          value="{{ 'customer.register.i_women_and_men' | t }}"
-                        >
-
-                        <div class="gr-mark mr-8"></div>
-                        <div class="p1">{{ 'customer.register.i_women_and_men' | t }}</div>
-                      </label>
-                    </div>
-                  </div>
-                </div>
-                <div class="col-12 flex ai-center d-mt-50 mt-25 aicm-buttons">
-                  <button type="button" class="btn1 w-full submit-btn d-max-290" onclick="contactmode(event,true)">
-                    {{ 'customer.account_info.save' | t }}
-                  </button>
-
-                  {% comment %}
-                    <a href="#" rel="nofollow" class="link3 d-ml-30 mt-10 d-mt-0">{{ 'customer.addresses.cancel' | t }}</a>
-                  {% endcomment %}
-                </div>
-
-                <div class="col-12 mt-10 p2 error-save-message c-red hide-m"></div>
-                <div class="col-12 mt-10 p2 success-save-message hide-m"></div>
+              <div>
+                <span class="p1 c-grey medium-500 w-full max-120 show-m-inline-block">
+                  {{- 'customer.account_info.progress_total_spending' | t -}}
+                </span>
+                <span class="p1 medium-500 ml-35 amount-total-spend"></span>
               </div>
             </div>
           </div>
-        </div>
+          <div class="ai-login-details col-12 d-mt-40 mt-25">
+            <div class="row">
+              <div class="col-12">
+                <h6 class="h3 bold-600 pb-15 mb-18 bb-1 b-border">
+                  {{ 'customer.account_info.login_detail_title' | t }}
+                </h6>
+              </div>
+              <div class="p1 c-grey medium-500 col-12">{{ 'customer.account_info.login_detail_email' | t }}</div>
+              <div class="col-12 col-d-5">
+                <span class="p1 medium-500" id="customer-email">{{ customer.email }}</span>
+              </div>
+              <div class="col-12 col-d-7 mt-5 d-mt-0">
+                <a href="#" rel="nofollow" class="link3" onclick="changePage('form-change-password',event)">
+                  {{- 'customer.account_info.login_detail_change_password' | t -}}
+                </a>
+              </div>
+            </div>
+          </div>
+          <div class="ai-personal-details col-12 d-mt-50 mt-30">
+            <div class="row">
+              <div class="col-12">
+                <h6 class="h3 bold-600 pb-20 mb-20 bb-1 b-border">{{ 'customer.account.personal_details' | t }}</h6>
+              </div>
+              <div class="col-12">
+                <div class="p1 c-grey medium-500">{{ 'customer.register.salutation' | t }}</div>
+                <div class="p1 medium-500 account-info-salutation">-</div>
+              </div>
+              <div class="col-6 col-d-5 mt-12">
+                <div class="p1 c-grey medium-500">{{ 'customer.register.first_name' | t }}</div>
+                <div class="p1 medium-500">{{ customer.first_name }}</div>
+              </div>
+              <div class="col-6 col-d-7 mt-12">
+                <div class="p1 c-grey medium-500">{{ 'customer.register.last_name' | t }}</div>
+                <div class="p1 medium-500">
+                  {% if customer.last_name != blank %}{{ customer.last_name }}{% else %}&nbsp;{% endif %}
+                </div>
+              </div>
+              <div class="col-6 col-d-5 mt-12">
+                <div class="p1 c-grey medium-500">{{ 'customer.register.dob' | t }}</div>
+                <div class="p1 medium-500 account-info-birth">
+                  {% if customer.dob %}{{ customer.dob }}{% else %}-{% endif %}
+                </div>
+              </div>
+              <div class="col-6 col-d-7 mt-12">
+                <div class="p1 c-grey medium-500">{{ 'customer.register.gender' | t }}</div>
+                <div class="p1 medium-500 account-info-gender">
+                  {% if customer.gender %}{{ customer.gender }}{% else %}-{% endif %}
+                </div>
+              </div>
+              <div class="col-6 col-d-5 mt-12">
+                <div class="p1 c-grey medium-500">{{ 'customer.register.contact' | t }}</div>
+                <div class="p1 medium-500 phone-number">
+                  {% if customer.default_address.phone %}{{ customer.default_address.phone }}{% else %}-{% endif %}
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="ai-contact-mode col-12 d-mt-50 mt-30 hide-m">
+            <div class="row">
+              <div class="col-12">
+                <h6 class="h3 bold-600 pb-20 mb-20 bb-1 b-border">{{ 'customer.account.contact_mode' | t }}</h6>
+              </div>
+              <div class="col-12">
+                <label class="global-radio flex ai-start">
+                  <input type="checkbox" name="customer['newsletter']" onchange="checkNewsLetter(event)">
+                  <div class="gr-mark mr-8 mt-3"></div>
+                  <div class="p1">{{ 'customer.register.newsletter' | t }}</div>
+                </label>
+              </div>
+              <div class="col-12 acm-cat overflow">
+                <div class="pl-20 pt-15">
+                  <div class="p1">{{ 'customer.register.interest' | t }}</div>
+                  <div class="flex ai-center mt-15">
+                    {% for tag in customer.tags %}
+                      {% assign tag = tag %}
+                    {% endfor %}
+                    <label class="global-radio flex ai-center">
+                      <input type="radio" name="customer['interest']" value="{{ 'customer.register.i_women' | t }}">
 
-        <div id="account-voucher" class="account-page hide-m col-d-5 col-12 mt-30 d-mt-0">
-          <div>
+                      <div class="gr-mark mr-8"></div>
+                      <div class="p1">{{ 'customer.register.i_women' | t }}</div>
+                    </label>
+                    <label class="global-radio flex ai-center ml-15">
+                      <input type="radio" name="customer['interest']" value="{{ 'customer.register.i_men' | t }}">
+
+                      <div class="gr-mark mr-8"></div>
+                      <div class="p1">{{ 'customer.register.i_men' | t }}</div>
+                    </label>
+                    <label class="global-radio flex ai-center ml-15">
+                      <input
+                        type="radio"
+                        name="customer['interest']"
+                        value="{{ 'customer.register.i_women_and_men' | t }}"
+                      >
+
+                      <div class="gr-mark mr-8"></div>
+                      <div class="p1">{{ 'customer.register.i_women_and_men' | t }}</div>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="col-12 flex ai-center d-mt-50 mt-25 aicm-buttons">
+                <button type="button" class="btn1 w-full submit-btn d-max-290" onclick="contactmode(event,true)">
+                  {{ 'customer.account_info.save' | t }}
+                </button>
+
+                {% comment %}
+                  <a href="#" rel="nofollow" class="link3 d-ml-30 mt-10 d-mt-0">{{ 'customer.addresses.cancel' | t }}</a>
+                {% endcomment %}
+              </div>
+
+              <div class="col-12 mt-10 p2 error-save-message c-red hide-m"></div>
+              <div class="col-12 mt-10 p2 success-save-message hide-m"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div id="account-voucher" class="account-page hide-m col-d-5 col-12 mt-30 d-mt-0">
+        <div>
+          <div class="p1 medium-500">
+            {{ 'customer.voucher.title' | t }}
+            <br>
+            <br>
+            {{ 'customer.voucher.text' | t }}
+          </div>
+          <div class="av-desktop d-mt-30  hide-m show-hd">
+            <table class="w-full" width="100%">
+              <thead>
+                <tr class="">
+                  <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-pc">
+                    {{ 'customer.voucher.promotion_code' | t }}
+                  </th>
+                  <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-d">{{ 'customer.voucher.description' | t }}</th>
+                  <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-v">{{ 'customer.voucher.value' | t }}</th>
+                  <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-e">{{ 'customer.voucher.expiry' | t }}</th>
+                  <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-s">{{ 'customer.voucher.status' | t }}</th>
+                  <th class="tl p2 d-pb-15 bb-1 b-border c-rd">{{ 'customer.voucher.redemption_date' | t }}</th>
+                </tr>
+              </thead>
+              <tbody id="voucher-container-d"></tbody>
+            </table>
+          </div>
+          <div class="av-mobile mt-30 hide-hd bt-1 b-border">
+            <div id="voucher-container-m"></div>
+            <div class="tc mt-30 hide-d av-load-more">
+              <a href="#" rel="nofollow" class="link1">{{ 'customer.voucher.load_more' | t }}</a>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div id="form-change-password" class="account-page hide-m col-d-5 col-12 mt-30 d-mt-0">
+        <a href="#" rel="nofollow" onclick="changePage('account-info',event)" class="p2 flex ai-center">
+          <span class="icon-back mr-5">
+            {{ settings.icon_btn_left }}
+          </span>
+          {{ 'customer.account.back_to_info' | t }}
+        </a>
+        <div class="d-mt-25 mt-25">
+          {%- form 'reset_customer_password', id: 'reset-password-form' -%}
             <div class="p1 medium-500">
-              {{ 'customer.voucher.title' | t }}
-              <br>
-              <br>
-              {{ 'customer.voucher.text' | t }}
+              {{ 'customer.change_password.title' | t }}
             </div>
-            <div class="av-desktop d-mt-30  hide-m show-hd">
-              <table class="w-full" width="100%">
-                <thead>
-                  <tr class="">
-                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-pc">
-                      {{ 'customer.voucher.promotion_code' | t }}
-                    </th>
-                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-d">{{ 'customer.voucher.description' | t }}</th>
-                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-v">{{ 'customer.voucher.value' | t }}</th>
-                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-e">{{ 'customer.voucher.expiry' | t }}</th>
-                    <th class="tl p2 d-pb-15 bb-1 d-pr-15 b-border c-s">{{ 'customer.voucher.status' | t }}</th>
-                    <th class="tl p2 d-pb-15 bb-1 b-border c-rd">{{ 'customer.voucher.redemption_date' | t }}</th>
-                  </tr>
-                </thead>
-                <tbody id="voucher-container-d">
-                </tbody>
-              </table>
+            <div class="w-full mt-30">
+              <div class="relative overflow pb-1">
+                <input
+                  type="password"
+                  name="customer[password_old]"
+                  id="password_old"
+                  class="global-input w-full bb-1 b-black p1 c-black pr-65"
+                  placeholder="{{ 'customer.change_password.old_password' | t }}"
+                >
+                <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                  {{ 'customer.change_password.old_password' | t }}
+                </div>
+              </div>
+              <div class="p2 mt-5 c-red hide-m error error-password-old"></div>
             </div>
-            <div class="av-mobile mt-30 hide-hd bt-1 b-border">
-              <div id="voucher-container-m"></div>
-              <div class="tc mt-30 hide-d av-load-more">
-                <a href="#" rel="nofollow" class="link1">{{ 'customer.voucher.load_more' | t }}</a>
+            <div class="w-full mt-20 mb-10">
+              <div class="relative overflow pb-1">
+                <input
+                  type="password"
+                  name="customer[password]"
+                  id="password"
+                  class="global-input w-full bb-1 b-black p1 c-black pr-50"
+                  placeholder="{{ 'customer.change_password.password' | t }}"
+                >
+                <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                  {{ 'customer.change_password.password' | t }}
+                </div>
               </div>
+              <div class="p2 mt-5 c-red hide-m error error-password"></div>
             </div>
-          </div>
-        </div>
-        <div id="form-change-password" class="account-page hide-m col-d-5 col-12 mt-30 d-mt-0">
-          <a href="#" rel="nofollow" onclick="changePage('account-info',event)" class="p2 flex ai-center">
-            <span class="icon-back mr-5">
-              {{ settings.icon_btn_left }}
-            </span>
-            {{ 'customer.account.back_to_info' | t }}
-          </a>
-          <div class="d-mt-25 mt-25">
-            {%- form 'reset_customer_password', id: 'reset-password-form' -%}
-              <div class="p1 medium-500">
-                {{ 'customer.change_password.title' | t }}
-              </div>
-              <div class="w-full mt-30">
-                <div class="relative overflow pb-1">
-                  <input
-                    type="password"
-                    name="customer[password_old]"
-                    id="password_old"
-                    class="global-input w-full bb-1 b-black p1 c-black pr-65"
-                    placeholder="{{ 'customer.change_password.old_password' | t }}"
-                  >
-                  <div class="global-placeholder absolute right-0 bottom-0 pb-8">
-                    {{ 'customer.change_password.old_password' | t }}
-                  </div>
+            <div class="w-full mt-20 mb-0">
+              <div class="relative overflow pb-1">
+                <input
+                  type="password"
+                  name="customer[password_confirmation]"
+                  id="password_confirmation"
+                  class="global-input w-full bb-1 b-black p1 c-black pr-100"
+                  placeholder="{{ 'customer.change_password.repeat_password' | t }}"
+                >
+                <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                  {{ 'customer.change_password.repeat_password' | t }}
                 </div>
-                <div class="p2 mt-5 c-red hide-m error error-password-old"></div>
               </div>
-              <div class="w-full mt-20 mb-10">
-                <div class="relative overflow pb-1">
-                  <input
-                    type="password"
-                    name="customer[password]"
-                    id="password"
-                    class="global-input w-full bb-1 b-black p1 c-black pr-50"
-                    placeholder="{{ 'customer.change_password.password' | t }}"
-                  >
-                  <div class="global-placeholder absolute right-0 bottom-0 pb-8">
-                    {{ 'customer.change_password.password' | t }}
-                  </div>
-                </div>
-                <div class="p2 mt-5 c-red hide-m error error-password"></div>
-              </div>
-              <div class="w-full mt-20 mb-0">
-                <div class="relative overflow pb-1">
-                  <input
-                    type="password"
-                    name="customer[password_confirmation]"
-                    id="password_confirmation"
-                    class="global-input w-full bb-1 b-black p1 c-black pr-100"
-                    placeholder="{{ 'customer.change_password.repeat_password' | t }}"
-                  >
-                  <div class="global-placeholder absolute right-0 bottom-0 pb-8">
-                    {{ 'customer.change_password.repeat_password' | t }}
-                  </div>
-                </div>
-                <div class="p2 mt-5 c-red hide-m error error-password-confirmation"></div>
-              </div>
-              <button type="button" class="mt-25 d-mt-30 btn1 w-full submit-btn" onclick="validate(event,true)">
-                {{ 'customer.change_password.submit' | t }}
-              </button>
-              <p class="p2 error-message c-red mt-10 hide-m"></p>
-              <p class="p2 success-message mt-10 hide-m"></p>
-            {%- endform -%}
-          </div>
+              <div class="p2 mt-5 c-red hide-m error error-password-confirmation"></div>
+            </div>
+            <button type="button" class="mt-25 d-mt-30 btn1 w-full submit-btn" onclick="validate(event,true)">
+              {{ 'customer.change_password.submit' | t }}
+            </button>
+            <p class="p2 error-message c-red mt-10 hide-m"></p>
+            <p class="p2 success-message mt-10 hide-m"></p>
+          {%- endform -%}
         </div>
       </div>
     </div>
   </div>
+</div>
 
-  {{ 'jquery-ajax-module.js' | asset_url | script_tag }}
-  <script>
+{{ 'jquery-ajax-module.js' | asset_url | script_tag }}
+<script>
     window.ShopifyCurrency = {
         money_format: "{{ shop.money_format | escape }}",
         money_with_currency_format: "{{ shop.money_with_currency_format | escape }}"
@@ -904,7 +912,7 @@
         });
       }
     });
-  </script>
+</script>
 
 {% schema %}
 {

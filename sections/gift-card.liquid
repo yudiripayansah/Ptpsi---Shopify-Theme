@@ -132,156 +132,163 @@
 </style>
 
 <section>
-    <div class="container">
-        <div class="flex-wrapper row">
-            <div class="col-12 col-d-6 pt-40 pb-40 d-pt-80 d-pb-80 flex flex-column ai-center jc-center hhd-max-800 hhd-ml-auto hhd-mr-auto">
-                <div class="row">
-                    <div class="col-12 col-d-2">
-                        <div class="p3 c-label d-pt-12 pb-12">Gift Card</div>
-                    </div>
-                    <div class="col-12 col-d-8">
-                        {%- if sender_name != blank -%}
-                            <h1 class="h3 no-anim c-green">You’ve received a gift card from {{ sender_name }}!</h1>
-                        {% else %}
-                            {%- if request.design_mode -%}
-                                <h1 class="h3 no-anim c-green">You’ve received a gift card from Alex!</h1>
-                            {% endif %}
-                        {%- endif -%}
-                        {%- if gift_card.message != blank -%}
-                            <h2 class="p2 c-green mt-16 no-anim pb-24 d-pb-32 bb-1 b-green">{{ gift_card.message }}</h2>
-                        {%- else -%}
-                            {%- if request.design_mode -%}
-                                <h2 class="p2 c-green mt-16 no-anim pb-24 d-pb-32 bb-1 b-green">
-                                    Congratulations on your new home. We are so excited for the next part of your life. Have a blessed marriage and stay happy!
-                                </h2>
-                            {% endif %}
-                        {%- endif -%}
+  <div class="container">
+    <div class="flex-wrapper row">
+      <div class="col-12 col-d-6 pt-40 pb-40 d-pt-80 d-pb-80 flex flex-column ai-center jc-center hhd-max-800 hhd-ml-auto hhd-mr-auto">
+        <div class="row">
+          <div class="col-12 col-d-2">
+            <div class="p3 c-label d-pt-12 pb-12">Gift Card</div>
+          </div>
+          <div class="col-12 col-d-8">
+            {%- if sender_name != blank -%}
+              <h1 class="h3 no-anim c-green">You’ve received a gift card from {{ sender_name }}!</h1>
+            {% else %}
+              {%- if request.design_mode -%}
+                <h1 class="h3 no-anim c-green">You’ve received a gift card from Alex!</h1>
+              {% endif %}
+            {%- endif -%}
+            {%- if gift_card.message != blank -%}
+              <h2 class="p2 c-green mt-16 no-anim pb-24 d-pb-32 bb-1 b-green">{{ gift_card.message }}</h2>
+            {%- else -%}
+              {%- if request.design_mode -%}
+                <h2 class="p2 c-green mt-16 no-anim pb-24 d-pb-32 bb-1 b-green">
+                  Congratulations on your new home. We are so excited for the next part of your life. Have a blessed
+                  marriage and stay happy!
+                </h2>
+              {% endif %}
+            {%- endif -%}
 
-                        {% comment %} {% if sender_name != blank %}
-                        <div class="p6 tc mt-20 mb-40 d-mb-60 ">
-                            {{ 'products.product.from' | t }}
-                            {{ sender_name }}
-                        </div>
-                        {% else %}
-                        {%- if request.design_mode -%}
-                            <div class="p6 tc mt-20 mb-40 d-mb-60">{{ 'products.product.from' | t }} Emily</div>
-                        {% endif %}
-                        {% endif %} {% endcomment %}
+            {% comment %}
+              {% if sender_name != blank %}
+              <div class="p6 tc mt-20 mb-40 d-mb-60 ">
+                  {{ 'products.product.from' | t }}
+                  {{ sender_name }}
+              </div>
+              {% else %}
+              {%- if request.design_mode -%}
+                  <div class="p6 tc mt-20 mb-40 d-mb-60">{{ 'products.product.from' | t }} Emily</div>
+              {% endif %}
+              {% endif %}
+            {% endcomment %}
 
-                        <div class="h3 no-anim mt-24 d-mt-32 mb-24 c-green">
-                            {%- if request.design_mode -%}
-                            $50.00
-                            {%- else -%}
-                            {{ gift_card.balance | money_with_currency }}
-                            {%- endif -%}
-                        </div>
-
-                        {%- if ss.redeem_text != blank -%}
-                        <div class="p2 c-green">
-                            {{ ss.redeem_text | newline_to_br }}
-                        </div>
-                        {%- endif -%}
-
-                        <div class="mt-12 pt-12 pb-12 pl-24 pr-24 w-full b-1 b-green button-copy-wrapper">
-                            <div
-                                style=""
-                                class="code-wrapper global-flex ai-center jc-between relative w-full"
-                            >
-                                {% if request.design_mode %}
-                                    <input type="text" id="textToCopy" class="p2 c-green w-full" value="84C7 3CHA 3296 B75B">
-                                {% else %}
-                                    <input type="text" id="textToCopy" class="p2 c-green w-full" value="{{ gift_card.code | format_code }}">
-                                {% endif %}
-                                <button class="flex flex-column ai-center" id="copyButton"><span class="clickable-area"></span>{{ settings.icon_copy }}</button>
-                            </div>
-                            <div class="area-copied ai-center jc-between">
-                                <p class="p2">Copied!</p>
-                                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="12" viewBox="0 0 10 12" fill="none">
-                                    <path d="M9.16797 5.16602L9.16797 8.79565C9.16797 10.1048 8.13325 11.166 6.85686 11.166L3.31797 11.166M5.7013 0.49935L1.8013 0.49935C1.08333 0.49935 0.501301 1.0963 0.501301 1.83268L0.501301 7.61046C0.501301 8.34684 1.08333 8.94379 1.8013 8.94379L5.7013 8.94379C6.41927 8.94379 7.0013 8.34684 7.0013 7.61046L7.0013 1.83268C7.0013 1.0963 6.41927 0.49935 5.7013 0.49935Z" stroke="#F2E9DF"/>
-                                </svg>
-                            </div>
-                        </div>
-
-                        <div class="p3 mt-12 mb-24 d-mb-32 c-green">
-                            {%- if request.design_mode -%}
-                                Expires on 30 September 2025
-                            {%- else -%}
-                                Expires on {{ gift_card.expires_on | date: '%e %B %Y' }}
-                            {%- endif -%}
-                        </div>
-                        
-                        <div class="button-wrapper w-full global-flex flex-column mt-24">
-                        <a
-                            href="{{ shop.url }}"
-                            class="btn1 w-full tc"
-                            style="display: flex; align-items: center; justify-content: space-between;"
-                            >
-                            <span class="p2">{{ ss.shop_label }}</span>
-                            <span class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
-                                    <path d="M1.69152 0.499889L7.77866 0.499802M7.77866 0.499802L7.77866 6.50037M7.77866 0.499802L0.707588 7.57087" stroke="white" stroke-linecap="square"/>
-                                </svg>
-                            </span>
-                            </a
-                        >
-
-                        {% if ss.print_label != blank %}
-                        <a
-                            href="#"
-                            rel="nofollow"
-                            onclick="window.print()"
-                            class="mt-16  tc"
-                            style="display: flex; align-items: center; justify-content: center;"
-                            ><span class="link1">{{ ss.print_label }}</span></a
-                        >
-                        {% endif %}
-                        </div>
-                    </div>
-                    <div class="col-12 col-d-2">
-
-                    </div>
-                </div>
+            <div class="h3 no-anim mt-24 d-mt-32 mb-24 c-green">
+              {%- if request.design_mode -%}
+                $50.00
+              {%- else -%}
+                {{ gift_card.balance | money_with_currency }}
+              {%- endif -%}
             </div>
-            <div class="image-wrapper relative col-12 col-d-6">
-                <div class="row">
-                    <div class="col-12 col-d-10">
-                        {%- for var in gift_card.product.variants -%}
-                        {%- assign initial_value = gift_card.initial_value | money -%}
-                        {%- if var.options[0] == initial_value -%}
-                            {%- assign var_img = var.featured_image -%}
-                        {%- endif -%}
-                        {%- endfor -%}
 
-                        {%- if request.design_mode -%}
-                            {% if section.settings.mood_image != blank %}
-                                {%- render 'global-image-wrapper', image: section.settings.mood_image, preload: true -%}
-                            {% else %}
-                            <img
-                            class="d-absolute"
-                            src="https://cdn.shopify.com/s/files/1/0628/8559/3228/files/dummy_344x517_ffffff_cccccc.png?v=1740537478"
-                            style="width: 100%;"
-                            >
-                            {% endif %}
-                        
-                        {% else %}
-                            {%- render 'global-image-wrapper', image: var_img, preload: true -%}
-                        {%- endif -%}
+            {%- if ss.redeem_text != blank -%}
+              <div class="p2 c-green">
+                {{ ss.redeem_text | newline_to_br }}
+              </div>
+            {%- endif -%}
 
-                        {% if section.settings.mood_image_label_1 != blank or section.settings.mood_image_label_2 != blank %}
-                            <div class="image-label-flex">
-                                <div class="image-label p4 c-label">
-                                    {{ section.settings.mood_image_label_1 }}
-                                </div>
-                                <div class="image-label p4 c-label">
-                                    {{ section.settings.mood_image_label_2 }}
-                                </div>
-                            </div>
-                        {% endif %}
-                    </div>
-                </div>
+            <div class="mt-12 pt-12 pb-12 pl-24 pr-24 w-full b-1 b-green button-copy-wrapper">
+              <div
+                style=""
+                class="code-wrapper global-flex ai-center jc-between relative w-full"
+              >
+                {% if request.design_mode %}
+                  <input type="text" id="textToCopy" class="p2 c-green w-full" value="84C7 3CHA 3296 B75B">
+                {% else %}
+                  <input
+                    type="text"
+                    id="textToCopy"
+                    class="p2 c-green w-full"
+                    value="{{ gift_card.code | format_code }}"
+                  >
+                {% endif %}
+                <button class="flex flex-column ai-center" id="copyButton">
+                  <span class="clickable-area"></span>{{ settings.icon_copy }}
+                </button>
+              </div>
+              <div class="area-copied ai-center jc-between">
+                <p class="p2">Copied!</p>
+                <svg xmlns="http://www.w3.org/2000/svg" width="10" height="12" viewBox="0 0 10 12" fill="none">
+                  <path d="M9.16797 5.16602L9.16797 8.79565C9.16797 10.1048 8.13325 11.166 6.85686 11.166L3.31797 11.166M5.7013 0.49935L1.8013 0.49935C1.08333 0.49935 0.501301 1.0963 0.501301 1.83268L0.501301 7.61046C0.501301 8.34684 1.08333 8.94379 1.8013 8.94379L5.7013 8.94379C6.41927 8.94379 7.0013 8.34684 7.0013 7.61046L7.0013 1.83268C7.0013 1.0963 6.41927 0.49935 5.7013 0.49935Z" stroke="#F2E9DF"/>
+                </svg>
+              </div>
             </div>
+
+            <div class="p3 mt-12 mb-24 d-mb-32 c-green">
+              {%- if request.design_mode -%}
+                Expires on 30 September 2025
+              {%- else -%}
+                Expires on {{ gift_card.expires_on | date: '%e %B %Y' }}
+              {%- endif -%}
+            </div>
+
+            <div class="button-wrapper w-full global-flex flex-column mt-24">
+              <a
+                href="{{ shop.url }}"
+                class="btn1 w-full tc"
+                style="display: flex; align-items: center; justify-content: space-between;"
+              >
+                <span class="p2">{{ ss.shop_label }}</span>
+                <span class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="9" height="9" viewBox="0 0 9 9" fill="none">
+                    <path d="M1.69152 0.499889L7.77866 0.499802M7.77866 0.499802L7.77866 6.50037M7.77866 0.499802L0.707588 7.57087" stroke="white" stroke-linecap="square"/>
+                  </svg>
+                </span>
+              </a>
+
+              {% if ss.print_label != blank %}
+                <a
+                  href="#"
+                  rel="nofollow"
+                  onclick="window.print()"
+                  class="mt-16  tc"
+                  style="display: flex; align-items: center; justify-content: center;"
+                  ><span class="link1">{{ ss.print_label }}</span></a
+                >
+              {% endif %}
+            </div>
+          </div>
+          <div class="col-12 col-d-2"></div>
         </div>
+      </div>
+      <div class="image-wrapper relative col-12 col-d-6">
+        <div class="row">
+          <div class="col-12 col-d-10">
+            {%- for var in gift_card.product.variants -%}
+              {%- assign initial_value = gift_card.initial_value | money -%}
+              {%- if var.options[0] == initial_value -%}
+                {%- assign var_img = var.featured_image -%}
+              {%- endif -%}
+            {%- endfor -%}
+
+            {%- if request.design_mode -%}
+              {% if section.settings.mood_image != blank %}
+                {%- render 'global-image-wrapper', image: section.settings.mood_image, preload: true -%}
+              {% else %}
+                <img
+                  class="d-absolute"
+                  src="https://cdn.shopify.com/s/files/1/0628/8559/3228/files/dummy_344x517_ffffff_cccccc.png?v=1740537478"
+                  style="width: 100%;"
+                >
+              {% endif %}
+
+            {% else %}
+              {%- render 'global-image-wrapper', image: var_img, preload: true -%}
+            {%- endif -%}
+
+            {% if section.settings.mood_image_label_1 != blank or section.settings.mood_image_label_2 != blank %}
+              <div class="image-label-flex">
+                <div class="image-label p4 c-label">
+                  {{ section.settings.mood_image_label_1 }}
+                </div>
+                <div class="image-label p4 c-label">
+                  {{ section.settings.mood_image_label_2 }}
+                </div>
+              </div>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </section>
 
 <script>
@@ -309,24 +316,24 @@
       "content": "General Settings"
     },
     {
-        "type": "color",
-        "id": "bg_color",
-        "label": "Background Color"
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
     },
     {
-        "type": "image_picker",
-        "id": "mood_image",
-        "label": "Mood Image"
+      "type": "image_picker",
+      "id": "mood_image",
+      "label": "Mood Image"
     },
     {
-        "type": "text",
-        "id": "mood_image_label_1",
-        "label": "Mood Image Label 1"
+      "type": "text",
+      "id": "mood_image_label_1",
+      "label": "Mood Image Label 1"
     },
     {
-        "type": "text",
-        "id": "mood_image_label_2",
-        "label": "Mood Image Label 2"
+      "type": "text",
+      "id": "mood_image_label_2",
+      "label": "Mood Image Label 2"
     },
     {
       "type": "textarea",
@@ -346,138 +353,138 @@
       "default": "Shop Now"
     },
     {
-        "type": "header",
-        "content": "Section Paddings"
+      "type": "header",
+      "content": "Section Paddings"
     },
     {
-        "type": "select",
-        "id": "top_padding_m",
-        "label": "Top padding (Mobile)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "bottom_padding_m",
-        "label": "Bottom padding (Mobile)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "top_padding_t",
-        "label": "Top padding (Tablet)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "bottom_padding_t",
-        "label": "Bottom padding (Tablet)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "top_padding",
-        "label": "Top padding (Desktop)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "bottom_padding",
-        "label": "Bottom padding (Desktop)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "top_padding_hd",
-        "label": "Top padding (HD)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "bottom_padding_hd",
-        "label": "Bottom padding (HD)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "top_padding_hhd",
-        "label": "Top padding (HHD)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     },
     {
-        "type": "select",
-        "id": "bottom_padding_hhd",
-        "label": "Bottom padding (HHD)",
-        "options": [
-            { "value": "nopadding", "label": "No padding" },
-            { "value": "extrasmall", "label": "Extra Small" },
-            { "value": "small", "label": "Small" },
-            { "value": "medium", "label": "Medium" },
-            { "value": "large", "label": "Large" }
-        ],
-        "default": "medium"
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
     }
   ],
   "blocks": []

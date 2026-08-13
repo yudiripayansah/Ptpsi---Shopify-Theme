@@ -958,10 +958,7 @@
             }
           }
         },
-        "block_order": [
-          "style_TjXQpz",
-          "style_iEE99F"
-        ],
+        "block_order": ["style_TjXQpz", "style_iEE99F"],
         "settings": {
           "font1": "'Founders Grotesk', sans-serif",
           "font2": "",
@@ -1144,10 +1141,7 @@
             }
           }
         },
-        "block_order": [
-          "country_HgBJFa",
-          "country_6xPjWB"
-        ],
+        "block_order": ["country_HgBJFa", "country_6xPjWB"],
         "settings": {
           "logo": "shopify:\/\/shop_images\/Vector_1.png",
           "image_mobile": "shopify:\/\/shop_images\/Hidden_Footer_3.png",
@@ -1249,10 +1243,7 @@
             }
           }
         },
-        "block_order": [
-          "entry_EcUbJJ",
-          "entry_fhLFJW"
-        ],
+        "block_order": ["entry_EcUbJJ", "entry_fhLFJW"],
         "settings": {
           "section_id": "",
           "bg_color": "#fff9f2",
@@ -1425,11 +1416,7 @@
             }
           }
         },
-        "block_order": [
-          "qna_PTjWFL",
-          "qna_h9dBVB",
-          "qna_kmMC7g"
-        ],
+        "block_order": ["qna_PTjWFL", "qna_h9dBVB", "qna_kmMC7g"],
         "settings": {
           "enable_faq": true,
           "id_faq": "choosing-your-plant",
@@ -1447,9 +1434,7 @@
             }
           }
         },
-        "block_order": [
-          "qna_yXGtkW"
-        ],
+        "block_order": ["qna_yXGtkW"],
         "settings": {
           "enable_faq": true,
           "id_faq": "shipping-delivery",
@@ -1474,10 +1459,7 @@
             }
           }
         },
-        "block_order": [
-          "qna_3pb7Mj",
-          "qna_cKJXDe"
-        ],
+        "block_order": ["qna_3pb7Mj", "qna_cKJXDe"],
         "settings": {
           "enable_faq": true,
           "id_faq": "returns-refunds",
@@ -1796,11 +1778,7 @@
             }
           }
         },
-        "block_order": [
-          "range_6WkHM4",
-          "range_m4cGqx",
-          "range_8VCy8r"
-        ],
+        "block_order": ["range_6WkHM4", "range_m4cGqx", "range_8VCy8r"],
         "name": "Carousel Jagged",
         "settings": {
           "bg_color": "#fff9f2",
@@ -1986,10 +1964,7 @@
             }
           }
         },
-        "block_order": [
-          "entry_y8e6a3",
-          "entry_WFEkYp"
-        ],
+        "block_order": ["entry_y8e6a3", "entry_WFEkYp"],
         "settings": {
           "section_id": "",
           "bg_color": "#fff9f2",
@@ -2040,10 +2015,7 @@
             }
           }
         },
-        "block_order": [
-          "entry_K7W6EV",
-          "entry_7q73jG"
-        ],
+        "block_order": ["entry_K7W6EV", "entry_7q73jG"],
         "name": "About Us",
         "settings": {
           "bg_color": "#fff9f2",
@@ -2105,11 +2077,7 @@
             }
           }
         },
-        "block_order": [
-          "entry_k6Yh6Y",
-          "entry_hfQ4Eb",
-          "entry_bGmWzz"
-        ],
+        "block_order": ["entry_k6Yh6Y", "entry_hfQ4Eb", "entry_bGmWzz"],
         "name": "Split Hero Accordion",
         "settings": {
           "bg_color": "#fff9f2",
@@ -2158,11 +2126,7 @@
             }
           }
         },
-        "block_order": [
-          "entry_bgeBiF",
-          "entry_TjMcqV",
-          "entry_rPpmPc"
-        ],
+        "block_order": ["entry_bgeBiF", "entry_TjMcqV", "entry_rPpmPc"],
         "name": "Text and Links",
         "settings": {
           "bg_color": "#fff9f2",
@@ -2305,11 +2269,7 @@
             }
           }
         },
-        "block_order": [
-          "range_XGAtnr",
-          "range_FdjT8Y",
-          "range_96nMAj"
-        ],
+        "block_order": ["range_XGAtnr", "range_FdjT8Y", "range_96nMAj"],
         "name": "Carousel Jagged",
         "settings": {
           "bg_color": "#fff9f2",

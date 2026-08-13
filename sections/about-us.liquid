@@ -1,394 +1,392 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'about-us-' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    render 'section-padding', el_id: el_id, section: section
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'about-us-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
 %}
 
 <style>
-    #{{ el_id }} {
-        background-color: {{ section.settings.bg_color }};
-        padding-bottom: 32px;
-    }
-    #{{ el_id }} .shs-button {
-        border: 1px solid var(--green);
-        width: 100%;
-        justify-content: space-between;
-    }
-    #{{ el_id }} .shs-button .icon,
-    #{{ el_id }} .shs-button .icon svg,
-    #{{ el_id }} .au-button,
-    #{{ el_id }} .au-button .icon svg {
-        width: 16px;
-        height: 16px;
-    }
-    #{{ el_id }} .au-header-subtitle {
-        min-width: 90px;
-        padding-right: 16px;
-        display: flex;
-        align-items: center;
-    }
-    #{{ el_id }} .au-header-title span {
-        text-indent: 0px;
-    }
-    #{{ el_id }} .au-button {
-        width: fit-content;
-        justify-content: space-between;
-        column-gap: 4px;
-        text-decoration: underline;
-    }
-    #{{ el_id }} .contact-wrapper {
-        flex-direction: column-reverse;
-        row-gap: 16px;
-    }
-    #{{ el_id }} .details-wrapper {
-        row-gap: 12px;
-    }
-    #{{ el_id }} .link-wrapper {
-        row-gap: 4px;
-    }
-    #{{ el_id }} .contact-wrapper::before,
-    #{{ el_id }} .contact-wrapper::after {
-        display: none;
-    }
-    @media screen and (min-width: 1024px){
-        #{{ el_id }} {
-            padding-bottom: 64px;
-        }
-        #{{ el_id }} .au-header-subtitle {
-            min-width: 118px;
-            padding-right: 24px;
-        }
-        #{{ el_id }} .details-wrapper {
-            row-gap: 16px;
-        }
-        #{{ el_id }} .contact-wrapper {
-            flex-direction: row;
-        }
-        #{{ el_id }} .shs-button:hover {
-            background-color: var(--green);
-            color: #fff;
-        }
-        #{{ el_id }} .shs-button:hover .icon svg path {
-            stroke: #fff;
-        }
-    }
+  #{{ el_id }} {
+      background-color: {{ section.settings.bg_color }};
+      padding-bottom: 32px;
+  }
+  #{{ el_id }} .shs-button {
+      border: 1px solid var(--green);
+      width: 100%;
+      justify-content: space-between;
+  }
+  #{{ el_id }} .shs-button .icon,
+  #{{ el_id }} .shs-button .icon svg,
+  #{{ el_id }} .au-button,
+  #{{ el_id }} .au-button .icon svg {
+      width: 16px;
+      height: 16px;
+  }
+  #{{ el_id }} .au-header-subtitle {
+      min-width: 90px;
+      padding-right: 16px;
+      display: flex;
+      align-items: center;
+  }
+  #{{ el_id }} .au-header-title span {
+      text-indent: 0px;
+  }
+  #{{ el_id }} .au-button {
+      width: fit-content;
+      justify-content: space-between;
+      column-gap: 4px;
+      text-decoration: underline;
+  }
+  #{{ el_id }} .contact-wrapper {
+      flex-direction: column-reverse;
+      row-gap: 16px;
+  }
+  #{{ el_id }} .details-wrapper {
+      row-gap: 12px;
+  }
+  #{{ el_id }} .link-wrapper {
+      row-gap: 4px;
+  }
+  #{{ el_id }} .contact-wrapper::before,
+  #{{ el_id }} .contact-wrapper::after {
+      display: none;
+  }
+  @media screen and (min-width: 1024px){
+      #{{ el_id }} {
+          padding-bottom: 64px;
+      }
+      #{{ el_id }} .au-header-subtitle {
+          min-width: 118px;
+          padding-right: 24px;
+      }
+      #{{ el_id }} .details-wrapper {
+          row-gap: 16px;
+      }
+      #{{ el_id }} .contact-wrapper {
+          flex-direction: row;
+      }
+      #{{ el_id }} .shs-button:hover {
+          background-color: var(--green);
+          color: #fff;
+      }
+      #{{ el_id }} .shs-button:hover .icon svg path {
+          stroke: #fff;
+      }
+  }
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'about-us-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'about-us-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-    <div id="{{ el_id }}">
-        <div class="container">
-            <div class="au-header relative">
-                <p class="p3 c-label absolute left-0 au-header-subtitle">
-                    {{- section.settings.subtitle -}}
-                </p>
-                <{{ section.settings.title_dom_type }} class="{{section.settings.title_size}} c-green au-header-title">
-                    {{- section.settings.title -}}
-                </{{ section.settings.title_dom_type }}>
-                <div class="row">
-                    <div class="col-12 col-d-3">
-                        {% if ss.btn_label != blank %}
-                            <a href="{{ ss.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 show-m flex mt-24 d-mt-32">
-                                {{ ss.btn_label }}
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                                    </svg>
-                                </div>
-                            </a>
-                        {% endif %}
-                    </div>
+  <div id="{{ el_id }}">
+    <div class="container">
+      <div class="au-header relative">
+        <p class="p3 c-label absolute left-0 au-header-subtitle">
+          {{- section.settings.subtitle -}}
+        </p>
+        <{{ section.settings.title_dom_type }} class="{{section.settings.title_size}} c-green au-header-title">
+          {{- section.settings.title -}}
+        </{{ section.settings.title_dom_type }}>
+        <div class="row">
+          <div class="col-12 col-d-3">
+            {% if ss.btn_label != blank %}
+              <a href="{{ ss.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 show-m flex mt-24 d-mt-32">
+                {{ ss.btn_label }}
+                <div class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                  </svg>
                 </div>
-            </div>
-            <div class="row mt-32 d-mt-40 flex contact-wrapper">
-                <div class="col-12 col-d-3 push-d-5">
-                    <div class="details-wrapper flex flex-column">
-                        <div class="rte p2 c-green">
-                            {{ ss.address }}
-                        </div>
-                        <div class="rte p2 c-green">
-                            {{ ss.details }}
-                        </div>
-                        <div class="link-wrapper flex flex-column">
-                            {% for block in sb %}
-                                {% assign bs = block.settings %}
-                                <a href="{{ bs.contact_url }}" class="p2 au-button flex c-green">
-                                    {{ bs.contact_label }}
-                                    <div class="icon">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                            <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                                        </svg>
-                                    </div>
-                                </a>
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
-                <div class="col-12 col-d-4 push-d-5">
-                    {% if ss.contact_image != blank %}
-                        {%- render 'global-image-wrapper',
-                            image: ss.contact_image
-                        -%}
-                    {% endif %}
-                </div>
-            </div>
+              </a>
+            {% endif %}
+          </div>
         </div>
+      </div>
+      <div class="row mt-32 d-mt-40 flex contact-wrapper">
+        <div class="col-12 col-d-3 push-d-5">
+          <div class="details-wrapper flex flex-column">
+            <div class="rte p2 c-green">
+              {{ ss.address }}
+            </div>
+            <div class="rte p2 c-green">
+              {{ ss.details }}
+            </div>
+            <div class="link-wrapper flex flex-column">
+              {% for block in sb %}
+                {% assign bs = block.settings %}
+                <a href="{{ bs.contact_url }}" class="p2 au-button flex c-green">
+                  {{ bs.contact_label }}
+                  <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                    </svg>
+                  </div>
+                </a>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+        <div class="col-12 col-d-4 push-d-5">
+          {% if ss.contact_image != blank %}
+            {%- render 'global-image-wrapper', image: ss.contact_image -%}
+          {% endif %}
+        </div>
+      </div>
     </div>
+  </div>
 {% endif %}
 
 <script>
-    function adjustSubtitle() {
-        const title = document.querySelector('.au-header-title');
-        const subtitle = document.querySelector('.au-header-subtitle');
-        title.style.textIndent = `${subtitle.offsetWidth}px`;
-        setTimeout(() => {
-            const title_span = document.querySelector('.au-header-title span');
-            subtitle.style.height = `${title_span.offsetHeight}px`;
-        }, 100);
-    }
-    document.addEventListener("DOMContentLoaded", function(){
-        adjustSubtitle();
-    });
-    window.addEventListener("resize", function(){
-        adjustSubtitle();
-    });
+  function adjustSubtitle() {
+    const title = document.querySelector('.au-header-title');
+    const subtitle = document.querySelector('.au-header-subtitle');
+    title.style.textIndent = `${subtitle.offsetWidth}px`;
+    setTimeout(() => {
+      const title_span = document.querySelector('.au-header-title span');
+      subtitle.style.height = `${title_span.offsetHeight}px`;
+    }, 100);
+  }
+  document.addEventListener('DOMContentLoaded', function () {
+    adjustSubtitle();
+  });
+  window.addEventListener('resize', function () {
+    adjustSubtitle();
+  });
 </script>
 
 {% schema %}
 {
-    "name": "About Us",
-    "settings": [
+  "name": "About Us",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "text",
+      "id": "btn_label",
+      "label": "Button Label"
+    },
+    {
+      "type": "url",
+      "id": "btn_url",
+      "label": "Button Url"
+    },
+    {
+      "type": "richtext",
+      "id": "address",
+      "label": "Address"
+    },
+    {
+      "type": "richtext",
+      "id": "details",
+      "label": "Details below address"
+    },
+    {
+      "type": "image_picker",
+      "id": "contact_image",
+      "label": "Contact image"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
         {
-            "type": "header",
-            "content": "General Settings"
+          "type": "text",
+          "id": "contact_label",
+          "label": "Contact Label"
         },
         {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
-        },
-        {
-            "type": "textarea",
-            "id": "subtitle",
-            "label": "Subtitle"
-        },
-        {
-            "type": "textarea",
-            "id": "title",
-            "label": "Title"
-        },
-        {
-            "type": "select",
-            "id": "title_dom_type",
-            "label": "Title DOM Type",
-            "options": [
-                {"value":"h1","label":"H1"},
-                {"value":"h2","label":"H2"},
-                {"value":"h3","label":"H3"},
-                {"value":"h4","label":"H4"},
-                {"value":"h5","label":"H5"}
-            ],
-            "default": "h2"
-        },
-        {
-            "type": "select",
-            "id": "title_size",
-            "label": "Title Size",
-            "options": [
-                { "value": "h1", "label": "H1" },
-                { "value": "h2", "label": "H2" },
-                { "value": "h3", "label": "H3" },
-                { "value": "h4", "label": "H4" }
-            ],
-            "default": "h2"
-        },
-        {
-            "type": "text",
-            "id": "btn_label",
-            "label": "Button Label"
-        },
-        {
-            "type": "url",
-            "id": "btn_url",
-            "label": "Button Url"
-        },
-        {
-            "type": "richtext",
-            "id": "address",
-            "label": "Address"
-        },
-        {
-            "type": "richtext",
-            "id": "details",
-            "label": "Details below address"
-        },
-        {
-            "type": "image_picker",
-            "id": "contact_image",
-            "label": "Contact image"
-        },
-        {
-            "type": "header",
-            "content": "Section Paddings"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_m",
-            "label": "Top padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_m",
-            "label": "Bottom padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_t",
-            "label": "Top padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_t",
-            "label": "Bottom padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding",
-            "label": "Top padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding",
-            "label": "Bottom padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hd",
-            "label": "Top padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hd",
-            "label": "Bottom padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hhd",
-            "label": "Top padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hhd",
-            "label": "Bottom padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
+          "type": "url",
+          "id": "contact_url",
+          "label": "Contact Url"
         }
-    ],
-    "blocks": [
-        {
-            "type": "entry",
-            "name": "Entry",
-            "settings": [
-                {
-                    "type": "text",
-                    "id": "contact_label",
-                    "label": "Contact Label"
-                },
-                {
-                    "type": "url",
-                    "id": "contact_url",
-                    "label": "Contact Url"
-                }
-            ]
-        }
-    ],
-    "presets": [
-        {
-            "name": "About Us",
-            "blocks": []
-        }
-    ]
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "About Us",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

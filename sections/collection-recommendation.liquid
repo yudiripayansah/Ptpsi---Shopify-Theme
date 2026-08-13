@@ -8,63 +8,63 @@
   {% render 'section-padding', section: section, el_id: el_id %}
   {% assign recommendation = collection.metafields.custom.recommended_collection.value.products %}
   {% if recommendation.size > 0 %}
-  <style>
-    #{{el_id}} .cr-slide-arrow svg {
-      width: 10.5px;
-      height: 10.5px;
-    }
-    #{{el_id}} .cr-slide-arrow svg * {
-      stroke: var(--green);
-    }
-    #{{el_id}} .swiper {
-      overflow: visible !important;
-      clip-path: inset(-100vw -100vw -100vw -100vw);
-    }
-    #box-{{el_id}} .container:after,
-    #box-{{el_id}} .container:before {
-      display: none;
-    }
-  </style>
+    <style>
+      #{{el_id}} .cr-slide-arrow svg {
+        width: 10.5px;
+        height: 10.5px;
+      }
+      #{{el_id}} .cr-slide-arrow svg * {
+        stroke: var(--green);
+      }
+      #{{el_id}} .swiper {
+        overflow: visible !important;
+        clip-path: inset(-100vw -100vw -100vw -100vw);
+      }
+      #box-{{el_id}} .container:after,
+      #box-{{el_id}} .container:before {
+        display: none;
+      }
+    </style>
 
-  <div id="box-{{el_id}}" class="bg-background-main">
-    {% if ss.border_top %}
-      <div class="container">
-        <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
-      </div>
-    {% endif %}
-    <div class="collection-recommendations overflow hide-m" id="{{el_id}}">
-      <div class="container">
-        <div class="cr-heading flex ai-center jc-between">
-          <{{ ss.title_dom_type }} class="{{ ss.title_size }}">
-            {{- ss.title -}}
-          </{{ ss.title_dom_type }}>
-          <div class="d-flex hide-m ai-center jc-center colgap-8">
-            <div class="cr-slide-arrow cursor flex ai-center jc-center p-5 left">
-              {{ settings.icon_slide_left }}
-            </div>
-            <div class="cr-slide-arrow cursor flex ai-center jc-center p-5 right">
-              {{ settings.icon_slide_right }}
-            </div>
-          </div>
+    <div id="box-{{el_id}}" class="bg-background-main">
+      {% if ss.border_top %}
+        <div class="container">
+          <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
         </div>
-        <div class="swiper cr-swiper d-mt-40 mt-32">
-          <div class="product-wrapper swiper-wrapper">
-            {% for product in collection.metafields.custom.recommended_collection.value.products limit: 12 %}
-              <div class="swiper-slide">
-                {% render 'product-each', product: product %}
+      {% endif %}
+      <div class="collection-recommendations overflow hide-m" id="{{el_id}}">
+        <div class="container">
+          <div class="cr-heading flex ai-center jc-between">
+            <{{ ss.title_dom_type }} class="{{ ss.title_size }}">
+              {{- ss.title -}}
+            </{{ ss.title_dom_type }}>
+            <div class="d-flex hide-m ai-center jc-center colgap-8">
+              <div class="cr-slide-arrow cursor flex ai-center jc-center p-5 left">
+                {{ settings.icon_slide_left }}
               </div>
-            {% endfor %}
+              <div class="cr-slide-arrow cursor flex ai-center jc-center p-5 right">
+                {{ settings.icon_slide_right }}
+              </div>
+            </div>
+          </div>
+          <div class="swiper cr-swiper d-mt-40 mt-32">
+            <div class="product-wrapper swiper-wrapper">
+              {% for product in collection.metafields.custom.recommended_collection.value.products limit: 12 %}
+                <div class="swiper-slide">
+                  {% render 'product-each', product: product %}
+                </div>
+              {% endfor %}
+            </div>
           </div>
         </div>
       </div>
+      {% if ss.border_bottom %}
+        <div class="container">
+          <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
+        </div>
+      {% endif %}
     </div>
-    {% if ss.border_bottom %}
-      <div class="container">
-        <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
-      </div>
-    {% endif %}
-  </div>
-  <script>
+    <script>
   const maxRecentlyViewed = 12;
   const recentlyViewedKey = 'recently_viewed_products';
   const currentProductHandle = '{{ product.handle }}';
@@ -138,7 +138,7 @@
     initSwiper();
     {% endif %}
   });
-  </script>
+    </script>
   {% endif %}
 {% endif %}
 {% schema %}

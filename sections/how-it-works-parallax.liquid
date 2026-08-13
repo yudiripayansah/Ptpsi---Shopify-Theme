@@ -275,7 +275,9 @@
             <video
               class="hiw-video hiw-video--d"
               data-src="{{ video_url_d }}"
-              {% if ss.static_image != blank %}poster="{{ ss.static_image | image_url: width: 1600 }}"{% endif %}
+              {% if ss.static_image != blank %}
+                poster="{{ ss.static_image | image_url: width: 1600 }}"
+              {% endif %}
               preload="none"
               muted
               loop
@@ -287,7 +289,9 @@
             <video
               class="hiw-video hiw-video--m"
               data-src="{{ video_url_m }}"
-              {% if ss.static_image != blank %}poster="{{ ss.static_image | image_url: width: 800 }}"{% endif %}
+              {% if ss.static_image != blank %}
+                poster="{{ ss.static_image | image_url: width: 800 }}"
+              {% endif %}
               preload="none"
               muted
               loop
@@ -396,10 +400,10 @@
     (function () {
       var SECTION_ID = '{{ el_id }}';
       var OVERLAP = 0.15; // share of a segment spent crossfading into the next set
-      var FADE = 0.18;    // share of a segment spent fading a step description in / out
+      var FADE = 0.18; // share of a segment spent fading a step description in / out
 
       function clamp(v, min, max) {
-        return v < min ? min : (v > max ? max : v);
+        return v < min ? min : v > max ? max : v;
       }
 
       function initHiwParallax(root) {
@@ -487,7 +491,7 @@
           });
           // Track = all segments plus one stage, so the last set finishes
           // before the sticky stage lets go.
-          root.style.height = (total + stageH) + 'px';
+          root.style.height = total + stageH + 'px';
         }
 
         function update() {
@@ -886,11 +890,7 @@
   "presets": [
     {
       "name": "How It Works Parallax",
-      "blocks": [
-        { "type": "set" },
-        { "type": "set" },
-        { "type": "set" }
-      ]
+      "blocks": [{ "type": "set" }, { "type": "set" }, { "type": "set" }]
     }
   ]
 }

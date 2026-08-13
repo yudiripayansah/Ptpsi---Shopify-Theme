@@ -194,7 +194,10 @@
               {% assign bs = block.settings %}
               {% if bs.title != blank %}
                 {% assign entry_counter = entry_counter | plus: 1 %}
-                <div class="snd-detail p2 c-green {% if entry_counter == 1 %}active{% endif %}" data-index="{{ entry_counter }}">
+                <div
+                  class="snd-detail p2 c-green {% if entry_counter == 1 %}active{% endif %}"
+                  data-index="{{ entry_counter }}"
+                >
                   {{ bs.text | newline_to_br }}
                 </div>
               {% endif %}
@@ -535,11 +538,7 @@
   "presets": [
     {
       "name": "Split Numbered Details",
-      "blocks": [
-        { "type": "entry" },
-        { "type": "entry" },
-        { "type": "entry" }
-      ]
+      "blocks": [{ "type": "entry" }, { "type": "entry" }, { "type": "entry" }]
     }
   ]
 }

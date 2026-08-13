@@ -49,9 +49,7 @@
           }
         }
       },
-      "block_order": [
-        "entry_KUxUHT"
-      ],
+      "block_order": ["entry_KUxUHT"],
       "name": "About Us",
       "settings": {
         "bg_color": "#fff9f2",
@@ -144,10 +142,7 @@
           }
         }
       },
-      "block_order": [
-        "entry_JfTPnm",
-        "entry_K9cdLa"
-      ],
+      "block_order": ["entry_JfTPnm", "entry_K9cdLa"],
       "name": "Homepage Banner",
       "settings": {
         "section_id": "",
@@ -194,11 +189,7 @@
           }
         }
       },
-      "block_order": [
-        "entry_J4L6TF",
-        "entry_hMD49D",
-        "entry_cTBq9h"
-      ],
+      "block_order": ["entry_J4L6TF", "entry_hMD49D", "entry_cTBq9h"],
       "name": "Text and Links",
       "settings": {
         "bg_color": "#fff9f2",

@@ -5,18 +5,20 @@
     endif
   %}
   <div class="flex flex-column d-rowgap-32 rowgap-24 {{ no_results }}">
-    {% comment %} {% if predictive_search.resources.products.size > 0 %}
-      <div class="predictive-products">
-        <h4 class="p3 c-label">{{ 'general.search.suggested' | t }}</h4>
-        <ul class="mt-12 rowgap-4 d-mt-16 flex flex-column d-rowgap-8">
-          {% for product in predictive_search.resources.products %}
-            <li>
-              <div onclick="fillSearchInput('{{ product.title }}')" class="p1 c-green cursor">{{ product.title }}</div>
-            </li>
-          {% endfor %}
-        </ul>
-      </div>
-    {% endif %} {% endcomment %}
+    {% comment %}
+      {% if predictive_search.resources.products.size > 0 %}
+        <div class="predictive-products">
+          <h4 class="p3 c-label">{{ 'general.search.suggested' | t }}</h4>
+          <ul class="mt-12 rowgap-4 d-mt-16 flex flex-column d-rowgap-8">
+            {% for product in predictive_search.resources.products %}
+              <li>
+                <div onclick="fillSearchInput('{{ product.title }}')" class="p1 c-green cursor">{{ product.title }}</div>
+              </li>
+            {% endfor %}
+          </ul>
+        </div>
+      {% endif %}
+    {% endcomment %}
     {% if predictive_search.resources.collections.size > 0 %}
       <div class="predictive-collections">
         <h4 class="p3 c-label">Collections</h4>

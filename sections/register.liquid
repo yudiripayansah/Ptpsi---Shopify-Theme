@@ -147,325 +147,356 @@
   }
 </style>
 <div id="{{ el_id }}" class="global-content-top-margin">
-    <div class="container pt-16 pb-16 d-pt-24 d-pb-24">
-        <div class="row">
-            <div class="col-12 col-d-1 d-mt-80">
-                <h1 class="p3 c-label d-pt-12 d-pb-12">Account</h1>
-            </div>
+  <div class="container pt-16 pb-16 d-pt-24 d-pb-24">
+    <div class="row">
+      <div class="col-12 col-d-1 d-mt-80">
+        <h1 class="p3 c-label d-pt-12 d-pb-12">Account</h1>
+      </div>
 
-            <div class="col-12 col-d-6 mt-12 mb-40 d-mb-0 d-mt-80">
-                <div class="flex title-flex">
-                    <a href="{{ routes.account_login_url }}" rel="nofollow" class="c-placeholder h3 no-anim">
-                        {{- 'customer.account.login' | t -}}
-                    </a>
-                    <a href="{{ routes.account_register_url }}" class="c-green h3 no-anim">
-                        {{- 'customer.account.create_account' | t -}}
-                    </a>
-                </div>
-                {% comment %} <div class="flex title-flex" v-if="showReset">
-                    <div class="c-green h3 no-anim">
-                        {{- 'customer.login.forgot_password' | t -}}
-                    </div>
-                </div> {% endcomment %}
-
-                <div class="row">
-                    <div class="col-12 col-d-8">
-                        <div class="form-login mt-40 d-mt-60">
-                            {%- form 'create_customer' -%}
-                                <div class="">
-                                {%- if form.errors -%}
-                                    <div class="form-errors mb-24 d-mb-36 rte p3 flex flex-column rowgap-4">
-                                        <ul>
-                                          {% for field in form.errors %}
-                                            <li>
-                                              {% if form.errors.messages[field] contains 'email address is already associated' %}
-                                                This email address is already associated with an account. If this account is yours, you can <a href="{{ routes.account_login_url }}#recover">reset your password</a>
-                                              {% else %}
-                                              {{ form.errors.messages[field] }}
-                                              {% endif %}
-                                            </li>
-                                          {% endfor %}
-                                        </ul>
-                                    </div>
-                                {%- endif -%}
-                                <div class="w-full">
-                                    <div class="relative overflow pb-1">
-                                    <input
-                                        type="text"
-                                        name="customer[first_name]"
-                                        v-model="first_name"
-                                        id="first_name"
-                                        class="global-input w-full bb-1 b-main p2 c-green label-input"
-                                        placeholder="{{ 'customer.register.first_name' | t }}*"
-                                    >
-                                    </div>
-                                    <div v-if="first_name_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_first_name' | t }}</div>
-                                
-                                </div>
-                                <div class="w-full mt-12">
-                                    <div class="relative overflow pb-1">
-                                    <input
-                                        type="text"
-                                        name="customer[last_name]"
-                                        v-model="last_name"
-                                        id="last_name"
-                                        class="global-input w-full bb-1 b-main p2 c-green label-input"
-                                        placeholder="{{ 'customer.register.last_name' | t }}*"
-                                    >
-                                    </div>
-                                    <div v-if="last_name_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_last_name' | t }}</div>
-                                </div>
-                                <div class="w-full mt-12">
-                                    <div class="relative overflow pb-1">
-                                    <input
-                                        type="email"
-                                        name="customer[email]"
-                                        v-model="email"
-                                        id="email"
-                                        class="global-input w-full bb-1 b-main p2 c-green label-input"
-                                        placeholder="{{ 'customer.register.email' | t }}*"
-                                    >
-                                    </div>
-                                    <div v-if="email_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_email' | t }}</div>
-                                </div>
-                                <div class="flex">
-                                <div class="w-mobile-prefix mt-12">
-                                  {% liquid
-                                    assign default_value = '+65'
-                                    assign default_text = '+65'
-                                    assign select_id = 'country-' | append: section.id
-                                    assign values = empty
-                                    assign option_values = empty
-                                    assign values = '+93,+358,+355,+213,+1684,+376,+244,+1264,+672,+1268,+54,+374,+297,+247,+61,+43,+994,+1242,+973,+880,+1246,+375,+32,+501,+229,+1441,+975,+591,+387,+267,+55,+246,+673,+359,+226,+257,+855,+237,+1,+238,+1345,+236,+235,+56,+86,+57,+269,+242,+682,+506,+385,+53,+357,+420,+243,+45,+253,+1767,+1849,+593,+20,+503,+240,+291,+372,+268,+251,+500,+298,+679,+358,+33,+594,+689,+241,+220,+995,+49,+233,+350,+30,+299,+1473,+590,+1671,+502,+44,+224,+245,+592,+509,+379,+504,+852,+36,+354,+91,+62,+98,+964,+353,+44,+972,+39,+225,+1876,+81,+44,+962,+77,+254,+686,+850,+82,+383,+965,+996,+856,+371,+961,+266,+231,+218,+423,+370,+352,+853,+261,+265,+60,+960,+223,+356,+692,+596,+222,+230,+262,+52,+691,+373,+377,+976,+382,+1664,+212,+258,+95,+264,+674,+977,+31,+599,+687,+64,+505,+227,+234,+683,+672,+389,+1670,+47,+968,+92,+680,+970,+507,+675,+595,+51,+63,+872,+48,+351,+1939,+974,+262,+40,+7,+250,+590,+290,+1869,+1758,+590,+508,+1784,+685,+378,+239,+966,+221,+381,+248,+232,+65,+1721,+421,+386,+677,+252,+27,+500,+211,+34,+94,+249,+597,+47,+46,+41,+963,+886,+992,+255,+66,+670,+228,+690,+676,+1868,+216,+90,+993,+1649,+688,+256,+380,+971,+44,+1,+246,+598,+998,+678,+58,+84,+1284,+1340,+681,+967,+260,+263'
-                                    assign option_values = '+93,+358,+355,+213,+1684,+376,+244,+1264,+672,+1268,+54,+374,+297,+247,+61,+43,+994,+1242,+973,+880,+1246,+375,+32,+501,+229,+1441,+975,+591,+387,+267,+55,+246,+673,+359,+226,+257,+855,+237,+1,+238,+1345,+236,+235,+56,+86,+57,+269,+242,+682,+506,+385,+53,+357,+420,+243,+45,+253,+1767,+1849,+593,+20,+503,+240,+291,+372,+268,+251,+500,+298,+679,+358,+33,+594,+689,+241,+220,+995,+49,+233,+350,+30,+299,+1473,+590,+1671,+502,+44,+224,+245,+592,+509,+379,+504,+852,+36,+354,+91,+62,+98,+964,+353,+44,+972,+39,+225,+1876,+81,+44,+962,+77,+254,+686,+850,+82,+383,+965,+996,+856,+371,+961,+266,+231,+218,+423,+370,+352,+853,+261,+265,+60,+960,+223,+356,+692,+596,+222,+230,+262,+52,+691,+373,+377,+976,+382,+1664,+212,+258,+95,+264,+674,+977,+31,+599,+687,+64,+505,+227,+234,+683,+672,+389,+1670,+47,+968,+92,+680,+970,+507,+675,+595,+51,+63,+872,+48,+351,+1939,+974,+262,+40,+7,+250,+590,+290,+1869,+1758,+590,+508,+1784,+685,+378,+239,+966,+221,+381,+248,+232,+65,+1721,+421,+386,+677,+252,+27,+500,+211,+34,+94,+249,+597,+47,+46,+41,+963,+886,+992,+255,+66,+670,+228,+690,+676,+1868,+216,+90,+993,+1649,+688,+256,+380,+971,+44,+1,+246,+598,+998,+678,+58,+84,+1284,+1340,+681,+967,+260,+263'
-                                    assign values = values | split: ','
-                                    assign option_values = values
-                                  %}
-                                  <input type="hidden" name="customer[tags]" :value="'phone:'+country+mobile_no">
-                                  {%- render 'global-select',
-                                    default_value: default_value,
-                                    default_text: default_text,
-                                    values: values,
-                                    option_values: option_values,
-                                    field_name: 'country_code',
-                                    vue_v_model: 'v-model="country"',
-                                    id: select_id,
-                                    selected_text_class: 'p2',
-                                    global_select_class: 'w-full bb-1 b-main p2 c-green label-input register-select'
-                                  -%}
-                                </div>
-                                <div class="w-mobile-suffix mt-12">
-                                    <div class="relative overflow pb-1">
-                                    <input
-                                        type="number"
-                                        name="customer[mobile_no]"
-                                        v-model="mobile_no"
-                                        id="mobile_no"
-                                        class="global-input w-full bb-1 b-main p2 c-green label-input"
-                                        placeholder="{{ 'customer.register.mobile_no' | t }}*"
-                                        @blur="checkMobilePhoneLength"
-                                    >
-                                    </div>
-                                    <div v-if="mobile_no_error" class="mt-4 p5 c-red error" v-html="mobile_no_error_text">{{ 'customer.register.error_mobile_number' | t }}</div>
-                                </div>
-                                </div>
-                                <div class="w-full mt-12">
-                                    <div class="relative overflow pb-1">
-                                    <input
-                                        type="password"
-                                        name="customer[password]"
-                                        v-model="password"
-                                        id="password"
-                                        class="global-input w-full bb-1 b-main p2 c-green label-input"
-                                        placeholder="{{ 'customer.login.password' | t }}*"
-                                        @blur="checkPasswordLength"
-                                    >
-                                    <div
-                                        @click="togglePassword"
-                                        class="pointer absolute right-0 bottom-0 h-full flex ai-center p-4"
-                                        id="toggleIcon"
-                                    >
-                                        {{ settings.icon_hide_password }}
-                                    </div>
-                                    </div>
-                                    <div v-if="password_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_password' | t }}</div>
-                                    <div v-if="password_lenght_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_password_lenght' | t }}</div>
-                                </div>
-                                
-                                <div class="w-full mt-24">
-                                    <label class="global-radio flex pointer hc-checkbox colgap-8">
-                                    <input @click="newsletterSetValue($event)" type="checkbox" name="customer[accepts_marketing]" value="true" checked class="hide-m gift-wrap-main-product">
-                                    <div class="hc__gwi-checkbox hc-icon relative b-1 b-secondary flex ai-start jc-center">
-                                      <span class="icon absolute ai-center jc-center">
-                                        {{settings.icon_checkmark}}
-                                      </span>
-                                    </div>
-                                    {% comment %} <input @click="newsletterSetValue($event)" type="checkbox" name="customer[accepts_marketing]" value="true" checked>
-                                    <div class="gr-mark mr-8 y2"></div> {% endcomment %}
-                                    <div class="p2 checkbox-line-height-custom">{{ 'customer.register.newsletter_checkbox_text' | t }}</div>
-                                    </label>
-                                </div>
-                                <div class="row">
-                                  <div class="col-12 col-d-8">
-                                    <button type="submit" class="mt-24 d-mt-32 submit-btn btn1 w-full tl with-link"><span class="p2">{{- 'customer.account.create_account' | t -}}</span></button>
-                                  </div>
-                                </div>
-                                <ul class="flex pt-8 d-pt-12">
-                                    <li class="flex">
-                                      <p class="p3">By creating an account, you agree to Soilboy’s <a class="underline" href="/policies/terms-of-service">Terms of Service</a> & <a class="underline" href="/policies/privacy-policy">Privacy Policy.</a></p>
-                                    </li>
-                                </ul>
-                                </div>
-                            {%- endform -%}
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-12 col-d-5">
-                {% assign image_id = "login_image_1" %}
-                {%- render 'global-image-wrapper-responsive',
-                    image_id: image_id,
-                    desktop_image: section.settings.image_desktop,
-                    mobile_image: section.settings.image_mobile,
-                    load_inside_vue: true
-                %}
-                {% if section.settings.label_1 != blank or section.settings.label_2 != blank %}
-                    <div class="flex mt-8" style="gap:24px">
-                        {% if section.settings.label_1 != blank %}
-                            <div class="p4 c-label">{{ section.settings.label_1 }}</div>
-                        {% endif %}
-                        {% if section.settings.label_2 != blank %}
-                            <div class="p4 c-label">{{ section.settings.label_2 }}</div>
-                        {% endif %}
-                    </div>
-                {% endif %}
-            </div>
-
-            {% comment %} <div class="col-hd-3 col-hhd-4 col-d-4 col-12 d-br-1 b-border left-login section-padding-custom">
-                <p class="p2 uppercase">{{- 'customer.account.account' | t -}}</p>
-                <div class="mt-20 mb-20 link-box">
-                <ul class="account-menu flex">
-                    <li class="mr-24 d-mr-0 flex ai-center">
-                    <a
-                        href="{{ routes.account_login_url }}"
-                        class="c-black flex ai-center signin-btn link4"
-                    >
-                        {{- 'customer.account.login' | t -}}
-                    </a>
-                    </li>
-                    <li class="flex ai-center">
-                    <a href="{{ routes.account_register_url }}" class="c-black active signin-btn d-mt-12 link4">
-                        {{- 'customer.account.sign_up' | t -}}
-                    </a>
-                    </li>
-                </ul>
-                </div>
-            </div>
-
-            <div class="login-container col-hd-6 col-d-7 col-hhd-4 col-12 section-padding-custom">
-                <div class="w-full d-pl-56 hd-pl-64 hhd-pl-80">
-                <div
-                    class="content-login mt-20 mb-80 d-mt-0 d-mb-0 ml-auto mr-auto"
-                    id="login-div"
-                >
-                    <div class="form-login">
-                    {%- form 'create_customer' -%}
-                        <div class="register-row row ml-0 mr-0">
-                        {%- if form.errors -%}
-                            <div class="form-errors mb-24 d-mb-36 rte p3">
-                            {{ form.errors | default_errors }}
-                            </div>
-                        {%- endif -%}
-                        <div class="w-full">
-                            <div class="relative overflow pb-1">
-                            <input
-                                type="text"
-                                name="customer[first_name]"
-                                v-model="first_name"
-                                id="first_name"
-                                class="global-input w-full bb-1 b-border p3 c-black label-input"
-                                placeholder="{{ 'customer.register.first_name' | t }}"
-                            >
-                            </div>
-                            <div v-if="first_name_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_first_name' | t }}</div>
-                        
-                        </div>
-                        <div class="w-full mt-8 d-mt-12">
-                            <div class="relative overflow pb-1">
-                            <input
-                                type="text"
-                                name="customer[last_name]"
-                                v-model="last_name"
-                                id="last_name"
-                                class="global-input w-full bb-1 b-border p3 c-black label-input"
-                                placeholder="{{ 'customer.register.last_name' | t }}"
-                            >
-                            </div>
-                            <div v-if="last_name_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_last_name' | t }}</div>
-                        </div>
-                        <div class="w-full mt-8 d-mt-12">
-                            <div class="relative overflow pb-1">
-                            <input
-                                type="email"
-                                name="customer[email]"
-                                v-model="email"
-                                id="email"
-                                class="global-input w-full bb-1 b-border p3 c-black label-input"
-                                placeholder="{{ 'customer.register.email' | t }}"
-                            >
-                            </div>
-                            <div v-if="email_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_email' | t }}</div>
-                        </div>
-                        <div class="w-full mt-8 d-mt-12">
-                            <div class="relative overflow pb-1">
-                            <input
-                                type="password"
-                                name="customer[password]"
-                                v-model="password"
-                                id="password"
-                                class="global-input w-full bb-1 b-border p3 c-black label-input"
-                                placeholder="{{ 'customer.login.password' | t }}"
-                                @blur="checkPasswordLength"
-                            >
-                            <div
-                                @click="togglePassword"
-                                class="pointer absolute right-0 bottom-0 h-full flex ai-center p-4"
-                                id="toggleIcon"
-                            >
-                                {{ settings.icon_hide_password }}
-                            </div>
-                            </div>
-                            <div v-if="password_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_password' | t }}</div>
-                            <div v-if="password_lenght_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_password_lenght' | t }}</div>
-                        </div>
-                        
-                        <div class="w-full mt-20">
-                            <label class="global-radio flex ai-center pointer">
-                            <input @click="newsletterSetValue($event)" type="checkbox" name="customer[accepts_marketing]" value="true" checked>
-                            <div class="gr-mark mr-8"></div>
-                            <div class="p3 c-black checkbox-line-height-custom">{{ 'customer.register.newsletter_checkbox_text' | t }}</div>
-                            </label>
-                        </div>
-                        <div>
-                            <button type="submit" class="mt-24 mb-16 c-black submit-btn btn4 p6">{{- 'customer.account.create_account' | t -}}</button>
-                        </div>
-                        <ul class="flex">
-                            <li class="flex">
-                            <p class="p3">{{- 'customer.register.sign_in_text_html' | t -}}</p>
-                            <a href="{{ routes.account_login_url }}" class="link1 c-black ml-4">
-                                {{- 'customer.register.login_here' | t -}}
-                            </a>
-                            </li>
-                        </ul>
-                        </div>
-                    {%- endform -%}
-                    </div>
-                </div>
-                </div>
-            </div> {% endcomment %}
+      <div class="col-12 col-d-6 mt-12 mb-40 d-mb-0 d-mt-80">
+        <div class="flex title-flex">
+          <a href="{{ routes.account_login_url }}" rel="nofollow" class="c-placeholder h3 no-anim">
+            {{- 'customer.account.login' | t -}}
+          </a>
+          <a href="{{ routes.account_register_url }}" class="c-green h3 no-anim">
+            {{- 'customer.account.create_account' | t -}}
+          </a>
         </div>
+        {% comment %}
+          <div class="flex title-flex" v-if="showReset">
+              <div class="c-green h3 no-anim">
+                  {{- 'customer.login.forgot_password' | t -}}
+              </div>
+          </div>
+        {% endcomment %}
+
+        <div class="row">
+          <div class="col-12 col-d-8">
+            <div class="form-login mt-40 d-mt-60">
+              {%- form 'create_customer' -%}
+                <div class="">
+                  {%- if form.errors -%}
+                    <div class="form-errors mb-24 d-mb-36 rte p3 flex flex-column rowgap-4">
+                      <ul>
+                        {% for field in form.errors %}
+                          <li>
+                            {% if form.errors.messages[field] contains 'email address is already associated' %}
+                              This email address is already associated with an account. If this account is yours, you
+                              can <a href="{{ routes.account_login_url }}#recover">reset your password</a>
+                            {% else %}
+                              {{ form.errors.messages[field] }}
+                            {% endif %}
+                          </li>
+                        {% endfor %}
+                      </ul>
+                    </div>
+                  {%- endif -%}
+                  <div class="w-full">
+                    <div class="relative overflow pb-1">
+                      <input
+                        type="text"
+                        name="customer[first_name]"
+                        v-model="first_name"
+                        id="first_name"
+                        class="global-input w-full bb-1 b-main p2 c-green label-input"
+                        placeholder="{{ 'customer.register.first_name' | t }}*"
+                      >
+                    </div>
+                    <div v-if="first_name_error" class="mt-4 p5 c-red error">
+                      {{ 'customer.register.error_first_name' | t }}
+                    </div>
+                  </div>
+                  <div class="w-full mt-12">
+                    <div class="relative overflow pb-1">
+                      <input
+                        type="text"
+                        name="customer[last_name]"
+                        v-model="last_name"
+                        id="last_name"
+                        class="global-input w-full bb-1 b-main p2 c-green label-input"
+                        placeholder="{{ 'customer.register.last_name' | t }}*"
+                      >
+                    </div>
+                    <div v-if="last_name_error" class="mt-4 p5 c-red error">
+                      {{ 'customer.register.error_last_name' | t }}
+                    </div>
+                  </div>
+                  <div class="w-full mt-12">
+                    <div class="relative overflow pb-1">
+                      <input
+                        type="email"
+                        name="customer[email]"
+                        v-model="email"
+                        id="email"
+                        class="global-input w-full bb-1 b-main p2 c-green label-input"
+                        placeholder="{{ 'customer.register.email' | t }}*"
+                      >
+                    </div>
+                    <div v-if="email_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_email' | t }}</div>
+                  </div>
+                  <div class="flex">
+                    <div class="w-mobile-prefix mt-12">
+                      {% liquid
+                        assign default_value = '+65'
+                        assign default_text = '+65'
+                        assign select_id = 'country-' | append: section.id
+                        assign values = empty
+                        assign option_values = empty
+                        assign values = '+93,+358,+355,+213,+1684,+376,+244,+1264,+672,+1268,+54,+374,+297,+247,+61,+43,+994,+1242,+973,+880,+1246,+375,+32,+501,+229,+1441,+975,+591,+387,+267,+55,+246,+673,+359,+226,+257,+855,+237,+1,+238,+1345,+236,+235,+56,+86,+57,+269,+242,+682,+506,+385,+53,+357,+420,+243,+45,+253,+1767,+1849,+593,+20,+503,+240,+291,+372,+268,+251,+500,+298,+679,+358,+33,+594,+689,+241,+220,+995,+49,+233,+350,+30,+299,+1473,+590,+1671,+502,+44,+224,+245,+592,+509,+379,+504,+852,+36,+354,+91,+62,+98,+964,+353,+44,+972,+39,+225,+1876,+81,+44,+962,+77,+254,+686,+850,+82,+383,+965,+996,+856,+371,+961,+266,+231,+218,+423,+370,+352,+853,+261,+265,+60,+960,+223,+356,+692,+596,+222,+230,+262,+52,+691,+373,+377,+976,+382,+1664,+212,+258,+95,+264,+674,+977,+31,+599,+687,+64,+505,+227,+234,+683,+672,+389,+1670,+47,+968,+92,+680,+970,+507,+675,+595,+51,+63,+872,+48,+351,+1939,+974,+262,+40,+7,+250,+590,+290,+1869,+1758,+590,+508,+1784,+685,+378,+239,+966,+221,+381,+248,+232,+65,+1721,+421,+386,+677,+252,+27,+500,+211,+34,+94,+249,+597,+47,+46,+41,+963,+886,+992,+255,+66,+670,+228,+690,+676,+1868,+216,+90,+993,+1649,+688,+256,+380,+971,+44,+1,+246,+598,+998,+678,+58,+84,+1284,+1340,+681,+967,+260,+263'
+                        assign option_values = '+93,+358,+355,+213,+1684,+376,+244,+1264,+672,+1268,+54,+374,+297,+247,+61,+43,+994,+1242,+973,+880,+1246,+375,+32,+501,+229,+1441,+975,+591,+387,+267,+55,+246,+673,+359,+226,+257,+855,+237,+1,+238,+1345,+236,+235,+56,+86,+57,+269,+242,+682,+506,+385,+53,+357,+420,+243,+45,+253,+1767,+1849,+593,+20,+503,+240,+291,+372,+268,+251,+500,+298,+679,+358,+33,+594,+689,+241,+220,+995,+49,+233,+350,+30,+299,+1473,+590,+1671,+502,+44,+224,+245,+592,+509,+379,+504,+852,+36,+354,+91,+62,+98,+964,+353,+44,+972,+39,+225,+1876,+81,+44,+962,+77,+254,+686,+850,+82,+383,+965,+996,+856,+371,+961,+266,+231,+218,+423,+370,+352,+853,+261,+265,+60,+960,+223,+356,+692,+596,+222,+230,+262,+52,+691,+373,+377,+976,+382,+1664,+212,+258,+95,+264,+674,+977,+31,+599,+687,+64,+505,+227,+234,+683,+672,+389,+1670,+47,+968,+92,+680,+970,+507,+675,+595,+51,+63,+872,+48,+351,+1939,+974,+262,+40,+7,+250,+590,+290,+1869,+1758,+590,+508,+1784,+685,+378,+239,+966,+221,+381,+248,+232,+65,+1721,+421,+386,+677,+252,+27,+500,+211,+34,+94,+249,+597,+47,+46,+41,+963,+886,+992,+255,+66,+670,+228,+690,+676,+1868,+216,+90,+993,+1649,+688,+256,+380,+971,+44,+1,+246,+598,+998,+678,+58,+84,+1284,+1340,+681,+967,+260,+263'
+                        assign values = values | split: ','
+                        assign option_values = values
+                      %}
+                      <input type="hidden" name="customer[tags]" :value="'phone:'+country+mobile_no">
+                      {%- render 'global-select',
+                        default_value: default_value,
+                        default_text: default_text,
+                        values: values,
+                        option_values: option_values,
+                        field_name: 'country_code',
+                        vue_v_model: 'v-model="country"',
+                        id: select_id,
+                        selected_text_class: 'p2',
+                        global_select_class: 'w-full bb-1 b-main p2 c-green label-input register-select'
+                      -%}
+                    </div>
+                    <div class="w-mobile-suffix mt-12">
+                      <div class="relative overflow pb-1">
+                        <input
+                          type="number"
+                          name="customer[mobile_no]"
+                          v-model="mobile_no"
+                          id="mobile_no"
+                          class="global-input w-full bb-1 b-main p2 c-green label-input"
+                          placeholder="{{ 'customer.register.mobile_no' | t }}*"
+                          @blur="checkMobilePhoneLength"
+                        >
+                      </div>
+                      <div v-if="mobile_no_error" class="mt-4 p5 c-red error" v-html="mobile_no_error_text">
+                        {{ 'customer.register.error_mobile_number' | t }}
+                      </div>
+                    </div>
+                  </div>
+                  <div class="w-full mt-12">
+                    <div class="relative overflow pb-1">
+                      <input
+                        type="password"
+                        name="customer[password]"
+                        v-model="password"
+                        id="password"
+                        class="global-input w-full bb-1 b-main p2 c-green label-input"
+                        placeholder="{{ 'customer.login.password' | t }}*"
+                        @blur="checkPasswordLength"
+                      >
+                      <div
+                        @click="togglePassword"
+                        class="pointer absolute right-0 bottom-0 h-full flex ai-center p-4"
+                        id="toggleIcon"
+                      >
+                        {{ settings.icon_hide_password }}
+                      </div>
+                    </div>
+                    <div v-if="password_error" class="mt-4 p5 c-red error">
+                      {{ 'customer.register.error_password' | t }}
+                    </div>
+                    <div v-if="password_lenght_error" class="mt-4 p5 c-red error">
+                      {{ 'customer.register.error_password_lenght' | t }}
+                    </div>
+                  </div>
+
+                  <div class="w-full mt-24">
+                    <label class="global-radio flex pointer hc-checkbox colgap-8">
+                      <input
+                        @click="newsletterSetValue($event)"
+                        type="checkbox"
+                        name="customer[accepts_marketing]"
+                        value="true"
+                        checked
+                        class="hide-m gift-wrap-main-product"
+                      >
+                      <div class="hc__gwi-checkbox hc-icon relative b-1 b-secondary flex ai-start jc-center">
+                        <span class="icon absolute ai-center jc-center">
+                          {{ settings.icon_checkmark }}
+                        </span>
+                      </div>
+                      {% comment %}
+                        <input @click="newsletterSetValue($event)" type="checkbox" name="customer[accepts_marketing]" value="true" checked>
+                        <div class="gr-mark mr-8 y2"></div>
+                      {% endcomment %}
+                      <div class="p2 checkbox-line-height-custom">
+                        {{ 'customer.register.newsletter_checkbox_text' | t }}
+                      </div>
+                    </label>
+                  </div>
+                  <div class="row">
+                    <div class="col-12 col-d-8">
+                      <button type="submit" class="mt-24 d-mt-32 submit-btn btn1 w-full tl with-link">
+                        <span class="p2">{{- 'customer.account.create_account' | t -}}</span>
+                      </button>
+                    </div>
+                  </div>
+                  <ul class="flex pt-8 d-pt-12">
+                    <li class="flex">
+                      <p class="p3">
+                        By creating an account, you agree to Soilboy’s
+                        <a class="underline" href="/policies/terms-of-service">Terms of Service</a> &
+                        <a class="underline" href="/policies/privacy-policy">Privacy Policy.</a>
+                      </p>
+                    </li>
+                  </ul>
+                </div>
+              {%- endform -%}
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-12 col-d-5">
+        {% assign image_id = 'login_image_1' %}
+        {%- render 'global-image-wrapper-responsive',
+          image_id: image_id,
+          desktop_image: section.settings.image_desktop,
+          mobile_image: section.settings.image_mobile,
+          load_inside_vue: true
+        %}
+        {% if section.settings.label_1 != blank or section.settings.label_2 != blank %}
+          <div class="flex mt-8" style="gap:24px">
+            {% if section.settings.label_1 != blank %}
+              <div class="p4 c-label">{{ section.settings.label_1 }}</div>
+            {% endif %}
+            {% if section.settings.label_2 != blank %}
+              <div class="p4 c-label">{{ section.settings.label_2 }}</div>
+            {% endif %}
+          </div>
+        {% endif %}
+      </div>
+
+      {% comment %}
+        <div class="col-hd-3 col-hhd-4 col-d-4 col-12 d-br-1 b-border left-login section-padding-custom">
+            <p class="p2 uppercase">{{- 'customer.account.account' | t -}}</p>
+            <div class="mt-20 mb-20 link-box">
+            <ul class="account-menu flex">
+                <li class="mr-24 d-mr-0 flex ai-center">
+                <a
+                    href="{{ routes.account_login_url }}"
+                    class="c-black flex ai-center signin-btn link4"
+                >
+                    {{- 'customer.account.login' | t -}}
+                </a>
+                </li>
+                <li class="flex ai-center">
+                <a href="{{ routes.account_register_url }}" class="c-black active signin-btn d-mt-12 link4">
+                    {{- 'customer.account.sign_up' | t -}}
+                </a>
+                </li>
+            </ul>
+            </div>
+        </div>
+
+        <div class="login-container col-hd-6 col-d-7 col-hhd-4 col-12 section-padding-custom">
+            <div class="w-full d-pl-56 hd-pl-64 hhd-pl-80">
+            <div
+                class="content-login mt-20 mb-80 d-mt-0 d-mb-0 ml-auto mr-auto"
+                id="login-div"
+            >
+                <div class="form-login">
+                {%- form 'create_customer' -%}
+                    <div class="register-row row ml-0 mr-0">
+                    {%- if form.errors -%}
+                        <div class="form-errors mb-24 d-mb-36 rte p3">
+                        {{ form.errors | default_errors }}
+                        </div>
+                    {%- endif -%}
+                    <div class="w-full">
+                        <div class="relative overflow pb-1">
+                        <input
+                            type="text"
+                            name="customer[first_name]"
+                            v-model="first_name"
+                            id="first_name"
+                            class="global-input w-full bb-1 b-border p3 c-black label-input"
+                            placeholder="{{ 'customer.register.first_name' | t }}"
+                        >
+                        </div>
+                        <div v-if="first_name_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_first_name' | t }}</div>
+
+                    </div>
+                    <div class="w-full mt-8 d-mt-12">
+                        <div class="relative overflow pb-1">
+                        <input
+                            type="text"
+                            name="customer[last_name]"
+                            v-model="last_name"
+                            id="last_name"
+                            class="global-input w-full bb-1 b-border p3 c-black label-input"
+                            placeholder="{{ 'customer.register.last_name' | t }}"
+                        >
+                        </div>
+                        <div v-if="last_name_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_last_name' | t }}</div>
+                    </div>
+                    <div class="w-full mt-8 d-mt-12">
+                        <div class="relative overflow pb-1">
+                        <input
+                            type="email"
+                            name="customer[email]"
+                            v-model="email"
+                            id="email"
+                            class="global-input w-full bb-1 b-border p3 c-black label-input"
+                            placeholder="{{ 'customer.register.email' | t }}"
+                        >
+                        </div>
+                        <div v-if="email_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_email' | t }}</div>
+                    </div>
+                    <div class="w-full mt-8 d-mt-12">
+                        <div class="relative overflow pb-1">
+                        <input
+                            type="password"
+                            name="customer[password]"
+                            v-model="password"
+                            id="password"
+                            class="global-input w-full bb-1 b-border p3 c-black label-input"
+                            placeholder="{{ 'customer.login.password' | t }}"
+                            @blur="checkPasswordLength"
+                        >
+                        <div
+                            @click="togglePassword"
+                            class="pointer absolute right-0 bottom-0 h-full flex ai-center p-4"
+                            id="toggleIcon"
+                        >
+                            {{ settings.icon_hide_password }}
+                        </div>
+                        </div>
+                        <div v-if="password_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_password' | t }}</div>
+                        <div v-if="password_lenght_error" class="mt-4 p5 c-red error">{{ 'customer.register.error_password_lenght' | t }}</div>
+                    </div>
+
+                    <div class="w-full mt-20">
+                        <label class="global-radio flex ai-center pointer">
+                        <input @click="newsletterSetValue($event)" type="checkbox" name="customer[accepts_marketing]" value="true" checked>
+                        <div class="gr-mark mr-8"></div>
+                        <div class="p3 c-black checkbox-line-height-custom">{{ 'customer.register.newsletter_checkbox_text' | t }}</div>
+                        </label>
+                    </div>
+                    <div>
+                        <button type="submit" class="mt-24 mb-16 c-black submit-btn btn4 p6">{{- 'customer.account.create_account' | t -}}</button>
+                    </div>
+                    <ul class="flex">
+                        <li class="flex">
+                        <p class="p3">{{- 'customer.register.sign_in_text_html' | t -}}</p>
+                        <a href="{{ routes.account_login_url }}" class="link1 c-black ml-4">
+                            {{- 'customer.register.login_here' | t -}}
+                        </a>
+                        </li>
+                    </ul>
+                    </div>
+                {%- endform -%}
+                </div>
+            </div>
+            </div>
+        </div>
+      {% endcomment %}
     </div>
+  </div>
 </div>
 
 <script>
@@ -487,7 +518,7 @@
         password_error: false,
         password_lenght_error: false,
         newsletter: true,
-        mobile_no_error_text: "{{ 'customer.register.error_mobile_number' | t }}"
+        mobile_no_error_text: "{{ 'customer.register.error_mobile_number' | t }}",
       };
     },
     mounted() {
@@ -502,16 +533,22 @@
         thisObj.last_name_error = !thisObj.last_name;
         thisObj.email_error = !thisObj.email;
         thisObj.password_error = !thisObj.password;
-        if(!thisObj.mobile_no){
+        if (!thisObj.mobile_no) {
           thisObj.mobile_no_error = true;
         } else {
-          if(String(thisObj.mobile_no).length < 8){
+          if (String(thisObj.mobile_no).length < 8) {
             thisObj.mobile_no_error = true;
           } else {
             thisObj.mobile_no_error = false;
           }
         }
-        thisObj.has_error = thisObj.first_name_error || thisObj.last_name_error || thisObj.email_error || thisObj.password_error || thisObj.password_lenght_error || thisObj.mobile_no_error;
+        thisObj.has_error =
+          thisObj.first_name_error ||
+          thisObj.last_name_error ||
+          thisObj.email_error ||
+          thisObj.password_error ||
+          thisObj.password_lenght_error ||
+          thisObj.mobile_no_error;
 
         if (thisObj.has_error) {
           e.stopImmediatePropagation();
@@ -537,10 +574,10 @@
       },
       checkMobilePhoneLength(event) {
         this.mobile_no_error = event.target.value.length < 8;
-        if(event.target.value.length > 0 && event.target.value.length < 8){
-          this.mobile_no_error_text = 'Minimum is 8 Digits'
+        if (event.target.value.length > 0 && event.target.value.length < 8) {
+          this.mobile_no_error_text = 'Minimum is 8 Digits';
         } else {
-          this.mobile_no_error_text = "{{ 'customer.register.error_mobile_number' | t }}"
+          this.mobile_no_error_text = "{{ 'customer.register.error_mobile_number' | t }}";
         }
       },
       togglePassword() {
@@ -562,24 +599,24 @@
   "name": "Register",
   "settings": [
     {
-        "type": "image_picker",
-        "id": "image_desktop",
-        "label": "Image Desktop"
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Image Desktop"
     },
     {
-        "type": "image_picker",
-        "id": "image_mobile",
-        "label": "Image Mobile"
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image Mobile"
     },
     {
-        "type": "text",
-        "id": "label_1",
-        "label": "Label 1"
+      "type": "text",
+      "id": "label_1",
+      "label": "Label 1"
     },
     {
-        "type": "text",
-        "id": "label_2",
-        "label": "Label 2"
+      "type": "text",
+      "id": "label_2",
+      "label": "Label 2"
     },
     {
       "type": "header",

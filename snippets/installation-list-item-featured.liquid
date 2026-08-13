@@ -1,23 +1,23 @@
 {%- comment -%}
-Soilboy
+  Soilboy
 
-Full-width featured installation banner. Rendered once, grid view only, for
-the first installation entry with Featured checked.
+  Full-width featured installation banner. Rendered once, grid view only, for
+  the first installation entry with Featured checked.
 
-Title and image link to the entry's own metaobject page (entry.system.url),
-falling back to a non-link wrapper (matching installation-list-item.liquid)
-if that's blank — e.g. because Online Store capability isn't enabled on the
-metaobject definition yet. cta_url is only used for the "View Project"
-button, the one deliberate place on this card where the two can differ.
+  Title and image link to the entry's own metaobject page (entry.system.url),
+  falling back to a non-link wrapper (matching installation-list-item.liquid)
+  if that's blank — e.g. because Online Store capability isn't enabled on the
+  metaobject definition yet. cta_url is only used for the "View Project"
+  button, the one deliberate place on this card where the two can differ.
 
-An unset `url`-type metaobject field resolves to the shop's root domain
-rather than truly blank, so cta_url is checked against `shop.url` too —
-otherwise every entry without a CTA URL set would show a "View Project"
-button that links to the homepage.
+  An unset `url`-type metaobject field resolves to the shop's root domain
+  rather than truly blank, so cta_url is checked against `shop.url` too —
+  otherwise every entry without a CTA URL set would show a "View Project"
+  button that links to the homepage.
 
-Variables:
-- entry: installation metaobject entry (title, category, banner_image or
-  hero_image, cta_label, cta_url)
+  Variables:
+  - entry: installation metaobject entry (title, category, banner_image or
+    hero_image, cta_label, cta_url)
 {%- endcomment -%}
 {%- liquid
   assign category = entry.category.value
@@ -37,7 +37,12 @@ Variables:
 -%}
 <div class="ill-featured flex" data-ill-item data-category="{{ category_handle }}">
   <div class="ill-featured-text flex flex-column">
-    <{{ link_tag }} {% if url != blank %}href="{{ url }}"{% endif %} class="ill-featured-link">
+    <{{ link_tag }}
+      {% if url != blank %}
+        href="{{ url }}"
+      {% endif %}
+      class="ill-featured-link"
+    >
       {% if category_name != blank %}
         <p class="ill-featured-eyebrow p3 c-label">{{ category_name }}</p>
       {% endif %}
@@ -51,7 +56,12 @@ Variables:
     {% endif %}
   </div>
   {% if banner_image != blank %}
-    <{{ link_tag }} {% if url != blank %}href="{{ url }}"{% endif %} class="ill-featured-media">
+    <{{ link_tag }}
+      {% if url != blank %}
+        href="{{ url }}"
+      {% endif %}
+      class="ill-featured-media"
+    >
       {{
         banner_image
         | image_url: width: 1600

@@ -45,7 +45,7 @@
     <div class="container">
       <div class="nf-top">
         <{{ ss.title_dom_type }} class="{{ ss.title_dom_size }} c-green">
-            <span class="p3 no-anim c-label w-full max-70 d-max-90 mr-16 d-mr-24 little-span">404</span>
+          <span class="p3 no-anim c-label w-full max-70 d-max-90 mr-16 d-mr-24 little-span">404</span>
           {{ ss.title | newline_to_br }}
         </{{ ss.title_dom_type }}>
       </div>
@@ -87,7 +87,11 @@
             {% assign bs = block.settings %}
             {% if bs.product != blank %}
               {% assign p_counter = p_counter | plus: 1 %}
-              <a href="{{bs.product.url}}" class="{% if p_counter < 2 %}flex{% else %}hide-m{% endif %} flex-column hcep-product" data-index="{{forloop.index}}">
+              <a
+                href="{{bs.product.url}}"
+                class="{% if p_counter < 2 %}flex{% else %}hide-m{% endif %} flex-column hcep-product"
+                data-index="{{forloop.index}}"
+              >
                 {%- render 'global-image-wrapper',
                   image: bs.product.featured_image,
                   additional_class: 'no-bg',
@@ -95,10 +99,10 @@
                 %}
                 <div class="flex ai-start jc-between w-full d-mt-8">
                   <span class="p4 c-label dont-break">
-                    {{bs.product.metafields.custom.image_code}}
+                    {{ bs.product.metafields.custom.image_code }}
                   </span>
                   <span class="p4 c-label tr">
-                    {{bs.product.title}}
+                    {{ bs.product.title }}
                   </span>
                 </div>
               </a>

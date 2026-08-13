@@ -1,18 +1,24 @@
 {% layout none %}
 <div class="pt-32 d-pt-0">
-    <h4 class="h4 title-main product-title{% if product.available == true %} available{% endif %}" style="visibility: visible" data-availability = "{{ product.variants[0].available }}">{{ product.title }}
-        {% unless product.available %}
-            <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
-        {% else %}
-            {% assign tags = product.tags | join: ',' | downcase %}
-            {% if tags contains 'new' %}
-                <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
-            {% endif %}
-        {% endunless %}
-    </h4>
-    <div class="rte p2 mt-12">
-        {{ product.description }}
-    </div>
-    <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
+  <h4
+    class="h4 title-main product-title{% if product.available == true %} available{% endif %}"
+    style="visibility: visible"
+    data-availability
+    {{ product.variants[0].available }}
+  >
+    {{ product.title }}
+    {% unless product.available %}
+      <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
+    {% else %}
+      {% assign tags = product.tags | join: ',' | downcase %}
+      {% if tags contains 'new' %}
+        <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
+      {% endif %}
+    {% endunless %}
+  </h4>
+  <div class="rte p2 mt-12">
+    {{ product.description }}
+  </div>
+  <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
 </div>
 {%- render 'product-variant-soil', product: product -%}

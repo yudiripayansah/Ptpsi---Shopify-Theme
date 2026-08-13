@@ -3,256 +3,242 @@
 {% assign sb = section.blocks %}
 {% render 'section-padding', section: section, el_id: el_id %}
 <style>
-	#{{el_id}} {
-		background-color: {{ss.bg_color}};
-	}
+  #{{el_id}} {
+  	background-color: {{ss.bg_color}};
+  }
 </style>
 {% if request.visual_preview_mode %}
-    <img src="{{ 'product-thumbnails-figma.PNG' | asset_url }}" width="100%" height="100%" /> 
+  <img src="{{ 'product-thumbnails-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-    {% if template contains 'product' %}
-        {% if product.metafields.custom.breadcrumb_level_1_title != blank %}
-            <div class="product-breadcrumbs">
-                <div class="container">
-                    <div class="flex">
-                        {% for i in (1..5) %}
-                            {%- assign custom_title = 'breadcrumb_level_' | append: i | append: '_title' -%}
-                            {%- assign custom_url = 'breadcrumb_level_' | append: i | append: '_url' -%}
-                            {% if product.metafields.custom[custom_title] != blank %}
-                            {% unless forloop.first %}
-                                <span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true">
-                                —
-                                </span>
-                            {% endunless %}
-                            {% if product.metafields.custom[custom_url] != blank %}
-                                <a href="{{ product.metafields.custom[custom_url] }}" class="c-label text p4">
-                            {% else %}
-                                <div class="c-label text p4">
-                            {% endif %}
-                            {{ product.metafields.custom[custom_title] }}
-                            {% if product.metafields.custom[custom_url] != blank %}
-                                </a>
-                            {% else %}
-                                </div>
-                            {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-		{% else %}
-            <div class="product-breadcrumbs">
-                <div class="container">
-                    <div class="flex">
-                            <a href="{{ routes.root_url }}" class="c-label text p4">
-								Home
-							</a>
-							{% if product.type != blank %}
-								<span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true">
-									—
-								</span>
-								<a href="{{ routes.collections_url }}/{{ product.type | handleize }}" class="c-label text p4">
-									{{ product.type }}
-								</a>
-							{% endif %}
-                    </div>
-                </div>
-            </div>
-        {% endif %}
-    {% elsif template contains 'collection' and collection.handle %}
-        {% if collection.metafields.custom.breadcrumb_level_1_title != blank %}
-            <div class="product-breadcrumbs">
-                <div class="container">
-                    <div class="flex">
-                        {% for i in (1..5) %}
-                            {%- assign custom_title = 'breadcrumb_level_' | append: i | append: '_title' -%}
-                            {%- assign custom_url = 'breadcrumb_level_' | append: i | append: '_url' -%}
-                            {% if collection.metafields.custom[custom_title] != blank %}
-                            {% unless forloop.first %}
-                                <span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true">
-                                —
-                                </span>
-                            {% endunless %}
-                            {% if collection.metafields.custom[custom_url] != blank %}
-                                <a href="{{ collection.metafields.custom[custom_url] }}" class="c-label text p4">
-                            {% else %}
-                                <div class="c-label text p4">
-                            {% endif %}
-                            {{ collection.metafields.custom[custom_title] }}
-                            {% if collection.metafields.custom[custom_url] != blank %}
-                                </a>
-                            {% else %}
-                                </div>
-                            {% endif %}
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-		{% else %}
-            <div class="product-breadcrumbs">
-                <div class="container">
-                    <div class="flex">
-                            <a href="{{ routes.root_url }}" class="c-label text p4">
-								Home
-							</a>
-								<span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true">
-									—
-								</span>
-								<a href="{{ routes.collections_url }}/all" class="c-label text p4">
-									All
-								</a>
-                    </div>
-                </div>
-            </div>
-        {% endif %}
+  {% if template contains 'product' %}
+    {% if product.metafields.custom.breadcrumb_level_1_title != blank %}
+      <div class="product-breadcrumbs">
+        <div class="container">
+          <div class="flex">
+            {% for i in (1..5) %}
+              {%- assign custom_title = 'breadcrumb_level_' | append: i | append: '_title' -%}
+              {%- assign custom_url = 'breadcrumb_level_' | append: i | append: '_url' -%}
+              {% if product.metafields.custom[custom_title] != blank %}
+                {% unless forloop.first %}
+                  <span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true"> — </span>
+                {% endunless %}
+                {% if product.metafields.custom[custom_url] != blank %}
+                  <a href="{{ product.metafields.custom[custom_url] }}" class="c-label text p4">
+                {% else %}
+                  <div class="c-label text p4">
+                {% endif %}
+                {{ product.metafields.custom[custom_title] }}
+                {% if product.metafields.custom[custom_url] != blank %}
+                  </a>
+                {% else %}
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="product-breadcrumbs">
+        <div class="container">
+          <div class="flex">
+            <a href="{{ routes.root_url }}" class="c-label text p4"> Home </a>
+            {% if product.type != blank %}
+              <span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true"> — </span>
+              <a href="{{ routes.collections_url }}/{{ product.type | handleize }}" class="c-label text p4">
+                {{ product.type }}
+              </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
     {% endif %}
+  {% elsif template contains 'collection' and collection.handle %}
+    {% if collection.metafields.custom.breadcrumb_level_1_title != blank %}
+      <div class="product-breadcrumbs">
+        <div class="container">
+          <div class="flex">
+            {% for i in (1..5) %}
+              {%- assign custom_title = 'breadcrumb_level_' | append: i | append: '_title' -%}
+              {%- assign custom_url = 'breadcrumb_level_' | append: i | append: '_url' -%}
+              {% if collection.metafields.custom[custom_title] != blank %}
+                {% unless forloop.first %}
+                  <span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true"> — </span>
+                {% endunless %}
+                {% if collection.metafields.custom[custom_url] != blank %}
+                  <a href="{{ collection.metafields.custom[custom_url] }}" class="c-label text p4">
+                {% else %}
+                  <div class="c-label text p4">
+                {% endif %}
+                {{ collection.metafields.custom[custom_title] }}
+                {% if collection.metafields.custom[custom_url] != blank %}
+                  </a>
+                {% else %}
+                  </div>
+                {% endif %}
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    {% else %}
+      <div class="product-breadcrumbs">
+        <div class="container">
+          <div class="flex">
+            <a href="{{ routes.root_url }}" class="c-label text p4"> Home </a>
+            <span class="c-label separator flex jc-center ai-center ml-4 mr-4 p4" aria-hidden="true"> — </span>
+            <a href="{{ routes.collections_url }}/all" class="c-label text p4"> All </a>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
 {% endif %}
 {% schema %}
 {
-	"name": "Product Breadcrumbs",
-	"settings": [
-		{
-			"type": "header",
-			"content": "General Settings"
-		},
-		{
-			"type": "color",
-			"id": "bg_color",
-			"label": "Background Color",
-			"default": "#ffffff"
-		},
-		{
-			"type": "header",
-			"content": "Padding Settings"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_m",
-			"label": "Top padding (Mobile)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_m",
-			"label": "Bottom padding (Mobile)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_t",
-			"label": "Top padding (Tablet)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_t",
-			"label": "Bottom padding (Tablet)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "top_padding",
-			"label": "Top padding (Desktop)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding",
-			"label": "Bottom padding (Desktop)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_hd",
-			"label": "Top padding (HD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_hd",
-			"label": "Bottom padding (HD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_hhd",
-			"label": "Top padding (HHD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_hhd",
-			"label": "Bottom padding (HHD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "nopadding"
-		}
-    ],
-	"blocks" : [],
-	"presets": [
-		{
-			"name": "Product Breadcrumbs",
-			"blocks": []
-		}
-	]
+  "name": "Product Breadcrumbs",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "header",
+      "content": "Padding Settings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "nopadding"
+    }
+  ],
+  "blocks": [],
+  "presets": [
+    {
+      "name": "Product Breadcrumbs",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

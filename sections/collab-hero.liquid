@@ -95,13 +95,21 @@
     <div class="chr-row">
       {% if ss.image != blank %}
         <div class="chr-media">
-          {{ ss.image | image_url: width: 1400 | image_tag: loading: 'eager', widths: '400, 600, 800, 1200, 1400', sizes: '(min-width: 1024px) 41vw, 100vw' }}
+          {{
+            ss.image
+            | image_url: width: 1400
+            | image_tag: loading: 'eager', widths: '400, 600, 800, 1200, 1400', sizes: '(min-width: 1024px) 41vw, 100vw'
+          }}
         </div>
       {% endif %}
       <div class="chr-col">
         {% if ss.image_small != blank %}
           <div class="chr-media-small">
-            {{ ss.image_small | image_url: width: 600 | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '16vw' }}
+            {{
+              ss.image_small
+              | image_url: width: 600
+              | image_tag: loading: 'lazy', widths: '300, 450, 600', sizes: '16vw'
+            }}
           </div>
         {% endif %}
         <div class="chr-text">
@@ -109,7 +117,9 @@
             {% if ss.label != blank %}
               <p class="p3 c-label">{{ ss.label }}</p>
             {% endif %}
-            <{{ ss.title_dom_type | default: 'h1' }} class="{{ ss.title_size | default: 'h2' }} c-green">{{ ss.title }}</{{ ss.title_dom_type | default: 'h1' }}>
+            <{{ ss.title_dom_type | default: 'h1' }} class="{{ ss.title_size | default: 'h2' }} c-green">
+              {{- ss.title -}}
+            </{{ ss.title_dom_type | default: 'h1' }}>
           </div>
           {% if ss.btn_label != blank %}
             <a href="{{ ss.btn_url }}" class="chr-button bg-green p2 c-white">

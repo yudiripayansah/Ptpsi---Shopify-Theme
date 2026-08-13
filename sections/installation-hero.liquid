@@ -62,11 +62,11 @@
     <div class="container flex flex-column rowgap-16 pt-16 d-pt-0">
       {% if entry.hero_image.value != blank %}
         <div class="ih-image">
-          {% assign image_id = "ih-hero" | append: el_id %}
+          {% assign image_id = 'ih-hero' | append: el_id %}
           {%- render 'global-image-wrapper-responsive',
-              image_id: image_id,
-              desktop_image: entry.hero_image.value,
-              mobile_image: entry.card_image.value
+            image_id: image_id,
+            desktop_image: entry.hero_image.value,
+            mobile_image: entry.card_image.value
           %}
         </div>
       {% endif %}

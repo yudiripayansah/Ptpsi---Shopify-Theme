@@ -271,7 +271,8 @@
       {% if entries.size == 0 %}
         {% if request.design_mode %}
           <p class="p2 c-label">
-            No "{{ mo_type }}" metaobject entries found. Add entries with category, title, year, card_image and cta_url fields in Admin &gt; Content &gt; Metaobjects.
+            No "{{ mo_type }}" metaobject entries found. Add entries with category, title, year, card_image and cta_url
+            fields in Admin &gt; Content &gt; Metaobjects.
           </p>
         {% endif %}
       {% else %}
@@ -287,7 +288,12 @@
                 {% if grid_index >= per_page %}
                   {% assign grid_hidden = true %}
                 {% endif %}
-                {% render 'installation-list-item', entry: entry, mode: 'grid', index: grid_index, is_hidden: grid_hidden %}
+                {% render 'installation-list-item',
+                  entry: entry,
+                  mode: 'grid',
+                  index: grid_index,
+                  is_hidden: grid_hidden
+                %}
                 {% assign grid_index = grid_index | plus: 1 %}
               {% endunless %}
             {% endfor %}
@@ -301,7 +307,12 @@
               {% if forloop.index0 >= per_page %}
                 {% assign list_hidden = true %}
               {% endif %}
-              {% render 'installation-list-item', entry: entry, mode: 'list', index: forloop.index0, is_hidden: list_hidden %}
+              {% render 'installation-list-item',
+                entry: entry,
+                mode: 'list',
+                index: forloop.index0,
+                is_hidden: list_hidden
+              %}
             {% endfor %}
           </div>
         </div>
@@ -335,17 +346,17 @@
       filterEl.style.top = '100px';
 
       function onScroll() {
-        let theHeader = document.querySelector('#shopify-section-header')
-        let header = document.querySelector('.header-con__inner')?.clientHeight
+        let theHeader = document.querySelector('#shopify-section-header');
+        let header = document.querySelector('.header-con__inner')?.clientHeight;
         var currentScrollY = window.scrollY;
         var isScrollingDown = currentScrollY > lastScrollY;
         filterEl.style.top = (isScrollingDown ? 0 : header) + 'px';
-        console.log('is scrolling down', isScrollingDown)
+        console.log('is scrolling down', isScrollingDown);
         lastScrollY = currentScrollY;
       }
-      onScroll()
+      onScroll();
       window.addEventListener('scroll', onScroll, { passive: true });
-      window.addEventListener('resize', onScroll)
+      window.addEventListener('resize', onScroll);
     }
 
     function initListHover(root) {

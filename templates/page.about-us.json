@@ -88,11 +88,7 @@
           }
         }
       },
-      "block_order": [
-        "block_intro",
-        "block_studio",
-        "block_mission"
-      ],
+      "block_order": ["block_intro", "block_studio", "block_mission"],
       "name": "Parallax Scroll",
       "settings": {
         "bg_color": "#642b10",
@@ -135,10 +131,7 @@
           }
         }
       },
-      "block_order": [
-        "row_sourcing",
-        "row_warehouse"
-      ],
+      "block_order": ["row_sourcing", "row_warehouse"],
       "name": "Alternating Content",
       "settings": {
         "bg_color": "#fff9f2",
@@ -181,10 +174,7 @@
           }
         }
       },
-      "block_order": [
-        "entry_contact",
-        "entry_instagram"
-      ],
+      "block_order": ["entry_contact", "entry_instagram"],
       "name": "About Us",
       "settings": {
         "bg_color": "#fff9f2",
@@ -245,9 +235,7 @@
           }
         }
       },
-      "block_order": [
-        "entry_2"
-      ],
+      "block_order": ["entry_2"],
       "name": "Homepage Banner",
       "settings": {
         "section_id": "",
@@ -294,11 +282,7 @@
           }
         }
       },
-      "block_order": [
-        "entry_instagram",
-        "entry_tiktok",
-        "entry_facebook"
-      ],
+      "block_order": ["entry_instagram", "entry_tiktok", "entry_facebook"],
       "name": "Text and Links",
       "settings": {
         "bg_color": "#fff9f2",

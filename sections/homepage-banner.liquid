@@ -61,7 +61,7 @@
       z-index: 1;
     {% endif %}
     {% if ss.enable_sticky %}
-      
+
       display: block;
       /* height: 100vh;  */
       top: -1px;
@@ -264,7 +264,7 @@
     }
   }
   @media(min-width: 1024px) {
-    
+
     {% if ss.pt_custom_d != blank  %}
       #{{el_id}} {
         padding-top: {{ ss.pt_custom_d }}px;
@@ -351,7 +351,7 @@
       width: 48px;
       height: 48px;
     }
-    
+
     .hhd-bottom-80 {
       bottom: 80px;
     }
@@ -366,309 +366,315 @@
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'homepage-banner-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'homepage-banner-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-<section
-  {% if section.settings.section_id != blank %}
-    id="{{ section.settings.section_id }}"
-  {% endif -%}
-  class="homepage-banner {{ ss.section_width }}"
->
-  <div class="swiper-numbered-slides mb-8 p4 c-label"></div>
+  <section
+    {% if section.settings.section_id != blank %}
+      id="{{ section.settings.section_id }}"
+    {% endif -%}
+    class="homepage-banner {{ ss.section_width }}"
+  >
+    <div class="swiper-numbered-slides mb-8 p4 c-label"></div>
 
-  <div id="slider-{{ el_id }} " class="flex flex-wrap swiper {% if ss.enable_parallax %}fixed-wrapper{% endif %}">
-    {% if section.blocks.size > 1 %}
-      <div class="swiper-navigation">
+    <div id="slider-{{ el_id }} " class="flex flex-wrap swiper {% if ss.enable_parallax %}fixed-wrapper{% endif %}">
+      {% if section.blocks.size > 1 %}
+        <div class="swiper-navigation">
           <div class="icon sn-prev cursor">
-              {{ settings.icon_slide_left }}
+            {{ settings.icon_slide_left }}
           </div>
           <div class="icon sn-next cursor">
-              {{ settings.icon_slide_right }}
+            {{ settings.icon_slide_right }}
           </div>
-      </div>
-    {% endif %}
-    <div class="swiper-wrapper {% if ss.enable_parallax %}fixed-element{% endif %}">
-      {%- for block in section.blocks -%}
-        {% assign bs = block.settings %}
-        <style>
-          #{{block.id}} .text-container, #{{block.id}} .text-content, #{{block.id}} .text-content a {
-            color: var(--{{ bs.text_color }});
-          }
-          #{{block.id}} .text-content a::before {
-            background: var(--{{ bs.text_color }});
-          }
-          #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
-            {% if bs.text_max_width_mobile != blank and bs.text_max_width_mobile != 0 %}
-            max-width: {{ bs.text_max_width_mobile }}px;
-            {% endif %}
-            color: var(--{{ bs.text_color }});
-          }
-          {% if bs.button_label_1 != blank or bs.button_label_2 != blank %}
-            #{{block.id}} .text-wrapper a:hover {
-              {% if bs.text_color contains "white" %}
-              color: var(--black);
-              {% else %}
-              color: var(--white);
-              {% endif %}
+        </div>
+      {% endif %}
+      <div class="swiper-wrapper {% if ss.enable_parallax %}fixed-element{% endif %}">
+        {%- for block in section.blocks -%}
+          {% assign bs = block.settings %}
+          <style>
+            #{{block.id}} .text-container, #{{block.id}} .text-content, #{{block.id}} .text-content a {
+              color: var(--{{ bs.text_color }});
             }
-          {% endif %}
-          #{{block.id}} .text-wrapper .tcs-title, #{{block.id}} .text-wrapper .text-content {
-            text-transform: none;
-          }
-          #{{block.id}} .text-wrapper .btn2 {
-            width: 100%;
-          }
-          #{{block.id}} .center-title {
-            top: 50%;
-            transform: translateY(-50%);
-            color: var(--{{ bs.text_color }});
-          }
-          #{{block.id}} .overlay {
-            width: 100%;
-            height: 100%;
-            position: absolute;
-            top: 0;
-            background: {{bs.overlay_color}};
-            z-index: 99;
-          }
-          #{{block.id}} .text-container.text-center {
-            left: 50%;
-            transform: translateX(-50%);
-          }
-          #{{block.id}} .text-container.text-left {
-            left: 0%;
-            transform: translateX(0%);
-          }
-          #{{block.id}} .text-container.text-right {
-            right: 0%;
-            transform: translateX(0%);
-          }
-          {% if bs.title == blank and bs.text == blank and bs.text == blank and bs.link_url == blank and bs.link_label == blank %}
-            {% if bs.video_d != blank or youtube_iframe != blank %}
-              #{{block.id}} .video-control-button {
-                width: 100%;
-                height: 100%;
-              }
-              #{{block.id}} .video-control-button svg {
-                width: 24px;
-                height: 24px;
+            #{{block.id}} .text-content a::before {
+              background: var(--{{ bs.text_color }});
+            }
+            #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
+              {% if bs.text_max_width_mobile != blank and bs.text_max_width_mobile != 0 %}
+              max-width: {{ bs.text_max_width_mobile }}px;
+              {% endif %}
+              color: var(--{{ bs.text_color }});
+            }
+            {% if bs.button_label_1 != blank or bs.button_label_2 != blank %}
+              #{{block.id}} .text-wrapper a:hover {
+                {% if bs.text_color contains "white" %}
+                color: var(--black);
+                {% else %}
+                color: var(--white);
+                {% endif %}
               }
             {% endif %}
-          {% endif %}
-          @media(min-width: 600px) {
-            #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
-              {% if bs.text_max_width_tablet != blank and bs.text_max_width_tablet != 0 %}
-              max-width: {{ bs.text_max_width_tablet }}px;
-              {% endif %}
-            }
-          }
-          @media(min-width: 1024px) {
-            #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
-              {% if bs.text_max_width_desktop != blank and bs.text_max_width_desktop != 0 %}
-              max-width: {{ bs.text_max_width_desktop }}px;
-              {% endif %}
+            #{{block.id}} .text-wrapper .tcs-title, #{{block.id}} .text-wrapper .text-content {
+              text-transform: none;
             }
             #{{block.id}} .text-wrapper .btn2 {
-              width: auto;
+              width: 100%;
             }
-            #{{block.id}} .text-container.d-text-center {
+            #{{block.id}} .center-title {
+              top: 50%;
+              transform: translateY(-50%);
+              color: var(--{{ bs.text_color }});
+            }
+            #{{block.id}} .overlay {
+              width: 100%;
+              height: 100%;
+              position: absolute;
+              top: 0;
+              background: {{bs.overlay_color}};
+              z-index: 99;
+            }
+            #{{block.id}} .text-container.text-center {
               left: 50%;
-              right: unset;
               transform: translateX(-50%);
             }
-            #{{block.id}} .text-container.d-text-left {
+            #{{block.id}} .text-container.text-left {
               left: 0%;
-              right: unset;
               transform: translateX(0%);
             }
-            #{{block.id}} .text-container.d-text-right {
+            #{{block.id}} .text-container.text-right {
               right: 0%;
-              left: unset;
               transform: translateX(0%);
             }
-          }
-          @media(min-width: 1440px) {
-            #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
-              {% if bs.text_max_width_hd != blank and bs.text_max_width_hd != 0 %}
-              max-width: {{ bs.text_max_width_hd }}px;
+            {% if bs.title == blank and bs.text == blank and bs.text == blank and bs.link_url == blank and bs.link_label == blank %}
+              {% if bs.video_d != blank or youtube_iframe != blank %}
+                #{{block.id}} .video-control-button {
+                  width: 100%;
+                  height: 100%;
+                }
+                #{{block.id}} .video-control-button svg {
+                  width: 24px;
+                  height: 24px;
+                }
               {% endif %}
-            }
-          }
-          @media(min-width: 1920px) {
-            #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
-              {% if bs.text_max_width_fullhd != blank and bs.text_max_width_fullhd != 0 %}
-              max-width: {{ bs.text_max_width_fullhd }}px;
-              {% endif %}
-            }
-          }
-        </style>
-        <div id="{{ block.id }}" class="swiper-slide">
-          <{% if bs.banner_url != blank %}a href="{{ bs.banner_url }}"{% else %}div{% endif %} class="relative {% if bs.banner_url != blank %}global-flex flex-wrap{% endif %} {% if bs.video_d != blank or youtube_iframe != blank %}video-banner{% endif %}">
-            {% assign preload = false %}
-            {% if ss.disable_lazyload or section.index == 1 %}
-              {% assign preload = true %}
             {% endif %}
-            {% assign image_id = el_id | append: 'homepage-banner-image_' | append: forloop.index %}
+            @media(min-width: 600px) {
+              #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
+                {% if bs.text_max_width_tablet != blank and bs.text_max_width_tablet != 0 %}
+                max-width: {{ bs.text_max_width_tablet }}px;
+                {% endif %}
+              }
+            }
+            @media(min-width: 1024px) {
+              #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
+                {% if bs.text_max_width_desktop != blank and bs.text_max_width_desktop != 0 %}
+                max-width: {{ bs.text_max_width_desktop }}px;
+                {% endif %}
+              }
+              #{{block.id}} .text-wrapper .btn2 {
+                width: auto;
+              }
+              #{{block.id}} .text-container.d-text-center {
+                left: 50%;
+                right: unset;
+                transform: translateX(-50%);
+              }
+              #{{block.id}} .text-container.d-text-left {
+                left: 0%;
+                right: unset;
+                transform: translateX(0%);
+              }
+              #{{block.id}} .text-container.d-text-right {
+                right: 0%;
+                left: unset;
+                transform: translateX(0%);
+              }
+            }
+            @media(min-width: 1440px) {
+              #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
+                {% if bs.text_max_width_hd != blank and bs.text_max_width_hd != 0 %}
+                max-width: {{ bs.text_max_width_hd }}px;
+                {% endif %}
+              }
+            }
+            @media(min-width: 1920px) {
+              #{{block.id}} .text-wrapper, #{{block.id}} .text-wrapper a {
+                {% if bs.text_max_width_fullhd != blank and bs.text_max_width_fullhd != 0 %}
+                max-width: {{ bs.text_max_width_fullhd }}px;
+                {% endif %}
+              }
+            }
+          </style>
+          <div id="{{ block.id }}" class="swiper-slide">
+            <{% if bs.banner_url != blank %}a href="{{ bs.banner_url }}"{% else %}div{% endif %} class="relative {% if bs.banner_url != blank %}global-flex flex-wrap{% endif %} {% if bs.video_d != blank or youtube_iframe != blank %}video-banner{% endif %}">
+              {% assign preload = false %}
+              {% if ss.disable_lazyload or section.index == 1 %}
+                {% assign preload = true %}
+              {% endif %}
+              {% assign image_id = el_id | append: 'homepage-banner-image_' | append: forloop.index %}
 
-            {%- assign youtube_iframe = bs.youtube_embed_code -%}
-            <div class="col-12 pl-0 pr-0 video-wrapper relative">
-              
-              <div class="inner-wrapper overflow relative w-full">
-                <div class="video-wrapper overflow relative">
-                  {% if bs.overlay %}
-                    <div class="overlay"></div>
-                  {% endif %}
-                  {% if bs.video_d != blank or youtube_iframe != blank %}
-                    {%- assign video_id = 'video_banner_' | append: block.id -%}
-                    {%- assign video_type_desktop = '' -%}
-                    {%- assign video_url_desktop = '' -%}
-                    {%- for vid_source in bs.video_d.sources -%}
-                      {%- if vid_source.mime_type == 'video/mp4' -%}
-                        {%- assign video_url_desktop = vid_source.url -%}
+              {%- assign youtube_iframe = bs.youtube_embed_code -%}
+              <div class="col-12 pl-0 pr-0 video-wrapper relative">
+                <div class="inner-wrapper overflow relative w-full">
+                  <div class="video-wrapper overflow relative">
+                    {% if bs.overlay %}
+                      <div class="overlay"></div>
+                    {% endif %}
+                    {% if bs.video_d != blank or youtube_iframe != blank %}
+                      {%- assign video_id = 'video_banner_' | append: block.id -%}
+                      {%- assign video_type_desktop = '' -%}
+                      {%- assign video_url_desktop = '' -%}
+                      {%- for vid_source in bs.video_d.sources -%}
+                        {%- if vid_source.mime_type == 'video/mp4' -%}
+                          {%- assign video_url_desktop = vid_source.url -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {% assign autoplay = false %}
+                      {% assign muted = false %}
+                      {%- if bs.autoplay -%}
+                        {%- assign autoplay = true -%}
+                        {% assign muted = true %}
                       {%- endif -%}
-                    {%- endfor -%}
-                    {% assign autoplay = false %}
-                    {% assign muted = false %}
-                    {%- if bs.autoplay -%}
-                      {%- assign autoplay = true -%}
-                      {% assign muted = true %}
-                    {%- endif -%}
 
-                    {%- assign video_type_mobile = '' -%}
-                    {%- assign video_url_mobile = '' -%}
-                    {%- for vid_source in bs.video_m.sources -%}
-                      {%- if vid_source.mime_type == 'video/mp4' -%}
-                        {%- assign video_url_mobile = vid_source.url -%}
-                      {%- endif -%}
-                    {%- endfor -%}
+                      {%- assign video_type_mobile = '' -%}
+                      {%- assign video_url_mobile = '' -%}
+                      {%- for vid_source in bs.video_m.sources -%}
+                        {%- if vid_source.mime_type == 'video/mp4' -%}
+                          {%- assign video_url_mobile = vid_source.url -%}
+                        {%- endif -%}
+                      {%- endfor -%}
+                      {% if bs.link_url != blank and bs.link_label != blank %}
+                        <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %} class="show-m">
+                      {% endif %}
+                      {%- render 'global-video-wrapper-responsive',
+                        desktop_image: bs.desktop_image,
+                        mobile_image: bs.mobile_image,
+                        desktop_video_url: video_url_desktop,
+                        mobile_video_url: video_url_mobile,
+                        video_id: video_id,
+                        autoplay: autoplay,
+                        preload: preload,
+                        muted: muted,
+                        loop: true,
+                        load_inside_vue: true,
+                        youtube_iframe: youtube_iframe
+                      -%}
+                      {% if bs.link_url != blank and bs.link_label != blank %}
+                        </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
+                      {% endif %}
+                      {%- if bs.autoplay == blank and youtube_iframe == blank -%}
+                        <div class="video-control zi-2 flex ai-center jc-center absolute bottom-10 {% if bs.text_align contains 'tr' %}{% if ss.text_over_image %}right-auto left-10 {% else %}left-auto right-10 {% endif %}{% else %}left-auto right-10 {% endif %}{% if bs.text_align_d contains 'd-tr' %}{% if ss.text_over_image %}d-right-auto d-left-10 {% else %}d-left-auto d-right-10 {% endif %}{% else %}d-left-auto d-right-10 {% endif %} {% if bs.title == blank and bs.text == blank and bs.text == blank and bs.link_url == blank and bs.link_label == blank %}{% if bs.video_d != blank or youtube_iframe != blank %} h-full w-full{% endif %}{% endif %}">
+                          <div
+                            @click="playVid{{forloop.index}}('{{video_id}}',$event)"
+                            class="cv-playButton video-control-button flex ai-center jc-center"
+                          >
+                            {{ settings.icon_play }}
+                          </div>
+
+                          <div
+                            @click="pauseVid{{forloop.index}}('{{video_id}}',$event)"
+                            class="cv-pauseButton video-control-button ai-center jc-center hide-m"
+                          >
+                            {{ settings.icon_pause }}
+                          </div>
+                        </div>
+                      {% endif %}
+                    {% else %}
+                      {%- render 'global-image-wrapper-responsive',
+                        image_id: image_id,
+                        desktop_image: bs.desktop_image,
+                        mobile_image: bs.mobile_image,
+                        preload: preload
+                      %}
+                    {% endif %}
+                  </div>
+
+                  {%- if bs.title != blank -%}
                     {% if bs.link_url != blank and bs.link_label != blank %}
                       <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %} class="show-m">
                     {% endif %}
-                    {%- render 'global-video-wrapper-responsive',
-                      desktop_image: bs.desktop_image,
-                      mobile_image: bs.mobile_image,
-                      desktop_video_url: video_url_desktop,
-                      mobile_video_url: video_url_mobile,
-                      video_id: video_id,
-                      autoplay: autoplay,
-                      preload: preload,
-                      muted: muted,
-                      loop: true,
-                      load_inside_vue: true,
-                      youtube_iframe: youtube_iframe
-                    -%}
+
+                    <div class="text-container center-title zi-2 {% if bs.title_v_align_d == "d-jc-end d-relative" %}hide-d {% else %} d-flex {% endif %} {% if bs.title_v_align == "jc-end relative" %}hide-m {% else %} show-flex {% endif %} {{bs.title_v_align}} {{bs.title_v_align_d}} top-0 w-full jc-center flex-column d-jc-center  {%  unless ss.section_width != blank %}container{% endunless %} {{bs.text_align | remove: "jc-center" | remove: "jc-start" | remove: "jc-end"}} {{bs.text_align_d | remove: "d-jc-center" | remove: "d-jc-start" | remove: "d-jc-end"}}">
+                      <{% if bs.title_v_align_d == "d-jc-end d-relative" or bs.title_v_align == "jc-end relative" %}h2{% else %}{{ bs.title_dom_type }}{% endif %} class="{{bs.title_size}} text-wrapper tcs-title {% if bs.text_align contains "text-right" %}ml-auto {% elsif bs.text_align contains "text-left" %}mr-auto {% else %}ml-auto mr-auto{% endif %} {% if bs.text_align_d contains "d-text-right" %}d-mr-0 d-ml-auto {% elsif bs.text_align_d contains "d-text-left" %}d-ml-0 d-mr-auto {% else %}d-ml-auto d-mr-auto{% endif %}">
+                        {{- bs.title -}}
+                      </{% if bs.title_v_align_d == "d-jc-end d-relative" or bs.title_v_align == "jc-end relative" %}h2{% else %}{{ bs.title_dom_type }}{% endif %}>
+                    </div>
+
                     {% if bs.link_url != blank and bs.link_label != blank %}
                       </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
                     {% endif %}
-                    {%- if bs.autoplay == blank and youtube_iframe == blank -%}
-                      <div class="video-control zi-2 flex ai-center jc-center absolute bottom-10 {% if bs.text_align contains 'tr' %}{% if ss.text_over_image %}right-auto left-10 {% else %}left-auto right-10 {% endif %}{% else %}left-auto right-10 {% endif %}{% if bs.text_align_d contains 'd-tr' %}{% if ss.text_over_image %}d-right-auto d-left-10 {% else %}d-left-auto d-right-10 {% endif %}{% else %}d-left-auto d-right-10 {% endif %} {% if bs.title == blank and bs.text == blank and bs.text == blank and bs.link_url == blank and bs.link_label == blank %}{% if bs.video_d != blank or youtube_iframe != blank %} h-full w-full{% endif %}{% endif %}">
-                        <div
-                          @click="playVid{{forloop.index}}('{{video_id}}',$event)"
-                          class="cv-playButton video-control-button flex ai-center jc-center"
-                        >
-                          {{ settings.icon_play }}
-                        </div>
-
-                        <div
-                          @click="pauseVid{{forloop.index}}('{{video_id}}',$event)"
-                          class="cv-pauseButton video-control-button ai-center jc-center hide-m"
-                        >
-                          {{ settings.icon_pause }}
-                        </div>
-                      </div>
-                    {% endif %}
-                  {% else %}
-                    {%- render 'global-image-wrapper-responsive',
-                      image_id: image_id,
-                      desktop_image: bs.desktop_image,
-                      mobile_image: bs.mobile_image,
-                      preload: preload
-                    %}
-                  {% endif %}
-                </div>
-
-                {%- if bs.title != blank -%}
-                  {% if bs.link_url != blank and bs.link_label != blank %}
-                    <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %} class="show-m">
-                  {% endif %}
-                 
-                  <div class="text-container center-title zi-2 {% if bs.title_v_align_d == "d-jc-end d-relative" %}hide-d {% else %} d-flex {% endif %} {% if bs.title_v_align == "jc-end relative" %}hide-m {% else %} show-flex {% endif %} {{bs.title_v_align}} {{bs.title_v_align_d}} top-0 w-full jc-center flex-column d-jc-center  {%  unless ss.section_width != blank %}container{% endunless %} {{bs.text_align | remove: "jc-center" | remove: "jc-start" | remove: "jc-end"}} {{bs.text_align_d | remove: "d-jc-center" | remove: "d-jc-start" | remove: "d-jc-end"}}">
-                    <{% if bs.title_v_align_d == "d-jc-end d-relative" or bs.title_v_align == "jc-end relative" %}h2{% else %}{{ bs.title_dom_type }}{% endif %} class="{{bs.title_size}} text-wrapper tcs-title {% if bs.text_align contains "text-right" %}ml-auto {% elsif bs.text_align contains "text-left" %}mr-auto {% else %}ml-auto mr-auto{% endif %} {% if bs.text_align_d contains "d-text-right" %}d-mr-0 d-ml-auto {% elsif bs.text_align_d contains "d-text-left" %}d-ml-0 d-mr-auto {% else %}d-ml-auto d-mr-auto{% endif %}">
-                      {{- bs.title -}}
-                    </{% if bs.title_v_align_d == "d-jc-end d-relative" or bs.title_v_align == "jc-end relative" %}h2{% else %}{{ bs.title_dom_type }}{% endif %}>
-                  </div>
-                  
-                  {% if bs.link_url != blank and bs.link_label != blank %}
-                    </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
-                  {% endif %}
-                  <div class="zi-2 flex text-container w-full{% if section.blocks.size > 1 %} bottom-with-bullet{% else %} bottom-no-bullet {% endif %} absolute {%  unless ss.section_width != blank %}container{% endunless %} slide-{{forloop.index}} {{bs.text_align}} {{bs.text_align_d}}">
-                    <div class="text-wrapper flex flex-column jc-end relative ">
-                      <div class="{% if bs.title_v_align_d == "d-jc-center d-absolute" %}hide-d {% else %} d-flex {% endif %} {% if bs.title_v_align == "jc-center absolute" %}hide-m {% else %} show-flex {% endif %} {{bs.title_v_align}} {{bs.title_v_align_d}} top-0 w-full jc-center flex-column d-jc-center {{bs.text_align | remove: "jc-center" | remove: "jc-start" | remove: "jc-end"}} {{bs.text_align_d | remove: "d-jc-center" | remove: "d-jc-start" | remove: "d-jc-end"}}">
-                        {% if bs.link_url != blank and bs.link_label != blank %}
-                          <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %} class="show-m">
-                        {% endif %}
+                    <div class="zi-2 flex text-container w-full{% if section.blocks.size > 1 %} bottom-with-bullet{% else %} bottom-no-bullet {% endif %} absolute {%  unless ss.section_width != blank %}container{% endunless %} slide-{{forloop.index}} {{bs.text_align}} {{bs.text_align_d}}">
+                      <div class="text-wrapper flex flex-column jc-end relative ">
+                        <div class="{% if bs.title_v_align_d == "d-jc-center d-absolute" %}hide-d {% else %} d-flex {% endif %} {% if bs.title_v_align == "jc-center absolute" %}hide-m {% else %} show-flex {% endif %} {{bs.title_v_align}} {{bs.title_v_align_d}} top-0 w-full jc-center flex-column d-jc-center {{bs.text_align | remove: "jc-center" | remove: "jc-start" | remove: "jc-end"}} {{bs.text_align_d | remove: "d-jc-center" | remove: "d-jc-start" | remove: "d-jc-end"}}">
+                          {% if bs.link_url != blank and bs.link_label != blank %}
+                            <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %}
+                              class="show-m"
+                            >
+                          {% endif %}
                           <{% if bs.title_v_align_d == "d-jc-center d-absolute" and bs.title_v_align == "jc-center absolute" %}h2{% else %}{{ bs.title_dom_type }}{% endif %} class="{{bs.title_size}}  tcs-title">
                             {{- bs.title -}}
                           </{% if bs.title_v_align_d == "d-jc-center d-absolute" and bs.title_v_align == "jc-center absolute" %}h2{% else %}{{ bs.title_dom_type }}{% endif %}>
-                        {% if bs.link_url != blank and bs.link_label != blank %}
-                          </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
+                          {% if bs.link_url != blank and bs.link_label != blank %}
+                            </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
+                          {% endif %}
+                        </div>
+
+                        {% if bs.text != blank %}
+                          {% if bs.link_url != blank and bs.link_label != blank %}
+                            <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %}
+                              class="show-m"
+                            >
+                          {% endif %}
+                          <div class="p3 text-content pt-10 d-pt-15 ">
+                            {{ bs.text }}
+                          </div>
+                          {% if bs.link_url != blank and bs.link_label != blank %}
+                            </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
+                          {% endif %}
+                        {% endif %}
+                        {% if bs.button_label_1 != blank or bs.button_label_2 != blank %}
+                          <div class="flex flex-column d-flex-row ai-center mt-16 d-mt-20 hhd-mt-28 {{bs.text_align}} {{bs.text_align_d}} colgap-8 rowgap-8">
+                            {% if bs.button_label_1 != blank %}
+                              <{% if bs.banner_url != blank %}div{% else %}a
+                              href="{{bs.button_url_1}}"{% endif %}
+                                class="btn2"
+                              >
+                                {{- bs.button_label_1 -}}
+                              </{% if bs.banner_url != blank %}div{% else %}a
+                              href="{{bs.button_url_1}}"{% endif %}>
+                            {% endif %}
+                            {% if bs.button_label_2 != blank %}
+                              <{% if bs.banner_url != blank %}div{% else %}a
+                              href="{{bs.button_url_2}}"{% endif %}
+                                class="btn2"
+                              >
+                                {{- bs.button_label_2 -}}
+                              </{% if bs.banner_url != blank %}div{% else %}a
+                              href="{{bs.button_url_2}}"{% endif %}>
+                            {% endif %}
+                          </div>
+                        {% endif %}
+
+                        {% if bs.link_label != blank %}
+                          <div class="flex flex-column d-flex-row ai-center {{bs.text_align}} {{bs.text_align_d}}">
+                            {% if bs.link_label != blank %}
+                              <{% if bs.banner_url != blank %}div{% else %}a
+                              href="{{bs.link_url}}"{% endif %}
+                                class="link5 mt-16 d-mt-20 relative pointer"
+                              >
+                                {{- bs.link_label -}}
+                              </{% if bs.banner_url != blank %}div{% else %}a
+                              href="{{bs.link_url}}"{% endif %}>
+                            {% endif %}
+                          </div>
                         {% endif %}
                       </div>
-
-                      {% if bs.text != blank %}
-                        {% if bs.link_url != blank and bs.link_label != blank %}
-                          <{% if bs.banner_url != blank %}div{% else %}a href="{{bs.link_url}}"{% endif %} class="show-m">
-                        {% endif %}
-                        <div class="p3 text-content pt-10 d-pt-15 ">
-                          {{ bs.text }}
-                        </div>
-                        {% if bs.link_url != blank and bs.link_label != blank %}
-                          </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
-                        {% endif %}
-                      {% endif %}
-                      {% if bs.button_label_1 != blank or bs.button_label_2 != blank %}
-                        <div class="flex flex-column d-flex-row ai-center mt-16 d-mt-20 hhd-mt-28 {{bs.text_align}} {{bs.text_align_d}} colgap-8 rowgap-8">
-                          {% if bs.button_label_1 != blank %}
-                            <{% if bs.banner_url != blank %}div{% else %}a
-                              href="{{bs.button_url_1}}"{% endif %}
-                              class="btn2"
-                            >
-                              {{- bs.button_label_1 -}}
-                            </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
-                          {% endif %}
-                          {% if bs.button_label_2 != blank %}
-                            <{% if bs.banner_url != blank %}div{% else %}a
-                              href="{{bs.button_url_2}}"{% endif %}
-                              class="btn2"
-                            >
-                              {{- bs.button_label_2 -}}
-                            </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
-                          {% endif %}
-                        </div>
-                      {% endif %}
-
-                      {% if bs.link_label != blank %}
-                        <div class="flex flex-column d-flex-row ai-center {{bs.text_align}} {{bs.text_align_d}}">
-                          {% if bs.link_label != blank %}
-                            <{% if bs.banner_url != blank %}div{% else %}a
-                              href="{{bs.link_url}}"{% endif %}
-                              class="link5 mt-16 d-mt-20 relative pointer"
-                            >
-                              {{- bs.link_label -}}
-                            </{% if bs.banner_url != blank %}div{% else %}a{% endif %}>
-                          {% endif %}
-                        </div>
-                      {% endif %}
                     </div>
-                  </div>
-                {%- else -%}
-                  <{{ bs.title_dom_type }}></{{ bs.title_dom_type }}>
-                {%- endif -%}
+                  {%- else -%}
+                    <{{ bs.title_dom_type }}></{{ bs.title_dom_type }}>
+                  {%- endif -%}
+                </div>
               </div>
-            </div>
-          </{% if bs.banner_url != blank %}a href="{{ bs.banner_url }}"{% else %}div{% endif %}>
-        </div>
-        <script>
+            </{% if bs.banner_url != blank %}a href="{{ bs.banner_url }}"{% else %}div{% endif %}>
+          </div>
+          <script>
           var supportFaqVue{{ forloop.index }}{{ section.id | replace: '-', '' }} = null;
           function initsupportFaqVue{{ forloop.index }}{{ section.id | replace: '-', '' }}() {
               supportFaqVue{{ forloop.index }}{{ section.id | replace: '-', '' }} = Vue.createApp({
@@ -739,33 +745,35 @@
 
             $360.lazyLoadInstance.update();
           });
-        </script>
-      {%- endfor -%}
-    </div>
-    {% comment %} {%- if section.blocks.size > 1 -%}
-      <div class="absolute w-full right-0 bottom-0 sp-wrap ">
-        <div class="container">
-          <div class="{{ el_id }}-pagination swiper-pagination"></div>
-        </div>
+          </script>
+        {%- endfor -%}
       </div>
-    {%- endif -%} {% endcomment %}
-  </div>
-  {% if ss.hbl_title != blank %}
-    <div class="homepage-banner-link-wrapper flex jc-between mt-16">
-      <p class="p2 c-green">{{ ss.hbl_title }}</p>
-      {% if ss.hbl_label != blank %}
-          <a href="{{ ss.hbl_url }}" class="hbl-button p2 flex ai-center">
-              {{ ss.hbl_label }}
-              <div class="icon">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                      <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                  </svg>
-              </div>
-          </a>
-      {% endif %}
+      {% comment %}
+        {%- if section.blocks.size > 1 -%}
+          <div class="absolute w-full right-0 bottom-0 sp-wrap ">
+            <div class="container">
+              <div class="{{ el_id }}-pagination swiper-pagination"></div>
+            </div>
+          </div>
+        {%- endif -%}
+      {% endcomment %}
     </div>
-  {% endif %}
-</section>
+    {% if ss.hbl_title != blank %}
+      <div class="homepage-banner-link-wrapper flex jc-between mt-16">
+        <p class="p2 c-green">{{ ss.hbl_title }}</p>
+        {% if ss.hbl_label != blank %}
+          <a href="{{ ss.hbl_url }}" class="hbl-button p2 flex ai-center">
+            {{ ss.hbl_label }}
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+              </svg>
+            </div>
+          </a>
+        {% endif %}
+      </div>
+    {% endif %}
+  </section>
 {% endif %}
 
 <script>
@@ -1023,19 +1031,19 @@
       "info": "in %"
     },
     {
-        "type": "text",
-        "id": "hbl_title",
-        "label": "Homepage Banner Link Title"
+      "type": "text",
+      "id": "hbl_title",
+      "label": "Homepage Banner Link Title"
     },
     {
-        "type": "text",
-        "id": "hbl_label",
-        "label": "Homepage Banner Link Label"
+      "type": "text",
+      "id": "hbl_label",
+      "label": "Homepage Banner Link Label"
     },
     {
-        "type": "url",
-        "id": "hbl_url",
-        "label": "Homepage Banner Link URL"
+      "type": "url",
+      "id": "hbl_url",
+      "label": "Homepage Banner Link URL"
     },
     {
       "type": "header",

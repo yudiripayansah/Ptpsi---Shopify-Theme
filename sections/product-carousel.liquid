@@ -1,15 +1,15 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'product-carousel-' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    render 'section-padding', el_id: el_id, section: section
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'product-carousel-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
 %}
 {% if request.visual_preview_mode %}
-    <img src="{{ 'product-carousel-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'product-carousel-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {%- elsif sb.size > 0 -%}
-<style>
+  <style>
     {%- if section.settings.bg_color != blank -%}
         #{{el_id}} {
             background-color: {{ section.settings.bg_color }};
@@ -211,93 +211,100 @@
             width: calc((100% - ({{ ss.slides_on_large_desktop | minus: 1 }} * 20px)) / {{ ss.slides_on_large_desktop }});
         }
     }
-</style>
+  </style>
 
-    <div id="{{ el_id }}" class="overflow">
-        <div class="container">
-            <div class="heading-wrapper flex ai-end jc-between">
-                <div class="title-wrapper">
-                    <p class="p3 title tl d-tl">
-                        {{- section.settings.title -}}
-                    </p>
+  <div id="{{ el_id }}" class="overflow">
+    <div class="container">
+      <div class="heading-wrapper flex ai-end jc-between">
+        <div class="title-wrapper">
+          <p class="p3 title tl d-tl">
+            {{- section.settings.title -}}
+          </p>
 
-                    {%- if section.blocks.size > 1 -%}
-                        <div class="ptsh-tabs flex flex-row mt-12 d-mt-0">
-                            {% for block in sb %}
-                                {%- assign bs = block.settings -%}
-                                {% if bs.collection != blank %}
-                                <a href="{{ bs.collection.url }}?view=coll-prod-tab"
-                                    class="relative h2 bold-700 pts-tab-style {% if forloop.first == true %} active {% endif %}"
-                                    data-btn-label="{{ bs.btn_label }}"
-                                >
-                                    {{bs.title}}
-                                </a>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    {%- endif -%}
-                </div>
-                <div class="flex">
-                    {% for block in sb %}
-                        {%- assign bs = block.settings -%}
-                        {% if bs.btn_label != blank %}
-                            {% if bs.collection != blank %}
-                            <a href="{{ bs.btn_url }}" class="shs-button p2 pt-12 pb-12 pl-24 pr-24 hide-m show-d-flex mr-20 ai-center colgap-48 {% unless forloop.first == true %} hide{%endunless%}">
-                                {{ bs.btn_label }}
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                                    </svg>
-                                </div>
-                            </a>
-                            {% endif %}
-                        {% endif %}
-                    {% endfor %}
-                    <div class="swiper-grid-arrow-wrapper">
-                        <div class="swiper-grid-arrow hide-m show-d-flex left pl-15 d-pl-0">
-                            {{ settings.icon_slide_left }}
-                        </div>
-                        <div class="swiper-grid-arrow hide-m show-d-flex right pr-15 d-pr-0">
-                            {{ settings.icon_slide_right }}
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="container mt-32 d-mt-40 relative">
-            {% assign block = sb | first %}
-            {% assign bs = block.settings %}
-            <div class="swiper relative pts-swiper" id="tab-{{block.id}}">
-                <div class="swiper-wrapper">
-                    {%- for product in bs.collection.products limit: 10 -%}
-                        <div class="swiper-slide">
-                            <div class="pts-product-item h-full">
-                                {% render 'product-each', product: product %}
-                            </div>
-                        </div>
-                    {%- endfor -%}
-                </div>
-            </div>
-            <div class="pts-loading absolute w-full h-full flex ai-center jc-center top-0 left-0">
-                <h4 class="h5 c-black">{{'customer.orders.loading' | t}}</h4>
-            </div>
-            {% for block in sb %}
+          {%- if section.blocks.size > 1 -%}
+            <div class="ptsh-tabs flex flex-row mt-12 d-mt-0">
+              {% for block in sb %}
                 {%- assign bs = block.settings -%}
-                {% if bs.btn_label != blank %}
-                    <a href="{{ bs.btn_url }}" class="shs-button mt-24 p2 pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d mr-20 ai-center {% unless forloop.first == true %} hide{%endunless%}">
-                        {{ bs.btn_label }}
-                        <div class="icon">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                            </svg>
-                        </div>
-                    </a>
+                {% if bs.collection != blank %}
+                  <a
+                    href="{{ bs.collection.url }}?view=coll-prod-tab"
+                    class="relative h2 bold-700 pts-tab-style {% if forloop.first == true %} active {% endif %}"
+                    data-btn-label="{{ bs.btn_label }}"
+                  >
+                    {{ bs.title }}
+                  </a>
                 {% endif %}
-            {% endfor %}
+              {% endfor %}
+            </div>
+          {%- endif -%}
         </div>
+        <div class="flex">
+          {% for block in sb %}
+            {%- assign bs = block.settings -%}
+            {% if bs.btn_label != blank %}
+              {% if bs.collection != blank %}
+                <a
+                  href="{{ bs.btn_url }}"
+                  class="shs-button p2 pt-12 pb-12 pl-24 pr-24 hide-m show-d-flex mr-20 ai-center colgap-48 {% unless forloop.first == true %} hide{%endunless%}"
+                >
+                  {{ bs.btn_label }}
+                  <div class="icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                      <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                    </svg>
+                  </div>
+                </a>
+              {% endif %}
+            {% endif %}
+          {% endfor %}
+          <div class="swiper-grid-arrow-wrapper">
+            <div class="swiper-grid-arrow hide-m show-d-flex left pl-15 d-pl-0">
+              {{ settings.icon_slide_left }}
+            </div>
+            <div class="swiper-grid-arrow hide-m show-d-flex right pr-15 d-pr-0">
+              {{ settings.icon_slide_right }}
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+    <div class="container mt-32 d-mt-40 relative">
+      {% assign block = sb | first %}
+      {% assign bs = block.settings %}
+      <div class="swiper relative pts-swiper" id="tab-{{block.id}}">
+        <div class="swiper-wrapper">
+          {%- for product in bs.collection.products limit: 10 -%}
+            <div class="swiper-slide">
+              <div class="pts-product-item h-full">
+                {% render 'product-each', product: product %}
+              </div>
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+      <div class="pts-loading absolute w-full h-full flex ai-center jc-center top-0 left-0">
+        <h4 class="h5 c-black">{{ 'customer.orders.loading' | t }}</h4>
+      </div>
+      {% for block in sb %}
+        {%- assign bs = block.settings -%}
+        {% if bs.btn_label != blank %}
+          <a
+            href="{{ bs.btn_url }}"
+            class="shs-button mt-24 p2 pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d mr-20 ai-center {% unless forloop.first == true %} hide{%endunless%}"
+          >
+            {{ bs.btn_label }}
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+              </svg>
+            </div>
+          </a>
+        {% endif %}
+      {% endfor %}
+    </div>
+  </div>
 
-<script>
+  <script>
     {%- assign function_name = el_id | replace: '-', '_' -%}
     let swiperPts{{function_name}};
     let initialLoad{{function_name}} = true; 
@@ -512,246 +519,245 @@
     document.addEventListener("shopify:block:select", () => {
         initProductTabs{{ function_name }}();
     });
-</script>
-  
+  </script>
 {%- endif -%}
 {% schema %}
 {
-    "name": "Product Carousel",
-    "settings": [
+  "name": "Product Carousel",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "number",
+      "id": "title_max_width_m",
+      "label": "Title Max Width (Mobile)",
+      "info": "In pixels. Leave blank for default.",
+      "default": 738
+    },
+    {
+      "type": "number",
+      "id": "title_max_width_t",
+      "label": "Title Max Width (Tablet)",
+      "info": "In pixels. Leave blank for default.",
+      "default": 738
+    },
+    {
+      "type": "number",
+      "id": "title_max_width",
+      "label": "Title Max Width (Desktop)",
+      "info": "In pixels. Leave blank for default.",
+      "default": 738
+    },
+    {
+      "type": "number",
+      "id": "slides_on_mobile",
+      "label": "Slides per display on mobile",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "slides_on_tablet",
+      "label": "Slides per display on tablet",
+      "default": 2
+    },
+    {
+      "type": "number",
+      "id": "slides_on_small_desktop",
+      "label": "Slides per display on small desktop (1024)",
+      "default": 3
+    },
+    {
+      "type": "number",
+      "id": "slides_on_medium_desktop",
+      "label": "Slides per display on medium desktop (1440)",
+      "default": 5
+    },
+    {
+      "type": "number",
+      "id": "slides_on_large_desktop",
+      "label": "Slides per display on large desktop (1920)",
+      "default": 5
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "collection",
+      "name": "Collection",
+      "settings": [
         {
-            "type": "header",
-            "content": "General Settings"
+          "type": "collection",
+          "id": "collection",
+          "label": "Collection"
         },
         {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
+          "type": "text",
+          "id": "title",
+          "label": "Title"
         },
         {
-            "type": "textarea",
-            "id": "title",
-            "label": "Title"
+          "type": "text",
+          "id": "btn_label",
+          "label": "Button Label"
         },
         {
-            "type": "number",
-            "id": "title_max_width_m",
-            "label": "Title Max Width (Mobile)",
-            "info": "In pixels. Leave blank for default.",
-            "default": 738
-        },
-        {
-            "type": "number",
-            "id": "title_max_width_t",
-            "label": "Title Max Width (Tablet)",
-            "info": "In pixels. Leave blank for default.",
-            "default": 738
-        },
-        {
-            "type": "number",
-            "id": "title_max_width",
-            "label": "Title Max Width (Desktop)",
-            "info": "In pixels. Leave blank for default.",
-            "default": 738
-        },
-        {
-            "type": "number",
-            "id": "slides_on_mobile",
-            "label": "Slides per display on mobile",
-            "default": 2
-        },
-        {
-            "type": "number",
-            "id": "slides_on_tablet",
-            "label": "Slides per display on tablet",
-            "default": 2
-        },
-        {
-            "type": "number",
-            "id": "slides_on_small_desktop",
-            "label": "Slides per display on small desktop (1024)",
-            "default": 3
-        },
-        {
-            "type": "number",
-            "id": "slides_on_medium_desktop",
-            "label": "Slides per display on medium desktop (1440)",
-            "default": 5
-        },
-        {
-            "type": "number",
-            "id": "slides_on_large_desktop",
-            "label": "Slides per display on large desktop (1920)",
-            "default": 5
-        },
-        {
-            "type": "header",
-            "content": "Section Paddings"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_m",
-            "label": "Top padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_m",
-            "label": "Bottom padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_t",
-            "label": "Top padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_t",
-            "label": "Bottom padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding",
-            "label": "Top padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding",
-            "label": "Bottom padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hd",
-            "label": "Top padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hd",
-            "label": "Bottom padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hhd",
-            "label": "Top padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hhd",
-            "label": "Bottom padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
+          "type": "url",
+          "id": "btn_url",
+          "label": "Button Url"
         }
-    ],
-    "blocks": [
-        {
-            "type": "collection",
-            "name": "Collection",
-            "settings": [
-                {
-                    "type": "collection",
-                    "id": "collection",
-                    "label": "Collection"
-                },
-                {
-                    "type": "text",
-                    "id": "title",
-                    "label": "Title"
-                },
-                {
-                    "type": "text",
-                    "id": "btn_label",
-                    "label": "Button Label"
-                },
-                {
-                    "type": "url",
-                    "id": "btn_url",
-                    "label": "Button Url"
-                }
-            ]
-        }
-    ],
-    "presets": [
-        {
-            "name": "Product Carousel",
-            "blocks": []
-        }
-    ]
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Product Carousel",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

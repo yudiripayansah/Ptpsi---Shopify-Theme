@@ -1,66 +1,65 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'border-' | append: section.id
-    assign ss = section.settings
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'border-' | append: section.id
+  assign ss = section.settings
 %}
 
 <style>
-    #{{ el_id }} {
-        {% if ss.bg_color %}
-            background-color: {{ ss.bg_color }};
-        {% endif %}
-    }
-    #{{ el_id }} .border-border {
-        height: 1px;
-        background-color: {{ ss.b_color }};
-    }
+  #{{ el_id }} {
+      {% if ss.bg_color %}
+          background-color: {{ ss.bg_color }};
+      {% endif %}
+  }
+  #{{ el_id }} .border-border {
+      height: 1px;
+      background-color: {{ ss.b_color }};
+  }
 </style>
 {% if request.visual_preview_mode %}
-    <img src="{{ 'border-figma.PNG' | asset_url }}" width="100%" height="100%" /> 
+  <img src="{{ 'border-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-<div id="{{ el_id }}">
+  <div id="{{ el_id }}">
     {% if ss.hascon %}
-        <div class="container">
+      <div class="container">
     {% endif %}
-    <div class="border-border">
-    </div>
+    <div class="border-border"></div>
     {% if ss.hascon %}
-    </div>
+      </div>
     {% endif %}
-</div>
+  </div>
 {% endif %}
 
 {% schema %}
 {
-    "name": "Border",
-    "settings": [
-        {
-            "type": "header",
-            "content": "General Settings"
-        },
-        {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
-        },
-        {
-            "type": "color",
-            "id": "b_color",
-            "label": "Border Color",
-            "default": "#304835"
-        },
-        {
-            "type": "checkbox",
-            "id": "hascon",
-            "label": "Has container"
-        }
-    ],
-    "presets": [
-        {
-            "name": "Border",
-            "blocks": []
-        }
-    ]
+  "name": "Border",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "color",
+      "id": "b_color",
+      "label": "Border Color",
+      "default": "#304835"
+    },
+    {
+      "type": "checkbox",
+      "id": "hascon",
+      "label": "Has container"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Border",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

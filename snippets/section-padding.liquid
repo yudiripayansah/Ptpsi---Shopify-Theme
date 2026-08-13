@@ -1,17 +1,17 @@
 {%- comment -%}
-Description:
-Snippet for add padding into section element
+  Description:
+  Snippet for add padding into section element
 
-Variables:
-- el_id: String. element id
-- section: Section object. Pass section object if want to use data from section setting
-- no_section: Boolean. If padding is not from section settings
-- top_padding_m : Numeric. If section is blank. Top padding mobile
-- bottom_padding_m : Numeric. If section is blank. Bottom padding mobile
-- top_padding_t : Numeric. If section is blank. Top padding tablet
-- bottom_padding_t : Numeric. If section is blank. Bottom padding tablet
-- top_padding : Numeric. If section is blank. Top padding desktop
-- bottom_padding : Numeric. If section is blank. Bottom padding desktop
+  Variables:
+  - el_id: String. element id
+  - section: Section object. Pass section object if want to use data from section setting
+  - no_section: Boolean. If padding is not from section settings
+  - top_padding_m : Numeric. If section is blank. Top padding mobile
+  - bottom_padding_m : Numeric. If section is blank. Bottom padding mobile
+  - top_padding_t : Numeric. If section is blank. Top padding tablet
+  - bottom_padding_t : Numeric. If section is blank. Bottom padding tablet
+  - top_padding : Numeric. If section is blank. Top padding desktop
+  - bottom_padding : Numeric. If section is blank. Bottom padding desktop
 {%- endcomment -%}
 {%- if no_section == blank -%}
   {%- assign top_padding_m = section.settings.top_padding_m -%}
@@ -32,75 +32,64 @@ Variables:
   <style>
 {%- endif -%}
   #{{ el_id }} {
-      {% if top_padding_m == 'nopadding' %}padding-top: 0;{% endif %}
-      {% if bottom_padding_m == 'nopadding' %}padding-bottom: 0;{% endif %}
-      {% if top_padding_m == 'extrasmall' %}padding-top: 32px;{% endif %}
-      {% if bottom_padding_m == 'extrasmall' %}padding-bottom: 32px;{% endif %}
-      {% if top_padding_m == 'small' %}padding-top: 40px;{% endif %}
-      {% if bottom_padding_m == 'small' %}padding-bottom: 40px;{% endif %}
-      {% if top_padding_m == 'medium' %}padding-top: 48px;{% endif %}
-      {% if bottom_padding_m == 'medium' %}padding-bottom: 48px;{% endif %}
-      {% if top_padding_m == 'large' %}padding-top: 56px;{% endif %}
-      {% if bottom_padding_m == 'large' %}padding-bottom: 56px;{% endif %}
-  }
-  @media only screen and (min-width: 600px) {
-      #{{ el_id }} {
-        {% if top_padding_t == 'nopadding' %}padding-top: 0;{% endif %}
-        {% if bottom_padding_t == 'nopadding' %}padding-bottom: 0;{% endif %}
-        {% if top_padding_t == 'extrasmall' %}padding-top: 32px;{% endif %}
-        {% if bottom_padding_t == 'extrasmall' %}padding-bottom: 32px;{% endif %}
-        {% if top_padding_t == 'small' %}padding-top: 40px;{% endif %}
-        {% if bottom_padding_t == 'small' %}padding-bottom: 40px;{% endif %}
-        {% if top_padding_t == 'medium' %}padding-top: 48px;{% endif %}
-        {% if bottom_padding_t == 'medium' %}padding-bottom: 48px;{% endif %}
-        {% if top_padding_t == 'large' %}padding-top: 56px;{% endif %}
-        {% if bottom_padding_t == 'large' %}padding-bottom: 56px;{% endif %}
-      }
-  }
-  @media only screen and (min-width: 1024px) {
-      #{{ el_id }} {
-        {% if top_padding == 'nopadding' %}padding-top: 0;{% endif %}
-        {% if bottom_padding == 'nopadding' %}padding-bottom: 0;{% endif %}
-        {% if top_padding == 'extrasmall' %}padding-top: 40px;{% endif %}
-        {% if bottom_padding == 'extrasmall' %}padding-bottom: 40px;{% endif %}
-        {% if top_padding == 'small' %}padding-top: 60px;{% endif %}
-        {% if bottom_padding == 'small' %}padding-bottom: 60px;{% endif %}
-        {% if top_padding == 'medium' %}padding-top: 80px;{% endif %}
-        {% if bottom_padding == 'medium' %}padding-bottom: 80px;{% endif %}
-        {% if top_padding == 'large' %}padding-top: 120px;{% endif %}
-        {% if bottom_padding == 'large' %}padding-bottom: 120px;{% endif %}
-      }
-  }
-  @media only screen and (min-width: 1440px) {
-      #{{ el_id }} {
-        {% if top_padding_hd == 'nopadding' %}padding-top: 0;{% endif %}
-        {% if bottom_padding_hd == 'nopadding' %}padding-bottom: 0;{% endif %}
-        {% if top_padding_hd == 'extrasmall' %}padding-top: 40px;{% endif %}
-        {% if bottom_padding_hd == 'extrasmall' %}padding-bottom: 40px;{% endif %}
-        {% if top_padding_hd == 'small' %}padding-top: 60px;{% endif %}
-        {% if bottom_padding_hd == 'small' %}padding-bottom: 60px;{% endif %}
-        {% if top_padding_hd == 'medium' %}padding-top: 80px;{% endif %}
-        {% if bottom_padding_hd == 'medium' %}padding-bottom: 80px;{% endif %}
-        {% if top_padding_hd == 'large' %}padding-top: 120px;{% endif %}
-        {% if bottom_padding_hd == 'large' %}padding-bottom: 120px;{% endif %}
-      }
-  }
-  @media only screen and (min-width: 1920px) {
-      #{{ el_id }} {
-        {% if top_padding_hhd == 'nopadding' %}padding-top: 0;{% endif %}
-        {% if bottom_padding_hhd == 'nopadding' %}padding-bottom: 0;{% endif %}
-        {% if top_padding_hhd == 'extrasmall' %}padding-top: 40px;{% endif %}
-        {% if bottom_padding_hhd == 'extrasmall' %}padding-bottom: 40px;{% endif %}
-        {% if top_padding_hhd == 'small' %}padding-top: 60px;{% endif %}
-        {% if bottom_padding_hhd == 'small' %}padding-bottom: 60px;{% endif %}
-        {% if top_padding_hhd == 'medium' %}padding-top: 80px;{% endif %}
-        {% if bottom_padding_hhd == 'medium' %}padding-bottom: 80px;{% endif %}
-        {% if top_padding_hhd == 'large' %}padding-top: 120px;{% endif %}
-        {% if bottom_padding_hhd == 'large' %}padding-bottom: 120px;{% endif %}
-      }
-  }
-{%- if load_inside_vue -%}
-  </component>
-{%- else -%}
-  </style>
-{%- endif -%}
+  {% if top_padding_m == 'nopadding' %}padding-top: 0;{% endif %}
+  {% if bottom_padding_m == 'nopadding' %}padding-bottom: 0;{% endif %}
+  {% if top_padding_m == 'extrasmall' %}padding-top: 32px;{% endif %}
+  {% if bottom_padding_m == 'extrasmall' %}padding-bottom: 32px;{% endif %}
+  {% if top_padding_m == 'small' %}padding-top: 40px;{% endif %}
+  {% if bottom_padding_m == 'small' %}padding-bottom: 40px;{% endif %}
+  {% if top_padding_m == 'medium' %}padding-top: 48px;{% endif %}
+  {% if bottom_padding_m == 'medium' %}padding-bottom: 48px;{% endif %}
+  {% if top_padding_m == 'large' %}padding-top: 56px;{% endif %}
+  {% if bottom_padding_m == 'large' %}padding-bottom: 56px;{% endif %}
+  } @media only screen and (min-width: 600px) { #{{ el_id }} {
+  {% if top_padding_t == 'nopadding' %}padding-top: 0;{% endif %}
+  {% if bottom_padding_t == 'nopadding' %}padding-bottom: 0;{% endif %}
+  {% if top_padding_t == 'extrasmall' %}padding-top: 32px;{% endif %}
+  {% if bottom_padding_t == 'extrasmall' %}padding-bottom: 32px;{% endif %}
+  {% if top_padding_t == 'small' %}padding-top: 40px;{% endif %}
+  {% if bottom_padding_t == 'small' %}padding-bottom: 40px;{% endif %}
+  {% if top_padding_t == 'medium' %}padding-top: 48px;{% endif %}
+  {% if bottom_padding_t == 'medium' %}padding-bottom: 48px;{% endif %}
+  {% if top_padding_t == 'large' %}padding-top: 56px;{% endif %}
+  {% if bottom_padding_t == 'large' %}padding-bottom: 56px;{% endif %}
+  } } @media only screen and (min-width: 1024px) { #{{ el_id }} {
+  {% if top_padding == 'nopadding' %}padding-top: 0;{% endif %}
+  {% if bottom_padding == 'nopadding' %}padding-bottom: 0;{% endif %}
+  {% if top_padding == 'extrasmall' %}padding-top: 40px;{% endif %}
+  {% if bottom_padding == 'extrasmall' %}padding-bottom: 40px;{% endif %}
+  {% if top_padding == 'small' %}padding-top: 60px;{% endif %}
+  {% if bottom_padding == 'small' %}padding-bottom: 60px;{% endif %}
+  {% if top_padding == 'medium' %}padding-top: 80px;{% endif %}
+  {% if bottom_padding == 'medium' %}padding-bottom: 80px;{% endif %}
+  {% if top_padding == 'large' %}padding-top: 120px;{% endif %}
+  {% if bottom_padding == 'large' %}padding-bottom: 120px;{% endif %}
+  } } @media only screen and (min-width: 1440px) { #{{ el_id }} {
+  {% if top_padding_hd == 'nopadding' %}padding-top: 0;{% endif %}
+  {% if bottom_padding_hd == 'nopadding' %}padding-bottom: 0;{% endif %}
+  {% if top_padding_hd == 'extrasmall' %}padding-top: 40px;{% endif %}
+  {% if bottom_padding_hd == 'extrasmall' %}padding-bottom: 40px;{% endif %}
+  {% if top_padding_hd == 'small' %}padding-top: 60px;{% endif %}
+  {% if bottom_padding_hd == 'small' %}padding-bottom: 60px;{% endif %}
+  {% if top_padding_hd == 'medium' %}padding-top: 80px;{% endif %}
+  {% if bottom_padding_hd == 'medium' %}padding-bottom: 80px;{% endif %}
+  {% if top_padding_hd == 'large' %}padding-top: 120px;{% endif %}
+  {% if bottom_padding_hd == 'large' %}padding-bottom: 120px;{% endif %}
+  } } @media only screen and (min-width: 1920px) { #{{ el_id }} {
+  {% if top_padding_hhd == 'nopadding' %}padding-top: 0;{% endif %}
+  {% if bottom_padding_hhd == 'nopadding' %}padding-bottom: 0;{% endif %}
+  {% if top_padding_hhd == 'extrasmall' %}padding-top: 40px;{% endif %}
+  {% if bottom_padding_hhd == 'extrasmall' %}padding-bottom: 40px;{% endif %}
+  {% if top_padding_hhd == 'small' %}padding-top: 60px;{% endif %}
+  {% if bottom_padding_hhd == 'small' %}padding-bottom: 60px;{% endif %}
+  {% if top_padding_hhd == 'medium' %}padding-top: 80px;{% endif %}
+  {% if bottom_padding_hhd == 'medium' %}padding-bottom: 80px;{% endif %}
+  {% if top_padding_hhd == 'large' %}padding-top: 120px;{% endif %}
+  {% if bottom_padding_hhd == 'large' %}padding-bottom: 120px;{% endif %}
+  } }
+  {%- if load_inside_vue -%}
+    </component>
+  {%- else -%}
+    </style>
+  {%- endif -%}
+{% endif %}

@@ -96,8 +96,12 @@
           -%}
         {% endif %}
       </div>
-      {% if banner_mobile == blank and banner_desktop == blank and banner_video_desktop == blank and banner_video_mobile == blank %}
-        {% assign cbt_class = 'd-pt-80 pt-48'  %}
+      {% if banner_mobile == blank
+        and banner_desktop == blank
+        and banner_video_desktop == blank
+        and banner_video_mobile == blank
+      %}
+        {% assign cbt_class = 'd-pt-80 pt-48' %}
       {% endif %}
       <div class="collection-banner-text flex d-flex-row flex-column rowgap-16 mt-20 ai-start jc-between d-mt-24 {{ cbt_class }}">
         <div class="collection-banner-title">

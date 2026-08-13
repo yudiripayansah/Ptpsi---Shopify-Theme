@@ -126,37 +126,37 @@
 {%- assign function_name = random_string | replace: '-', '_' -%}
 {%- assign prefix = random_string | replace: '-', '_' | append: '_prefix' -%}
 <script>
-var {{ prefix }}Init= false;
-var {{ prefix }}Slider = Swiper;
-function sliderInit{{ function_name }}() {
-    if(!{{ prefix }}Init) {
-        {{ prefix }}Init = true;
-		{{ prefix }}Slider = new Swiper('#slider-{{ random_string }}', {
-            {%if section.settings.enable_autoslide%}
-            autoplay: {
-                delay: {{section.settings.delay_autoslide}}
-            },
-            {%endif%}
-            slidesPerView: 1,
-            loop: false,
-            a11y: false,
-			observer: true,  
-       		observeParents: true,
-            navigation: {
-                nextEl: '#product-card{{ random_string }} .swiper-slider-arrow.right',
-                prevEl: '#product-card{{ random_string }} .swiper-slider-arrow.left'
-            },
-			scrollbar: {
-                el: '#product-card{{ random_string }} .swiper-scrollbar',
-				draggable: true,
-            }
-        });
-    }
-}
+  var {{ prefix }}Init= false;
+  var {{ prefix }}Slider = Swiper;
+  function sliderInit{{ function_name }}() {
+      if(!{{ prefix }}Init) {
+          {{ prefix }}Init = true;
+  		{{ prefix }}Slider = new Swiper('#slider-{{ random_string }}', {
+              {%if section.settings.enable_autoslide%}
+              autoplay: {
+                  delay: {{section.settings.delay_autoslide}}
+              },
+              {%endif%}
+              slidesPerView: 1,
+              loop: false,
+              a11y: false,
+  			observer: true,
+         		observeParents: true,
+              navigation: {
+                  nextEl: '#product-card{{ random_string }} .swiper-slider-arrow.right',
+                  prevEl: '#product-card{{ random_string }} .swiper-slider-arrow.left'
+              },
+  			scrollbar: {
+                  el: '#product-card{{ random_string }} .swiper-scrollbar',
+  				draggable: true,
+              }
+          });
+      }
+  }
 
-document.addEventListener('DOMContentLoaded', function() {
-	sliderInit{{ function_name }}();
-});
+  document.addEventListener('DOMContentLoaded', function() {
+  	sliderInit{{ function_name }}();
+  });
 
-document.addEventListener('shopify:section:load', () => { {{ prefix }}Init= false;sliderInit{{ function_name }}() });
+  document.addEventListener('shopify:section:load', () => { {{ prefix }}Init= false;sliderInit{{ function_name }}() });
 </script>

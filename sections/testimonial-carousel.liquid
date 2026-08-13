@@ -153,7 +153,11 @@
               <div class="tc-figure {% if forloop.first %}active{% endif %}">
                 {% if block.settings.image != blank %}
                   {%- assign image_id = 'tc-image-' | append: section.id | append: '-' | append: block.id -%}
-                  {%- render 'global-image-wrapper', image: block.settings.image, additional_class: 'no-bg', image_id: image_id -%}
+                  {%- render 'global-image-wrapper',
+                    image: block.settings.image,
+                    additional_class: 'no-bg',
+                    image_id: image_id
+                  -%}
                   {% if block.settings.caption_label != blank or block.settings.caption_text != blank %}
                     <div class="flex tc-caption p4 c-label">
                       <div class="tc-caption-label">{{ block.settings.caption_label }}</div>
@@ -181,12 +185,24 @@
           <div class="tc-controls flex ai-center jc-between">
             <div class="flex ai-center colgap-8">
               <button type="button" class="tc-arrow prev" aria-label="Previous testimonial">
-                <svg width="12" height="11" viewBox="0 0 11.6974 10.4141" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  width="12"
+                  height="11"
+                  viewBox="0 0 11.6974 10.4141"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path d="M6.625 9.70704L11 5.20704L6.625 0.707037M11 5.20704L0.5 5.20704" stroke="#19341E" stroke-linecap="square"/>
                 </svg>
               </button>
               <button type="button" class="tc-arrow next" aria-label="Next testimonial">
-                <svg width="12" height="11" viewBox="0 0 11.6974 10.4141" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <svg
+                  width="12"
+                  height="11"
+                  viewBox="0 0 11.6974 10.4141"
+                  fill="none"
+                  xmlns="http://www.w3.org/2000/svg"
+                >
                   <path d="M6.625 9.70704L11 5.20704L6.625 0.707037M11 5.20704L0.5 5.20704" stroke="#19341E" stroke-linecap="square"/>
                 </svg>
               </button>
@@ -194,7 +210,10 @@
             <div class="p4 c-label flex colgap-4">
               <span class="tc-current">01</span>
               <span>–</span>
-              <span>{% if sb.size < 10 %}0{% endif %}{{ sb.size }}</span>
+              <span>
+                {%- if sb.size < 10 %}0{% endif -%}
+                {{- sb.size -}}
+              </span>
             </div>
           </div>
         </div>
@@ -212,7 +231,7 @@
         loop: false,
         navigation: {
           nextEl: '#{{ el_id }} .tc-arrow.next',
-          prevEl: '#{{ el_id }} .tc-arrow.prev'
+          prevEl: '#{{ el_id }} .tc-arrow.prev',
         },
         on: {
           slideChange: function () {
@@ -221,8 +240,8 @@
             figures.forEach(function (figure, i) {
               figure.classList.toggle('active', i === idx);
             });
-          }
-        }
+          },
+        },
       });
     });
   </script>
@@ -426,10 +445,7 @@
   "presets": [
     {
       "name": "Testimonial Carousel",
-      "blocks": [
-        { "type": "entry" },
-        { "type": "entry" }
-      ]
+      "blocks": [{ "type": "entry" }, { "type": "entry" }]
     }
   ]
 }

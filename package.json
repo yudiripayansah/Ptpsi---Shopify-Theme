@@ -1,0 +1,8 @@
+{
+  "name": "ptpsi-theme",
+  "private": true,
+  "devDependencies": {
+    "prettier": "^3.3.3",
+    "@shopify/prettier-plugin-liquid": "^1.6.1"
+  }
+}

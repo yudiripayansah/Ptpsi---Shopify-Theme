@@ -40,41 +40,40 @@
 {% if request.visual_preview_mode %}
   <img src="{{ 'pdp-recommendation-figma.PNG' | asset_url }}" width="100%" height="100%">
 {% else %}
-<div id="box-{{el_id}}" class="hide-m">
-  {% if ss.border_top %}
-    <div class="container container-border">
-      <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
-    </div>
-  {% endif %}
-  <div class="product-recommendation-wrapper overflow">
-    <div class="" id="product-recommendation">
-      <div class="container">
-        <div class="pdpr-heading flex ai-center jc-between">
-          <{{ ss.title_dom_type }} class="{{ ss.title_size }}">
-            {{ ss.title }}
-          </{{ ss.title_dom_type }}>
-          <div class="d-flex hide-m ai-center jc-center colgap-8">
-            <div class="pdpr-slide-arrow cursor flex ai-center jc-center p-5 left">
-              {{ settings.icon_slide_left }}
-            </div>
-            <div class="pdpr-slide-arrow cursor flex ai-center jc-center p-5 right">
-              {{ settings.icon_slide_right }}
+  <div id="box-{{el_id}}" class="hide-m">
+    {% if ss.border_top %}
+      <div class="container container-border">
+        <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
+      </div>
+    {% endif %}
+    <div class="product-recommendation-wrapper overflow">
+      <div class="" id="product-recommendation">
+        <div class="container">
+          <div class="pdpr-heading flex ai-center jc-between">
+            <{{ ss.title_dom_type }} class="{{ ss.title_size }}">
+              {{ ss.title }}
+            </{{ ss.title_dom_type }}>
+            <div class="d-flex hide-m ai-center jc-center colgap-8">
+              <div class="pdpr-slide-arrow cursor flex ai-center jc-center p-5 left">
+                {{ settings.icon_slide_left }}
+              </div>
+              <div class="pdpr-slide-arrow cursor flex ai-center jc-center p-5 right">
+                {{ settings.icon_slide_right }}
+              </div>
             </div>
           </div>
-        </div>
-        <div class="swiper pdpr-swiper d-mt-40 mt-32">
-          <div class="product-wrapper swiper-wrapper">
+          <div class="swiper pdpr-swiper d-mt-40 mt-32">
+            <div class="product-wrapper swiper-wrapper"></div>
           </div>
         </div>
       </div>
     </div>
+    {% if ss.border_bottom %}
+      <div class="container container-border">
+        <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
+      </div>
+    {% endif %}
   </div>
-  {% if ss.border_bottom %}
-    <div class="container container-border">
-      <div class="bt-1 b-main w-full" style="height:0">&nbsp;</div>
-    </div>
-  {% endif %}
-</div>
 {% endif %}
 
 <script>
@@ -195,126 +194,126 @@
       "id": "bg_color",
       "label": "Background Color"
     },
-		{
-			"type": "select",
-			"id": "top_padding_m",
-			"label": "Top padding (Mobile)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_m",
-			"label": "Bottom padding (Mobile)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_t",
-			"label": "Top padding (Tablet)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_t",
-			"label": "Bottom padding (Tablet)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "top_padding",
-			"label": "Top padding (Desktop)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding",
-			"label": "Bottom padding (Desktop)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_hd",
-			"label": "Top padding (HD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_hd",
-			"label": "Bottom padding (HD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "top_padding_hhd",
-			"label": "Top padding (HHD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
-		{
-			"type": "select",
-			"id": "bottom_padding_hhd",
-			"label": "Bottom padding (HHD)",
-			"options": [
-			  { "value": "nopadding", "label": "No padding" },
-			  { "value": "small", "label": "Small" },
-			  { "value": "medium", "label": "Medium" },
-			  { "value": "large", "label": "Large" }
-			],
-			"default": "medium"
-		},
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
     {
       "type": "header",
       "content": "General Settings"
@@ -356,8 +355,7 @@
       ]
     }
   ],
-  "blocks": [
-  ],
+  "blocks": [],
   "presets": [
     {
       "name": "PDP - Recommendation",

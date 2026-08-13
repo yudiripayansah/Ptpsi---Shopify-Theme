@@ -1,9 +1,9 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'header-con'
-    assign ss = section.settings
-    assign sb = section.blocks
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'header-con'
+  assign ss = section.settings
+  assign sb = section.blocks
 %}
 <style>
   {% if template.name == "index" %}
@@ -44,7 +44,7 @@
     visibility: hidden;
     opacity: 0;
     transition: all .3s ease;
-    background-color: #000;  
+    background-color: #000;
   }
   #{{el_id}} .header-con__cart .header-con__cart-box {
     /* transform: translateX(100%); */
@@ -154,14 +154,17 @@
       <div class="header-con container relative z-1">
         <div class="header-con__inner flex ai-start jc-between pt-16 pb-16 d-pt-16 d-pb-12 relative z-2{% if template == 'product' %} bb-1 b-main{% endif %}">
           <div class="header-con__left flex ai-center colgap-24">
-            <div class="cursor p1 c-green header-con__menu-toggle pt-16 pb-12 pl-16 pr-16 d-pt-0 d-pb-0 d-pl-0 d-pr-0 col-2" @click="toggleHeaderMenu()">
-              {{'general.header.menu'|t}}
+            <div
+              class="cursor p1 c-green header-con__menu-toggle pt-16 pb-12 pl-16 pr-16 d-pt-0 d-pb-0 d-pl-0 d-pr-0 col-2"
+              @click="toggleHeaderMenu()"
+            >
+              {{ 'general.header.menu' | t }}
             </div>
             <div class="cursor p2 c-green hide-m show-d">
               {% comment %} 30° Sunny, 10:43:00 SGT {% endcomment %}
               {% assign weather = shop.metafields.global.weather.value | parse_json %}
               {% assign stations = weather.stations %}
-              {% assign temperature = stations[0][2] | times: 1  %}
+              {% assign temperature = stations[0][2] | times: 1 %}
               {% assign vibe = 'Cool' %}
               {% if temperature < 24 %}
                 {% assign vibe = 'Cool' %}
@@ -188,13 +191,15 @@
                   additional_class: 'no-bg'
                 -%}
               </div>
-              {% comment %} <div class="logo-white ai-center jc-center hide-m width-100 header-logo-box">
-                {%- render 'global-image-wrapper',
-                  image: section.settings.logo_image_white,
-                  preload: true,
-                  additional_class: 'no-bg'
-                -%}
-              </div> {% endcomment %}
+              {% comment %}
+                <div class="logo-white ai-center jc-center hide-m width-100 header-logo-box">
+                  {%- render 'global-image-wrapper',
+                    image: section.settings.logo_image_white,
+                    preload: true,
+                    additional_class: 'no-bg'
+                  -%}
+                </div>
+              {% endcomment %}
             {%- else -%}
               <div class="logo-black ai-center jc-center header-logo-box">
                 {{ section.settings.logo_svg_black }}
@@ -207,27 +212,31 @@
           <div class="header-con__right flex ai-center hd-colgap-24 colgap-16 jc-end">
             <a href="{{ss.installation_url}}" class="p1 c-green hide-m d-flex ai-center colgap-8">
               <span class="icon flex ai-center jc-center">
-                {{settings.icon_orange_circle}}
+                {{ settings.icon_orange_circle }}
               </span>
-              {{'general.header.installations'|t}}
+              {{ 'general.header.installations' | t }}
             </a>
             <div class="p1 c-green hide-m show-d cursor dont-break" @click="toggleHeaderMenu('search')">
-              {{'general.header.search'|t}}
+              {{ 'general.header.search' | t }}
             </div>
             <a href="{{ routes.account_url }}" class="p1 c-green hide-m show-d">
-              {{'general.header.account'|t}}
+              {{ 'general.header.account' | t }}
             </a>
             <div class="cursor p1 c-green ai-start flex header-con__cart-trigger" @click="showHeaderCart()">
-              {{'general.header.cart'|t}}
+              {{ 'general.header.cart' | t }}
               <span class="header-cart-number {% unless cart.item_count > 0 %}hide-m{% else %}flex{% endunless %}">
                 <sup class="y-5 cart-count p5">
-                  {% if cart.item_count < 10 %}0{% endif %}{{cart.item_count}}
+                  {% if cart.item_count < 10 %}0{% endif -%}
+                  {{- cart.item_count }}
                 </sup>
               </span>
             </div>
           </div>
-          <div class="header-con__close-menu flex ai-center jc-center absolute pl-24 pr-24 d-pt-24 d-pb-24 pt-20 pb-20 top-0 right-0 cursor" @click="toggleHeaderMenu(targetDropdownToggle)">
-            {{settings.icon_close}}
+          <div
+            class="header-con__close-menu flex ai-center jc-center absolute pl-24 pr-24 d-pt-24 d-pb-24 pt-20 pb-20 top-0 right-0 cursor"
+            @click="toggleHeaderMenu(targetDropdownToggle)"
+          >
+            {{ settings.icon_close }}
           </div>
         </div>
       </div>
@@ -236,18 +245,33 @@
       <div class="container global-flex hide-d pt-16 w-full sticky top-0 bg-background-main zi-2">
         <div class="header-con__search-box flex ai-center colgap-8 pb-12 bb-1 b-main w-full">
           <div class="header-con__search-box-icon flex ai-center jc-center p-5">
-            {{settings.icon_search}}
+            {{ settings.icon_search }}
           </div>
-          <input type="text" name="" class="h4 no-anim w-full search-term c-green" placeholder="{{'general.header.search'| t}}" @keydown="handleKeyDown($event)" @input="goSearch()" v-model="q" @focus="toggleSearch('show')" @focusout="toggleSearch('hide')">
-          <button type="button" class="p2 c-green d-pl-16 pl-12 cursor" @click="q='';toggleSearch('hide');goSearch();">{{'general.header.clear' | t}}</button>
+          <input
+            type="text"
+            name=""
+            class="h4 no-anim w-full search-term c-green"
+            placeholder="{{'general.header.search'| t}}"
+            @keydown="handleKeyDown($event)"
+            @input="goSearch()"
+            v-model="q"
+            @focus="toggleSearch('show')"
+            @focusout="toggleSearch('hide')"
+          >
+          <button type="button" class="p2 c-green d-pl-16 pl-12 cursor" @click="q='';toggleSearch('hide');goSearch();">
+            {{ 'general.header.clear' | t }}
+          </button>
         </div>
       </div>
-      <div id="header-con__dropdown-menu" class="container flex h-full flex-column jc-between w-full d-pt-40 d-pb-40 pt-32 active">
+      <div
+        id="header-con__dropdown-menu"
+        class="container flex h-full flex-column jc-between w-full d-pt-40 d-pb-40 pt-32 active"
+      >
         <div class="row flex flex-wrap d-flex-row h-full d-jc-start header-con-first-row rowgap-24">
           <div class="header-con-menu-col col-12 header-con-menu-col-main col-d-3 hide-d flex flex-column rowgap-8">
             {% assign first_menu = '' %}
             {% for link in ss.main_linklist.links %}
-              {% assign main_parent = link.title | handle  %}
+              {% assign main_parent = link.title | handle %}
               {% assign current_path = request.path %}
               {% assign link_path = link.url %}
               {% if forloop.first %}
@@ -291,48 +315,58 @@
                 </div>
               {% endcapture %}
               {% if has_submenu %}
-              {%- render 'accordion',
-                icon_rotate: false,
-                wrapper_class: wrapper_class,
-                title_wrapper_class: title_wrapper_class,
-                title_class: title_class,
-                desc_no_pt: true,
-                title: link.title,
-                desc_html: desc_html,
-                title_no_pt: true,
-                title_no_pb: true,
-              -%}
+                {%- render 'accordion',
+                  icon_rotate: false,
+                  wrapper_class: wrapper_class,
+                  title_wrapper_class: title_wrapper_class,
+                  title_class: title_class,
+                  desc_no_pt: true,
+                  title: link.title,
+                  desc_html: desc_html,
+                  title_no_pt: true,
+                  title_no_pb: true
+                -%}
               {% else %}
-              <a href="{{link.url}}" class="h3 dropdown-anim pt-4">{{link.title}}</a>
+                <a href="{{link.url}}" class="h3 dropdown-anim pt-4">{{ link.title }}</a>
               {% endif %}
             {% endfor %}
           </div>
           <div class="header-con-menu-col col-d-3 hide-m d-flex flex-column rowgap-8">
             {% assign first_menu = '' %}
             {% for link in ss.main_linklist.links %}
-              {% assign parent = link.title | handle  %}
+              {% assign parent = link.title | handle %}
               {% assign current_path = request.path %}
               {% assign link_path = link.url %}
               {% if forloop.first %}
                 {% assign first_menu = link.title | handle %}
               {% endif %}
-              <a href="{{link.url}}" class="h3 no-anim dropdown-anim header-con-menu-item c-placeholder {% if current_path == link_path or forloop.first == true %}active{% endif %}" @mouseover="toggleSubmenu('{{parent}}')" data-parent="{{parent}}">{{link.title}}</a>
+              <a
+                href="{{link.url}}"
+                class="h3 no-anim dropdown-anim header-con-menu-item c-placeholder {% if current_path == link_path or forloop.first == true %}active{% endif %}"
+                @mouseover="toggleSubmenu('{{parent}}')"
+                data-parent="{{parent}}"
+              >
+                {{- link.title -}}
+              </a>
             {% endfor %}
           </div>
           <div class="header-con-menu-col col-d-3 hide-m d-flex flex-column">
             {% for block in sb %}
               {% if block.type == 'submenu' %}
                 {% assign bs = block.settings %}
-                {% assign parent = bs.title | handle  %}
+                {% assign parent = bs.title | handle %}
                 {% if forloop.first %}
                   {% assign animated = true %}
                 {% else %}
-                  {% assign animated = false %}                    
+                  {% assign animated = false %}
                 {% endif %}
-                <div class="header-con-submenu {% if first_menu == parent %}flex{% else %}hide-m{% endif %} flex-column rowgap-8" data-parent="{{parent}}">
+                <div
+                  class="header-con-submenu {% if first_menu == parent %}flex{% else %}hide-m{% endif %} flex-column rowgap-8"
+                  data-parent="{{parent}}"
+                >
                   {% for link in bs.menu.links %}
-                      <!--asd-->
-                    <a href="{{link.url}}" class="h4 c-green dropdown-anim">{{link.title}}</a>
+                    <!-- asd -->
+                    <a href="{{link.url}}" class="h4 c-green dropdown-anim">{{ link.title }}</a>
                   {% endfor %}
                 </div>
               {% endif %}
@@ -342,16 +376,19 @@
             {% for block in sb %}
               {% if block.type == 'submenu' %}
                 {% assign bs = block.settings %}
-                {% assign parent = bs.title | handle  %}
+                {% assign parent = bs.title | handle %}
                 {% if forloop.first %}
                   {% assign animated = true %}
                 {% else %}
-                  {% assign animated = false %}                    
+                  {% assign animated = false %}
                 {% endif %}
-                <div class="header-con-submenu {% if first_menu == parent %}flex{% else %}hide-m{% endif %} flex-column rowgap-8" data-parent="{{parent}}">
+                <div
+                  class="header-con-submenu {% if first_menu == parent %}flex{% else %}hide-m{% endif %} flex-column rowgap-8"
+                  data-parent="{{parent}}"
+                >
                   {% for link in bs.menu_2.links %}
-                      <!--{{ animated }}-->
-                    <a href="{{link.url}}" class="h4 c-green dropdown-anim">{{link.title}}</a>
+                    <!-- {{ animated }} -->
+                    <a href="{{link.url}}" class="h4 c-green dropdown-anim">{{ link.title }}</a>
                   {% endfor %}
                 </div>
               {% endif %}
@@ -368,15 +405,15 @@
                   {% endif %}
                 </span>
                 <span class="p1 dropdown-anim">
-                  {{link.title}}
+                  {{ link.title }}
                 </span>
               </a>
             {% endfor %}
             <div class="hide-d mt-12">
               <div class="flex colgap-16">
                 {% if ss.mobile_link_label_1 != blank %}
-                {%- assign link_id = "1-mobile-link" -%}
-                {% render 'link-icon', 
+                  {%- assign link_id = '1-mobile-link' -%}
+                  {% render 'link-icon',
                     id: link_id,
                     label: ss.mobile_link_label_1,
                     url: ss.mobile_link_url_1,
@@ -384,11 +421,11 @@
                     icon_color: 'var(--green)',
                     icon_svg: settings.icon_arrow_up_right,
                     load_inside_vue: true
-                %}
+                  %}
                 {% endif %}
                 {% if ss.mobile_link_label_2 != blank %}
-                {%- assign link_id = "2-mobile-link" -%}
-                {% render 'link-icon', 
+                  {%- assign link_id = '2-mobile-link' -%}
+                  {% render 'link-icon',
                     id: link_id,
                     label: ss.mobile_link_label_2,
                     url: ss.mobile_link_url_2,
@@ -396,11 +433,11 @@
                     icon_color: 'var(--green)',
                     icon_svg: settings.icon_arrow_up_right,
                     load_inside_vue: true
-                %}
+                  %}
                 {% endif %}
                 {% if ss.mobile_link_label_3 != blank %}
-                {%- assign link_id = "3-mobile-link" -%}
-                {% render 'link-icon', 
+                  {%- assign link_id = '3-mobile-link' -%}
+                  {% render 'link-icon',
                     id: link_id,
                     label: ss.mobile_link_label_3,
                     url: ss.mobile_link_url_3,
@@ -408,7 +445,7 @@
                     icon_color: 'var(--green)',
                     icon_svg: settings.icon_arrow_up_right,
                     load_inside_vue: true
-                %}
+                  %}
                 {% endif %}
               </div>
             </div>
@@ -418,25 +455,25 @@
           <div class="col-d-3 ">
             <div class="flex flex-column rowgap-2 ai-start">
               {% for link in ss.sosmed_link.links %}
-                {%- assign link_id = "header-sosmed-link-" | append: forloop.index -%}
-                {% render 'link-icon', 
-                    id: link_id,
-                    label: link.title,
-                    url: link.url,
-                    text_class: 'p2 underline dropdown-anim mt-2 header-con__sosmed-link',
-                    icon_color: 'var(--green)',
-                    icon_svg: settings.icon_arrow_up_right,
-                    load_inside_vue: true
+                {%- assign link_id = 'header-sosmed-link-' | append: forloop.index -%}
+                {% render 'link-icon',
+                  id: link_id,
+                  label: link.title,
+                  url: link.url,
+                  text_class: 'p2 underline dropdown-anim mt-2 header-con__sosmed-link',
+                  icon_color: 'var(--green)',
+                  icon_svg: settings.icon_arrow_up_right,
+                  load_inside_vue: true
                 %}
               {% endfor %}
             </div>
           </div>
           <div class="col-d-3 push-d-6 flex flex-column rowgap-16">
             <div class="header-con-address p2 dropdown-anim">
-              {{ss.address |  newline_to_br}}
+              {{ ss.address | newline_to_br }}
             </div>
             <div class="header-con-open-hours p2 dropdown-anim">
-              {{ss.open_hours |  newline_to_br}}
+              {{ ss.open_hours | newline_to_br }}
             </div>
           </div>
         </div>
@@ -444,37 +481,52 @@
       <div id="header-con__dropdown-search" class="container d-pt-40 d-pb-40 w-full">
         <div class="header-con__search-box d-flex hide-m ai-center colgap-8 pb-12 bb-1 b-main w-full">
           <div class="header-con__search-box-icon flex ai-center jc-center p-5">
-            {{settings.icon_search}}
+            {{ settings.icon_search }}
           </div>
-          <input type="text" name="" class="h4 no-anim w-full search-term c-green" placeholder="{{'general.header.search'| t}}" @keydown="handleKeyDown($event)" @input="goSearch()" v-model="q">
-          <button type="button" class="p2 c-green d-pl-16 pl-12 cursor" @click="q='';goSearch()">{{'general.header.clear' | t}}</button>
+          <input
+            type="text"
+            name=""
+            class="h4 no-anim w-full search-term c-green"
+            placeholder="{{'general.header.search'| t}}"
+            @keydown="handleKeyDown($event)"
+            @input="goSearch()"
+            v-model="q"
+          >
+          <button type="button" class="p2 c-green d-pl-16 pl-12 cursor" @click="q='';goSearch()">
+            {{ 'general.header.clear' | t }}
+          </button>
         </div>
         <div class="header-con__search-result row d-pt-40 d-pb-40 pt-32 pb-32 h-full flex d-flex-wrap flex-column d-flex-row ai-start jc-start">
-            <div class="w-full" id="header-con__search-suggestion-box">
-              <div class="col-d-3 col-6" id="header-con__search-suggestion">
-                <div class="p3 c-label">
-                  {{'general.header.popular' | t}}
-                </div>
-                <div class="header-con__suggestion popular flex flex-column d-rowgap-8 rowgap-4 mt-12 d-mt-16">
-                  {% for block in sb %}
-                    {% if block.type == 'popular_keyword' %}
-                      {% assign bs = block.settings %}
-                      <div onclick="fillSearchInput('{{bs.title}}')" class="p1 c-green cursor">{{bs.title}}</div>
-                    {% endif %}
-                  {% endfor %}
-                </div>
+          <div class="w-full" id="header-con__search-suggestion-box">
+            <div class="col-d-3 col-6" id="header-con__search-suggestion">
+              <div class="p3 c-label">
+                {{ 'general.header.popular' | t }}
               </div>
-              <div class="col-d-3 col-6" id="header-con__search-recent">
-                <div class="p3 c-label">
-                  {{'general.header.recent' | t}}
-                </div>
-                <div class="header-con__suggestion recent flex flex-column d-rowgap-8 rowgap-4 d-mt-16 mt-12">
-                  <div v-for="keyword in recents_keywords" class="p1 c-green cursor" v-html="keyword" @click="fillSearchInput(keyword)"></div>
-                </div>
+              <div class="header-con__suggestion popular flex flex-column d-rowgap-8 rowgap-4 mt-12 d-mt-16">
+                {% for block in sb %}
+                  {% if block.type == 'popular_keyword' %}
+                    {% assign bs = block.settings %}
+                    <div onclick="fillSearchInput('{{bs.title}}')" class="p1 c-green cursor">{{ bs.title }}</div>
+                  {% endif %}
+                {% endfor %}
               </div>
             </div>
-            <div class="col-d-3 col-12 hide-m mt-48 d-mt-0 d-pb-0" id="header-con__predictive-search"></div>
-            <div class="col-d-6 col-12 push-d-3 hide-m" id="header-con__search-result"></div>
+            <div class="col-d-3 col-6" id="header-con__search-recent">
+              <div class="p3 c-label">
+                {{ 'general.header.recent' | t }}
+              </div>
+              <div class="header-con__suggestion recent flex flex-column d-rowgap-8 rowgap-4 d-mt-16 mt-12">
+                <div
+                  v-for="keyword in recents_keywords"
+                  class="p1 c-green cursor"
+                  v-html="keyword"
+                  @click="fillSearchInput(keyword)"
+                ></div>
+              </div>
+            </div>
+          </div>
+          <div class="col-d-3 col-12 hide-m mt-48 d-mt-0 d-pb-0" id="header-con__predictive-search"></div>
+          <div class="col-d-6 col-12 push-d-3 hide-m" id="header-con__search-result"></div>
         </div>
       </div>
     </div>
@@ -482,100 +534,98 @@
       class="header-con__cart-overlay header-cart-overlay fixed zi-4 w-full h-full top-0 left-0 bg-black opacity-7 cursor"
       onclick="$360.hideHeaderCart()"
     ></div>
-    <div id="header-cart" class="header-con__cart fixed w-full d-max-465 right-0 h-full zi-1 top-0">
-      
-    </div>
+    <div id="header-cart" class="header-con__cart fixed w-full d-max-465 right-0 h-full zi-1 top-0"></div>
   </header>
 </div>
 
 <script>
-    function headerBarCarouselInit() {
-      let header_bar_carousel;
-      header_bar_carousel = new Swiper("#header-bar .swiper", {
-        direction: 'horizontal',
-        slidesPerView: 1,
-        watchSlidesProgress: true,
-        {% if header_bar_count > 1 %}
-        loop: true,
-        autoplay: {
-          delay: 3500
-        },
-        {% endif %}
-        navigation: {
-          nextEl: '#header-bar .swiper-next',
-          prevEl: '#header-bar .swiper-prev'
-        },
-        on: {
-            init: function() {
-                $360.lazyLoadInstance.update();
-            },
-            slideChange: function() {
-                $360.lazyLoadInstance.update();
-            },
-            resize: function() {
-                $360.lazyLoadInstance.update();
-            }
-          }
-      });
-    }
-    function shrinkOnScroll(selector) {
-      const el = document.querySelector(selector);
-      const el_box = el.querySelector('.header-logo-box');
-      let defwidth = 248
-      let defpadTop = 37
-      let maxWidth = 100
-      if(screen.width < 1024){
-        maxWidth = 93
-        defpadTop = 42
-        defwidth = 170
-      }
-      let defpadBottom = 0
-      el_box.style.width = Math.max(maxWidth, defwidth) + "px";
-      el.style.paddingTop = Math.max(0, defpadTop) + "px";
-      el.style.paddingBottom = Math.max(0, defpadBottom) + "px";
-      let lastScrollY = window.scrollY;
-
-      window.addEventListener('scroll', () => {
-        const now = Number(window.scrollY);
-        const styleEl = getComputedStyle(el);
-        const styleBox = getComputedStyle(el_box);
-        let width = 248
-        let padTop = 37
-        if(screen.width < 1024){
-          padTop = 42
-          width = 170
-        }
-        let padBottom = 0
-        width -= (now/100 * width)
-        padTop-= (now/100 * padTop)
-        padBottom -= (now/100 * padBottom)
-        el_box.style.width = Math.max(maxWidth, width) + "px";
-        el.style.paddingTop = Math.max(0, padTop) + "px";
-        el.style.paddingBottom = Math.max(0, padBottom) + "px";
-      });
-    }
-    document.addEventListener('DOMContentLoaded', function() {
-      headerBarCarouselInit();
-      {% if template.name == "index" %}
-      shrinkOnScroll('#header-con .header-logo');
+  function headerBarCarouselInit() {
+    let header_bar_carousel;
+    header_bar_carousel = new Swiper("#header-bar .swiper", {
+      direction: 'horizontal',
+      slidesPerView: 1,
+      watchSlidesProgress: true,
+      {% if header_bar_count > 1 %}
+      loop: true,
+      autoplay: {
+        delay: 3500
+      },
       {% endif %}
-      function updateSGT() {
-        const now = new Date().toLocaleTimeString("en-US", {
-          timeZone: "Asia/Singapore",
-          hour12: false,
-          hour: "2-digit",
-          minute: "2-digit",
-          second: "2-digit"
-        });
-
-        document.getElementById("sgt-time").textContent = now;
-      }
-
-      updateSGT();
-      setInterval(updateSGT, 1000);
-
+      navigation: {
+        nextEl: '#header-bar .swiper-next',
+        prevEl: '#header-bar .swiper-prev'
+      },
+      on: {
+          init: function() {
+              $360.lazyLoadInstance.update();
+          },
+          slideChange: function() {
+              $360.lazyLoadInstance.update();
+          },
+          resize: function() {
+              $360.lazyLoadInstance.update();
+          }
+        }
     });
-    document.addEventListener('shopify:section:load', () => { headerBarCarouselInit() });
+  }
+  function shrinkOnScroll(selector) {
+    const el = document.querySelector(selector);
+    const el_box = el.querySelector('.header-logo-box');
+    let defwidth = 248
+    let defpadTop = 37
+    let maxWidth = 100
+    if(screen.width < 1024){
+      maxWidth = 93
+      defpadTop = 42
+      defwidth = 170
+    }
+    let defpadBottom = 0
+    el_box.style.width = Math.max(maxWidth, defwidth) + "px";
+    el.style.paddingTop = Math.max(0, defpadTop) + "px";
+    el.style.paddingBottom = Math.max(0, defpadBottom) + "px";
+    let lastScrollY = window.scrollY;
+
+    window.addEventListener('scroll', () => {
+      const now = Number(window.scrollY);
+      const styleEl = getComputedStyle(el);
+      const styleBox = getComputedStyle(el_box);
+      let width = 248
+      let padTop = 37
+      if(screen.width < 1024){
+        padTop = 42
+        width = 170
+      }
+      let padBottom = 0
+      width -= (now/100 * width)
+      padTop-= (now/100 * padTop)
+      padBottom -= (now/100 * padBottom)
+      el_box.style.width = Math.max(maxWidth, width) + "px";
+      el.style.paddingTop = Math.max(0, padTop) + "px";
+      el.style.paddingBottom = Math.max(0, padBottom) + "px";
+    });
+  }
+  document.addEventListener('DOMContentLoaded', function() {
+    headerBarCarouselInit();
+    {% if template.name == "index" %}
+    shrinkOnScroll('#header-con .header-logo');
+    {% endif %}
+    function updateSGT() {
+      const now = new Date().toLocaleTimeString("en-US", {
+        timeZone: "Asia/Singapore",
+        hour12: false,
+        hour: "2-digit",
+        minute: "2-digit",
+        second: "2-digit"
+      });
+
+      document.getElementById("sgt-time").textContent = now;
+    }
+
+    updateSGT();
+    setInterval(updateSGT, 1000);
+
+  });
+  document.addEventListener('shopify:section:load', () => { headerBarCarouselInit() });
 </script>
 
 {% schema %}

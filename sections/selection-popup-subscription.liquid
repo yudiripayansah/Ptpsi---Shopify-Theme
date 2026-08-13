@@ -1,9 +1,9 @@
 {% liquid
-    assign el_id = section.id
-    assign ss = section.settings
+  assign el_id = section.id
+  assign ss = section.settings
 %}
 {% if ss.enable %}
-<style>
+  <style>
     #{{el_id}} .sp-overlay {
         background: rgba(23, 23, 23, 0.5);
     }
@@ -50,7 +50,7 @@
             width:410px;
         }
     }
-    
+
     @media(min-width: 1024px) {
         #{{el_id}} .sp-box {
             width:440px;
@@ -59,19 +59,19 @@
             padding:30px;
         }
     }
-</style>
+  </style>
 
-<section id="{{el_id}}">
+  <section id="{{el_id}}">
     <div class="">
-        {% render 'selection-popup', section: section, type: 'subscription' %}
+      {% render 'selection-popup', section: section, type: 'subscription' %}
     </div>
-</section>
+  </section>
 
-<script>
+  <script>
     let overlay_subs = document.querySelectorAll('.sp-overlay');
 
     if (!toggleContentSelectionPopup) {
-        function toggleContentSelectionPopup(e) { 
+        function toggleContentSelectionPopup(e) {
             if(e != null) {
                 e.preventDefault();
             }
@@ -131,7 +131,7 @@
             document.cookie = name + '=; expires=Thu, 01 Jan 1970 00:00:00 GMT; path=/';
         }
     }
-    
+
     {% comment %} function getQueryParamValue(param) {
       const urlParams = new URLSearchParams(window.location.search);
       return urlParams.get(param);
@@ -156,66 +156,64 @@
         {% endif %}
     {%- endif -%}
     {% endcomment %}
-  
+
     overlay_subs.forEach(function(item){
       item.addEventListener('click', function(){toggleContentSelectionPopup()})
     });
-
-</script>
+  </script>
 {%- else -%}
-    <script>
-        document.addEventListener("DOMContentLoaded", function(){
-            const footer_subscription_link = document.querySelector('.footer-subscription-popup');
-            if(footer_subscription_link != null) {
-                footer_subscription_link.closest('li').remove();
-            }
-        });
-    </script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const footer_subscription_link = document.querySelector('.footer-subscription-popup');
+      if (footer_subscription_link != null) {
+        footer_subscription_link.closest('li').remove();
+      }
+    });
+  </script>
 {% endif %}
 {% schema %}
-  {
-    "name": "Subscription Popup",
-    "settings": [
-        {
-            "type": "checkbox",
-            "id": "enable",
-            "label": "Enable Popup"
-        },
-        {
-            "type": "image_picker",
-            "id": "image_desktop",
-            "label": "Image (Desktop)"
-        },
-        {
-            "type": "image_picker",
-            "id": "image_mobile",
-            "label": "Image (Mobile)"
-        },
-        {
-            "type": "textarea",
-            "id": "title",
-            "label": "Title"
-        },
-        {
-            "type": "textarea",
-            "id": "text",
-            "label": "Text"
-        },
-        {
-            "type": "select",
-            "id": "subscription_type",
-            "label": "Subscription Type",
-            "options": [
-                {"value":"native","label":"Native"},
-                {"value":"embed","label":"Embed"}
-            ]
-        },
-        {
-            "type": "textarea",
-            "id": "subscription_embed_code",
-            "label": "Mailing List Embed Code"
-        }
-    ]
-  }
+{
+  "name": "Subscription Popup",
+  "settings": [
+    {
+      "type": "checkbox",
+      "id": "enable",
+      "label": "Enable Popup"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_desktop",
+      "label": "Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "image_mobile",
+      "label": "Image (Mobile)"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "select",
+      "id": "subscription_type",
+      "label": "Subscription Type",
+      "options": [
+        { "value": "native", "label": "Native" },
+        { "value": "embed", "label": "Embed" }
+      ]
+    },
+    {
+      "type": "textarea",
+      "id": "subscription_embed_code",
+      "label": "Mailing List Embed Code"
+    }
+  ]
+}
 {% endschema %}
-  

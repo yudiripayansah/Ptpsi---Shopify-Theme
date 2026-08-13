@@ -1,14 +1,14 @@
 {%- comment -%}
-Soilboy
+  Soilboy
 
-Description:
-One showcase card for the installation showcase grid. The image keeps its
-natural aspect ratio — only the width is set by the grid pattern.
+  Description:
+  One showcase card for the installation showcase grid. The image keeps its
+  natural aspect ratio — only the width is set by the grid pattern.
 
-Variables:
-- entry: metaobject entry with card_image, reference_number and title fields
-- card_class: String. Pattern slot classes for the wrapper
-- sizes: String. sizes attribute for the responsive image
+  Variables:
+  - entry: metaobject entry with card_image, reference_number and title fields
+  - card_class: String. Pattern slot classes for the wrapper
+  - sizes: String. sizes attribute for the responsive image
 {%- endcomment -%}
 {%- liquid
   assign card_image = entry.card_image.value
@@ -20,12 +20,7 @@ Variables:
     {{
       card_image
       | image_url: width: 1400
-      | image_tag:
-        loading: 'lazy',
-        widths: '400, 600, 800, 1000, 1400',
-        sizes: sizes,
-        class: 'ilc-img',
-        alt: card_title
+      | image_tag: loading: 'lazy', widths: '400, 600, 800, 1000, 1400', sizes: sizes, class: 'ilc-img', alt: card_title
     }}
   {% endif %}
   {% if ref != blank or card_title != blank %}

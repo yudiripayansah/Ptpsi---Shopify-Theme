@@ -193,10 +193,7 @@
           }
         }
       },
-      "block_order": [
-        "collab_1",
-        "collab_2"
-      ],
+      "block_order": ["collab_1", "collab_2"],
       "name": "More Collabs",
       "settings": {
         "bg_color": "",

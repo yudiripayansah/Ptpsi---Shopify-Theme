@@ -95,10 +95,15 @@
   <div id="{{ el_id }}" class="overflow">
     <div class="container">
       <div class="flex ai-center jc-between">
-        <{{ ss.title_dom_type | default: 'h2' }} class="{{ ss.title_size | default: 'h3' }} c-green">{{ ss.title }}</{{ ss.title_dom_type | default: 'h2' }}>
+        <{{ ss.title_dom_type | default: 'h2' }} class="{{ ss.title_size | default: 'h3' }} c-green">
+          {{- ss.title -}}
+        </{{ ss.title_dom_type | default: 'h2' }}>
         <div class="cle-actions flex ai-center">
           {% if ss.btn_label != blank %}
-            <a href="{{ shop_all_url }}" class="shs-button p2 c-green pt-12 pb-12 pl-24 pr-24 hide-m show-d-flex ai-center colgap-48">
+            <a
+              href="{{ shop_all_url }}"
+              class="shs-button p2 c-green pt-12 pb-12 pl-24 pr-24 hide-m show-d-flex ai-center colgap-48"
+            >
               {{ ss.btn_label }}
               <div class="icon">
                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
@@ -129,7 +134,10 @@
         </div>
       </div>
       {% if ss.btn_label != blank %}
-        <a href="{{ shop_all_url }}" class="shs-button mt-24 p2 c-green pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d ai-center w-full">
+        <a
+          href="{{ shop_all_url }}"
+          class="shs-button mt-24 p2 c-green pt-12 pb-12 pl-24 pr-24 show-m-flex hide-d ai-center w-full"
+        >
           {{ ss.btn_label }}
           <div class="icon">
             <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">

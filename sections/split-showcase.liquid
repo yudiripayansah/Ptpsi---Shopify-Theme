@@ -1,300 +1,299 @@
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'split-showcase-' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    render 'section-padding', el_id: el_id, section: section
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'split-showcase-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
 %}
 
 <style>
-    #{{ el_id }} {
-        background-color: {{ section.settings.bg_color }};
-    }
-    #{{ el_id }} .icon, #{{ el_id }} .icon svg {
-        width: 18px;
-        height: 18px;
-    }
-    #{{ el_id }} .small-image {
-        padding-left: calc(5/12 * 100%);
-    }
-    @media screen and (min-width: 1024px){
-        #{{ el_id }} .small-image {
-            padding-left: unset;
-        }  
-        #{{ el_id }} .big-image .global-image-wrapper,
-        #{{ el_id }} .small-image .global-image-wrapper {
-            transition: 1s all ease;
-        }
-        #{{ el_id }} .big-image .global-image-wrapper:hover,
-        #{{ el_id }} .small-image .global-image-wrapper:hover {
-            scale: 1.1;
-        } 
-    }
+  #{{ el_id }} {
+      background-color: {{ section.settings.bg_color }};
+  }
+  #{{ el_id }} .icon, #{{ el_id }} .icon svg {
+      width: 18px;
+      height: 18px;
+  }
+  #{{ el_id }} .small-image {
+      padding-left: calc(5/12 * 100%);
+  }
+  @media screen and (min-width: 1024px){
+      #{{ el_id }} .small-image {
+          padding-left: unset;
+      }
+      #{{ el_id }} .big-image .global-image-wrapper,
+      #{{ el_id }} .small-image .global-image-wrapper {
+          transition: 1s all ease;
+      }
+      #{{ el_id }} .big-image .global-image-wrapper:hover,
+      #{{ el_id }} .small-image .global-image-wrapper:hover {
+          scale: 1.1;
+      }
+  }
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'split-showcase-figma.png' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'split-showcase-figma.png' | asset_url }}" width="100%" height="100%" />
 {% else %}
-    <div id="{{ el_id }}">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-d-9 big-image">
-                    {% if section.settings.big_image_url != blank %}
-                        <a href="{{ section.settings.big_image_url }}">
-                    {% endif %}
-                    <div class="overflow">
-                        {% assign image_id = "split-showcase-big_" | append: section.id %}
-                        {%- render 'global-image-wrapper-responsive',
-                            image_id: image_id,
-                            desktop_image: section.settings.big_image_desktop,
-                            mobile_image: section.settings.big_image_mobile,
-                            additional_class: 'no-bg'
-                        %}
-                    </div>
-                    {% if section.settings.big_image_title != blank %}
-                        <div class="flex jc-between pt-12">
-                            <div class="p1">{{ section.settings.big_image_title }}</div>
-                            {% if section.settings.big_image_url != blank %}
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                                    </svg>
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    {% if section.settings.big_image_url != blank %}
-                        </a>
-                    {% endif %}
+  <div id="{{ el_id }}">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-d-9 big-image">
+          {% if section.settings.big_image_url != blank %}
+            <a href="{{ section.settings.big_image_url }}">
+          {% endif %}
+          <div class="overflow">
+            {% assign image_id = 'split-showcase-big_' | append: section.id %}
+            {%- render 'global-image-wrapper-responsive',
+              image_id: image_id,
+              desktop_image: section.settings.big_image_desktop,
+              mobile_image: section.settings.big_image_mobile,
+              additional_class: 'no-bg'
+            %}
+          </div>
+          {% if section.settings.big_image_title != blank %}
+            <div class="flex jc-between pt-12">
+              <div class="p1">{{ section.settings.big_image_title }}</div>
+              {% if section.settings.big_image_url != blank %}
+                <div class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                  </svg>
                 </div>
-                <div class="col-12 col-d-3 small-image mt-24 d-mt-0">
-                    {% if section.settings.small_image_url != blank %}
-                        <a href="{{ section.settings.small_image_url }}">
-                    {% endif %}
-                    <div class="overflow">
-                        {% assign image_id = "split-showcase-small_" | append: section.id %}
-                        {%- render 'global-image-wrapper-responsive',
-                            image_id: image_id,
-                            desktop_image: section.settings.small_image_desktop,
-                            mobile_image: section.settings.small_image_mobile,
-                            additional_class: 'no-bg'
-                        %}
-                    </div>
-                    {% if section.settings.small_image_title != blank %}
-                        <div class="flex jc-between pt-12">
-                            <div class="p1">{{ section.settings.small_image_title }}</div>
-                            {% if section.settings.small_image_url != blank %}
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
-                                    </svg>
-                                </div>
-                            {% endif %}
-                        </div>
-                    {% endif %}
-                    {% if section.settings.small_image_url != blank %}
-                        </a>
-                    {% endif %}
-                </div>
+              {% endif %}
             </div>
+          {% endif %}
+          {% if section.settings.big_image_url != blank %}
+            </a>
+          {% endif %}
         </div>
+        <div class="col-12 col-d-3 small-image mt-24 d-mt-0">
+          {% if section.settings.small_image_url != blank %}
+            <a href="{{ section.settings.small_image_url }}">
+          {% endif %}
+          <div class="overflow">
+            {% assign image_id = 'split-showcase-small_' | append: section.id %}
+            {%- render 'global-image-wrapper-responsive',
+              image_id: image_id,
+              desktop_image: section.settings.small_image_desktop,
+              mobile_image: section.settings.small_image_mobile,
+              additional_class: 'no-bg'
+            %}
+          </div>
+          {% if section.settings.small_image_title != blank %}
+            <div class="flex jc-between pt-12">
+              <div class="p1">{{ section.settings.small_image_title }}</div>
+              {% if section.settings.small_image_url != blank %}
+                <div class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M5.36083 4.63917L11.448 4.63908M11.448 4.63908L11.448 10.6396M11.448 4.63908L4.3769 11.7102" stroke="#19341E" stroke-linecap="square"/>
+                  </svg>
+                </div>
+              {% endif %}
+            </div>
+          {% endif %}
+          {% if section.settings.small_image_url != blank %}
+            </a>
+          {% endif %}
+        </div>
+      </div>
     </div>
+  </div>
 {% endif %}
-
 
 {% schema %}
 {
-    "name": "Split Showcase",
-    "settings": [
-        {
-            "type": "header",
-            "content": "General Settings"
-        },
-        {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
-        },
-        {
-            "type": "image_picker",
-            "id": "big_image_desktop",
-            "label": "Big Image (Desktop)"
-        },
-        {
-            "type": "image_picker",
-            "id": "big_image_mobile",
-            "label": "Big Image (Mobile)"
-        },
-        {
-            "type": "text",
-            "id": "big_image_title",
-            "label": "Big Image Title"
-        },
-        {
-            "type": "url",
-            "id": "big_image_url",
-            "label": "Big Image URL"
-        },
-        {
-            "type": "image_picker",
-            "id": "small_image_desktop",
-            "label": "Small Image (Desktop)"
-        },
-        {
-            "type": "image_picker",
-            "id": "small_image_mobile",
-            "label": "Small Image (Mobile)"
-        },
-        {
-            "type": "text",
-            "id": "small_image_title",
-            "label": "Small Image Title"
-        },
-        {
-            "type": "url",
-            "id": "small_image_url",
-            "label": "Small Image URL"
-        },
-        {
-            "type": "header",
-            "content": "Section Paddings"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_m",
-            "label": "Top padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_m",
-            "label": "Bottom padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_t",
-            "label": "Top padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_t",
-            "label": "Bottom padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding",
-            "label": "Top padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding",
-            "label": "Bottom padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hd",
-            "label": "Top padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hd",
-            "label": "Bottom padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hhd",
-            "label": "Top padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hhd",
-            "label": "Bottom padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        }
-    ],
-    "presets": [
-        {
-            "name": "Split Showcase",
-            "blocks": []
-        }
-    ]
+  "name": "Split Showcase",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "image_picker",
+      "id": "big_image_desktop",
+      "label": "Big Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "big_image_mobile",
+      "label": "Big Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "big_image_title",
+      "label": "Big Image Title"
+    },
+    {
+      "type": "url",
+      "id": "big_image_url",
+      "label": "Big Image URL"
+    },
+    {
+      "type": "image_picker",
+      "id": "small_image_desktop",
+      "label": "Small Image (Desktop)"
+    },
+    {
+      "type": "image_picker",
+      "id": "small_image_mobile",
+      "label": "Small Image (Mobile)"
+    },
+    {
+      "type": "text",
+      "id": "small_image_title",
+      "label": "Small Image Title"
+    },
+    {
+      "type": "url",
+      "id": "small_image_url",
+      "label": "Small Image URL"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Showcase",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

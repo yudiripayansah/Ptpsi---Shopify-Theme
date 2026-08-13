@@ -73,7 +73,7 @@
               <div class="cf-main-text mt-12 d-mt-0 w-full">
                 {% if ss.text != blank %}
                   <{{ ss.title_dom_type }} class="{{ ss.title_size }} c-green">
-                    {{- ss.text |  newline_to_br-}}
+                    {{- ss.text | newline_to_br -}}
                   </{{ ss.title_dom_type }}>
                 {% endif %}
                 {% if ss.link_label != blank %}
@@ -90,11 +90,11 @@
               </div>
             </div>
             {% if ss.parag_text != blank or ss.ss.parag_title != blank %}
-            <div class="cf-paragraph hide-m show-d">
-              <div class="c-green p1">{{ss.parag_title}}</div>
-              <div class="c-green p2 d-mt-12 cf-parag-text">{{ss.parag_text}}</div>
-              <div class="cursor underline p2 c-green cf-parag-toggle-show d-mt-8">Show More</div>
-            </div>
+              <div class="cf-paragraph hide-m show-d">
+                <div class="c-green p1">{{ ss.parag_title }}</div>
+                <div class="c-green p2 d-mt-12 cf-parag-text">{{ ss.parag_text }}</div>
+                <div class="cursor underline p2 c-green cf-parag-toggle-show d-mt-8">Show More</div>
+              </div>
             {% endif %}
           </div>
           <div class="col-12 col-d-6 mt-32 d-mt-0">
@@ -106,7 +106,7 @@
                   assign title_wrapper_class = 'sha-accordion-title'
                   assign title_class = 'p1 '
                   if forloop.last == true
-                  assign wrapper_class = 'pb-16 bb-1 b-secondary'
+                    assign wrapper_class = 'pb-16 bb-1 b-secondary'
                   endif
                 %}
                 {% if bs.title != blank %}
@@ -160,11 +160,11 @@
               {% endfor %}
             </div>
             {% if ss.parag_title != blank and ss.parag_text != blank %}
-            <div class="cf-paragraph mt-40 hide-d">
-              <div class="c-green p1">{{ss.parag_title}}</div>
-              <div class="c-green p2 mt-12 cf-parag-text">{{ss.parag_text}}</div>
-              <div class="cursor underline p2 c-green cf-parag-toggle-show mt-8">Show More</div>
-            </div>
+              <div class="cf-paragraph mt-40 hide-d">
+                <div class="c-green p1">{{ ss.parag_title }}</div>
+                <div class="c-green p2 mt-12 cf-parag-text">{{ ss.parag_text }}</div>
+                <div class="cursor underline p2 c-green cf-parag-toggle-show mt-8">Show More</div>
+              </div>
             {% endif %}
           </div>
         </div>
@@ -177,10 +177,10 @@
     {% endif %}
   </div>
   <script>
-    document.addEventListener("DOMContentLoaded", function () {
+    document.addEventListener('DOMContentLoaded', function () {
       const toggles = document.querySelectorAll('.cf-parag-toggle-show');
 
-      toggles.forEach(toggle => {
+      toggles.forEach((toggle) => {
         toggle.addEventListener('click', function () {
           const parent = toggle.closest('.cf-paragraph');
           const text = parent.querySelector('.cf-parag-text');
@@ -190,9 +190,9 @@
 
           // Ubah tulisan tombol
           if (text.classList.contains('open')) {
-            toggle.textContent = "Show Less";
+            toggle.textContent = 'Show Less';
           } else {
-            toggle.textContent = "Show More";
+            toggle.textContent = 'Show More';
           }
         });
       });

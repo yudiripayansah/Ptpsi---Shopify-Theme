@@ -1,819 +1,828 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign el_id = 'parallax-scroll-' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    assign total_d = 0
-    assign total_m = 0
-    for block in sb
-        assign len_d = block.settings.scroll_length_d | default: 200
-        assign len_m = block.settings.scroll_length_m | default: 150
-        assign total_d = total_d | plus: len_d
-        assign total_m = total_m | plus: len_m
-    endfor
-    assign track_d = total_d | plus: 100
-    assign track_m = total_m | plus: 100
+  assign el_id = 'parallax-scroll-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  assign total_d = 0
+  assign total_m = 0
+  for block in sb
+    assign len_d = block.settings.scroll_length_d | default: 200
+    assign len_m = block.settings.scroll_length_m | default: 150
+    assign total_d = total_d | plus: len_d
+    assign total_m = total_m | plus: len_m
+  endfor
+  assign track_d = total_d | plus: 100
+  assign track_m = total_m | plus: 100
 %}
 
 <style>
-    #{{ el_id }} {
-        position: relative;
-        height: {{ track_m }}vh;
-        background-color: {{ ss.bg_color }};
-    }
-    #{{ el_id }} .ps-stage {
-        position: -webkit-sticky;
-        position: sticky;
-        top: 0;
-        height: 100vh;
-        overflow: hidden;
-    }
-    /* svh stays put when the mobile browser chrome hides, so the stage doesn't
-       resize mid-scroll. JS measures the stage, so the track stays in step. */
-    @supports (height: 100svh) {
-        #{{ el_id }} .ps-stage {
-            height: 100svh;
-        }
-    }
-    #{{ el_id }} .ps-block {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        opacity: 0;
-    }
-    #{{ el_id }} .ps-block:first-child {
-        opacity: 1;
-    }
-    #{{ el_id }} .ps-media {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-    }
-    #{{ el_id }} .ps-media img,
-    #{{ el_id }} .ps-media video {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: block;
-    }
-    #{{ el_id }} .ps-media[data-fit="cover"] img,
-    #{{ el_id }} .ps-media[data-fit="cover"] video {
-        object-fit: cover;
-    }
-    #{{ el_id }} .ps-media[data-fit="contain"] img,
-    #{{ el_id }} .ps-media[data-fit="contain"] video {
-        object-fit: contain;
-    }
-    /* Frames stack in order and only the incoming one fades, so a dissolve
-       never lets the background show through the pair. Each frame is a <picture>
-       so desktop and mobile crops exist without downloading both. */
-    #{{ el_id }} .ps-frame {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        display: block;
-        opacity: 0;
-    }
-    #{{ el_id }} .ps-frame:first-of-type {
-        opacity: 1;
-    }
-    #{{ el_id }} .ps-text {
-        position: absolute;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        pointer-events: none;
-        will-change: transform, opacity;
-    }
-    #{{ el_id }} .ps-text a {
-        pointer-events: auto;
-    }
-    /* Mobile lays the texts out in flow, not absolutely, so they can never land
-       on top of each other however long the copy is. By default Text 1 sits at
-       the top and Text 2 at the bottom. */
-    #{{ el_id }} .ps-text {
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-        padding: 150px 16px 40px;
-    }
-    /* Grouped: both texts travel together to one zone instead of being pushed to
-       opposite ends. They stay separate elements, so each keeps its own
-       alignment - that is what gives Text 1 left and Text 2 right on one line. */
-    #{{ el_id }} .ps-m-top {
-        justify-content: flex-start;
-    }
-    #{{ el_id }} .ps-m-center {
-        justify-content: center;
-        padding-top: 48px;
-    }
-    #{{ el_id }} .ps-m-bottom {
-        justify-content: flex-end;
-    }
-    #{{ el_id }} .ps-a-right {
-        text-align: right;
-    }
-    #{{ el_id }} .ps-label {
-        margin-bottom: 16px;
-    }
-    @media screen and (min-width: 600px) {
-        #{{ el_id }} .ps-text {
-            padding-left: 20px;
-            padding-right: 20px;
-        }
-    }
-    @media screen and (min-width: 1024px) {
-        #{{ el_id }} {
-            height: {{ track_d }}vh;
-        }
-        /* Desktop places each text on its own, so back to absolute. This also
-           makes the mobile grouping toggle inert here. */
-        #{{ el_id }} .ps-text {
-            display: block;
-            padding: 0;
-        }
-        #{{ el_id }} .ps-text-col {
-            position: absolute;
-        }
-        #{{ el_id }} .ps-text-col--1 {
-            left: 24px;
-            width: 50%;
-        }
-        #{{ el_id }} .ps-text-col--2 {
-            right: 24px;
-            width: 33.3333%;
-        }
-        #{{ el_id }} .ps-v-top {
-            top: 120px;
-        }
-        #{{ el_id }} .ps-v-center {
-            top: 50%;
-            -webkit-transform: translateY(-50%);
-            transform: translateY(-50%);
-        }
-        #{{ el_id }} .ps-v-bottom {
-            bottom: 80px;
-        }
-    }
-    {%- if ss.invert_header -%}
-        body.ps-header-light .site-header:not(.dropdown-shown) .header-con-outer,
-        body.ps-header-light .site-header:not(.dropdown-shown) .header-con__dropdown {
-            background-color: transparent;
-        }
-        body.ps-header-light .site-header:not(.dropdown-shown) .header-con .c-green {
-            color: {{ ss.header_text_color }};
-        }
-        body.ps-header-light .site-header:not(.dropdown-shown) .header-con .logo-black {
-            -webkit-filter: brightness(0) invert(1);
-            filter: brightness(0) invert(1);
-        }
-    {%- endif -%}
-    @media (prefers-reduced-motion: reduce) {
-        /* No pin: every block becomes its own static panel so nothing is lost. */
-        #{{ el_id }} {
-            height: auto !important;
-        }
-        #{{ el_id }} .ps-stage {
-            position: static;
-            height: auto;
-        }
-        #{{ el_id }} .ps-block {
-            position: relative;
-            height: 100vh;
-            opacity: 1 !important;
-        }
-        @supports (height: 100svh) {
-            #{{ el_id }} .ps-block {
-                height: 100svh;
-            }
-        }
-        #{{ el_id }} .ps-text {
-            opacity: 1 !important;
-            -webkit-transform: none !important;
-            transform: none !important;
-        }
-        #{{ el_id }} .ps-frame:first-of-type {
-            opacity: 1 !important;
-        }
-    }
+  #{{ el_id }} {
+      position: relative;
+      height: {{ track_m }}vh;
+      background-color: {{ ss.bg_color }};
+  }
+  #{{ el_id }} .ps-stage {
+      position: -webkit-sticky;
+      position: sticky;
+      top: 0;
+      height: 100vh;
+      overflow: hidden;
+  }
+  /* svh stays put when the mobile browser chrome hides, so the stage doesn't
+     resize mid-scroll. JS measures the stage, so the track stays in step. */
+  @supports (height: 100svh) {
+      #{{ el_id }} .ps-stage {
+          height: 100svh;
+      }
+  }
+  #{{ el_id }} .ps-block {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      opacity: 0;
+  }
+  #{{ el_id }} .ps-block:first-child {
+      opacity: 1;
+  }
+  #{{ el_id }} .ps-media {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+  }
+  #{{ el_id }} .ps-media img,
+  #{{ el_id }} .ps-media video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+  }
+  #{{ el_id }} .ps-media[data-fit="cover"] img,
+  #{{ el_id }} .ps-media[data-fit="cover"] video {
+      object-fit: cover;
+  }
+  #{{ el_id }} .ps-media[data-fit="contain"] img,
+  #{{ el_id }} .ps-media[data-fit="contain"] video {
+      object-fit: contain;
+  }
+  /* Frames stack in order and only the incoming one fades, so a dissolve
+     never lets the background show through the pair. Each frame is a <picture>
+     so desktop and mobile crops exist without downloading both. */
+  #{{ el_id }} .ps-frame {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: block;
+      opacity: 0;
+  }
+  #{{ el_id }} .ps-frame:first-of-type {
+      opacity: 1;
+  }
+  #{{ el_id }} .ps-text {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      pointer-events: none;
+      will-change: transform, opacity;
+  }
+  #{{ el_id }} .ps-text a {
+      pointer-events: auto;
+  }
+  /* Mobile lays the texts out in flow, not absolutely, so they can never land
+     on top of each other however long the copy is. By default Text 1 sits at
+     the top and Text 2 at the bottom. */
+  #{{ el_id }} .ps-text {
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 150px 16px 40px;
+  }
+  /* Grouped: both texts travel together to one zone instead of being pushed to
+     opposite ends. They stay separate elements, so each keeps its own
+     alignment - that is what gives Text 1 left and Text 2 right on one line. */
+  #{{ el_id }} .ps-m-top {
+      justify-content: flex-start;
+  }
+  #{{ el_id }} .ps-m-center {
+      justify-content: center;
+      padding-top: 48px;
+  }
+  #{{ el_id }} .ps-m-bottom {
+      justify-content: flex-end;
+  }
+  #{{ el_id }} .ps-a-right {
+      text-align: right;
+  }
+  #{{ el_id }} .ps-label {
+      margin-bottom: 16px;
+  }
+  @media screen and (min-width: 600px) {
+      #{{ el_id }} .ps-text {
+          padding-left: 20px;
+          padding-right: 20px;
+      }
+  }
+  @media screen and (min-width: 1024px) {
+      #{{ el_id }} {
+          height: {{ track_d }}vh;
+      }
+      /* Desktop places each text on its own, so back to absolute. This also
+         makes the mobile grouping toggle inert here. */
+      #{{ el_id }} .ps-text {
+          display: block;
+          padding: 0;
+      }
+      #{{ el_id }} .ps-text-col {
+          position: absolute;
+      }
+      #{{ el_id }} .ps-text-col--1 {
+          left: 24px;
+          width: 50%;
+      }
+      #{{ el_id }} .ps-text-col--2 {
+          right: 24px;
+          width: 33.3333%;
+      }
+      #{{ el_id }} .ps-v-top {
+          top: 120px;
+      }
+      #{{ el_id }} .ps-v-center {
+          top: 50%;
+          -webkit-transform: translateY(-50%);
+          transform: translateY(-50%);
+      }
+      #{{ el_id }} .ps-v-bottom {
+          bottom: 80px;
+      }
+  }
+  {%- if ss.invert_header -%}
+      body.ps-header-light .site-header:not(.dropdown-shown) .header-con-outer,
+      body.ps-header-light .site-header:not(.dropdown-shown) .header-con__dropdown {
+          background-color: transparent;
+      }
+      body.ps-header-light .site-header:not(.dropdown-shown) .header-con .c-green {
+          color: {{ ss.header_text_color }};
+      }
+      body.ps-header-light .site-header:not(.dropdown-shown) .header-con .logo-black {
+          -webkit-filter: brightness(0) invert(1);
+          filter: brightness(0) invert(1);
+      }
+  {%- endif -%}
+  @media (prefers-reduced-motion: reduce) {
+      /* No pin: every block becomes its own static panel so nothing is lost. */
+      #{{ el_id }} {
+          height: auto !important;
+      }
+      #{{ el_id }} .ps-stage {
+          position: static;
+          height: auto;
+      }
+      #{{ el_id }} .ps-block {
+          position: relative;
+          height: 100vh;
+          opacity: 1 !important;
+      }
+      @supports (height: 100svh) {
+          #{{ el_id }} .ps-block {
+              height: 100svh;
+          }
+      }
+      #{{ el_id }} .ps-text {
+          opacity: 1 !important;
+          -webkit-transform: none !important;
+          transform: none !important;
+      }
+      #{{ el_id }} .ps-frame:first-of-type {
+          opacity: 1 !important;
+      }
+  }
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'parallax-scroll-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'parallax-scroll-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-    <div
-        id="{{ el_id }}"
-        class="ps-track"
-        data-parallax-scroll
-        data-invert-header="{% if ss.invert_header %}true{% else %}false{% endif %}"
-        data-text-travel="{{ ss.text_travel }}"
-    >
-        <div class="ps-stage">
-            {% for block in sb %}
-                {% assign bs = block.settings %}
-                {% assign block_bg = bs.bg_color | default: ss.bg_color %}
-                <div
-                    class="ps-block"
-                    data-index="{{ forloop.index0 }}"
-                    data-length-d="{{ bs.scroll_length_d | default: 200 }}"
-                    data-length-m="{{ bs.scroll_length_m | default: 150 }}"
-                    style="background-color: {{ block_bg }};"
-                    {{ block.shopify_attributes }}
-                >
-                    <div class="ps-media" data-fit="{{ bs.media_fit }}">
-                        {% if bs.media_type == 'video' and bs.video != blank %}
-                            {%- assign video_url = '' -%}
-                            {%- for vid_source in bs.video.sources -%}
-                                {%- if vid_source.mime_type == 'video/mp4' -%}
-                                    {%- assign video_url = vid_source.url -%}
-                                {%- endif -%}
-                            {%- endfor -%}
-                            {% if video_url != blank %}
-                                <video
-                                    class="ps-video"
-                                    data-src="{{ video_url }}"
-                                    {% if bs.image_1 != blank %}poster="{{ bs.image_1 | image_url: width: 1600 }}"{% endif %}
-                                    preload="none"
-                                    autoplay
-                                    muted
-                                    loop
-                                    playsinline
-                                    webkit-playsinline
-                                ></video>
-                            {% endif %}
-                        {% else %}
-                            {% for i in (1..10) %}
-                                {% assign image_key = 'image_' | append: i %}
-                                {% assign mobile_key = image_key | append: '_m' %}
-                                {% assign frame = bs[image_key] %}
-                                {% assign frame_m = bs[mobile_key] %}
-                                {% if frame == blank and frame_m == blank %}
-                                    {% continue %}
-                                {% endif %}
-                                {% if frame == blank %}
-                                    {% assign frame = frame_m %}
-                                {% endif %}
-                                <picture class="ps-frame">
-                                    {% if frame_m != blank %}
-                                        <source
-                                            media="(max-width: 1023px)"
-                                            data-srcset="{{ frame_m | image_url: width: 1200 }}"
-                                        >
-                                    {% endif %}
-                                    <img
-                                        data-src="{{ frame | image_url: width: 2000 }}"
-                                        width="{{ frame.width }}"
-                                        height="{{ frame.height }}"
-                                        alt="{{ frame.alt | escape_once }}"
-                                    >
-                                </picture>
-                            {% endfor %}
-                        {% endif %}
-                    </div>
-                    <div
-                        class="ps-text{% if bs.mobile_group %} ps-m-{{ bs.mobile_group_v }}{% endif %}"
-                        style="color: {{ bs.text_color }}; row-gap: {{ bs.mobile_group_gap | default: 16 }}px;"
+  <div
+    id="{{ el_id }}"
+    class="ps-track"
+    data-parallax-scroll
+    data-invert-header="{% if ss.invert_header %}true{% else %}false{% endif %}"
+    data-text-travel="{{ ss.text_travel }}"
+  >
+    <div class="ps-stage">
+      {% for block in sb %}
+        {% assign bs = block.settings %}
+        {% assign block_bg = bs.bg_color | default: ss.bg_color %}
+        <div
+          class="ps-block"
+          data-index="{{ forloop.index0 }}"
+          data-length-d="{{ bs.scroll_length_d | default: 200 }}"
+          data-length-m="{{ bs.scroll_length_m | default: 150 }}"
+          style="background-color: {{ block_bg }};"
+          {{ block.shopify_attributes }}
+        >
+          <div class="ps-media" data-fit="{{ bs.media_fit }}">
+            {% if bs.media_type == 'video' and bs.video != blank %}
+              {%- assign video_url = '' -%}
+              {%- for vid_source in bs.video.sources -%}
+                {%- if vid_source.mime_type == 'video/mp4' -%}
+                  {%- assign video_url = vid_source.url -%}
+                {%- endif -%}
+              {%- endfor -%}
+              {% if video_url != blank %}
+                <video
+                  class="ps-video"
+                  data-src="{{ video_url }}"
+                  {% if bs.image_1 != blank %}
+                    poster="{{ bs.image_1 | image_url: width: 1600 }}"
+                  {% endif %}
+                  preload="none"
+                  autoplay
+                  muted
+                  loop
+                  playsinline
+                  webkit-playsinline
+                ></video>
+              {% endif %}
+            {% else %}
+              {% for i in (1..10) %}
+                {% assign image_key = 'image_' | append: i %}
+                {% assign mobile_key = image_key | append: '_m' %}
+                {% assign frame = bs[image_key] %}
+                {% assign frame_m = bs[mobile_key] %}
+                {% if frame == blank and frame_m == blank %}
+                  {% continue %}
+                {% endif %}
+                {% if frame == blank %}
+                  {% assign frame = frame_m %}
+                {% endif %}
+                <picture class="ps-frame">
+                  {% if frame_m != blank %}
+                    <source
+                      media="(max-width: 1023px)"
+                      data-srcset="{{ frame_m | image_url: width: 1200 }}"
                     >
-                        <div class="ps-text-col ps-text-col--1 ps-v-{{ bs.text_1_v }} ps-a-{{ bs.text_1_align }}"
-                            {% if bs.text_1_max_width != blank %}style="max-width: {{ bs.text_1_max_width }}px;"{% endif %}
-                        >
-                            {% if bs.label != blank %}
-                                <p class="p1 no-anim ps-label">{{ bs.label }}</p>
-                            {% endif %}
-                            {% if bs.text_1 != blank %}
-                                <div class="{{ bs.text_1_size }} no-anim">
-                                    {{- bs.text_1 | newline_to_br -}}
-                                </div>
-                            {% endif %}
-                        </div>
-                        <div class="ps-text-col ps-text-col--2 ps-v-{{ bs.text_2_v }} ps-a-{{ bs.text_2_align }}"
-                            {% if bs.text_2_max_width != blank %}style="max-width: {{ bs.text_2_max_width }}px;"{% endif %}
-                        >
-                            {% if bs.text_2 != blank %}
-                                <div class="{{ bs.text_2_size }} no-anim">
-                                    {{- bs.text_2 | newline_to_br -}}
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
+                  {% endif %}
+                  <img
+                    data-src="{{ frame | image_url: width: 2000 }}"
+                    width="{{ frame.width }}"
+                    height="{{ frame.height }}"
+                    alt="{{ frame.alt | escape_once }}"
+                  >
+                </picture>
+              {% endfor %}
+            {% endif %}
+          </div>
+          <div
+            class="ps-text{% if bs.mobile_group %} ps-m-{{ bs.mobile_group_v }}{% endif %}"
+            style="color: {{ bs.text_color }}; row-gap: {{ bs.mobile_group_gap | default: 16 }}px;"
+          >
+            <div
+              class="ps-text-col ps-text-col--1 ps-v-{{ bs.text_1_v }} ps-a-{{ bs.text_1_align }}"
+              {% if bs.text_1_max_width != blank %}
+                style="max-width: {{ bs.text_1_max_width }}px;"
+              {% endif %}
+            >
+              {% if bs.label != blank %}
+                <p class="p1 no-anim ps-label">{{ bs.label }}</p>
+              {% endif %}
+              {% if bs.text_1 != blank %}
+                <div class="{{ bs.text_1_size }} no-anim">
+                  {{- bs.text_1 | newline_to_br -}}
                 </div>
-            {% endfor %}
+              {% endif %}
+            </div>
+            <div
+              class="ps-text-col ps-text-col--2 ps-v-{{ bs.text_2_v }} ps-a-{{ bs.text_2_align }}"
+              {% if bs.text_2_max_width != blank %}
+                style="max-width: {{ bs.text_2_max_width }}px;"
+              {% endif %}
+            >
+              {% if bs.text_2 != blank %}
+                <div class="{{ bs.text_2_size }} no-anim">
+                  {{- bs.text_2 | newline_to_br -}}
+                </div>
+              {% endif %}
+            </div>
+          </div>
         </div>
+      {% endfor %}
     </div>
+  </div>
 
-    <script>
-        (function () {
-            var SECTION_ID = '{{ el_id }}';
-            var OVERLAP = 0.15; // share of a segment spent crossfading into the next block
-            var FADE = 0.12;    // share of a segment spent fading the text in / out
-            
-            function clamp(v, min, max) {
-                return v < min ? min : (v > max ? max : v);
+  <script>
+    (function () {
+      var SECTION_ID = '{{ el_id }}';
+      var OVERLAP = 0.15; // share of a segment spent crossfading into the next block
+      var FADE = 0.12; // share of a segment spent fading the text in / out
+
+      function clamp(v, min, max) {
+        return v < min ? min : v > max ? max : v;
+      }
+
+      function initParallaxScroll(root) {
+        if (!root || root.psInited) return;
+        root.psInited = true;
+
+        var stage = root.querySelector('.ps-stage');
+        var blocks = Array.prototype.slice.call(root.querySelectorAll('.ps-block'));
+        if (!stage || !blocks.length) return;
+
+        var travelVh = parseFloat(root.getAttribute('data-text-travel'));
+        if (isNaN(travelVh)) travelVh = 50;
+        var invertHeader = root.getAttribute('data-invert-header') === 'true';
+
+        var media = blocks.map(function (b) {
+          return b.querySelector('.ps-media');
+        });
+        var texts = blocks.map(function (b) {
+          return b.querySelector('.ps-text');
+        });
+        var frames = blocks.map(function (b) {
+          return Array.prototype.slice.call(b.querySelectorAll('.ps-frame'));
+        });
+        var videos = blocks.map(function (b) {
+          return b.querySelector('.ps-video');
+        });
+
+        var stageH = 0;
+        var lengths = [];
+        var total = 0;
+        var ticking = false;
+
+        function loadBlock(i) {
+          var block = blocks[i];
+          if (!block || block.psLoaded) return;
+          block.psLoaded = true;
+          // Sources first: once the img gets a src the browser may commit
+          // to it before an empty <source> has been filled in.
+          Array.prototype.forEach.call(block.querySelectorAll('source[data-srcset]'), function (source) {
+            source.srcset = source.getAttribute('data-srcset');
+            source.removeAttribute('data-srcset');
+          });
+          Array.prototype.forEach.call(block.querySelectorAll('img[data-src]'), function (img) {
+            img.src = img.getAttribute('data-src');
+            img.removeAttribute('data-src');
+          });
+          var video = videos[i];
+          if (video && video.getAttribute('data-src')) {
+            video.src = video.getAttribute('data-src');
+            video.removeAttribute('data-src');
+            video.load();
+          }
+        }
+
+        function measure() {
+          stageH = stage.offsetHeight;
+          var isDesktop = window.innerWidth >= 1024;
+          total = 0;
+          lengths = blocks.map(function (b) {
+            var vh = parseFloat(b.getAttribute(isDesktop ? 'data-length-d' : 'data-length-m'));
+            if (isNaN(vh) || vh <= 0) vh = 150;
+            var px = (vh / 100) * stageH;
+            total += px;
+            return px;
+          });
+          // Track = all segments plus one stage, so the last block finishes
+          // before the sticky stage lets go.
+          root.style.height = total + stageH + 'px';
+        }
+
+        function update() {
+          var rect = root.getBoundingClientRect();
+
+          if (invertHeader) {
+            var headerEl = document.querySelector('.site-header');
+            var headerH = headerEl ? headerEl.offsetHeight : 81;
+            document.body.classList.toggle('ps-header-light', rect.top < headerH && rect.bottom > 0);
+          }
+
+          var scrolled = clamp(-rect.top, 0, total);
+          var index = blocks.length - 1;
+          var t = 1;
+          var acc = 0;
+          for (var i = 0; i < lengths.length; i++) {
+            if (scrolled < acc + lengths[i] || i === lengths.length - 1) {
+              index = i;
+              t = lengths[i] ? clamp((scrolled - acc) / lengths[i], 0, 1) : 0;
+              break;
             }
+            acc += lengths[i];
+          }
 
-            function initParallaxScroll(root) {
-                if (!root || root.psInited) return;
-                root.psInited = true;
+          loadBlock(index);
+          loadBlock(index + 1);
 
-                var stage = root.querySelector('.ps-stage');
-                var blocks = Array.prototype.slice.call(root.querySelectorAll('.ps-block'));
-                if (!stage || !blocks.length) return;
-
-                var travelVh = parseFloat(root.getAttribute('data-text-travel'));
-                if (isNaN(travelVh)) travelVh = 50;
-                var invertHeader = root.getAttribute('data-invert-header') === 'true';
-
-                var media = blocks.map(function (b) { return b.querySelector('.ps-media'); });
-                var texts = blocks.map(function (b) { return b.querySelector('.ps-text'); });
-                var frames = blocks.map(function (b) {
-                    return Array.prototype.slice.call(b.querySelectorAll('.ps-frame'));
-                });
-                var videos = blocks.map(function (b) { return b.querySelector('.ps-video'); });
-
-                var stageH = 0;
-                var lengths = [];
-                var total = 0;
-                var ticking = false;
-
-                function loadBlock(i) {
-                    var block = blocks[i];
-                    if (!block || block.psLoaded) return;
-                    block.psLoaded = true;
-                    // Sources first: once the img gets a src the browser may commit
-                    // to it before an empty <source> has been filled in.
-                    Array.prototype.forEach.call(block.querySelectorAll('source[data-srcset]'), function (source) {
-                        source.srcset = source.getAttribute('data-srcset');
-                        source.removeAttribute('data-srcset');
-                    });
-                    Array.prototype.forEach.call(block.querySelectorAll('img[data-src]'), function (img) {
-                        img.src = img.getAttribute('data-src');
-                        img.removeAttribute('data-src');
-                    });
-                    var video = videos[i];
-                    if (video && video.getAttribute('data-src')) {
-                        video.src = video.getAttribute('data-src');
-                        video.removeAttribute('data-src');
-                        video.load();
-                    }
-                }
-
-                function measure() {
-                    stageH = stage.offsetHeight;
-                    var isDesktop = window.innerWidth >= 1024;
-                    total = 0;
-                    lengths = blocks.map(function (b) {
-                        var vh = parseFloat(b.getAttribute(isDesktop ? 'data-length-d' : 'data-length-m'));
-                        if (isNaN(vh) || vh <= 0) vh = 150;
-                        var px = (vh / 100) * stageH;
-                        total += px;
-                        return px;
-                    });
-                    // Track = all segments plus one stage, so the last block finishes
-                    // before the sticky stage lets go.
-                    root.style.height = (total + stageH) + 'px';
-                }
-
-                function update() {
-                    var rect = root.getBoundingClientRect();
-
-                    if (invertHeader) {
-                        var headerEl = document.querySelector('.site-header');
-                        var headerH = headerEl ? headerEl.offsetHeight : 81;
-                        document.body.classList.toggle(
-                            'ps-header-light',
-                            rect.top < headerH && rect.bottom > 0
-                        );
-                    }
-
-                    var scrolled = clamp(-rect.top, 0, total);
-                    var index = blocks.length - 1;
-                    var t = 1;
-                    var acc = 0;
-                    for (var i = 0; i < lengths.length; i++) {
-                        if (scrolled < acc + lengths[i] || i === lengths.length - 1) {
-                            index = i;
-                            t = lengths[i] ? clamp((scrolled - acc) / lengths[i], 0, 1) : 0;
-                            break;
-                        }
-                        acc += lengths[i];
-                    }
-
-                    loadBlock(index);
-                    loadBlock(index + 1);
-
-                    for (var b = 0; b < blocks.length; b++) {
-                        // Blocks below the active one stay opaque: the active block sits
-                        // on top of them, and it keeps scrolling backwards seamless.
-                        var opacity;
-                        if (b <= index) {
-                            opacity = 1;
-                        } else if (b === index + 1 && t > 1 - OVERLAP) {
-                            opacity = (t - (1 - OVERLAP)) / OVERLAP;
-                        } else {
-                            opacity = 0;
-                        }
-                        blocks[b].style.opacity = opacity;
-
-                        var video = videos[b];
-                        if (video && video.src) {
-                            if (b === index && video.paused) {
-                                var playing = video.play();
-                                if (playing && playing.catch) playing.catch(function () {});
-                            } else if (b !== index && !video.paused) {
-                                video.pause();
-                            }
-                        }
-
-                        var text = texts[b];
-                        if (!text) continue;
-                        if (b !== index) {
-                            text.style.opacity = 0;
-                            continue;
-                        }
-                        // The stage holds still while the words travel through it.
-                        // The first block starts at rest and fully visible, so the
-                        // page doesn't land on faded-out text that is offset downwards.
-                        var travel = (travelVh / 100) * stageH;
-                        var y, fadeIn;
-                        if (b === 0) {
-                            y = -travel * t;
-                            fadeIn = 1;
-                        } else {
-                            y = travel * (1 - 2 * t);
-                            fadeIn = t / FADE;
-                        }
-                        text.style.opacity = clamp(Math.min(fadeIn, (1 - t) / FADE), 0, 1);
-                        text.style.transform = 'translate3d(0,' + y + 'px,0)';
-                    }
-
-                    var active = frames[index];
-                    if (active && active.length) {
-                        var f = t * (active.length - 1);
-                        for (var k = 0; k < active.length; k++) {
-                            active[k].style.opacity = clamp(f - (k - 1), 0, 1);
-                        }
-                    }
-                }
-
-                function onScroll() {
-                    if (ticking) return;
-                    ticking = true;
-                    window.requestAnimationFrame(function () {
-                        ticking = false;
-                        update();
-                    });
-                }
-
-                function onResize() {
-                    measure();
-                    update();
-                }
-
-                var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-                if (reduced) {
-                    // CSS has already unpinned the section; just make sure every
-                    // block's media is actually loaded.
-                    root.style.height = 'auto';
-                    for (var r = 0; r < blocks.length; r++) loadBlock(r);
-                    return;
-                }
-
-                loadBlock(0);
-                measure();
-                update();
-
-                window.addEventListener('scroll', onScroll, { passive: true });
-                window.addEventListener('resize', onResize);
-                window.addEventListener('orientationchange', onResize);
-                window.addEventListener('load', onResize);
-
-                root.psDestroy = function () {
-                    window.removeEventListener('scroll', onScroll);
-                    window.removeEventListener('resize', onResize);
-                    window.removeEventListener('orientationchange', onResize);
-                    window.removeEventListener('load', onResize);
-                    document.body.classList.remove('ps-header-light');
-                };
-            }
-
-            function boot() {
-                initParallaxScroll(document.getElementById(SECTION_ID));
-            }
-
-            if (document.readyState === 'loading') {
-                document.addEventListener('DOMContentLoaded', boot);
+          for (var b = 0; b < blocks.length; b++) {
+            // Blocks below the active one stay opaque: the active block sits
+            // on top of them, and it keeps scrolling backwards seamless.
+            var opacity;
+            if (b <= index) {
+              opacity = 1;
+            } else if (b === index + 1 && t > 1 - OVERLAP) {
+              opacity = (t - (1 - OVERLAP)) / OVERLAP;
             } else {
-                boot();
+              opacity = 0;
+            }
+            blocks[b].style.opacity = opacity;
+
+            var video = videos[b];
+            if (video && video.src) {
+              if (b === index && video.paused) {
+                var playing = video.play();
+                if (playing && playing.catch) playing.catch(function () {});
+              } else if (b !== index && !video.paused) {
+                video.pause();
+              }
             }
 
-            if (window.Shopify && window.Shopify.designMode) {
-                document.addEventListener('shopify:section:load', function (event) {
-                    var el = event.target.querySelector('[data-parallax-scroll]');
-                    if (el) initParallaxScroll(el);
-                });
-                document.addEventListener('shopify:section:unload', function (event) {
-                    var el = event.target.querySelector('[data-parallax-scroll]');
-                    if (el && el.psDestroy) el.psDestroy();
-                });
+            var text = texts[b];
+            if (!text) continue;
+            if (b !== index) {
+              text.style.opacity = 0;
+              continue;
             }
-        })();
-    </script>
+            // The stage holds still while the words travel through it.
+            // The first block starts at rest and fully visible, so the
+            // page doesn't land on faded-out text that is offset downwards.
+            var travel = (travelVh / 100) * stageH;
+            var y, fadeIn;
+            if (b === 0) {
+              y = -travel * t;
+              fadeIn = 1;
+            } else {
+              y = travel * (1 - 2 * t);
+              fadeIn = t / FADE;
+            }
+            text.style.opacity = clamp(Math.min(fadeIn, (1 - t) / FADE), 0, 1);
+            text.style.transform = 'translate3d(0,' + y + 'px,0)';
+          }
+
+          var active = frames[index];
+          if (active && active.length) {
+            var f = t * (active.length - 1);
+            for (var k = 0; k < active.length; k++) {
+              active[k].style.opacity = clamp(f - (k - 1), 0, 1);
+            }
+          }
+        }
+
+        function onScroll() {
+          if (ticking) return;
+          ticking = true;
+          window.requestAnimationFrame(function () {
+            ticking = false;
+            update();
+          });
+        }
+
+        function onResize() {
+          measure();
+          update();
+        }
+
+        var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+        if (reduced) {
+          // CSS has already unpinned the section; just make sure every
+          // block's media is actually loaded.
+          root.style.height = 'auto';
+          for (var r = 0; r < blocks.length; r++) loadBlock(r);
+          return;
+        }
+
+        loadBlock(0);
+        measure();
+        update();
+
+        window.addEventListener('scroll', onScroll, { passive: true });
+        window.addEventListener('resize', onResize);
+        window.addEventListener('orientationchange', onResize);
+        window.addEventListener('load', onResize);
+
+        root.psDestroy = function () {
+          window.removeEventListener('scroll', onScroll);
+          window.removeEventListener('resize', onResize);
+          window.removeEventListener('orientationchange', onResize);
+          window.removeEventListener('load', onResize);
+          document.body.classList.remove('ps-header-light');
+        };
+      }
+
+      function boot() {
+        initParallaxScroll(document.getElementById(SECTION_ID));
+      }
+
+      if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', boot);
+      } else {
+        boot();
+      }
+
+      if (window.Shopify && window.Shopify.designMode) {
+        document.addEventListener('shopify:section:load', function (event) {
+          var el = event.target.querySelector('[data-parallax-scroll]');
+          if (el) initParallaxScroll(el);
+        });
+        document.addEventListener('shopify:section:unload', function (event) {
+          var el = event.target.querySelector('[data-parallax-scroll]');
+          if (el && el.psDestroy) el.psDestroy();
+        });
+      }
+    })();
+  </script>
 {% endif %}
 
 {% schema %}
 {
-    "name": "Parallax Scroll",
-    "settings": [
+  "name": "Parallax Scroll",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color",
+      "info": "Used behind any block that has no background colour of its own.",
+      "default": "#642B10"
+    },
+    {
+      "type": "range",
+      "id": "text_travel",
+      "label": "Text Travel",
+      "info": "How far the text travels through the stage, as a share of screen height. At 50 a centred text sweeps from the bottom edge to the top edge. Raise it to carry lower-anchored text off the top too, at the cost of it sitting off-screen for longer.",
+      "min": 0,
+      "max": 100,
+      "step": 5,
+      "unit": "vh",
+      "default": 50
+    },
+    {
+      "type": "checkbox",
+      "id": "invert_header",
+      "label": "Light header over this section",
+      "info": "Makes the header transparent with light text while this section covers it. Use when the section sits at the top of the page with a dark background.",
+      "default": true
+    },
+    {
+      "type": "color",
+      "id": "header_text_color",
+      "label": "Header Text Color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "block",
+      "name": "Block",
+      "settings": [
         {
-            "type": "header",
-            "content": "General Settings"
+          "type": "header",
+          "content": "Text"
         },
         {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color",
-            "info": "Used behind any block that has no background colour of its own.",
-            "default": "#642B10"
+          "type": "text",
+          "id": "label",
+          "label": "Label",
+          "info": "Optional. Sits above Text 1, always at P1 size."
         },
         {
-            "type": "range",
-            "id": "text_travel",
-            "label": "Text Travel",
-            "info": "How far the text travels through the stage, as a share of screen height. At 50 a centred text sweeps from the bottom edge to the top edge. Raise it to carry lower-anchored text off the top too, at the cost of it sitting off-screen for longer.",
-            "min": 0,
-            "max": 100,
-            "step": 5,
-            "unit": "vh",
-            "default": 50
+          "type": "textarea",
+          "id": "text_1",
+          "label": "Text 1",
+          "info": "Left on desktop, top on mobile."
         },
         {
-            "type": "checkbox",
-            "id": "invert_header",
-            "label": "Light header over this section",
-            "info": "Makes the header transparent with light text while this section covers it. Use when the section sits at the top of the page with a dark background.",
-            "default": true
+          "type": "select",
+          "id": "text_1_size",
+          "label": "Text 1 Size",
+          "options": [
+            { "value": "h0", "label": "H0" },
+            { "value": "h1", "label": "H1" },
+            { "value": "h2", "label": "H2" },
+            { "value": "p1", "label": "P1" }
+          ],
+          "default": "h0"
         },
         {
-            "type": "color",
-            "id": "header_text_color",
-            "label": "Header Text Color",
-            "default": "#ffffff"
+          "type": "select",
+          "id": "text_1_v",
+          "label": "Text 1 Vertical Position (Desktop)",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "top"
+        },
+        {
+          "type": "select",
+          "id": "text_1_align",
+          "label": "Text 1 Alignment (Desktop)",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "number",
+          "id": "text_1_max_width",
+          "label": "Text 1 Max Width (px)",
+          "info": "Optional."
+        },
+        {
+          "type": "textarea",
+          "id": "text_2",
+          "label": "Text 2",
+          "info": "Right on desktop, bottom on mobile."
+        },
+        {
+          "type": "select",
+          "id": "text_2_size",
+          "label": "Text 2 Size",
+          "options": [
+            { "value": "h0", "label": "H0" },
+            { "value": "h1", "label": "H1" },
+            { "value": "h2", "label": "H2" },
+            { "value": "p1", "label": "P1" }
+          ],
+          "default": "p1"
+        },
+        {
+          "type": "select",
+          "id": "text_2_v",
+          "label": "Text 2 Vertical Position (Desktop)",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "bottom"
+        },
+        {
+          "type": "select",
+          "id": "text_2_align",
+          "label": "Text 2 Alignment (Desktop)",
+          "options": [
+            { "value": "left", "label": "Left" },
+            { "value": "right", "label": "Right" }
+          ],
+          "default": "left"
+        },
+        {
+          "type": "number",
+          "id": "text_2_max_width",
+          "label": "Text 2 Max Width (px)",
+          "info": "Optional."
+        },
+        {
+          "type": "color",
+          "id": "text_color",
+          "label": "Text Color",
+          "default": "#ffffff"
+        },
+        {
+          "type": "header",
+          "content": "Mobile"
+        },
+        {
+          "type": "checkbox",
+          "id": "mobile_group",
+          "label": "Group both texts together on Mobile",
+          "info": "Off: Text 1 sits at the top and Text 2 at the bottom. On: they sit together in one zone, Text 1 above Text 2, each keeping its own alignment. Desktop is never affected.",
+          "default": false
+        },
+        {
+          "type": "select",
+          "id": "mobile_group_v",
+          "label": "Mobile Group Position",
+          "info": "Where the pair sits. Only used when the toggle above is on.",
+          "options": [
+            { "value": "top", "label": "Top" },
+            { "value": "center", "label": "Center" },
+            { "value": "bottom", "label": "Bottom" }
+          ],
+          "default": "bottom"
+        },
+        {
+          "type": "range",
+          "id": "mobile_group_gap",
+          "label": "Mobile Gap Between Texts",
+          "info": "0 runs them together as continuous lines. 16 matches the page margin.",
+          "min": 0,
+          "max": 48,
+          "step": 4,
+          "unit": "px",
+          "default": 16
+        },
+        {
+          "type": "header",
+          "content": "Media"
+        },
+        {
+          "type": "color",
+          "id": "bg_color",
+          "label": "Background Color"
+        },
+        {
+          "type": "select",
+          "id": "media_type",
+          "label": "Media Type",
+          "options": [
+            { "value": "images", "label": "Image sequence" },
+            { "value": "video", "label": "Video" }
+          ],
+          "default": "images"
+        },
+        {
+          "type": "select",
+          "id": "media_fit",
+          "label": "Media Fit",
+          "options": [
+            { "value": "cover", "label": "Cover (fill the screen)" },
+            { "value": "contain", "label": "Contain (fit inside)" }
+          ],
+          "default": "cover"
+        },
+        {
+          "type": "video",
+          "id": "video",
+          "label": "Video",
+          "info": "Used when Media Type is Video. Plays muted and looped."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1",
+          "label": "Image 1 (Desktop)",
+          "info": "Images crossfade in order as the block scrolls. Also used as the video poster."
+        },
+        {
+          "type": "image_picker",
+          "id": "image_1_m",
+          "label": "Image 1 (Mobile)",
+          "info": "Optional throughout. Any mobile slot left empty falls back to its desktop image."
+        },
+        { "type": "image_picker", "id": "image_2", "label": "Image 2 (Desktop)" },
+        { "type": "image_picker", "id": "image_2_m", "label": "Image 2 (Mobile)" },
+        { "type": "image_picker", "id": "image_3", "label": "Image 3 (Desktop)" },
+        { "type": "image_picker", "id": "image_3_m", "label": "Image 3 (Mobile)" },
+        { "type": "image_picker", "id": "image_4", "label": "Image 4 (Desktop)" },
+        { "type": "image_picker", "id": "image_4_m", "label": "Image 4 (Mobile)" },
+        { "type": "image_picker", "id": "image_5", "label": "Image 5 (Desktop)" },
+        { "type": "image_picker", "id": "image_5_m", "label": "Image 5 (Mobile)" },
+        { "type": "image_picker", "id": "image_6", "label": "Image 6 (Desktop)" },
+        { "type": "image_picker", "id": "image_6_m", "label": "Image 6 (Mobile)" },
+        { "type": "image_picker", "id": "image_7", "label": "Image 7 (Desktop)" },
+        { "type": "image_picker", "id": "image_7_m", "label": "Image 7 (Mobile)" },
+        { "type": "image_picker", "id": "image_8", "label": "Image 8 (Desktop)" },
+        { "type": "image_picker", "id": "image_8_m", "label": "Image 8 (Mobile)" },
+        { "type": "image_picker", "id": "image_9", "label": "Image 9 (Desktop)" },
+        { "type": "image_picker", "id": "image_9_m", "label": "Image 9 (Mobile)" },
+        { "type": "image_picker", "id": "image_10", "label": "Image 10 (Desktop)" },
+        { "type": "image_picker", "id": "image_10_m", "label": "Image 10 (Mobile)" },
+        {
+          "type": "header",
+          "content": "Scroll Length"
+        },
+        {
+          "type": "range",
+          "id": "scroll_length_d",
+          "label": "Scroll Length (Desktop)",
+          "info": "How long this block holds the screen, as a share of screen height.",
+          "min": 100,
+          "max": 400,
+          "step": 25,
+          "unit": "vh",
+          "default": 200
+        },
+        {
+          "type": "range",
+          "id": "scroll_length_m",
+          "label": "Scroll Length (Mobile)",
+          "min": 100,
+          "max": 400,
+          "step": 25,
+          "unit": "vh",
+          "default": 150
         }
-    ],
-    "blocks": [
-        {
-            "type": "block",
-            "name": "Block",
-            "settings": [
-                {
-                    "type": "header",
-                    "content": "Text"
-                },
-                {
-                    "type": "text",
-                    "id": "label",
-                    "label": "Label",
-                    "info": "Optional. Sits above Text 1, always at P1 size."
-                },
-                {
-                    "type": "textarea",
-                    "id": "text_1",
-                    "label": "Text 1",
-                    "info": "Left on desktop, top on mobile."
-                },
-                {
-                    "type": "select",
-                    "id": "text_1_size",
-                    "label": "Text 1 Size",
-                    "options": [
-                        { "value": "h0", "label": "H0" },
-                        { "value": "h1", "label": "H1" },
-                        { "value": "h2", "label": "H2" },
-                        { "value": "p1", "label": "P1" }
-                    ],
-                    "default": "h0"
-                },
-                {
-                    "type": "select",
-                    "id": "text_1_v",
-                    "label": "Text 1 Vertical Position (Desktop)",
-                    "options": [
-                        { "value": "top", "label": "Top" },
-                        { "value": "center", "label": "Center" },
-                        { "value": "bottom", "label": "Bottom" }
-                    ],
-                    "default": "top"
-                },
-                {
-                    "type": "select",
-                    "id": "text_1_align",
-                    "label": "Text 1 Alignment (Desktop)",
-                    "options": [
-                        { "value": "left", "label": "Left" },
-                        { "value": "right", "label": "Right" }
-                    ],
-                    "default": "left"
-                },
-                {
-                    "type": "number",
-                    "id": "text_1_max_width",
-                    "label": "Text 1 Max Width (px)",
-                    "info": "Optional."
-                },
-                {
-                    "type": "textarea",
-                    "id": "text_2",
-                    "label": "Text 2",
-                    "info": "Right on desktop, bottom on mobile."
-                },
-                {
-                    "type": "select",
-                    "id": "text_2_size",
-                    "label": "Text 2 Size",
-                    "options": [
-                        { "value": "h0", "label": "H0" },
-                        { "value": "h1", "label": "H1" },
-                        { "value": "h2", "label": "H2" },
-                        { "value": "p1", "label": "P1" }
-                    ],
-                    "default": "p1"
-                },
-                {
-                    "type": "select",
-                    "id": "text_2_v",
-                    "label": "Text 2 Vertical Position (Desktop)",
-                    "options": [
-                        { "value": "top", "label": "Top" },
-                        { "value": "center", "label": "Center" },
-                        { "value": "bottom", "label": "Bottom" }
-                    ],
-                    "default": "bottom"
-                },
-                {
-                    "type": "select",
-                    "id": "text_2_align",
-                    "label": "Text 2 Alignment (Desktop)",
-                    "options": [
-                        { "value": "left", "label": "Left" },
-                        { "value": "right", "label": "Right" }
-                    ],
-                    "default": "left"
-                },
-                {
-                    "type": "number",
-                    "id": "text_2_max_width",
-                    "label": "Text 2 Max Width (px)",
-                    "info": "Optional."
-                },
-                {
-                    "type": "color",
-                    "id": "text_color",
-                    "label": "Text Color",
-                    "default": "#ffffff"
-                },
-                {
-                    "type": "header",
-                    "content": "Mobile"
-                },
-                {
-                    "type": "checkbox",
-                    "id": "mobile_group",
-                    "label": "Group both texts together on Mobile",
-                    "info": "Off: Text 1 sits at the top and Text 2 at the bottom. On: they sit together in one zone, Text 1 above Text 2, each keeping its own alignment. Desktop is never affected.",
-                    "default": false
-                },
-                {
-                    "type": "select",
-                    "id": "mobile_group_v",
-                    "label": "Mobile Group Position",
-                    "info": "Where the pair sits. Only used when the toggle above is on.",
-                    "options": [
-                        { "value": "top", "label": "Top" },
-                        { "value": "center", "label": "Center" },
-                        { "value": "bottom", "label": "Bottom" }
-                    ],
-                    "default": "bottom"
-                },
-                {
-                    "type": "range",
-                    "id": "mobile_group_gap",
-                    "label": "Mobile Gap Between Texts",
-                    "info": "0 runs them together as continuous lines. 16 matches the page margin.",
-                    "min": 0,
-                    "max": 48,
-                    "step": 4,
-                    "unit": "px",
-                    "default": 16
-                },
-                {
-                    "type": "header",
-                    "content": "Media"
-                },
-                {
-                    "type": "color",
-                    "id": "bg_color",
-                    "label": "Background Color"
-                },
-                {
-                    "type": "select",
-                    "id": "media_type",
-                    "label": "Media Type",
-                    "options": [
-                        { "value": "images", "label": "Image sequence" },
-                        { "value": "video", "label": "Video" }
-                    ],
-                    "default": "images"
-                },
-                {
-                    "type": "select",
-                    "id": "media_fit",
-                    "label": "Media Fit",
-                    "options": [
-                        { "value": "cover", "label": "Cover (fill the screen)" },
-                        { "value": "contain", "label": "Contain (fit inside)" }
-                    ],
-                    "default": "cover"
-                },
-                {
-                    "type": "video",
-                    "id": "video",
-                    "label": "Video",
-                    "info": "Used when Media Type is Video. Plays muted and looped."
-                },
-                {
-                    "type": "image_picker",
-                    "id": "image_1",
-                    "label": "Image 1 (Desktop)",
-                    "info": "Images crossfade in order as the block scrolls. Also used as the video poster."
-                },
-                {
-                    "type": "image_picker",
-                    "id": "image_1_m",
-                    "label": "Image 1 (Mobile)",
-                    "info": "Optional throughout. Any mobile slot left empty falls back to its desktop image."
-                },
-                { "type": "image_picker", "id": "image_2", "label": "Image 2 (Desktop)" },
-                { "type": "image_picker", "id": "image_2_m", "label": "Image 2 (Mobile)" },
-                { "type": "image_picker", "id": "image_3", "label": "Image 3 (Desktop)" },
-                { "type": "image_picker", "id": "image_3_m", "label": "Image 3 (Mobile)" },
-                { "type": "image_picker", "id": "image_4", "label": "Image 4 (Desktop)" },
-                { "type": "image_picker", "id": "image_4_m", "label": "Image 4 (Mobile)" },
-                { "type": "image_picker", "id": "image_5", "label": "Image 5 (Desktop)" },
-                { "type": "image_picker", "id": "image_5_m", "label": "Image 5 (Mobile)" },
-                { "type": "image_picker", "id": "image_6", "label": "Image 6 (Desktop)" },
-                { "type": "image_picker", "id": "image_6_m", "label": "Image 6 (Mobile)" },
-                { "type": "image_picker", "id": "image_7", "label": "Image 7 (Desktop)" },
-                { "type": "image_picker", "id": "image_7_m", "label": "Image 7 (Mobile)" },
-                { "type": "image_picker", "id": "image_8", "label": "Image 8 (Desktop)" },
-                { "type": "image_picker", "id": "image_8_m", "label": "Image 8 (Mobile)" },
-                { "type": "image_picker", "id": "image_9", "label": "Image 9 (Desktop)" },
-                { "type": "image_picker", "id": "image_9_m", "label": "Image 9 (Mobile)" },
-                { "type": "image_picker", "id": "image_10", "label": "Image 10 (Desktop)" },
-                { "type": "image_picker", "id": "image_10_m", "label": "Image 10 (Mobile)" },
-                {
-                    "type": "header",
-                    "content": "Scroll Length"
-                },
-                {
-                    "type": "range",
-                    "id": "scroll_length_d",
-                    "label": "Scroll Length (Desktop)",
-                    "info": "How long this block holds the screen, as a share of screen height.",
-                    "min": 100,
-                    "max": 400,
-                    "step": 25,
-                    "unit": "vh",
-                    "default": 200
-                },
-                {
-                    "type": "range",
-                    "id": "scroll_length_m",
-                    "label": "Scroll Length (Mobile)",
-                    "min": 100,
-                    "max": 400,
-                    "step": 25,
-                    "unit": "vh",
-                    "default": 150
-                }
-            ]
-        }
-    ],
-    "presets": [
-        {
-            "name": "Parallax Scroll",
-            "blocks": [
-                { "type": "block" }
-            ]
-        }
-    ]
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Parallax Scroll",
+      "blocks": [{ "type": "block" }]
+    }
+  ]
 }
 {% endschema %}

@@ -21,7 +21,7 @@ body.no-overflow {
   visibility: visible;
 }
 #header-con .header-logo {
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
 #header-con .underline,
 #header-con .underline * {
@@ -32,7 +32,7 @@ body.no-overflow {
 }
 #header-con .header-logo-box {
   width: 100px;
-  transition: all .5s ease;
+  transition: all 0.5s ease;
 }
 #header-con .header-con__left,
 #header-con .header-con__right {
@@ -53,12 +53,12 @@ body.no-overflow {
 #header-con .header-con-submenu {
   opacity: 0;
   visibility: hidden;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .header-con-submenu.flex {
   opacity: 1;
   visibility: visible;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .header-con-menu-col {
   min-height: 1px;
@@ -70,7 +70,7 @@ body.no-overflow {
 #header-con .header-con__left,
 #header-con .header-con__right,
 #header-con .header-con__close-menu {
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .header-con__menu-toggle {
   margin: -12px -16px;
@@ -78,7 +78,7 @@ body.no-overflow {
 }
 @media screen and (max-width: 1023px) {
   #header-con .header-con__menu-toggle::before {
-    content: '';
+    content: "";
     position: absolute;
     top: -4px;
     bottom: -4px;
@@ -89,7 +89,7 @@ body.no-overflow {
 #header-con .header-con__cart-trigger {
   padding: 16px 16px 16px 8px;
   margin: -16px -16px -16px -8px;
-} 
+}
 @media screen and (min-width: 1024px) {
   #header-con .header-con__cart-trigger {
     padding: 0;
@@ -128,10 +128,10 @@ body.no-overflow {
   height: 12px;
 }
 #header-con .has-activemenu .accordion-title:not(.active) {
-  color: #A4A399;
+  color: #a4a399;
 }
 #header-con .has-activemenu .accordion-title:not(.active) svg * {
-  stroke: #A4A399;
+  stroke: #a4a399;
 }
 /* header search */
 #header-con .search-product-each-wrapper {
@@ -216,7 +216,7 @@ body.no-overflow {
   width: 10px;
   height: 10px;
   opacity: 0;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .delivery-option-item {
   width: 50%;
@@ -243,7 +243,7 @@ body.no-overflow {
 #header-con #storePickupApp .Zapiet-Select__Value,
 #header-con #storePickupApp .Zapiet-InputWithPrefix__Input,
 #header-con #storePickupApp .locations .location .block * {
-  font-family: 'PP Object Sans';
+  font-family: "PP Object Sans";
   letter-spacing: -0.14px;
   font-weight: 400;
   font-size: 13px;
@@ -267,7 +267,11 @@ body.no-overflow {
   display: block;
   padding: 5px;
 }
-#header-con #storePickupApp .Zapiet-InputWithPrefix__Wrapper .Zapiet-InputWithPrefix .Zapiet-InputWithPrefix__Prefix {
+#header-con
+  #storePickupApp
+  .Zapiet-InputWithPrefix__Wrapper
+  .Zapiet-InputWithPrefix
+  .Zapiet-InputWithPrefix__Prefix {
   position: absolute;
   margin: 0;
   right: 0;
@@ -284,7 +288,10 @@ body.no-overflow {
 #header-con #storePickupApp.active {
   display: block;
 }
-#header-con #storePickupApp .ZapietStack .ZapietStack-Item.ZapietStack-Item--fullWidth,
+#header-con
+  #storePickupApp
+  .ZapietStack
+  .ZapietStack-Item.ZapietStack-Item--fullWidth,
 #header-con #storePickupApp .checkoutMethodsContainer,
 #header-con #storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Prefix,
 #header-con #storePickupApp .datepickerIcon svg {
@@ -335,13 +342,28 @@ body.no-overflow {
 }
 #header-con .ZapietStack .ZapietStack-Item .ZapietStack {
   flex-direction: column;
-  flex-wrap: nowrap; 
+  flex-wrap: nowrap;
 }
-#header-con #storePickupApp .checkoutMethodContainer .ZapietLocations-List .address,
-#header-con #storePickupApp .checkoutMethodContainer .locations .location .block .moreInformationLink {
+#header-con
+  #storePickupApp
+  .checkoutMethodContainer
+  .ZapietLocations-List
+  .address,
+#header-con
+  #storePickupApp
+  .checkoutMethodContainer
+  .locations
+  .location
+  .block
+  .moreInformationLink {
   margin-top: 0;
 }
-#header-con #storePickupApp .checkoutMethodContainer .locations .location .block {
+#header-con
+  #storePickupApp
+  .checkoutMethodContainer
+  .locations
+  .location
+  .block {
   row-gap: 2px;
 }
 .Zapiet-Modal__Wrapper .Zapiet-Modal__Close-Button {
@@ -371,7 +393,7 @@ body.no-overflow {
 }
 .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .openingHours,
 .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .address {
-  font-family: 'PP Object Sans' !important;
+  font-family: "PP Object Sans" !important;
   letter-spacing: -0.14px !important;
   font-weight: 400 !important;
   font-size: 14px !important;
@@ -380,7 +402,7 @@ body.no-overflow {
 }
 .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .openingHours h2,
 .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .address h2 {
-  font-family: 'PP Object Sans' !important;
+  font-family: "PP Object Sans" !important;
   font-weight: 400 !important;
   font-size: 18px !important;
   font-size: 1.125rem !important;
@@ -391,7 +413,7 @@ body.no-overflow {
 .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .openingHours {
   padding-top: 20px !important;
 }
-@media screen and (min-width: 600px){
+@media screen and (min-width: 600px) {
   #header-con #storePickupApp .Zapiet-Select__Value,
   #header-con #storePickupApp .Zapiet-InputWithPrefix__Input,
   #header-con #storePickupApp .locations .location .block * {
@@ -401,7 +423,7 @@ body.no-overflow {
     line-height: 140%;
   }
 }
-@media screen and (min-width: 1024px){
+@media screen and (min-width: 1024px) {
   #header-con #storePickupApp .Zapiet-Select__Value,
   #header-con #storePickupApp .Zapiet-InputWithPrefix__Input,
   #header-con #storePickupApp .locations .location .block * {
@@ -418,7 +440,7 @@ body.no-overflow {
     font-size: 21px !important;
   }
 }
-@media screen and (min-width: 1440px){
+@media screen and (min-width: 1440px) {
   .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .openingHours h2,
   .Zapiet-Modal__Wrapper .Zapiet-Modal__Content .address h2 {
     font-size: 24px !important;
@@ -427,7 +449,7 @@ body.no-overflow {
 /* header cart gift wrap */
 #header-con .header-con__gift-wrap {
   transform: translateY(100%);
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .header-con__gift-wrap.active {
   transform: translateY(0%);
@@ -439,7 +461,7 @@ body.no-overflow {
 }
 #header-con .hc-checkbox .icon {
   opacity: 0;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .hc-checkbox .icon svg {
   width: 10px;
@@ -453,7 +475,7 @@ body.no-overflow {
 }
 #header-con .hc__gw-item .hc__gwi-details {
   max-height: 0;
-  transition: all .3s ease;
+  transition: all 0.3s ease;
 }
 #header-con .hc__gw-item.active .hc__gwi-details {
   max-height: 500px;
@@ -485,7 +507,7 @@ body.no-overflow {
 #header-con #header-cart .header-con__cm_zapiet {
   visibility: hidden;
   opacity: 0;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
   display: flex;
   position: absolute;
 }
@@ -502,7 +524,7 @@ body.no-overflow {
   visibility: visible;
   opacity: 1;
   position: relative;
-  transition: opacity .3s ease;
+  transition: opacity 0.3s ease;
 }
 #header-con #storePickupApp.active,
 #header-con .shipping-options:not(.hide-m),
@@ -510,39 +532,47 @@ body.no-overflow {
   position: relative;
   visibility: visible;
   opacity: 1;
-  transition: opacity .3s ease, visibility .3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
 }
 #header-con .shipping-options.hide-m,
 #header-con .pickup-options.hide-m {
   position: absolute;
   visibility: hidden;
   opacity: 0;
-  transition: opacity .3s ease, visibility .3s ease;
+  transition:
+    opacity 0.3s ease,
+    visibility 0.3s ease;
   display: block;
 }
-#storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option:hover, 
-#storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option.Zapiet-Select__Option--selected {
+#storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option:hover,
+#storePickupApp
+  .Zapiet-Select__Wrapper
+  .Zapiet-Select__Option.Zapiet-Select__Option--selected {
   background-color: transparent !important;
   border: none !important;
 }
 #storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option:after {
-  content: '';
+  content: "";
   display: inline-block;
   width: 5px;
   height: 5px;
   margin-left: 8px;
   transform: translateY(-25%);
-  background-color: #B35E34;
+  background-color: #b35e34;
   border-radius: 100px;
   opacity: 0;
 }
-#storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option:hover:after, 
-#storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option.Zapiet-Select__Option--selected:after {
+#storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option:hover:after,
+#storePickupApp
+  .Zapiet-Select__Wrapper
+  .Zapiet-Select__Option.Zapiet-Select__Option--selected:after {
   opacity: 1;
 }
 #storePickupApp .Zapiet-Select__Wrapper .Zapiet-Select__Option {
   color: var(--green);
-  font-family: 'PP Object Sans';
+  font-family: "PP Object Sans";
   letter-spacing: -0.14px;
   font-weight: 400;
   font-size: 14px;
@@ -575,7 +605,7 @@ body.no-overflow {
   }
 }
 #header-con #header-cart.delivery .header-con__cart-heading > .flex {
-  border-bottom: 1px solid var(--main); 
+  border-bottom: 1px solid var(--main);
 }
 #header-con .button-checkout.disabled {
   background-color: var(--placeholder);
@@ -586,17 +616,17 @@ body.no-overflow {
 }
 #header-con .hc__gwi-details input::placeholder,
 #header-con .hc__gwi-details textarea::placeholder {
-  color: #A4A399;
+  color: #a4a399;
 }
 #header-con .hc__gwi-details input:placeholder-shown,
 #header-con .hc__gwi-details textarea.empty {
-  border-color: #A4A399;
-  opacity: .5;
+  border-color: #a4a399;
+  opacity: 0.5;
 }
 #header-con .hc__gwi-details input:not(:placeholder-shown),
 #header-con .hc__gwi-details textarea:not(.empty) {
-  border-color: #19341E;
-  color: #19341E;
+  border-color: #19341e;
+  color: #19341e;
 }
 #header-con .hc__gwi-design {
   width: 195px;
@@ -628,7 +658,7 @@ body.no-overflow {
     display: none;
   }
   #header-con.on-homepage .header-logo .header-logo-box {
-    width: 248px;;
+    width: 248px;
   }
   #header-con.on-homepage .header-logo {
     padding: 37px 0 0;
@@ -679,7 +709,7 @@ body.no-overflow {
   }
   #header-con .header-con__gift-wrap-products {
     margin-left: 0;
-    margin-right: 0; 
+    margin-right: 0;
   }
   #header-con .header-con__empty-links .icon-active {
     display: none;

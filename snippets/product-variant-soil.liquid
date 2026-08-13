@@ -1,511 +1,558 @@
-
 {% assign first_available = product.variants | where: 'available', true | first %}
 {%- assign variant = product.selected_or_first_available_variant -%}
 {%- liquid
-    # Workshops are identified by their title, same rule as the Product Detail section.
-    assign is_workshop = false
-    assign product_title_check = product.title | default: '' | downcase
-    if product_title_check contains 'workshop'
-        assign is_workshop = true
-    endif
+  # Workshops are identified by their title, same rule as the Product Detail section.
+  assign is_workshop = false
+  assign product_title_check = product.title | default: '' | downcase
+  if product_title_check contains 'workshop'
+    assign is_workshop = true
+  endif
 -%}
 <div class="flex flex-column ai-center pt-8 d-pt-0 options-only-wrapper">
-    {%- assign coll = '' -%}
-    {%- for collection in product.collections -%}
-        {% if collection.template_suffix == 'set' %}
-            {%- assign coll = collection -%}
-        {% endif %}
-    {%- endfor -%}
-    {% if coll.products.size > 1 %}
+  {%- assign coll = '' -%}
+  {%- for collection in product.collections -%}
+    {% if collection.template_suffix == 'set' %}
+      {%- assign coll = collection -%}
+    {% endif %}
+  {%- endfor -%}
+  {% if coll.products.size > 1 %}
     <div class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper bb-1 b-main w-full">
-        <div class="pdpb-item accordion w-full overflow">
-            <div class="pdpb-item-header w-full flex ai-center jc-between">
-                {% assign size_guide_data = shop.metaobjects["size_guide"].values | first %}
-                {% assign check_tag = false %}
-                {% if size_guide_data.tag_1 != blank %}
-                    {% assign tags_array = size_guide_data.tag_1 | split: ',' %}
-                    {% for tag in tags_array %}
-                        {% if product.tags contains tag %}
-                            {% assign check_tag = true %}
-                        {% endif %}
-                    {% endfor %}
-                {% else %}
-                    {% assign check_tag = true %}
-                {% endif %}
-                <p class="p4 c-label {{ size_guide_data | json }}">Size {% if check_tag %}<button class="underline size-guide-trigger c-label p4">(Size Guide)</button>{% endif %}</p>
-                <div class="flex flex-row ai-center right">
-                    <p class="p2 size-title-holder">{{ product.metafields.custom.size.value }}</p>
-                    <div class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                        </svg>
-                    </div>
-                </div>
+      <div class="pdpb-item accordion w-full overflow">
+        <div class="pdpb-item-header w-full flex ai-center jc-between">
+          {% assign size_guide_data = shop.metaobjects.size_guide.values | first %}
+          {% assign check_tag = false %}
+          {% if size_guide_data.tag_1 != blank %}
+            {% assign tags_array = size_guide_data.tag_1 | split: ',' %}
+            {% for tag in tags_array %}
+              {% if product.tags contains tag %}
+                {% assign check_tag = true %}
+              {% endif %}
+            {% endfor %}
+          {% else %}
+            {% assign check_tag = true %}
+          {% endif %}
+          <p class="p4 c-label {{ size_guide_data | json }}">
+            Size
+            {% if check_tag -%}
+              <button class="underline size-guide-trigger c-label p4">(Size Guide)</button>
+            {%- endif %}
+          </p>
+          <div class="flex flex-row ai-center right">
+            <p class="p2 size-title-holder">{{ product.metafields.custom.size.value }}</p>
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+              </svg>
             </div>
-            <div class="pdpb-item-content">
-                <div class="pdpb-planters cursor-pointer pt-4">
-                    {% for pro in coll.products %}
-                        {%if pro.metafields.custom.size.value != product.metafields.custom.size.value%}
-                            <div class="pdpb-size tr w-full relative pr-20">
-                                <p class="p2" onclick="pdpProductTop.switchProduct(event)" class="color-swatch-each" data-color-name="{{ pro.metafields.custom.size }}" data-product-handle="{{ pro.handle }}">{{ pro.metafields.custom.size.value }}</p>
-                            </div>
-                        {% endif %}
-                    {% endfor %}
-                </div>
-            </div>
+          </div>
         </div>
-    </div>
-    {% endif %}
-    {% comment %}
-        Generic variant-option selectors. Renders one accordion per product option that
-        isn't already handled elsewhere (Colour has its own accordion; Title is Shopify's
-        placeholder for single-variant products). Works for any option name, e.g. Maturity,
-        Age, Stage, etc., and for every product that has real variant options.
-
-        On plant products these options select the parent plant variant only. Colour there
-        is derived from the planter/saucer intersection and its data-variant carries the
-        planter's variant id (a child line item), so colour selection stays owned by the
-        planter/saucer flow and is never touched by the generic resolver (see resolveVariant).
-    {% endcomment %}
-    {% for option in product.options_with_values %}
-        {% assign opt_name_lower = option.name | downcase %}
-        {% unless opt_name_lower == 'colour' or opt_name_lower == 'color' or opt_name_lower == 'title' %}
-            <div class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper accordion-option-wrapper bb-1 b-main w-full" data-option-name="{{ option.name | escape }}">
-                <div class="pdpb-item accordion accordion-option w-full overflow">
-                    <div class="pdpb-item-header w-full flex ai-center jc-between">
-                        <p class="p4 c-label">{{ option.name }}</p>
-                        <div class="flex flex-row ai-center right">
-                            <p class="p2 option-title-holder">Select {{ option.name }}</p>
-                            <div class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                    <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pdpb-item-content">
-                        <div class="pdpb-planters w-full pt-12">
-                            {% for value in option.values %}
-                                {% assign v_available = false %}
-                                {% for v in product.variants %}
-                                    {% if v.option1 == value or v.option2 == value or v.option3 == value %}
-                                        {% if v.available %}{% assign v_available = true %}{% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                                <button class="pdpb-option tr w-full relative pr-20"
-                                        data-option-name="{{ option.name | escape }}"
-                                        data-option-value="{{ value | escape }}"
-                                        data-availability="{{ v_available }}">
-                                    <p class="p2">{{ value }}</p>
-                                </button>
-                            {% endfor %}
-                        </div>
-                    </div>
+        <div class="pdpb-item-content">
+          <div class="pdpb-planters cursor-pointer pt-4">
+            {% for pro in coll.products %}
+              {% if pro.metafields.custom.size.value != product.metafields.custom.size.value %}
+                <div class="pdpb-size tr w-full relative pr-20">
+                  <p
+                    class="p2"
+                    onclick="pdpProductTop.switchProduct(event)"
+                    class="color-swatch-each"
+                    data-color-name="{{ pro.metafields.custom.size }}"
+                    data-product-handle="{{ pro.handle }}"
+                  >
+                    {{ pro.metafields.custom.size.value }}
+                  </p>
                 </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
+    </div>
+  {% endif %}
+  {% comment %}
+    Generic variant-option selectors. Renders one accordion per product option that
+    isn't already handled elsewhere (Colour has its own accordion; Title is Shopify's
+    placeholder for single-variant products). Works for any option name, e.g. Maturity,
+    Age, Stage, etc., and for every product that has real variant options.
+
+    On plant products these options select the parent plant variant only. Colour there
+    is derived from the planter/saucer intersection and its data-variant carries the
+    planter's variant id (a child line item), so colour selection stays owned by the
+    planter/saucer flow and is never touched by the generic resolver (see resolveVariant).
+  {% endcomment %}
+  {% for option in product.options_with_values %}
+    {% assign opt_name_lower = option.name | downcase %}
+    {% unless opt_name_lower == 'colour' or opt_name_lower == 'color' or opt_name_lower == 'title' %}
+      <div
+        class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper accordion-option-wrapper bb-1 b-main w-full"
+        data-option-name="{{ option.name | escape }}"
+      >
+        <div class="pdpb-item accordion accordion-option w-full overflow">
+          <div class="pdpb-item-header w-full flex ai-center jc-between">
+            <p class="p4 c-label">{{ option.name }}</p>
+            <div class="flex flex-row ai-center right">
+              <p class="p2 option-title-holder">Select {{ option.name }}</p>
+              <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+                </svg>
+              </div>
             </div>
-        {% endunless %}
-    {% endfor %}
-    {% if product.metafields.custom.planter.value != blank %}
+          </div>
+          <div class="pdpb-item-content">
+            <div class="pdpb-planters w-full pt-12">
+              {% for value in option.values %}
+                {% assign v_available = false %}
+                {% for v in product.variants %}
+                  {% if v.option1 == value or v.option2 == value or v.option3 == value %}
+                    {% if v.available %}{% assign v_available = true %}{% endif %}
+                  {% endif %}
+                {% endfor %}
+                <button
+                  class="pdpb-option tr w-full relative pr-20"
+                  data-option-name="{{ option.name | escape }}"
+                  data-option-value="{{ value | escape }}"
+                  data-availability="{{ v_available }}"
+                >
+                  <p class="p2">{{ value }}</p>
+                </button>
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endunless %}
+  {% endfor %}
+  {% if product.metafields.custom.planter.value != blank %}
     <div class="planter-accordion-wrapper pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper bb-1 b-main w-full">
-        <div class="pdpb-item accordion w-full overflow">
-            <div class="pdpb-item-header w-full flex ai-center jc-between">
-                <p class="p4 c-label">Planter</p>
-                <div class="flex flex-row ai-center right">
-                    <div class="planter-image-holder mr-4"></div>
-                    <p class="p2 planter-title-holder">Select Planter</p>
-                    <div class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                        </svg>
-                    </div>
-                </div>
+      <div class="pdpb-item accordion w-full overflow">
+        <div class="pdpb-item-header w-full flex ai-center jc-between">
+          <p class="p4 c-label">Planter</p>
+          <div class="flex flex-row ai-center right">
+            <div class="planter-image-holder mr-4"></div>
+            <p class="p2 planter-title-holder">Select Planter</p>
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+              </svg>
             </div>
-            <div class="pdpb-item-content">
-                <div class="pdpb-planters pt-12">
-                    {%- for planter in product.metafields.custom.planter.value -%}
-                        {% assign data_colors = '' %}
-                        {% assign data_color_variants = '' %}
-                        {% assign data_prices = '' %}
-                        {% assign data_availability = '' %}
-                        {% assign colour_index = 0 %}
-                        {% assign colour_values = '' %}
-
-                        {%- for option in planter.options_with_values -%}
-                            {% if option.name == 'Colour' or option.name == 'colour' %}
-                            {% assign colour_index = forloop.index %}
-                            {% comment %} {% assign data_colors = option.values | join: '|' %} {% endcomment %}
-                            {% assign data_colors = option.values | json | base64_encode %}
-                            {% assign colour_values = option.values %}
-                            {% endif %}
-                        {%- endfor -%}
-
-                        {% comment %}
-                            Aggregate per colour (not per variant). A planter may have several
-                            variants for one colour (e.g. Size x Colour): pick an AVAILABLE one
-                            for that colour, and only flag the colour out of stock when every
-                            variant of that colour is unavailable. Keeps all arrays index-aligned
-                            with data_colors.
-                        {% endcomment %}
-                        {%- if colour_index > 0 -%}
-                            {%- for cval in colour_values -%}
-                                {% assign chosen_id = '' %}
-                                {% assign chosen_price = '' %}
-                                {% assign fallback_id = '' %}
-                                {% assign fallback_price = '' %}
-                                {% assign color_available = false %}
-                                {%- for variant in planter.variants -%}
-                                    {% assign variant_colour = '' %}
-                                    {% if colour_index == 1 %}
-                                        {% assign variant_colour = variant.option1 %}
-                                    {% elsif colour_index == 2 %}
-                                        {% assign variant_colour = variant.option2 %}
-                                    {% elsif colour_index == 3 %}
-                                        {% assign variant_colour = variant.option3 %}
-                                    {% endif %}
-                                    {% if variant_colour == cval %}
-                                        {% if fallback_id == '' %}
-                                            {% assign fallback_id = variant.id %}
-                                            {% assign fallback_price = variant.price %}
-                                        {% endif %}
-                                        {% if variant.available and color_available == false %}
-                                            {% assign chosen_id = variant.id %}
-                                            {% assign chosen_price = variant.price %}
-                                            {% assign color_available = true %}
-                                        {% endif %}
-                                    {% endif %}
-                                {%- endfor -%}
-                                {% if color_available == false %}
-                                    {% assign chosen_id = fallback_id %}
-                                    {% assign chosen_price = fallback_price %}
-                                {% endif %}
-                                {% assign data_color_variants = data_color_variants | append: chosen_id | append: '|' %}
-                                {% assign data_prices = data_prices | append: chosen_price | append: '|' %}
-                                {% assign data_availability = data_availability | append: color_available | append: '|' %}
-                            {%- endfor -%}
-                        {%- endif -%}
-                        {% assign initial_price = planter.variants[0].price %}
-
-                        {% assign data_color_variants = data_color_variants | remove_last: '|' %}
-                        {% assign data_availability = data_availability | remove_last: '|' %}
-                        {% assign data_prices = data_prices | remove_last: '|' %}
-                        {% if planter.tags contains 'matching-saucer' %}
-                            {% assign matching_saucer = true %}
-                        {% else %}
-                            {% assign matching_saucer = false %}
-                        {% endif %}
-                        {% comment %} Whole-planter availability: out of stock only when every variant is unavailable. {% endcomment %}
-                        {% assign planter_available = false %}
-                        {% for variant in planter.variants %}
-                            {% if variant.available %}{% assign planter_available = true %}{% endif %}
-                        {% endfor %}
-                        <button class="pdpb-list pdpb-planter relative{% unless planter_available %} oos{% endunless %}" onclick="pdpProductTop.changeVariantValue(event)" data-prices="{{ data_prices }}" initial-price="{{ initial_price }}"  data-test ='' data-color='{{ data_colors }}' data-color-variant="{{ data_color_variants }}" data-matching-saucer="{{ matching_saucer }}" data-availability="{{ data_availability }}" data-planter-available="{{ planter_available }}">
-                            <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">{{ planter.title }}</p>
-                            {% paginate shop.metaobjects["planter"].values by 50 %}
-                                {% for plantermet in shop.metaobjects["planter"].values %}
-                                    {% if plantermet.title == planter.title %}
-                                        <span class="flex">{{ plantermet.svg }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endpaginate %}
-                        </button>
-                    {%- endfor -%}
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="pdpb-item-content">
+          <div class="pdpb-planters pt-12">
+            {%- for planter in product.metafields.custom.planter.value -%}
+              {% assign data_colors = '' %}
+              {% assign data_color_variants = '' %}
+              {% assign data_prices = '' %}
+              {% assign data_availability = '' %}
+              {% assign colour_index = 0 %}
+              {% assign colour_values = '' %}
+
+              {%- for option in planter.options_with_values -%}
+                {% if option.name == 'Colour' or option.name == 'colour' %}
+                  {% assign colour_index = forloop.index %}
+                  {% comment %} {% assign data_colors = option.values | join: '|' %} {% endcomment %}
+                  {% assign data_colors = option.values | json | base64_encode %}
+                  {% assign colour_values = option.values %}
+                {% endif %}
+              {%- endfor -%}
+
+              {% comment %}
+                Aggregate per colour (not per variant). A planter may have several
+                variants for one colour (e.g. Size x Colour): pick an AVAILABLE one
+                for that colour, and only flag the colour out of stock when every
+                variant of that colour is unavailable. Keeps all arrays index-aligned
+                with data_colors.
+              {% endcomment %}
+              {%- if colour_index > 0 -%}
+                {%- for cval in colour_values -%}
+                  {% assign chosen_id = '' %}
+                  {% assign chosen_price = '' %}
+                  {% assign fallback_id = '' %}
+                  {% assign fallback_price = '' %}
+                  {% assign color_available = false %}
+                  {%- for variant in planter.variants -%}
+                    {% assign variant_colour = '' %}
+                    {% if colour_index == 1 %}
+                      {% assign variant_colour = variant.option1 %}
+                    {% elsif colour_index == 2 %}
+                      {% assign variant_colour = variant.option2 %}
+                    {% elsif colour_index == 3 %}
+                      {% assign variant_colour = variant.option3 %}
+                    {% endif %}
+                    {% if variant_colour == cval %}
+                      {% if fallback_id == '' %}
+                        {% assign fallback_id = variant.id %}
+                        {% assign fallback_price = variant.price %}
+                      {% endif %}
+                      {% if variant.available and color_available == false %}
+                        {% assign chosen_id = variant.id %}
+                        {% assign chosen_price = variant.price %}
+                        {% assign color_available = true %}
+                      {% endif %}
+                    {% endif %}
+                  {%- endfor -%}
+                  {% if color_available == false %}
+                    {% assign chosen_id = fallback_id %}
+                    {% assign chosen_price = fallback_price %}
+                  {% endif %}
+                  {% assign data_color_variants = data_color_variants | append: chosen_id | append: '|' %}
+                  {% assign data_prices = data_prices | append: chosen_price | append: '|' %}
+                  {% assign data_availability = data_availability | append: color_available | append: '|' %}
+                {%- endfor -%}
+              {%- endif -%}
+              {% assign initial_price = planter.variants[0].price %}
+
+              {% assign data_color_variants = data_color_variants | remove_last: '|' %}
+              {% assign data_availability = data_availability | remove_last: '|' %}
+              {% assign data_prices = data_prices | remove_last: '|' %}
+              {% if planter.tags contains 'matching-saucer' %}
+                {% assign matching_saucer = true %}
+              {% else %}
+                {% assign matching_saucer = false %}
+              {% endif %}
+              {% comment %} Whole-planter availability: out of stock only when every variant is unavailable. {% endcomment %}
+              {% assign planter_available = false %}
+              {% for variant in planter.variants %}
+                {% if variant.available %}{% assign planter_available = true %}{% endif %}
+              {% endfor %}
+              <button
+                class="pdpb-list pdpb-planter relative{% unless planter_available %} oos{% endunless %}"
+                onclick="pdpProductTop.changeVariantValue(event)"
+                data-prices="{{ data_prices }}"
+                initial-price="{{ initial_price }}"
+                data-test
+                data-color="{{ data_colors }}"
+                data-color-variant="{{ data_color_variants }}"
+                data-matching-saucer="{{ matching_saucer }}"
+                data-availability="{{ data_availability }}"
+                data-planter-available="{{ planter_available }}"
+              >
+                <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">{{ planter.title }}</p>
+                {% paginate shop.metaobjects.planter.values by 50 %}
+                  {% for plantermet in shop.metaobjects.planter.values %}
+                    {% if plantermet.title == planter.title %}
+                      <span class="flex">{{ plantermet.svg }}</span>
+                    {% endif %}
+                  {% endfor %}
+                {% endpaginate %}
+              </button>
+            {%- endfor -%}
+          </div>
+        </div>
+      </div>
     </div>
-    {% endif %}
-    {% if product.tags contains 'plants' %}
-        {%  if product.metafields.custom.planter.value != blank or product.metafields.custom.saucer.value != blank %}
-            {% assign has_color_option = true %}
-        {% else %}
-            {% assign has_color_option = false %}
-        {% endif %}
+  {% endif %}
+  {% if product.tags contains 'plants' %}
+    {% if product.metafields.custom.planter.value != blank or product.metafields.custom.saucer.value != blank %}
+      {% assign has_color_option = true %}
     {% else %}
-        {% assign has_color_option = false %}
+      {% assign has_color_option = false %}
     {% endif %}
-    {% unless product.tags contains 'plants' %}
-        {% for option in product.options %}
-            {% if option == 'Color' or option == 'Colour' or option == 'colour' %}
-                {% assign has_color_option = true %}
-                {% break %}
-            {% endif %}
-        {% endfor %}
-    {% endunless %}
-    {% if product.metafields.custom.saucer.value != blank %}
+  {% else %}
+    {% assign has_color_option = false %}
+  {% endif %}
+  {% unless product.tags contains 'plants' %}
+    {% for option in product.options %}
+      {% if option == 'Color' or option == 'Colour' or option == 'colour' %}
+        {% assign has_color_option = true %}
+        {% break %}
+      {% endif %}
+    {% endfor %}
+  {% endunless %}
+  {% if product.metafields.custom.saucer.value != blank %}
     <div class="saucer-accordion-wrapper pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper bb-1 b-main w-full{% if product.metafields.custom.planter.value != blank %} disabled-option{% endif %}">
-        <div class="pdpb-item accordion w-full overflow">
-            <div class="pdpb-item-header w-full flex ai-center jc-between">
-                <p class="p4 c-label">Saucer</p>
-                <div class="flex flex-row ai-center right">
-                    <div class="saucer-image-holder flex mr-4"></div>
-                    <p class="p2 saucer-title-holder">Select Saucer</p>
-                    <div class="icon">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                            <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                        </svg>
-                    </div>
-                </div>
+      <div class="pdpb-item accordion w-full overflow">
+        <div class="pdpb-item-header w-full flex ai-center jc-between">
+          <p class="p4 c-label">Saucer</p>
+          <div class="flex flex-row ai-center right">
+            <div class="saucer-image-holder flex mr-4"></div>
+            <p class="p2 saucer-title-holder">Select Saucer</p>
+            <div class="icon">
+              <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+              </svg>
             </div>
-            <div class="pdpb-item-content">
-                <div class="pdpb-planters pt-12">
-                    {%- for saucer in product.metafields.custom.saucer.value -%}
-                        {% assign data_colors = '' %}
-                        {% assign data_color_variants = '' %}
-                        {% assign data_prices = '' %}
-                        {% assign data_availability = '' %}
-                        {% assign colour_index = 0 %}
-                        {% assign colour_values = '' %}
-
-                        {%- for option in saucer.options_with_values -%}
-                            {% if option.name == 'Colour' or option.name == 'colour' %}
-                            {% assign colour_index = forloop.index %}
-                            {% comment %} {% assign data_colors = option.values | join: '|' %} {% endcomment %}
-                            {% assign data_colors = option.values | json | base64_encode %}
-                            {% assign colour_values = option.values %}
-                            {% endif %}
-                        {%- endfor -%}
-                        {% comment %}
-                            Aggregate per colour (see planter block): pick an available variant
-                            for each colour, only flag out of stock when every variant of that
-                            colour is unavailable, and keep arrays aligned with data_colors.
-                        {% endcomment %}
-                        {%- if colour_index > 0 -%}
-                            {%- for cval in colour_values -%}
-                                {% assign chosen_id = '' %}
-                                {% assign chosen_price = '' %}
-                                {% assign fallback_id = '' %}
-                                {% assign fallback_price = '' %}
-                                {% assign color_available = false %}
-                                {%- for variant in saucer.variants -%}
-                                    {% assign variant_colour = '' %}
-                                    {% if colour_index == 1 %}
-                                        {% assign variant_colour = variant.option1 %}
-                                    {% elsif colour_index == 2 %}
-                                        {% assign variant_colour = variant.option2 %}
-                                    {% elsif colour_index == 3 %}
-                                        {% assign variant_colour = variant.option3 %}
-                                    {% endif %}
-                                    {% if variant_colour == cval %}
-                                        {% if fallback_id == '' %}
-                                            {% assign fallback_id = variant.id %}
-                                            {% assign fallback_price = variant.price %}
-                                        {% endif %}
-                                        {% if variant.available and color_available == false %}
-                                            {% assign chosen_id = variant.id %}
-                                            {% assign chosen_price = variant.price %}
-                                            {% assign color_available = true %}
-                                        {% endif %}
-                                    {% endif %}
-                                {%- endfor -%}
-                                {% if color_available == false %}
-                                    {% assign chosen_id = fallback_id %}
-                                    {% assign chosen_price = fallback_price %}
-                                {% endif %}
-                                {% assign data_color_variants = data_color_variants | append: chosen_id | append: '|' %}
-                                {% assign data_prices = data_prices | append: chosen_price | append: '|' %}
-                                {% assign data_availability = data_availability | append: color_available | append: '|' %}
-                            {%- endfor -%}
-                        {%- endif -%}
-                        {% assign data_color_variants = data_color_variants | remove_last: '|' %}
-                        {% assign data_availability = data_availability | remove_last: '|' %}
-                        {% assign data_prices = data_prices | remove_last: '|' %}
-                        {% comment %} Whole-saucer availability: out of stock only when every variant is unavailable. {% endcomment %}
-                        {% assign saucer_available = false %}
-                        {% for variant in saucer.variants %}
-                            {% if variant.available %}{% assign saucer_available = true %}{% endif %}
-                        {% endfor %}
-                        <button class="pdpb-list pdpb-saucer relative{% unless saucer_available %} oos{% endunless %}" data-saucer-variant={{ data_color_variants }} data-saucer-color={{ data_colors }} data-saucer-price={{ data_prices }} data-availability={{ data_availability }} data-saucer-available="{{ saucer_available }}">
-                            <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">{{ saucer.title }}</p>
-                            {% paginate shop.metaobjects["saucer"].values by 50 %}
-                                {% for saucermet in shop.metaobjects["saucer"].values %}
-                                    {% if saucermet.title == saucer.title %}
-                                        <span class="flex">{{ saucermet.svg }}</span>
-                                    {% endif %}
-                                {% endfor %}
-                            {% endpaginate %}
-                        </button>
-                    {%- endfor -%}
-                    {% comment %} {% paginate shop.metaobjects["planter"].values by 50 %}
-                        {% for planter in shop.metaobjects["planter"].values %}
-                            {% if planter.title == variant.option1 %}
-                                {% assign saucers = planter.saucer | replace: '[', '' | replace: ']', '' | replace: '"', '' | replace: ' ', '' | split: ',' %}
-                                {% for saucer_id in saucers %}
-                                    {% if saucer_id != '' %}
-                                        {% assign saucer_obj = shop.metaobjects["saucer"][saucer_id] %}
-                                        {% if saucer_obj %}
-                                            {% comment %}Build a likely product handle from the saucer title and attempt to get the first variant id{% endcomment %}
-                                            {% comment %}Get saucer variant id & price from the configured settings product's variants (more reliable than guessing handle){% endcomment %}
-                                            {% assign saucer_variant_id = '' %}
-                                            {% assign saucer_price = '' %}
-                                            {% for saucer_prod in settings.saucer_product.variants %}
-                                                {% if saucer_prod.title == saucer_obj.title %}
-                                                    {% assign saucer_variant_id = saucer_prod.id %}
-                                                    {% assign saucer_price = saucer_prod.price %}
-                                                {% endif %}
-                                            {% endfor %}
-                                            <div class="pdpb-list pdpb-saucer relative" data-saucer-title="{{ saucer_obj.title }}" data-saucer-handle="{{ saucer_handle }}" data-saucer-variant="{{ saucer_variant_id }}" data-saucer-price="{{ saucer_price }}">
-                                                <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">{{ saucer_obj.title }}</p>
-                                                <span class="flex">{{ saucer_obj.svg }}</span>
-                                            </div>
-                                        {% endif %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% endif %}
-                        {% endfor %}
-                    {% endpaginate %} {% endcomment %}
-                </div>
-            </div>
+          </div>
         </div>
+        <div class="pdpb-item-content">
+          <div class="pdpb-planters pt-12">
+            {%- for saucer in product.metafields.custom.saucer.value -%}
+              {% assign data_colors = '' %}
+              {% assign data_color_variants = '' %}
+              {% assign data_prices = '' %}
+              {% assign data_availability = '' %}
+              {% assign colour_index = 0 %}
+              {% assign colour_values = '' %}
+
+              {%- for option in saucer.options_with_values -%}
+                {% if option.name == 'Colour' or option.name == 'colour' %}
+                  {% assign colour_index = forloop.index %}
+                  {% comment %} {% assign data_colors = option.values | join: '|' %} {% endcomment %}
+                  {% assign data_colors = option.values | json | base64_encode %}
+                  {% assign colour_values = option.values %}
+                {% endif %}
+              {%- endfor -%}
+              {% comment %}
+                Aggregate per colour (see planter block): pick an available variant
+                for each colour, only flag out of stock when every variant of that
+                colour is unavailable, and keep arrays aligned with data_colors.
+              {% endcomment %}
+              {%- if colour_index > 0 -%}
+                {%- for cval in colour_values -%}
+                  {% assign chosen_id = '' %}
+                  {% assign chosen_price = '' %}
+                  {% assign fallback_id = '' %}
+                  {% assign fallback_price = '' %}
+                  {% assign color_available = false %}
+                  {%- for variant in saucer.variants -%}
+                    {% assign variant_colour = '' %}
+                    {% if colour_index == 1 %}
+                      {% assign variant_colour = variant.option1 %}
+                    {% elsif colour_index == 2 %}
+                      {% assign variant_colour = variant.option2 %}
+                    {% elsif colour_index == 3 %}
+                      {% assign variant_colour = variant.option3 %}
+                    {% endif %}
+                    {% if variant_colour == cval %}
+                      {% if fallback_id == '' %}
+                        {% assign fallback_id = variant.id %}
+                        {% assign fallback_price = variant.price %}
+                      {% endif %}
+                      {% if variant.available and color_available == false %}
+                        {% assign chosen_id = variant.id %}
+                        {% assign chosen_price = variant.price %}
+                        {% assign color_available = true %}
+                      {% endif %}
+                    {% endif %}
+                  {%- endfor -%}
+                  {% if color_available == false %}
+                    {% assign chosen_id = fallback_id %}
+                    {% assign chosen_price = fallback_price %}
+                  {% endif %}
+                  {% assign data_color_variants = data_color_variants | append: chosen_id | append: '|' %}
+                  {% assign data_prices = data_prices | append: chosen_price | append: '|' %}
+                  {% assign data_availability = data_availability | append: color_available | append: '|' %}
+                {%- endfor -%}
+              {%- endif -%}
+              {% assign data_color_variants = data_color_variants | remove_last: '|' %}
+              {% assign data_availability = data_availability | remove_last: '|' %}
+              {% assign data_prices = data_prices | remove_last: '|' %}
+              {% comment %} Whole-saucer availability: out of stock only when every variant is unavailable. {% endcomment %}
+              {% assign saucer_available = false %}
+              {% for variant in saucer.variants %}
+                {% if variant.available %}{% assign saucer_available = true %}{% endif %}
+              {% endfor %}
+              <button
+                class="pdpb-list pdpb-saucer relative{% unless saucer_available %} oos{% endunless %}"
+                data-saucer-variant="{{ data_color_variants }}"
+                data-saucer-color="{{ data_colors }}"
+                data-saucer-price="{{ data_prices }}"
+                data-availability="{{ data_availability }}"
+                data-saucer-available="{{ saucer_available }}"
+              >
+                <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">{{ saucer.title }}</p>
+                {% paginate shop.metaobjects.saucer.values by 50 %}
+                  {% for saucermet in shop.metaobjects.saucer.values %}
+                    {% if saucermet.title == saucer.title %}
+                      <span class="flex">{{ saucermet.svg }}</span>
+                    {% endif %}
+                  {% endfor %}
+                {% endpaginate %}
+              </button>
+            {%- endfor -%}
+            {% comment %}
+              {% paginate shop.metaobjects["planter"].values by 50 %}
+                  {% for planter in shop.metaobjects["planter"].values %}
+                      {% if planter.title == variant.option1 %}
+                          {% assign saucers = planter.saucer | replace: '[', '' | replace: ']', '' | replace: '"', '' | replace: ' ', '' | split: ',' %}
+                          {% for saucer_id in saucers %}
+                              {% if saucer_id != '' %}
+                                  {% assign saucer_obj = shop.metaobjects["saucer"][saucer_id] %}
+                                  {% if saucer_obj %}
+                                      {% comment %}Build a likely product handle from the saucer title and attempt to get the first variant id{% endcomment %}
+                                      {% comment %}Get saucer variant id & price from the configured settings product's variants (more reliable than guessing handle){% endcomment %}
+                                      {% assign saucer_variant_id = '' %}
+                                      {% assign saucer_price = '' %}
+                                      {% for saucer_prod in settings.saucer_product.variants %}
+                                          {% if saucer_prod.title == saucer_obj.title %}
+                                              {% assign saucer_variant_id = saucer_prod.id %}
+                                              {% assign saucer_price = saucer_prod.price %}
+                                          {% endif %}
+                                      {% endfor %}
+                                      <div class="pdpb-list pdpb-saucer relative" data-saucer-title="{{ saucer_obj.title }}" data-saucer-handle="{{ saucer_handle }}" data-saucer-variant="{{ saucer_variant_id }}" data-saucer-price="{{ saucer_price }}">
+                                          <p class="absolute bg-main pt-4 pb-4 pl-8 pr-8 p3">{{ saucer_obj.title }}</p>
+                                          <span class="flex">{{ saucer_obj.svg }}</span>
+                                      </div>
+                                  {% endif %}
+                              {% endif %}
+                          {% endfor %}
+                      {% endif %}
+                  {% endfor %}
+              {% endpaginate %}
+            {% endcomment %}
+          </div>
+        </div>
+      </div>
     </div>
-    {% endif %}
-    {% unless product.tags contains 'plants' and product.metafields.custom.planter.value == blank %}
-        {% if has_color_option %}
-            <div class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper accordion-color-wrapper bb-1 b-main w-full{% if product.tags contains 'plants' %} disabled-option{% endif %}">
-                <div class="pdpb-item accordion accordion-color w-full overflow">
-                    <div class="pdpb-item-header w-full flex ai-center jc-between">
-                        <p class="p4 c-label">Color</p>
-                        <div class="flex flex-row ai-center right">
-                            {% unless product.tags contains 'plants' %}
-                                {% assign variant_count = 0 %}
-                                {% for option in product.options_with_values %}
-                                    {% if option.name == 'Colour' or option.name == 'colour' %}
-                                        {% for value in option.values %}
-                                            {% assign variant_count = variant_count | plus: 1 %}
-                                        {% endfor %}
-                                    {% endif %}
-                                {% endfor %}
-                            {% else %}
-                                {% assign variant_count = 5 %}
-                            {% endunless %}
-                            <p class="p2 color-title-holder">{% if product.tags contains 'plants' %}Select Color{%endif%}{% unless product.tags contains 'plants' %} {{ variant.option1 }}{% endunless %}</p>
-                            {% if variant_count > 1 %}
-                                <div class="icon">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                        <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                                    </svg>
-                                </div>
-                            {% endif %}
-                        </div>
-                    </div>
-                    <div class="pdpb-item-content">
-                        <div class="pdpb-planters w-full pt-12">
-                            {% for option in product.options_with_values %}
-                                {% if option.name == 'Colour' or option.name == 'colour' %}
-                                    {% for value in option.values %}
-
-                                    {% assign is_available = false %}
-
-                                    {% for variant in product.variants %}
-                                        {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
-                                        {% assign variant_id = variant.id %}
-                                        {% assign variant_price = variant.price %}
-                                        {% if variant.available %}
-                                            {% assign is_available = true %}
-                                            {% break %}
-                                        {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-
-                                    <button
-                                        class="pdpb-color tr w-full relative pr-20"
-                                        data-variant="{{ variant_id }}"
-                                        data-availability="{{ is_available }}"
-                                        data-color-initial-price="{{ variant_price }}"
-                                    >
-                                        <p class="p2">{{ value }}</p>
-                                    </button>
-
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
+  {% endif %}
+  {% unless product.tags contains 'plants' and product.metafields.custom.planter.value == blank %}
+    {% if has_color_option %}
+      <div class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper accordion-color-wrapper bb-1 b-main w-full{% if product.tags contains 'plants' %} disabled-option{% endif %}">
+        <div class="pdpb-item accordion accordion-color w-full overflow">
+          <div class="pdpb-item-header w-full flex ai-center jc-between">
+            <p class="p4 c-label">Color</p>
+            <div class="flex flex-row ai-center right">
+              {% unless product.tags contains 'plants' %}
+                {% assign variant_count = 0 %}
+                {% for option in product.options_with_values %}
+                  {% if option.name == 'Colour' or option.name == 'colour' %}
+                    {% for value in option.values %}
+                      {% assign variant_count = variant_count | plus: 1 %}
+                    {% endfor %}
+                  {% endif %}
+                {% endfor %}
+              {% else %}
+                {% assign variant_count = 5 %}
+              {% endunless %}
+              <p class="p2 color-title-holder">
+                {% if product.tags contains 'plants' %}Select Color{% endif -%}
+                {%- unless product.tags contains 'plants' %} {{ variant.option1 }}{% endunless %}
+              </p>
+              {% if variant_count > 1 %}
+                <div class="icon">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+                  </svg>
                 </div>
+              {% endif %}
             </div>
-        {% endif %}
-    {% endunless %}
-    {% if product.tags contains 'plants' and product.metafields.custom.planter.value == blank %}
-        {% if has_color_option %}
-            <div class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper accordion-color-wrapper bb-1 b-main w-full{% if product.tags contains 'plants' %} disabled-option{% endif %}">
-                <div class="pdpb-item accordion accordion-color w-full overflow">
-                    <div class="pdpb-item-header w-full flex ai-center jc-between">
-                        <p class="p4 c-label">Color</p>
-                        <div class="flex flex-row ai-center right">
-                            <p class="p2 color-title-holder">{% if product.tags contains 'plants' %}Select Color{%endif%}{% unless product.tags contains 'plants' %} {{ variant.option1 }}{% endunless %}</p>
-                            <div class="icon">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                    <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                                </svg>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="pdpb-item-content">
-                        <div class="pdpb-planters w-full pt-12">
-                            {% for option in product.options_with_values %}
-                                {% if option.name == 'Colour' or option.name == 'colour' %}
-                                    {% for value in option.values %}
+          </div>
+          <div class="pdpb-item-content">
+            <div class="pdpb-planters w-full pt-12">
+              {% for option in product.options_with_values %}
+                {% if option.name == 'Colour' or option.name == 'colour' %}
+                  {% for value in option.values %}
+                    {% assign is_available = false %}
 
-                                    {% assign is_available = false %}
+                    {% for variant in product.variants %}
+                      {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                        {% assign variant_id = variant.id %}
+                        {% assign variant_price = variant.price %}
+                        {% if variant.available %}
+                          {% assign is_available = true %}
+                          {% break %}
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
 
-                                    {% for variant in product.variants %}
-                                        {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
-                                        {% assign variant_id = variant.id %}
-                                        {% assign variant_price = variant.price %}
-                                        {% if variant.available %}
-                                            {% assign is_available = true %}
-                                            {% break %}
-                                        {% endif %}
-                                        {% endif %}
-                                    {% endfor %}
-
-                                    <button
-                                        class="pdpb-color tr w-full relative pr-20"
-                                        data-variant="{{ variant_id }}"
-                                        data-availability="{{ is_available }}"
-                                        data-color-initial-price="{{ variant_price }}"
-                                    >
-                                        <p class="p2">{{ value }}</p>
-                                    </button>
-
-                                    {% endfor %}
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                </div>
+                    <button
+                      class="pdpb-color tr w-full relative pr-20"
+                      data-variant="{{ variant_id }}"
+                      data-availability="{{ is_available }}"
+                      data-color-initial-price="{{ variant_price }}"
+                    >
+                      <p class="p2">{{ value }}</p>
+                    </button>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
             </div>
-        {% endif %}
+          </div>
+        </div>
+      </div>
     {% endif %}
-    <div class="hide-m saucer-change-holder">
-        {{ product.metafields.custom.saucer.value | json }}
-    </div>
-    {% comment %} {% assign disclaimertags = settings.pdp_top_disclaimer_tag %} {% endcomment %}
-    {% assign disclaimertags = settings.pdp_top_disclaimer_tag | split: ',' %}
-    {% assign disclaimercheck = false %}
-    {% if disclaimertags != blank %}
-        {% for tag in disclaimertags %}
-            {% if product.tags contains tag %}
-                {% assign disclaimercheck = true %}
-            {% endif %}
-        {% endfor %}
-    {% else %}
+  {% endunless %}
+  {% if product.tags contains 'plants' and product.metafields.custom.planter.value == blank %}
+    {% if has_color_option %}
+      <div class="pt-16 pb-16 d-pt-12 d-pb-12 accordion-wrapper accordion-color-wrapper bb-1 b-main w-full{% if product.tags contains 'plants' %} disabled-option{% endif %}">
+        <div class="pdpb-item accordion accordion-color w-full overflow">
+          <div class="pdpb-item-header w-full flex ai-center jc-between">
+            <p class="p4 c-label">Color</p>
+            <div class="flex flex-row ai-center right">
+              <p class="p2 color-title-holder">
+                {% if product.tags contains 'plants' %}Select Color{% endif -%}
+                {%- unless product.tags contains 'plants' %} {{ variant.option1 }}{% endunless %}
+              </p>
+              <div class="icon">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                  <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
+                </svg>
+              </div>
+            </div>
+          </div>
+          <div class="pdpb-item-content">
+            <div class="pdpb-planters w-full pt-12">
+              {% for option in product.options_with_values %}
+                {% if option.name == 'Colour' or option.name == 'colour' %}
+                  {% for value in option.values %}
+                    {% assign is_available = false %}
+
+                    {% for variant in product.variants %}
+                      {% if variant.option1 == value or variant.option2 == value or variant.option3 == value %}
+                        {% assign variant_id = variant.id %}
+                        {% assign variant_price = variant.price %}
+                        {% if variant.available %}
+                          {% assign is_available = true %}
+                          {% break %}
+                        {% endif %}
+                      {% endif %}
+                    {% endfor %}
+
+                    <button
+                      class="pdpb-color tr w-full relative pr-20"
+                      data-variant="{{ variant_id }}"
+                      data-availability="{{ is_available }}"
+                      data-color-initial-price="{{ variant_price }}"
+                    >
+                      <p class="p2">{{ value }}</p>
+                    </button>
+                  {% endfor %}
+                {% endif %}
+              {% endfor %}
+            </div>
+          </div>
+        </div>
+      </div>
+    {% endif %}
+  {% endif %}
+  <div class="hide-m saucer-change-holder">
+    {{ product.metafields.custom.saucer.value | json }}
+  </div>
+  {% comment %} {% assign disclaimertags = settings.pdp_top_disclaimer_tag %} {% endcomment %}
+  {% assign disclaimertags = settings.pdp_top_disclaimer_tag | split: ',' %}
+  {% assign disclaimercheck = false %}
+  {% if disclaimertags != blank %}
+    {% for tag in disclaimertags %}
+      {% if product.tags contains tag %}
         {% assign disclaimercheck = true %}
-    {% endif %}
-    {% if disclaimercheck == true %}
-        <p class="pt-16 d-pt-12">{{ settings.pdp_top_disclaimer }}</p>
-    {% endif %}
-    <form method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" class="pdp-top-atc-form w-full">
-        <input type="hidden" name="form_type" value="product">
-        <input type="hidden" name="utf8" value="✓">
-        <input type="hidden" name="id" value="{{ variant.id }}" class="pdp-top-variant-id">
-        <input type="hidden" name="properties[_is_parent]" value="true" class="pdp-top-is-parent">
-        <input type="hidden" name="quantity" value="1" class="pdp-top-qty">
-        {%- if is_workshop and workshop_note != blank -%}
-            <p class="mt-12 workshop-atc-note">{{ workshop_note | newline_to_br }}</p>
-        {%- endif -%}
-        <button onclick="pdpProductTop.submitForm(event)" class="pdp-top-atc bg-green w-full mt-12 pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center{% if product.metafields.custom.planter.value != blank and product.tags contains 'plants' %} disabled {% endif %}" {% if product.metafields.custom.planter.value != blank and product.tags contains 'plants' %}disabled{% endif %}>
-            <span class="atc-title">Add to Cart</span>
-            <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
-        </button>
-    </form>
+      {% endif %}
+    {% endfor %}
+  {% else %}
+    {% assign disclaimercheck = true %}
+  {% endif %}
+  {% if disclaimercheck == true %}
+    <p class="pt-16 d-pt-12">{{ settings.pdp_top_disclaimer }}</p>
+  {% endif %}
+  <form method="post" action="{{ routes.cart_add_url }}" accept-charset="UTF-8" class="pdp-top-atc-form w-full">
+    <input type="hidden" name="form_type" value="product">
+    <input type="hidden" name="utf8" value="✓">
+    <input type="hidden" name="id" value="{{ variant.id }}" class="pdp-top-variant-id">
+    <input type="hidden" name="properties[_is_parent]" value="true" class="pdp-top-is-parent">
+    <input type="hidden" name="quantity" value="1" class="pdp-top-qty">
+    {%- if is_workshop and workshop_note != blank -%}
+      <p class="mt-12 workshop-atc-note">{{ workshop_note | newline_to_br }}</p>
+    {%- endif -%}
+    <button
+      onclick="pdpProductTop.submitForm(event)"
+      class="pdp-top-atc bg-green w-full mt-12 pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center{% if product.metafields.custom.planter.value != blank and product.tags contains 'plants' %} disabled {% endif %}"
+      {% if product.metafields.custom.planter.value != blank and product.tags contains 'plants' %}
+        disabled
+      {% endif %}
+    >
+      <span class="atc-title">Add to Cart</span>
+      <span class="atc-button-price" data-price="{{ variant.price }}"
+        >S${{ variant.price | money_without_currency -}}
+      </span>
+    </button>
+  </form>
 </div>

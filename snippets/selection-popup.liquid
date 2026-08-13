@@ -1,72 +1,87 @@
-<div class="zi-7 sp-wrap {% if type == 'account' %} sp-wrap-account {% endif %} fixed top-0 left-0 w-full h-full flex ai-center jc-center sp-wrap-{{type}}" id="sp-wrap">
-    <div class="sp-overlay absolute w-full h-full top-0 left-0 zi-1"></div>
-    {% if type == 'account' %}
-        <div class="sp-box bg-white relative zi-2">
-            <a href="#" rel="nofollow" class="close-popup" onclick="toggleContentSelectionPopupAcc(event)">
-                {{ settings.icon_close }}
-            </a>
+<div
+  class="zi-7 sp-wrap {% if type == 'account' %} sp-wrap-account {% endif %} fixed top-0 left-0 w-full h-full flex ai-center jc-center sp-wrap-{{type}}"
+  id="sp-wrap"
+>
+  <div class="sp-overlay absolute w-full h-full top-0 left-0 zi-1"></div>
+  {% if type == 'account' %}
+    <div class="sp-box bg-white relative zi-2">
+      <a href="#" rel="nofollow" class="close-popup" onclick="toggleContentSelectionPopupAcc(event)">
+        {{ settings.icon_close }}
+      </a>
 
-            {%- if section.settings.image_desktop != blank -%}
-                <div class="spb-image">
-                    {%- assign image_id = 'selection-popup-image-salon-' | append: section.id -%}
-                    {%- render 'global-image-wrapper-responsive',
-                        image_id: image_id,
-                        desktop_image: section.settings.image_desktop,
-                        mobile_image: section.settings.image_mobile
-                    %}
-                </div>
-            {%- endif -%}
-
-            <div class="spb-content">
-                <div class="h2">{{ section.settings.title }}</div>
-                <div class="p1 pt-5 d-pt-10">{{ section.settings.text }}</div>
-                <a href="{{ section.settings.button_url }}" class="btn1 mt-20 width-100 tc uppercase">{{ section.settings.button_label }}</a>
-            </div>
+      {%- if section.settings.image_desktop != blank -%}
+        <div class="spb-image">
+          {%- assign image_id = 'selection-popup-image-salon-' | append: section.id -%}
+          {%- render 'global-image-wrapper-responsive',
+            image_id: image_id,
+            desktop_image: section.settings.image_desktop,
+            mobile_image: section.settings.image_mobile
+          %}
         </div>
-    {% elsif type == 'subscription' %}
-        <div class="sp-box bg-white relative zi-2">
-            <a href="#" rel="nofollow" class="close-popup" onclick="toggleContentSelectionPopup(event)">
-                {{ settings.icon_close }}
-            </a>
+      {%- endif -%}
 
-            {%- if section.settings.image_desktop != blank -%}
-                <div class="spb-image">
-                    {%- assign image_id = 'selection-popup-image-salon-' | append: section.id -%}
-                    {%- render 'global-image-wrapper-responsive',
-                        image_id: image_id,
-                        desktop_image: section.settings.image_desktop,
-                        mobile_image: section.settings.image_mobile
-                    %}
-                </div>
-            {%- endif -%}
-            
-            {% if section.settings.subscription_type == 'native' %}
-                <div class="spb-content">
-                    <div class="h2">{{ section.settings.title }}</div>
-                    <div class="p1 pt-5 d-pt-10">{{ section.settings.text }}</div>
-                    
-                    {% form 'customer' %}
-                        {%- if form.posted_successfully? -%}
-                            <p class="p2 mt-15">{{ 'general.newsletter_form.confirmation' | t }}</p>
-                        {%- else -%}
-                            <div class="relative overflow pb-1">
-                                <input type="email" name="contact[email]" class="required global-input relative w-full p1 pb-8 mt-15 bb-1 b-border" placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"/>
-                                <div class="global-placeholder absolute right-0 bottom-0 pb-8">{{ 'general.newsletter_form.email_placeholder' | t }}</div>
-                            </div>
-                            <input type="submit" class="btn1 mt-20 width-100 tc uppercase" value="{{ 'customer.account.sign_up' | t }}" />
-                        {%- endif -%}
-                    {% endform %}
-                </div>
-            {% elsif section.settings.subscription_type == 'embed' %}
-                <div class="spb-content">
-                    <div class="h2">{{ section.settings.title }}</div>
-                    <div class="p1 pt-5 d-pt-10">{{ section.settings.text }}</div>
-                    <div class="embed-code-wrapper w-full relative mt-15">
-                        {{ section.settings.subscription_embed_code }}
-                    </div>
-                </div>
-            {% endif %}
+      <div class="spb-content">
+        <div class="h2">{{ section.settings.title }}</div>
+        <div class="p1 pt-5 d-pt-10">{{ section.settings.text }}</div>
+        <a href="{{ section.settings.button_url }}" class="btn1 mt-20 width-100 tc uppercase">
+          {{- section.settings.button_label -}}
+        </a>
+      </div>
+    </div>
+  {% elsif type == 'subscription' %}
+    <div class="sp-box bg-white relative zi-2">
+      <a href="#" rel="nofollow" class="close-popup" onclick="toggleContentSelectionPopup(event)">
+        {{ settings.icon_close }}
+      </a>
+
+      {%- if section.settings.image_desktop != blank -%}
+        <div class="spb-image">
+          {%- assign image_id = 'selection-popup-image-salon-' | append: section.id -%}
+          {%- render 'global-image-wrapper-responsive',
+            image_id: image_id,
+            desktop_image: section.settings.image_desktop,
+            mobile_image: section.settings.image_mobile
+          %}
         </div>
-    {% endif %}
+      {%- endif -%}
+
+      {% if section.settings.subscription_type == 'native' %}
+        <div class="spb-content">
+          <div class="h2">{{ section.settings.title }}</div>
+          <div class="p1 pt-5 d-pt-10">{{ section.settings.text }}</div>
+
+          {% form 'customer' %}
+            {%- if form.posted_successfully? -%}
+              <p class="p2 mt-15">{{ 'general.newsletter_form.confirmation' | t }}</p>
+            {%- else -%}
+              <div class="relative overflow pb-1">
+                <input
+                  type="email"
+                  name="contact[email]"
+                  class="required global-input relative w-full p1 pb-8 mt-15 bb-1 b-border"
+                  placeholder="{{ 'general.newsletter_form.email_placeholder' | t }}"
+                />
+                <div class="global-placeholder absolute right-0 bottom-0 pb-8">
+                  {{ 'general.newsletter_form.email_placeholder' | t }}
+                </div>
+              </div>
+              <input
+                type="submit"
+                class="btn1 mt-20 width-100 tc uppercase"
+                value="{{ 'customer.account.sign_up' | t }}"
+              />
+            {%- endif -%}
+          {% endform %}
+        </div>
+      {% elsif section.settings.subscription_type == 'embed' %}
+        <div class="spb-content">
+          <div class="h2">{{ section.settings.title }}</div>
+          <div class="p1 pt-5 d-pt-10">{{ section.settings.text }}</div>
+          <div class="embed-code-wrapper w-full relative mt-15">
+            {{ section.settings.subscription_embed_code }}
+          </div>
+        </div>
+      {% endif %}
+    </div>
+  {% endif %}
 </div>
-  

@@ -46,7 +46,10 @@
       }
     }
   </style>
-  <section class="{%if nopadding %}d-pt-0 {% else %}d-pt-80 {% endif %}pt-48 section-spy" id="{{ section.settings.id_faq }}">
+  <section
+    class="{%if nopadding %}d-pt-0 {% else %}d-pt-80 {% endif %}pt-48 section-spy"
+    id="{{ section.settings.id_faq }}"
+  >
     <h3 class="h3 d-pb-40 pb-32">{{ section.settings.title }}</h3>
     <div class="faq-wrapper bb-1 b-secondary">
       {% for block in section.blocks %}

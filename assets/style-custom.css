@@ -1,6 +1,6 @@
 /* global input */
 .global-input::placeholder {
-  opacity: .3;
+  opacity: 0.3;
   color: #171717;
 }
 .global-input {
@@ -8,7 +8,7 @@
   padding-top: 0;
   padding-bottom: 8px;
   background-color: transparent;
-  color: #19341E;
+  color: #19341e;
 }
 .global-select-div {
   background-color: transparent;
@@ -42,7 +42,7 @@
 }
 .global-placeholder {
   font-size: 8px;
-  padding-bottom: 8px; 
+  padding-bottom: 8px;
   transform: translateY(100%);
   transition: 0.3s ease all;
 }
@@ -90,7 +90,7 @@
   }
 }
 /* input date */
-#register-register .datepicker-picker .datepicker-controls .button, 
+#register-register .datepicker-picker .datepicker-controls .button,
 #register-register .datepicker .dow,
 .datepicker span {
   font-family: Studio Pro;
@@ -153,7 +153,11 @@
 .header-cart .header-cart-wrapper .cart-items-wrapper {
   overflow-x: hidden;
 }
-.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .details-con {
+.header-cart
+  .header-cart-wrapper
+  .cart-items-wrapper
+  .header-cart-items
+  .details-con {
   flex: unset;
   flex-direction: column;
 }
@@ -163,7 +167,11 @@
 .hbc-gifting .global-input {
   padding-bottom: 0;
 }
-.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .image-con {
+.header-cart
+  .header-cart-wrapper
+  .cart-items-wrapper
+  .header-cart-items
+  .image-con {
   width: 80px;
   flex: 0 0 80px;
 }
@@ -187,9 +195,25 @@
 .header-cart .emwi-caption-item {
   width: 50%;
 }
-.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .bottom-part > .button-wrapper,
-.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .bottom-part .close,
-.header-cart .header-cart-wrapper .cart-items-wrapper .header-cart-items .bottom-part .close svg {
+.header-cart
+  .header-cart-wrapper
+  .cart-items-wrapper
+  .header-cart-items
+  .bottom-part
+  > .button-wrapper,
+.header-cart
+  .header-cart-wrapper
+  .cart-items-wrapper
+  .header-cart-items
+  .bottom-part
+  .close,
+.header-cart
+  .header-cart-wrapper
+  .cart-items-wrapper
+  .header-cart-items
+  .bottom-part
+  .close
+  svg {
   width: 12px;
   height: 12px;
 }
@@ -200,8 +224,12 @@
   align-items: flex-start;
 }
 .header-cart .emwi-overlay {
-  background: linear-gradient(to top, rgba(30, 30, 31, 0.7), rgba(30, 30, 31, 0.2));
-  opacity: .4;
+  background: linear-gradient(
+    to top,
+    rgba(30, 30, 31, 0.7),
+    rgba(30, 30, 31, 0.2)
+  );
+  opacity: 0.4;
 }
 .hcm-page {
   opacity: 1;
@@ -290,7 +318,7 @@
    h1 and h2 both sit at roughly 72-77% of their 1440 size at that breakpoint.
    -0.02em reproduces the spec's -1.48px at 74px and holds at every size. */
 .h0 {
-  font-family: 'PP Object Sans';
+  font-family: "PP Object Sans";
   font-weight: 400;
   font-synthesis: none;
   -webkit-font-smoothing: antialiased;

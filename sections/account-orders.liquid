@@ -10,7 +10,6 @@
     border: 0;
   }
   .account-orders .desktop-account-th {
-    
   }
   @media only screen and (min-width: 1024px) {
     .account-orders .order-click.no-border td {
@@ -28,31 +27,46 @@
 </style>
 <div class="account-orders pt-40 d-pt-0 pb-48 d-pb-80">
   <h2 class="h2">Orders</h2>
-  <p class="p1 pt-16">{{'customer.orders.view_order' | t}}</p>
+  <p class="p1 pt-16">{{ 'customer.orders.view_order' | t }}</p>
   <div class="t-mt-20 d-mt-60 pl-0 pr-0 container table-container hide-m show-t">
     <table class="w-full tl overflow">
       <thead>
         <tr>
-          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 c-label bb-1 b-background desktop-account-th">{{'customer.order.order' | t}}</th>
-          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 bb-1 c-label b-background desktop-account-th">{{'customer.orders.date' | t}}</th>
-          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 bb-1 c-label b-background desktop-account-th">{{'customer.orders.amount' | t}}</th>
-          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 bb-1 c-label b-background desktop-account-th" style="white-space:nowrap">{{ 'customer.account.status' | t }}</th>
+          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 c-label bb-1 b-background desktop-account-th">
+            {{ 'customer.order.order' | t }}
+          </th>
+          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 bb-1 c-label b-background desktop-account-th">
+            {{ 'customer.orders.date' | t }}
+          </th>
+          <th class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 bb-1 c-label b-background desktop-account-th">
+            {{ 'customer.orders.amount' | t }}
+          </th>
+          <th
+            class="pt-16 pb-16 d-pt-0 d-pb-12 hhd-pb-16 p3 bb-1 c-label b-background desktop-account-th"
+            style="white-space:nowrap"
+          >
+            {{ 'customer.account.status' | t }}
+          </th>
         </tr>
       </thead>
       <tbody>
         {% for order in customer.orders %}
-        <tr class="order-click relative">
-          <td class="pt-16 pb-16 d-pb-12 hhd-pt-16 hhd-pb-16{% if forloop.first %} d-pt-24{%else%} d-pt-12{% endif %}">
-            <div class="flex ai-center">
-              <a href="{{order.customer_url}}" class="p2 underline">
-                {{ order.name }}
-              </a>
-            </div>
-          </td>
-          <td class="pt-16 pb-16 d-pt-12 d-pb-12 hhd-pt-16 hhd-pb-16 p2">{{ order.created_at | date: "%d %b %Y" }}</td>
-          <td class="pt-16 pb-16 d-pt-12 d-pb-12 hhd-pt-16 hhd-pb-16 p2">{{ order.total_price | money_with_currency }}</td>
-          <td class="pt-16 pb-16 d-pt-12 d-pb-12 hhd-pt-16 hhd-pb-16 p2">{{ order.financial_status_label }}</td>
-        </tr>
+          <tr class="order-click relative">
+            <td class="pt-16 pb-16 d-pb-12 hhd-pt-16 hhd-pb-16{% if forloop.first %} d-pt-24{%else%} d-pt-12{% endif %}">
+              <div class="flex ai-center">
+                <a href="{{order.customer_url}}" class="p2 underline">
+                  {{ order.name }}
+                </a>
+              </div>
+            </td>
+            <td class="pt-16 pb-16 d-pt-12 d-pb-12 hhd-pt-16 hhd-pb-16 p2">
+              {{ order.created_at | date: '%d %b %Y' }}
+            </td>
+            <td class="pt-16 pb-16 d-pt-12 d-pb-12 hhd-pt-16 hhd-pb-16 p2">
+              {{ order.total_price | money_with_currency }}
+            </td>
+            <td class="pt-16 pb-16 d-pt-12 d-pb-12 hhd-pt-16 hhd-pb-16 p2">{{ order.financial_status_label }}</td>
+          </tr>
         {% endfor %}
       </tbody>
     </table>
@@ -60,13 +74,24 @@
   <div class="hide-t pt-20">
     {% for order in customer.orders %}
       <ul class="order-list-left{% unless forloop.last %} pb-20 bb-1 b-background{% endunless %} pt-20">
-        <li class="flex ai-center"><span class="p3 c-label">Order ID</span>
+        <li class="flex ai-center">
+          <span class="p3 c-label">Order ID</span>
           <a href="{{order.customer_url}}" class="p2 underline">
             {{ order.name }}
-          </a></li>
-        <li class="mt-12 flex ai-center"><span class="p3 c-label">{{'customer.orders.date' | t}}</span><span class="p2">{{ order.created_at | date: "%d %b %Y" }}</span></li>
-        <li class="mt-12 flex ai-center"><span class="p3 c-label">{{'customer.orders.amount' | t}}</span><span class="p2">{{ order.total_price | money_with_currency }}</span></li>
-        <li class="mt-12 flex ai-center"><span class="p3 c-label">{{ 'customer.account.status' | t }}</span><span class="p2">{{ order.financial_status_label }}</span></li>
+          </a>
+        </li>
+        <li class="mt-12 flex ai-center">
+          <span class="p3 c-label">{{ 'customer.orders.date' | t }}</span
+          ><span class="p2">{{ order.created_at | date: '%d %b %Y' }}</span>
+        </li>
+        <li class="mt-12 flex ai-center">
+          <span class="p3 c-label">{{ 'customer.orders.amount' | t }}</span
+          ><span class="p2">{{ order.total_price | money_with_currency }}</span>
+        </li>
+        <li class="mt-12 flex ai-center">
+          <span class="p3 c-label">{{ 'customer.account.status' | t }}</span
+          ><span class="p2">{{ order.financial_status_label }}</span>
+        </li>
       </ul>
     {% endfor %}
   </div>

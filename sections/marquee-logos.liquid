@@ -71,8 +71,12 @@
             {% if block.settings.image != blank %}
               <div
                 class="ml-cell"
-                {% if i > 1 %}aria-hidden="true"{% endif %}
-                {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
+                {% if i > 1 %}
+                  aria-hidden="true"
+                {% endif %}
+                {% if i == 1 %}
+                  {{- block.shopify_attributes -}}
+                {% endif %}
               >
                 {{ block.settings.image | image_url: height: 200 | image_tag: loading: 'lazy' }}
               </div>
@@ -286,12 +290,7 @@
   "presets": [
     {
       "name": "Marquee Logos",
-      "blocks": [
-        { "type": "logo" },
-        { "type": "logo" },
-        { "type": "logo" },
-        { "type": "logo" }
-      ]
+      "blocks": [{ "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }]
     }
   ]
 }

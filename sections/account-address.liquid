@@ -227,7 +227,8 @@
     }
   </style>
   <div id="{{ el_id }}" class="pb-48 d-pb-80 pt-40 d-pt-0 overflow">
-    <a href="#"
+    <a
+      href="#"
       onclick="toggleAddressForm(event)"
       rel="nofollow"
       class="p2 pb-16 ai-center address-back-link hide-m underline"
@@ -253,554 +254,585 @@
           {{ 'customer.addresses.add_new' | t }}
         </button>
       {% else %}
-      <div class="flex flex-wrap mt-40 d-mt-60 main-display">
-        <div class="w-full bb-1 b-background pb-12 c-label">
-          {{ 'customer.addresses.addresses' | t }}
+        <div class="flex flex-wrap mt-40 d-mt-60 main-display">
+          <div class="w-full bb-1 b-background pb-12 c-label">
+            {{ 'customer.addresses.addresses' | t }}
+          </div>
+          {% paginate customer.addresses by 50 %}
+            {% for address in customer.addresses %}
+              {% if forloop.first %}
+                <div class="flex w-full pt-20 d-pt-24">
+                  <div class="col-title flex ai-center">
+                    <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.addresses.name' | t }}</div>
+                  </div>
+                  <div class="col-value">
+                    <div class="p2 pl-8 d-pl-12">{{ address.name }}</div>
+                  </div>
+                </div>
+                <div class="flex w-full pt-12 d-pt-16">
+                  <div class="col-title flex ai-center">
+                    <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.addresses.email_address' | t }}</div>
+                  </div>
+                  <div class="col-value">
+                    <div class="p2 pl-8 d-pl-12">{{ customer.email }}</div>
+                  </div>
+                </div>
+              {% endif %}
+              <div class="flex w-full pt-12 d-pt-16">
+                <div class="col-title flex">
+                  <div class="p3 c-label pr-8 d-pr-12">
+                    Address {{ forloop.index -}}
+                    {%- if address == customer.default_address %} (Default){% endif %}
+                  </div>
+                </div>
+                <div class="col-value">
+                  <div class="p2 pl-8 d-pl-12">
+                    {% if address.address1 != blank %}
+                      {{ address.address1 }}
+                      <br>
+                    {% endif %}
+                    {% if address.address2 != blank %}
+                      {{ address.address2 }}
+                      <br>
+                    {% endif %}
+                    {% comment %}
+                      {% if address.city != blank %}
+                        <br>
+                        {{ address.city }}
+                      {% endif %}
+                    {% endcomment %}
+                    {{ address.country }}
+                    {{ address.zip }}
+                  </div>
+                  <div class="mt-8 pl-8 d-pl-12 flex ai-start button-group">
+                    <a
+                      href="#"
+                      class="p5 mr-8"
+                      onclick="toggleAddressForm(event,{{address.id}})"
+                      rel="nofollow"
+                    >
+                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M11.2786 5.54384L14.4568 8.72198M3.33301 16.6673L7.18751 15.8907C7.39213 15.8495 7.58002 15.7487 7.72758 15.6011L16.3562 6.96798C16.7699 6.55407 16.7697 5.88314 16.3556 5.46958L14.5278 3.64385C14.1139 3.23045 13.4433 3.23073 13.0297 3.64447L4.40016 12.2785C4.25289 12.4258 4.15233 12.6133 4.11106 12.8175L3.33301 16.6673Z" stroke="#19341E"/>
+                      </svg>
+                    </a>
+                    <form
+                      class="address-delete-form font-0"
+                      method="post"
+                      action="/account/addresses/{{ address.id }}"
+                    >
+                      <input type="hidden" name="_method" value="delete">
+                      <button class="p5" type="submit">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                          <path d="M4.16699 5.68693H15.8337M8.54199 13.5301V8.82418M11.4587 13.5301V8.82418M12.917 16.6673H7.08366C6.27824 16.6673 5.62533 15.965 5.62533 15.0987V6.47124C5.62533 6.03807 5.95178 5.68693 6.35449 5.68693H13.6462C14.0489 5.68693 14.3753 6.03807 14.3753 6.47124V15.0987C14.3753 15.965 13.7224 16.6673 12.917 16.6673ZM8.54199 5.68693H11.4587C11.8614 5.68693 12.1878 5.33578 12.1878 4.90261V4.1183C12.1878 3.68513 11.8614 3.33398 11.4587 3.33398H8.54199C8.13928 3.33398 7.81283 3.68513 7.81283 4.1183V4.90261C7.81283 5.33578 8.13928 5.68693 8.54199 5.68693Z" stroke="#19341E"/>
+                        </svg>
+                      </button>
+                    </form>
+                  </div>
+                </div>
+              </div>
+            {% endfor %}
+          {% endpaginate %}
         </div>
         {% paginate customer.addresses by 50 %}
-          {% for address in customer.addresses %}
-            {% if forloop.first %}
-              <div class="flex w-full pt-20 d-pt-24">
-                <div class="col-title flex ai-center">
-                  <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.addresses.name' | t }}</div>
-                </div>
-                <div class="col-value">
-                  <div class="p2 pl-8 d-pl-12">{{ address.name }}</div>
-                </div>
-              </div>
-              <div class="flex w-full pt-12 d-pt-16">
-                <div class="col-title flex ai-center">
-                  <div class="p3 c-label pr-8 d-pr-12">{{ 'customer.addresses.email_address' | t }}</div>
-                </div>
-                <div class="col-value">
-                  <div class="p2 pl-8 d-pl-12">{{ customer.email }}</div>
-                </div>
-              </div>
-            {% endif %}
-            <div class="flex w-full pt-12 d-pt-16">
-              <div class="col-title flex">
-                <div class="p3 c-label pr-8 d-pr-12">Address {{ forloop.index }}{% if address == customer.default_address %} (Default){% endif %}</div>
-              </div>
-              <div class="col-value">
-                <div class="p2 pl-8 d-pl-12">
-                  {% if address.address1 != blank %}
-                  {{ address.address1 }}
-                  <br>
-                  {% endif %}
-                  {% if address.address2 != blank %}
-                    {{ address.address2 }}
-                    <br>
-                  {% endif %}
-                  {% comment %} {% if address.city != blank %}
-                    <br>
-                    {{ address.city }}
-                  {% endif %} {% endcomment %}
-                  {{ address.country }}
-                  {{ address.zip }}
-                </div>
-                <div class="mt-8 pl-8 d-pl-12 flex ai-start button-group">
-                  <a
-                    href="#"
-                    class="p5 mr-8"
-                    onclick="toggleAddressForm(event,{{address.id}})"
-                    rel="nofollow"
-                  >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                      <path d="M11.2786 5.54384L14.4568 8.72198M3.33301 16.6673L7.18751 15.8907C7.39213 15.8495 7.58002 15.7487 7.72758 15.6011L16.3562 6.96798C16.7699 6.55407 16.7697 5.88314 16.3556 5.46958L14.5278 3.64385C14.1139 3.23045 13.4433 3.23073 13.0297 3.64447L4.40016 12.2785C4.25289 12.4258 4.15233 12.6133 4.11106 12.8175L3.33301 16.6673Z" stroke="#19341E"/>
-                    </svg>
-                  </a>
-                  <form
-                    class="address-delete-form font-0"
-                    method="post"
-                    action="/account/addresses/{{ address.id }}"
-                  >
-                    <input type="hidden" name="_method" value="delete">
-                    <button class="p5" type="submit">
-                      <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                        <path d="M4.16699 5.68693H15.8337M8.54199 13.5301V8.82418M11.4587 13.5301V8.82418M12.917 16.6673H7.08366C6.27824 16.6673 5.62533 15.965 5.62533 15.0987V6.47124C5.62533 6.03807 5.95178 5.68693 6.35449 5.68693H13.6462C14.0489 5.68693 14.3753 6.03807 14.3753 6.47124V15.0987C14.3753 15.965 13.7224 16.6673 12.917 16.6673ZM8.54199 5.68693H11.4587C11.8614 5.68693 12.1878 5.33578 12.1878 4.90261V4.1183C12.1878 3.68513 11.8614 3.33398 11.4587 3.33398H8.54199C8.13928 3.33398 7.81283 3.68513 7.81283 4.1183V4.90261C7.81283 5.33578 8.13928 5.68693 8.54199 5.68693Z" stroke="#19341E"/>
-                      </svg>
-                    </button>
-                  </form>
-                </div>
-              </div>
-            </div>
-          {% endfor %}
+          <table class="tl w-full hide-m table-d">
+            {% comment %}
+              <thead>
+                <tr class="">
+                  <th class="w-50 pr-12 pb-12 hhd-pb-16 p6 bb-1 b-main">{{ 'customer.account.customer_label' | t }}</th>
+                  <th class="w-50 pr-12 pb-12 hhd-pb-16 p6 bb-1 b-main">{{ 'customer.account.address_label' | t }}</th>
+                </tr>
+              </thead>
+            {% endcomment %}
+            <tbody>
+              {% for address in customer.addresses %}
+                {% comment %}
+                  <tr class="each-address-wrapper {% if forloop.last %}no-border{% endif %}">
+                    <td class="each-address-wrapper-left pt-12 pb-12 hhd-pt-16 hhd-pb-16 p3 bb-1 b-main rte{% unless forloop.first %} user-hidden{% endunless %}">
+                      {{ address.first_name }}
+                      {{ address.last_name }}
+                      <br>
+                      {{ customer.email -}}
+                    </td>
+                    <td class="each-address-wrapper-right pt-12 pb-12 hhd-pt-16 hhd-pb-16 bb-1 b-main">
+                      <div class="p3 rte">
+                        {{ address.address1 }}
+                        {% if address.address2 != blank %}
+                          <br>
+                          {{ address.address2 }}
+                        {% endif %}
+                        {% comment %} {% if address.city != blank %}
+                          <br>
+                          {{ address.city }}
+                        {% endif %} {% endcomment %}
+                        <br>
+                        {{ address.country }}
+                        {{ address.zip }}
+                      </div>
+                      <div class="mt-4 flex ai-start">
+                        <a
+                          href="#"
+                          class="p5 mr-8 link1"
+                          onclick="toggleAddressForm(event,{{address.id}})"
+                          rel="nofollow"
+                        >
+                          {{ 'customer.addresses.edit' | t }}
+                        </a>
+                        <form
+                          class="address-delete-form font-0"
+                          method="post"
+                          action="/account/addresses/{{ address.id }}"
+                        >
+                          <input type="hidden" name="_method" value="delete">
+                          <button class="p5 link1" type="submit">{{ 'customer.addresses.delete' | t }}</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                {% endcomment %}
+                <tr class="ac-form-edit-{{address.id}} ac-form-edit-position ac-form-wrapper hide-m {% if forloop.last %}no-border{% endif %}">
+                  <td class=" pt-40 d-pt-60" colspan="2">
+                    <div class="ac-form ac-form-edit">
+                      {% assign form_id = 'form-address-' | append: address.id %}
+                      {% form 'customer_address', address, id: form_id %}
+                        <div class="row">
+                          <div class="col-12 col-d-6">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="first-name-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[first_name]"
+                                value="{{form.first_name}}"
+                                size="40"
+                                placeholder="{{ 'customer.addresses.first_name' | t }}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-first-name"></div>
+                          </div>
+                          <div class="col-12 col-d-6">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="last-name-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[last_name]"
+                                value="{{form.last_name}}"
+                                size="40"
+                                placeholder="{{ 'customer.addresses.last_name' | t }}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-last-name"></div>
+                          </div>
+                          <div class="col-12 mt-8 d-mt-12">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="address1-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[address1]"
+                                value="{{form.address1}}"
+                                size="40"
+                                placeholder="{{- 'customer.addresses.address1' | t -}}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-address1"></div>
+                          </div>
+                          <div class="col-12 mt-8 d-mt-12">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="address2-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[address2]"
+                                value="{{form.address2}}"
+                                size="40"
+                                placeholder="{{- 'customer.addresses.address2' | t -}}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-address2"></div>
+                          </div>
+                          {% comment %}
+                            <div class="col-12 mt-8 d-mt-12">
+                              <div class="relative overflow">
+                                <input
+                                  type="text"
+                                  id="city-{{address.id}}"
+                                  class="global-input w-full bb-1 b-main p2 label-anim"
+                                  onkeyup="validate(event)"
+                                  name="address[city]"
+                                  value="{{form.city}}"
+                                  size="40"
+                                  placeholder="{{- 'customer.addresses.city' | t -}}"
+                                >
+                              </div>
+                              <div class="mt-4 p5 c-red hide-m error error-city"></div>
+                            </div>
+                          {% endcomment %}
+                          <div class="col-12 col-d-6 mt-8 d-mt-12">
+                            {% liquid
+                              assign default_value = form.country
+                              assign default_text = form.country
+                              assign select_id = 'address-country-' | append: section.id | append: address.id
+                              assign values = empty
+                              assign option_values = form.country
+                              assign values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
+                              assign option_values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
+                              assign values = values | split: ','
+                              assign option_values = option_values | split: ','
+                            %}
+                            <div class="relative">
+                              {%- render 'global-select',
+                                default_value: default_value,
+                                default_text: default_text,
+                                values: values,
+                                option_values: option_values,
+                                id: select_id,
+                                field_name: 'address[country]',
+                                selected_text_class: 'p2',
+                                global_select_class: 'bb-1 b-main pl-0 pr-0 pt-8 pb-8 label-anim label-anim-select'
+                              -%}
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-salutation"></div>
+                          </div>
+                          <div class="col-12 col-d-6 mt-8 d-mt-12">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="zip-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[zip]"
+                                value="{{form.zip}}"
+                                size="40"
+                                placeholder="{{ 'customer.addresses.zip' | t }}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-zip"></div>
+                          </div>
+                          {% comment %}
+                            <div class="col-12 mt-8 d-mt-12">
+                              <div class="relative overflow">
+                                <input
+                                  type="text"
+                                  id="phone-{{address.id}}"
+                                  class="global-input w-full bb-1 b-main p2 label-anim"
+                                  onkeyup="validate(event)"
+                                  name="address[phone]"
+                                  value="{{form.phone}}"
+                                  size="40"
+                                  placeholder="{{ 'customer.addresses.phone' | t }}"
+                                >
+                              </div>
+                              <div class="mt-4 p5 c-red hide-m error error-phone"></div>
+                            </div>
+                          {% endcomment %}
+                          <div class="col-12 mt-20">
+                            <label class="global-radio flex ai-center check-default">
+                              <input
+                                type="checkbox"
+                                id="address_default_address_{{ form.id }}"
+                                name="address[default]"
+                                value="1"
+                                {% if address == customer.default_address %}
+                                  checked
+                                {% endif %}
+                              >
+                              <div class="gr-mark mr-8"></div>
+                              <div class="p2 checkbox-line-height-custom">
+                                {{ 'customer.addresses.set_default' | t }}
+                              </div>
+                            </label>
+                          </div>
+                          <div class="col-12 mt-40 flex flex-column d-flex-row ai-center jc-start">
+                            <button type="button" class="btn1 w-full submit-btn" onclick="validate(event,true)">
+                              {{ 'customer.addresses.update' | t }}
+                            </button>
+                            {% comment %}
+                              <a
+                                href="#"
+                                class="p5 mt-12 d-mt-0 d-ml-20 link4"
+                                onclick="toggleAddressForm(event)"
+                                rel="nofollow"
+                              >
+                                {{ 'customer.addresses.cancel' | t }}
+                              </a>
+                            {% endcomment %}
+                          </div>
+                        </div>
+                      {% endform %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          {% comment %}
+            <table class="tl w-full hide-t">
+              <thead>
+                <tr class="">
+                  <th class="w-full pb-12 p6 bb-1 b-main">{{ 'customer.account.customer_label' | t }}</th>
+                </tr>
+              </thead>
+              <tbody>
+                {% for address in customer.addresses %}
+                  <tr class="">
+                    <td class="pt-12 p3 b-main rte{% unless forloop.first %} hide-m{% endunless %}">
+                      {{ address.first_name }}
+                      {{ address.last_name }}
+                      <br>
+                      {{ customer.email -}}
+                    </td>
+                  </tr>
+                {% endfor %}
+              </tbody>
+            </table>
+          {% endcomment %}
+          <table class="tl w-full hide-t">
+            {% comment %}
+              <thead>
+                <tr class="">
+                  <th class="w-full pt-24 pb-12 p4 bb-1 b-main">{{ 'customer.account.address_label' | t }}</th>
+                </tr>
+              </thead>
+            {% endcomment %}
+            <tbody>
+              {% for address in customer.addresses %}
+                {% comment %}
+                  <tr class="">
+                    <td class="pt-12 b-main ac-form-mobile {% unless forloop.last %} bb-1 pb-12{% endunless %}">
+                      <div class="p3 rte">
+                        {{ address.first_name }}
+                        {{ address.last_name }}
+                        <br>
+                        {{ customer.email -}}
+                        <br>
+                        {{ address.address1 }}
+                        {% if address.address2 != blank %}
+                          <br>
+                          {{ address.address2 }}
+                        {% endif %}
+                        {% comment %} {% if address.city != blank %}
+                          <br>
+                          {{ address.city }}
+                        {% endif %} {% endcomment %}
+                        <br>
+                        {{ address.country }}
+                        {{ address.zip }}
+                      </div>
+                      <div class="mt-12 flex ai-start">
+                        <a
+                          href="#"
+                          class="p5 mr-8 link1"
+                          onclick="toggleAddressForm(event,{{address.id}})"
+                          rel="nofollow"
+                        >
+                          {{ 'customer.addresses.edit' | t }}
+                        </a>
+                        <form
+                          class="address-delete-form font-0"
+                          method="post"
+                          action="/account/addresses/{{ address.id }}"
+                        >
+                          <input type="hidden" name="_method" value="delete">
+                          <button class="p5 link1" type="submit">{{ 'customer.addresses.delete' | t }}</button>
+                        </form>
+                      </div>
+                    </td>
+                  </tr>
+                {% endcomment %}
+                <tr class="ac-form-edit-mobile-{{address.id}} ac-form-wrapper ac-form-edit-position hide-m">
+                  <td class="pt-40">
+                    <div class="ac-form ac-form-edit">
+                      {% assign form_id = 'form-address-' | append: address.id %}
+                      {% form 'customer_address', address, id: form_id %}
+                        <div class="row">
+                          <div class="col-12 col-d-6">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="first-name-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[first_name]"
+                                value="{{form.first_name}}"
+                                size="40"
+                                placeholder="{{ 'customer.addresses.first_name' | t }}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-first-name"></div>
+                          </div>
+                          <div class="col-12 col-d-6">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="last-name-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[last_name]"
+                                value="{{form.last_name}}"
+                                size="40"
+                                placeholder="{{ 'customer.addresses.last_name' | t }}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-last-name"></div>
+                          </div>
+                          <div class="col-12 mt-8 d-mt-12">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="address1-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[address1]"
+                                value="{{form.address1}}"
+                                size="40"
+                                placeholder="{{- 'customer.addresses.address1' | t -}}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-address1"></div>
+                          </div>
+                          <div class="col-12 mt-8 d-mt-12">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="address2-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[address2]"
+                                value="{{form.address2}}"
+                                size="40"
+                                placeholder="{{- 'customer.addresses.address2' | t -}}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-address2"></div>
+                          </div>
+                          {% comment %}
+                            <div class="col-12 mt-8 d-mt-12">
+                              <div class="relative overflow">
+                                <input
+                                  type="text"
+                                  id="city-{{address.id}}"
+                                  class="global-input w-full bb-1 b-main p2 label-anim"
+                                  onkeyup="validate(event)"
+                                  name="address[city]"
+                                  value="{{form.city}}"
+                                  size="40"
+                                  placeholder="{{- 'customer.addresses.city' | t -}}"
+                                >
+                              </div>
+                              <div class="mt-4 p5 c-red hide-m error error-city"></div>
+                            </div>
+                          {% endcomment %}
+                          <div class="col-d-6 col-12 mt-8 d-mt-12">
+                            {% liquid
+                              assign default_value = form.country
+                              assign default_text = form.country
+                              assign select_id = 'address-country-' | append: section.id | append: address.id
+                              assign values = empty
+                              assign option_values = form.country
+                              assign values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
+                              assign option_values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
+                              assign values = values | split: ','
+                              assign option_values = option_values | split: ','
+                            %}
+                            <div class="relative">
+                              {%- render 'global-select',
+                                default_value: default_value,
+                                default_text: default_text,
+                                values: values,
+                                option_values: option_values,
+                                id: select_id,
+                                field_name: 'address[country]',
+                                selected_text_class: 'p2',
+                                global_select_class: 'bb-1 b-main pl-0 pr-0 pt-8 pb-8 label-anim label-anim-select'
+                              -%}
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-salutation"></div>
+                          </div>
+                          <div class="col-d-6 col-12 mt-8 d-mt-12">
+                            <div class="relative overflow">
+                              <input
+                                type="text"
+                                id="zip-{{address.id}}"
+                                class="global-input w-full bb-1 b-main p2 label-anim"
+                                onkeyup="validate(event)"
+                                name="address[zip]"
+                                value="{{form.zip}}"
+                                size="40"
+                                placeholder="{{ 'customer.addresses.zip' | t }}"
+                              >
+                            </div>
+                            <div class="mt-4 p5 c-red hide-m error error-zip"></div>
+                          </div>
+                          {% comment %}
+                            <div class="col-12 mt-8 d-mt-12">
+                              <div class="relative overflow">
+                                <input
+                                  type="text"
+                                  id="phone-{{address.id}}"
+                                  class="global-input w-full bb-1 b-main p2 label-anim"
+                                  onkeyup="validate(event)"
+                                  name="address[phone]"
+                                  value="{{form.phone}}"
+                                  size="40"
+                                  placeholder="{{ 'customer.addresses.phone' | t }}"
+                                >
+                              </div>
+                              <div class="mt-4 p5 c-red hide-m error error-phone"></div>
+                            </div>
+                          {% endcomment %}
+                          <div class="col-12 mt-20">
+                            <label class="global-radio flex ai-center check-default">
+                              <input
+                                type="checkbox"
+                                id="address_default_address_{{ form.id }}"
+                                name="address[default]"
+                                value="1"
+                                {% if address == customer.default_address %}
+                                  checked
+                                {% endif %}
+                              >
+                              <div class="gr-mark mr-8"></div>
+                              <div class="p2 checkbox-line-height-custom">
+                                {{ 'customer.addresses.set_default' | t }}
+                              </div>
+                            </label>
+                          </div>
+                          <div class="col-12 mt-32 flex flex-column d-flex-row ai-start jc-start">
+                            <button type="button" class="btn1 submit-btn" onclick="validate(event,true)">
+                              {{ 'customer.addresses.update' | t }}
+                            </button>
+                            {% comment %}
+                              <a
+                                href="#"
+                                class="p5 mt-12 d-mt-0 d-ml-20 link4"
+                                onclick="toggleAddressForm(event)"
+                                rel="nofollow"
+                              >
+                                {{ 'customer.addresses.cancel' | t }}
+                              </a>
+                            {% endcomment %}
+                          </div>
+                        </div>
+                      {% endform %}
+                    </div>
+                  </td>
+                </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+          <button
+            type="button"
+            class="b-main b-1 mt-32 d-mt-40 aa-btn display-inline p2 pr-24 pl-24 pt-12 pb-12"
+            onclick="toggleAddressForm(event)"
+          >
+            {{ 'customer.addresses.add_new' | t }}
+          </button>
         {% endpaginate %}
-      </div>
-      {% paginate customer.addresses by 50 %}
-        <table class="tl w-full hide-m table-d">
-          {% comment %} <thead>
-            <tr class="">
-              <th class="w-50 pr-12 pb-12 hhd-pb-16 p6 bb-1 b-main">{{ 'customer.account.customer_label' | t }}</th>
-              <th class="w-50 pr-12 pb-12 hhd-pb-16 p6 bb-1 b-main">{{ 'customer.account.address_label' | t }}</th>
-            </tr>
-          </thead> {% endcomment %}
-          <tbody>
-            {% for address in customer.addresses %}
-              {% comment %} <tr class="each-address-wrapper {% if forloop.last %}no-border{% endif %}">
-                <td class="each-address-wrapper-left pt-12 pb-12 hhd-pt-16 hhd-pb-16 p3 bb-1 b-main rte{% unless forloop.first %} user-hidden{% endunless %}">
-                  {{ address.first_name }}
-                  {{ address.last_name }}
-                  <br>
-                  {{ customer.email -}}
-                </td>
-                <td class="each-address-wrapper-right pt-12 pb-12 hhd-pt-16 hhd-pb-16 bb-1 b-main">
-                  <div class="p3 rte">
-                    {{ address.address1 }}
-                    {% if address.address2 != blank %}
-                      <br>
-                      {{ address.address2 }}
-                    {% endif %}
-                    {% comment %} {% if address.city != blank %}
-                      <br>
-                      {{ address.city }}
-                    {% endif %} {% endcomment %}
-                    <br>
-                    {{ address.country }}
-                    {{ address.zip }}
-                  </div>
-                  <div class="mt-4 flex ai-start">
-                    <a
-                      href="#"
-                      class="p5 mr-8 link1"
-                      onclick="toggleAddressForm(event,{{address.id}})"
-                      rel="nofollow"
-                    >
-                      {{ 'customer.addresses.edit' | t }}
-                    </a>
-                    <form
-                      class="address-delete-form font-0"
-                      method="post"
-                      action="/account/addresses/{{ address.id }}"
-                    >
-                      <input type="hidden" name="_method" value="delete">
-                      <button class="p5 link1" type="submit">{{ 'customer.addresses.delete' | t }}</button>
-                    </form>
-                  </div>
-                </td>
-              </tr> {% endcomment %}
-              <tr class="ac-form-edit-{{address.id}} ac-form-edit-position ac-form-wrapper hide-m {% if forloop.last %}no-border{% endif %}">
-                <td class=" pt-40 d-pt-60" colspan="2">
-                  <div class="ac-form ac-form-edit">
-                    {% assign form_id = 'form-address-' | append: address.id %}
-                    {% form 'customer_address', address, id: form_id %}
-                      <div class="row">
-                        <div class="col-12 col-d-6">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="first-name-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[first_name]"
-                              value="{{form.first_name}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.first_name' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-first-name"></div>
-                        </div>
-                        <div class="col-12 col-d-6">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="last-name-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[last_name]"
-                              value="{{form.last_name}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.last_name' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-last-name"></div>
-                        </div>
-                        <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="address1-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[address1]"
-                              value="{{form.address1}}"
-                              size="40"
-                              placeholder="{{- 'customer.addresses.address1' | t -}}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-address1"></div>
-                        </div>
-                        <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="address2-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[address2]"
-                              value="{{form.address2}}"
-                              size="40"
-                              placeholder="{{- 'customer.addresses.address2' | t -}}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-address2"></div>
-                        </div>
-                        {% comment %} <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="city-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[city]"
-                              value="{{form.city}}"
-                              size="40"
-                              placeholder="{{- 'customer.addresses.city' | t -}}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-city"></div>
-                        </div> {% endcomment %}
-                        <div class="col-12 col-d-6 mt-8 d-mt-12">
-                          {% liquid
-                            assign default_value = form.country
-                            assign default_text = form.country
-                            assign select_id = 'address-country-' | append: section.id | append: address.id
-                            assign values = empty
-                            assign option_values = form.country
-                            assign values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
-                            assign option_values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
-                            assign values = values | split: ','
-                            assign option_values = option_values | split: ','
-                          %}
-                          <div class="relative">
-                            {%- render 'global-select',
-                              default_value: default_value,
-                              default_text: default_text,
-                              values: values,
-                              option_values: option_values,
-                              id: select_id,
-                              field_name: 'address[country]',
-                              selected_text_class: 'p2',
-                              global_select_class: 'bb-1 b-main pl-0 pr-0 pt-8 pb-8 label-anim label-anim-select'
-                            -%}
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-salutation"></div>
-                        </div>
-                        <div class="col-12 col-d-6 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="zip-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[zip]"
-                              value="{{form.zip}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.zip' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-zip"></div>
-                        </div>
-                        {% comment %} <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="phone-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[phone]"
-                              value="{{form.phone}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.phone' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-phone"></div>
-                        </div> {% endcomment %}
-                        <div class="col-12 mt-20">
-                          <label class="global-radio flex ai-center check-default">
-                            <input
-                              type="checkbox"
-                              id="address_default_address_{{ form.id }}"
-                              name="address[default]"
-                              value="1"
-                              {% if address == customer.default_address %}
-                                checked
-                              {% endif %}
-                            >
-                            <div class="gr-mark mr-8"></div>
-                            <div class="p2 checkbox-line-height-custom">{{ 'customer.addresses.set_default' | t }}</div>
-                          </label>
-                        </div>
-                        <div class="col-12 mt-40 flex flex-column d-flex-row ai-center jc-start">
-                          <button type="button" class="btn1 w-full submit-btn" onclick="validate(event,true)">
-                            {{ 'customer.addresses.update' | t }}
-                          </button>
-                          {% comment %} <a
-                            href="#"
-                            class="p5 mt-12 d-mt-0 d-ml-20 link4"
-                            onclick="toggleAddressForm(event)"
-                            rel="nofollow"
-                          >
-                            {{ 'customer.addresses.cancel' | t }}
-                          </a> {% endcomment %}
-                        </div>
-                      </div>
-                    {% endform %}
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        {% comment %} <table class="tl w-full hide-t">
-          <thead>
-            <tr class="">
-              <th class="w-full pb-12 p6 bb-1 b-main">{{ 'customer.account.customer_label' | t }}</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for address in customer.addresses %}
-              <tr class="">
-                <td class="pt-12 p3 b-main rte{% unless forloop.first %} hide-m{% endunless %}">
-                  {{ address.first_name }}
-                  {{ address.last_name }}
-                  <br>
-                  {{ customer.email -}}
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table> {% endcomment %}
-        <table class="tl w-full hide-t">
-          {% comment %} <thead>
-            <tr class="">
-              <th class="w-full pt-24 pb-12 p4 bb-1 b-main">{{ 'customer.account.address_label' | t }}</th>
-            </tr>
-          </thead> {% endcomment %}
-          <tbody>
-            {% for address in customer.addresses %}
-              {% comment %} <tr class="">
-                <td class="pt-12 b-main ac-form-mobile {% unless forloop.last %} bb-1 pb-12{% endunless %}">
-                  <div class="p3 rte">
-                    {{ address.first_name }}
-                    {{ address.last_name }}
-                    <br>
-                    {{ customer.email -}}
-                    <br>
-                    {{ address.address1 }}
-                    {% if address.address2 != blank %}
-                      <br>
-                      {{ address.address2 }}
-                    {% endif %}
-                    {% comment %} {% if address.city != blank %}
-                      <br>
-                      {{ address.city }}
-                    {% endif %} {% endcomment %}
-                    <br>
-                    {{ address.country }}
-                    {{ address.zip }}
-                  </div>
-                  <div class="mt-12 flex ai-start">
-                    <a
-                      href="#"
-                      class="p5 mr-8 link1"
-                      onclick="toggleAddressForm(event,{{address.id}})"
-                      rel="nofollow"
-                    >
-                      {{ 'customer.addresses.edit' | t }}
-                    </a>
-                    <form
-                      class="address-delete-form font-0"
-                      method="post"
-                      action="/account/addresses/{{ address.id }}"
-                    >
-                      <input type="hidden" name="_method" value="delete">
-                      <button class="p5 link1" type="submit">{{ 'customer.addresses.delete' | t }}</button>
-                    </form>
-                  </div>
-                </td>
-              </tr> {% endcomment %}
-              <tr class="ac-form-edit-mobile-{{address.id}} ac-form-wrapper ac-form-edit-position hide-m">
-                <td class="pt-40">
-                  <div class="ac-form ac-form-edit">
-                    {% assign form_id = 'form-address-' | append: address.id %}
-                    {% form 'customer_address', address, id: form_id %}
-                      <div class="row">
-                        <div class="col-12 col-d-6">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="first-name-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[first_name]"
-                              value="{{form.first_name}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.first_name' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-first-name"></div>
-                        </div>
-                        <div class="col-12 col-d-6">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="last-name-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[last_name]"
-                              value="{{form.last_name}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.last_name' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-last-name"></div>
-                        </div>
-                        <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="address1-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[address1]"
-                              value="{{form.address1}}"
-                              size="40"
-                              placeholder="{{- 'customer.addresses.address1' | t -}}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-address1"></div>
-                        </div>
-                        <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="address2-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[address2]"
-                              value="{{form.address2}}"
-                              size="40"
-                              placeholder="{{- 'customer.addresses.address2' | t -}}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-address2"></div>
-                        </div>
-                        {% comment %} <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="city-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[city]"
-                              value="{{form.city}}"
-                              size="40"
-                              placeholder="{{- 'customer.addresses.city' | t -}}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-city"></div>
-                        </div> {% endcomment %}
-                        <div class="col-d-6 col-12 mt-8 d-mt-12">
-                          {% liquid
-                            assign default_value = form.country
-                            assign default_text = form.country
-                            assign select_id = 'address-country-' | append: section.id | append: address.id
-                            assign values = empty
-                            assign option_values = form.country
-                            assign values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
-                            assign option_values = 'Singapore,Indonesia,Malaysia,Philippines,Thailand,Vietnam'
-                            assign values = values | split: ','
-                            assign option_values = option_values | split: ','
-                          %}
-                          <div class="relative">
-                            {%- render 'global-select',
-                              default_value: default_value,
-                              default_text: default_text,
-                              values: values,
-                              option_values: option_values,
-                              id: select_id,
-                              field_name: 'address[country]',
-                              selected_text_class: 'p2',
-                              global_select_class: 'bb-1 b-main pl-0 pr-0 pt-8 pb-8 label-anim label-anim-select'
-                            -%}
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-salutation"></div>
-                        </div>
-                        <div class="col-d-6 col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="zip-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[zip]"
-                              value="{{form.zip}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.zip' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-zip"></div>
-                        </div>
-                        {% comment %} <div class="col-12 mt-8 d-mt-12">
-                          <div class="relative overflow">
-                            <input
-                              type="text"
-                              id="phone-{{address.id}}"
-                              class="global-input w-full bb-1 b-main p2 label-anim"
-                              onkeyup="validate(event)"
-                              name="address[phone]"
-                              value="{{form.phone}}"
-                              size="40"
-                              placeholder="{{ 'customer.addresses.phone' | t }}"
-                            >
-                          </div>
-                          <div class="mt-4 p5 c-red hide-m error error-phone"></div>
-                        </div> {% endcomment %}
-                        <div class="col-12 mt-20">
-                          <label class="global-radio flex ai-center check-default">
-                            <input
-                              type="checkbox"
-                              id="address_default_address_{{ form.id }}"
-                              name="address[default]"
-                              value="1"
-                              {% if address == customer.default_address %}
-                                checked
-                              {% endif %}
-                            >
-                            <div class="gr-mark mr-8"></div>
-                            <div class="p2 checkbox-line-height-custom">{{ 'customer.addresses.set_default' | t }}</div>
-                          </label>
-                        </div>
-                        <div class="col-12 mt-32 flex flex-column d-flex-row ai-start jc-start">
-                          <button type="button" class="btn1 submit-btn" onclick="validate(event,true)">
-                            {{ 'customer.addresses.update' | t }}
-                          </button>
-                          {% comment %} <a
-                            href="#"
-                            class="p5 mt-12 d-mt-0 d-ml-20 link4"
-                            onclick="toggleAddressForm(event)"
-                            rel="nofollow"
-                          >
-                            {{ 'customer.addresses.cancel' | t }}
-                          </a> {% endcomment %}
-                        </div>
-                      </div>
-                    {% endform %}
-                  </div>
-                </td>
-              </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-        <button
-          type="button"
-          class="b-main b-1 mt-32 d-mt-40 aa-btn display-inline p2 pr-24 pl-24 pt-12 pb-12"
-          onclick="toggleAddressForm(event)"
-        >
-          {{ 'customer.addresses.add_new' | t }}
-        </button>
-      {% endpaginate %}
       {% endif %}
     </div>
     <div class="address-popup-teleport hide-m">
@@ -867,21 +899,23 @@
               </div>
               <div class="mt-4 p5 c-red hide-m error error-address2"></div>
             </div>
-            {% comment %} <div class="col-12 mt-12">
-              <div class="relative overflow pb-1">
-                <input
-                  type="text"
-                  id="city"
-                  class="global-input w-full bb-1 b-main p2 label-anim"
-                  onkeyup="validate(event)"
-                  name="address[city]"
-                  value="{{form.city}}"
-                  size="40"
-                  placeholder="{{- 'customer.addresses.city' | t -}}"
-                >
+            {% comment %}
+              <div class="col-12 mt-12">
+                <div class="relative overflow pb-1">
+                  <input
+                    type="text"
+                    id="city"
+                    class="global-input w-full bb-1 b-main p2 label-anim"
+                    onkeyup="validate(event)"
+                    name="address[city]"
+                    value="{{form.city}}"
+                    size="40"
+                    placeholder="{{- 'customer.addresses.city' | t -}}"
+                  >
+                </div>
+                <div class="mt-4 p5 c-red hide-m error error-city"></div>
               </div>
-              <div class="mt-4 p5 c-red hide-m error error-city"></div>
-            </div> {% endcomment %}
+            {% endcomment %}
             <div class="col-d-6 col-12 mt-12">
               {% liquid
                 assign default_value = 'Singapore'
@@ -924,46 +958,56 @@
               </div>
               <div class="mt-4 p5 c-red hide-m error error-zip"></div>
             </div>
-            {% comment %} <div class="col-12 mt-12">
-              <div class="relative overflow pb-1">
-                <input
-                  type="text"
-                  id="phone"
-                  class="global-input w-full bb-1 b-main p2 label-anim"
-                  onkeyup="validate(event)"
-                  name="address[phone]"
-                  value="{{form.phone}}"
-                  size="40"
-                  placeholder="{{ 'customer.addresses.phone' | t }}"
-                >
+            {% comment %}
+              <div class="col-12 mt-12">
+                <div class="relative overflow pb-1">
+                  <input
+                    type="text"
+                    id="phone"
+                    class="global-input w-full bb-1 b-main p2 label-anim"
+                    onkeyup="validate(event)"
+                    name="address[phone]"
+                    value="{{form.phone}}"
+                    size="40"
+                    placeholder="{{ 'customer.addresses.phone' | t }}"
+                  >
+                </div>
+                <div class="mt-4 p5 c-red hide-m error error-phone"></div>
               </div>
-              <div class="mt-4 p5 c-red hide-m error error-phone"></div>
-            </div> {% endcomment %}
+            {% endcomment %}
             <div class="col-12 mt-24">
               <label class="global-radio hc-checkbox colgap-8 flex ai-center check-default">
-                <input type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" value="1" class="hide-m gift-wrap-main-product">
+                <input
+                  type="checkbox"
+                  id="address_default_address_{{ form.id }}"
+                  name="address[default]"
+                  value="1"
+                  class="hide-m gift-wrap-main-product"
+                >
                 <div class="hc__gwi-checkbox hc-icon relative b-1 b-secondary flex ai-start jc-center">
                   <span class="icon absolute ai-center jc-center">
-                    {{settings.icon_checkmark}}
+                    {{ settings.icon_checkmark }}
                   </span>
                 </div>
-                {% comment %} <input type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" value="1">
-                <div class="gr-mark mr-8"></div> {% endcomment %}
+                {% comment %}
+                  <input type="checkbox" id="address_default_address_{{ form.id }}" name="address[default]" value="1">
+                  <div class="gr-mark mr-8"></div>
+                {% endcomment %}
                 <div class="p2 checkbox-line-height-custom">{{ 'customer.addresses.set_default' | t }}</div>
               </label>
             </div>
             <div class="col-12 mt-32 d-mt-40 flex flex-column d-flex-row ai-start jc-start">
-              <button type="button" class="btn1 submit-btn" onclick="validate(event,true)">
-                Save Address
-              </button>
-              {% comment %} <a
-                href="#"
-                class="p5 mt-12 d-mt-0 d-ml-20 link4"
-                onclick="toggleAddressForm(event)"
-                rel="nofollow"
-              >
-                {{ 'customer.addresses.cancel' | t }}
-              </a> {% endcomment %}
+              <button type="button" class="btn1 submit-btn" onclick="validate(event,true)">Save Address</button>
+              {% comment %}
+                <a
+                  href="#"
+                  class="p5 mt-12 d-mt-0 d-ml-20 link4"
+                  onclick="toggleAddressForm(event)"
+                  rel="nofollow"
+                >
+                  {{ 'customer.addresses.cancel' | t }}
+                </a>
+              {% endcomment %}
             </div>
           </div>
         {% endform %}

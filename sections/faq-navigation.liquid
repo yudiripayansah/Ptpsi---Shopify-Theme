@@ -6,183 +6,194 @@
   assign sb = section.blocks
 %}
 <style>
-  #{{el_id}} .nav-link-mobile{
+    #{{el_id}} .nav-link-mobile{
+        display: inline-flex;
+        align-items: center;
+        color: var(--black);
+    }
+    #{{el_id}} .nav-link-mobile.active{
+      display: none;
+    }
+    #{{el_id}} .nav-each {
       display: inline-flex;
       align-items: center;
+      transition: all .3s ease;
+    }
+    #{{el_id}} .icons .icon,
+    #{{el_id}} .icons .icon svg {
+      width: 24px;
+      height: 24px;
+    }
+    #{{el_id}} .nav-each svg {
+      width: 6px;
+      height: 6px;
+      opacity: 0;
+      transition: all .3s ease;
+    }
+    #{{el_id}} .nav-each.active svg {
+      opacity: 1;
+    }
+    #{{el_id}} .faq-navigation-contact-link {
+      white-space: nowrap;
+    }
+    #{{el_id}} .faq-navigation-contact-link svg {
+      width: 16px;
+      height: 16px;
+    }
+    #{{el_id}} .nav-link-mobile.active {
+      {% comment %} width: fit-content;
+      border-bottom: 1px solid var(--black); {% endcomment %}
+    }
+    #{{el_id}} .nav-each.active,
+    #{{el_id}} .nav-each:hover {
       color: var(--black);
+    }
+    #{{el_id}} .global-select-div .options li {
+      padding: 0;
+    }
+    #{{el_id}} .global-select-div .options {
+      opacity: 0;
+      visibility: hidden;
+      display: unset;
+      transition: all .2s ease;
+    }
+    #{{el_id}} .global-select-div.active .options {
+      visibility: visible;
+      opacity: 1;
+    }
+    #{{el_id}} .global-select-div .options li {
+    border-bottom: 0;
+    padding: 4px 16px;
   }
-  #{{el_id}} .nav-link-mobile.active{
-    display: none;
+  #{{el_id}} .global-select-div .options li:last-child {
+    padding-bottom: 16px;
   }
-  #{{el_id}} .nav-each {
-    display: inline-flex;
-    align-items: center;
-    transition: all .3s ease;
-  }
-  #{{el_id}} .icons .icon,
-  #{{el_id}} .icons .icon svg {
-    width: 24px;
-    height: 24px;
-  }
-  #{{el_id}} .nav-each svg {
-    width: 6px;
-    height: 6px;
-    opacity: 0;
-    transition: all .3s ease;
-  }
-  #{{el_id}} .nav-each.active svg {
-    opacity: 1;
-  }
-  #{{el_id}} .faq-navigation-contact-link {
-    white-space: nowrap;
-  }
-  #{{el_id}} .faq-navigation-contact-link svg {
-    width: 16px;
-    height: 16px;
-  }
-  #{{el_id}} .nav-link-mobile.active {
-    {% comment %} width: fit-content;
-    border-bottom: 1px solid var(--black); {% endcomment %}
-  }
-  #{{el_id}} .nav-each.active,
-  #{{el_id}} .nav-each:hover {
-    color: var(--black);
-  }
-  #{{el_id}} .global-select-div .options li {
-    padding: 0;
-  }
-  #{{el_id}} .global-select-div .options {
-    opacity: 0;
-    visibility: hidden;
-    display: unset;
-    transition: all .2s ease;
-  }
-  #{{el_id}} .global-select-div.active .options {
-    visibility: visible;
-    opacity: 1;
-  }
-  #{{el_id}} .global-select-div .options li {
-  border-bottom: 0;
-  padding: 4px 16px;
-}
-#{{el_id}} .global-select-div .options li:last-child {
-  padding-bottom: 16px;
-}
-  #{{el_id}} .swiper-mobile-nav {
-    margin: 0 -16px;
-  }
-  #{{el_id}} .mobile-fn .options {
-    margin-left: 0;
-  }
-  #{{el_id}} .mobile-fn .options li:before {
-    display: none;
-  }
-  #{{el_id}} .mobile-fn .swiper-wrapper {
-    white-space: nowrap;
-    overflow: auto;
-  }
-  #{{el_id}} .mobile-fn .swiper-wrapper {
-    scrollbar-width: none; /* Firefox */
-    -ms-overflow-style: none; /* Internet Explorer 10+ */
-  }
-
-  #{{el_id}} .mobile-fn .swiper-wrapper::-webkit-scrollbar {
-    display: none; /* Chrome, Safari, and Edge */
-  }
-  #{{el_id}} .mobile-fn .swiper-slide {
-    display: inline-flex;
-    width: auto;
-  }
-  #{{el_id}} .dd-faq .faq-dd {
-    transition: height 0.3s ease-in-out;
-    overflow: hidden;
-    height: 0;
-  }
-  @media(min-width: 600px) {
     #{{el_id}} .swiper-mobile-nav {
-      margin: 0 -20px;
+      margin: 0 -16px;
     }
-    #{{el_id}} .icons .icon {
-      right: -6px;
+    #{{el_id}} .mobile-fn .options {
+      margin-left: 0;
     }
-  }
+    #{{el_id}} .mobile-fn .options li:before {
+      display: none;
+    }
+    #{{el_id}} .mobile-fn .swiper-wrapper {
+      white-space: nowrap;
+      overflow: auto;
+    }
+    #{{el_id}} .mobile-fn .swiper-wrapper {
+      scrollbar-width: none; /* Firefox */
+      -ms-overflow-style: none; /* Internet Explorer 10+ */
+    }
+
+    #{{el_id}} .mobile-fn .swiper-wrapper::-webkit-scrollbar {
+      display: none; /* Chrome, Safari, and Edge */
+    }
+    #{{el_id}} .mobile-fn .swiper-slide {
+      display: inline-flex;
+      width: auto;
+    }
+    #{{el_id}} .dd-faq .faq-dd {
+      transition: height 0.3s ease-in-out;
+      overflow: hidden;
+      height: 0;
+    }
+    @media(min-width: 600px) {
+      #{{el_id}} .swiper-mobile-nav {
+        margin: 0 -20px;
+      }
+      #{{el_id}} .icons .icon {
+        right: -6px;
+      }
+    }
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'faq-navigation-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'faq-navigation-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-<section id="{{el_id}}" class="faq-navigation d-mt-80">
-  <div class="hide-m show-d">
-    {% for block in sb %}
-      {% assign bs = block.settings %}
-      <div class="bb-1 b-background">
-        <a
-          href="#{{bs.section_id}}"
-          rel="nofollow"
-          onclick="changeSection{{fn}}(event)"
-          class="flex ai-center pb-12 nav-each p1{% if forloop.first %} active{% else %} pt-12{% endif %}"
-          data-tag="{{bs.section_id}}"
-        >
-          <span class="c-label p4 mr-8">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span> <span class="c-green">{{- bs.title }}</span>
-          <svg class="ml-8" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
-            <circle cx="3" cy="3" r="3" fill="#B35E34"/>
+  <section id="{{el_id}}" class="faq-navigation d-mt-80">
+    <div class="hide-m show-d">
+      {% for block in sb %}
+        {% assign bs = block.settings %}
+        <div class="bb-1 b-background">
+          <a
+            href="#{{bs.section_id}}"
+            rel="nofollow"
+            onclick="changeSection{{fn}}(event)"
+            class="flex ai-center pb-12 nav-each p1{% if forloop.first %} active{% else %} pt-12{% endif %}"
+            data-tag="{{bs.section_id}}"
+          >
+            <span class="c-label p4 mr-8">
+              {%- if forloop.index < 10 %}0{% endif -%}
+              {{- forloop.index -}}
+            </span>
+            <span class="c-green">{{- bs.title }}</span>
+            <svg class="ml-8" xmlns="http://www.w3.org/2000/svg" width="6" height="6" viewBox="0 0 6 6" fill="none">
+              <circle cx="3" cy="3" r="3" fill="#B35E34"/>
+            </svg>
+          </a>
+        </div>
+      {% endfor %}
+      <div class="flex flex-wrap pt-40">
+        <p class="p2 mr-8">Need more help?</p>
+        <a class="p2 underline flex ai-center faq-navigation-contact-link" href="#">
+          <span class="mr-4">Contact Us</span>
+          <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+            <path d="M5.36071 4.64051L11.4478 4.64043M11.4478 4.64043L11.4478 10.641M11.4478 4.64043L4.37678 11.7115" stroke="#19341E" stroke-width="0.8" stroke-linecap="square"/>
           </svg>
         </a>
       </div>
-    {% endfor %}
-    <div class="flex flex-wrap pt-40">
-      <p class="p2 mr-8">Need more help?</p>
-      <a class="p2 underline flex ai-center faq-navigation-contact-link" href="#">
-        <span class="mr-4">Contact Us</span>
-        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-          <path d="M5.36071 4.64051L11.4478 4.64043M11.4478 4.64043L11.4478 10.641M11.4478 4.64043L4.37678 11.7115" stroke="#19341E" stroke-width="0.8" stroke-linecap="square"/>
-        </svg>
-      </a>
     </div>
-  </div>
-  <div class="hide-d show-m mobile-fn swiper-mobile-nav">
-    <div class="global-select-div dd-faq pl-0 pr-0 pt-0 pb-0 bb-0 b-background bg-background-main" onclick="ddActive()">
-      <div class="container">
-        <div class="bb-1 b-background pb-16 pt-16 d-pt-0">
-          <div class="inner relative">
-            <div class="text selected-div-text tl flex ai-center">
-              <span class="p4 mr-8">01</span> <span class="p1">{{ sb[0].settings.title }}</span>
-            </div>
-            <div class="icons">
-              <div class="icon icon-caret">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                  <path d="M6 9L12.001 15L18 9" stroke="#19341E"/>
-                </svg>
+    <div class="hide-d show-m mobile-fn swiper-mobile-nav">
+      <div
+        class="global-select-div dd-faq pl-0 pr-0 pt-0 pb-0 bb-0 b-background bg-background-main"
+        onclick="ddActive()"
+      >
+        <div class="container">
+          <div class="bb-1 b-background pb-16 pt-16 d-pt-0">
+            <div class="inner relative">
+              <div class="text selected-div-text tl flex ai-center">
+                <span class="p4 mr-8">01</span> <span class="p1">{{ sb[0].settings.title }}</span>
+              </div>
+              <div class="icons">
+                <div class="icon icon-caret">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <path d="M6 9L12.001 15L18 9" stroke="#19341E"/>
+                  </svg>
+                </div>
               </div>
             </div>
-          </div>
-          <ul class="faq-dd b-background bg-background tl">
-            {% for block in sb %}
-              {% assign bs = block.settings %}
-              <li
-                onclick="changeSection{{fn}}(event)"
-                data-sections="{{ bs.section_id }}"
-                data-title="{{ bs.title }}"
-                data-tag="{{bs.section_id}}"
-              >
-                <a
+            <ul class="faq-dd b-background bg-background tl">
+              {% for block in sb %}
+                {% assign bs = block.settings %}
+                <li
+                  onclick="changeSection{{fn}}(event)"
                   data-sections="{{ bs.section_id }}"
                   data-title="{{ bs.title }}"
                   data-tag="{{bs.section_id}}"
-                  href="#{{bs.section_id}}"
-                  rel="nofollow"
-                  class="nav-link-mobile nav-handler show-m-inline-block w-full nav-each nav-each-mobile pt-8 {%if forloop.first%}active{% endif %}"
                 >
-                  <span class="p4 mr-8">{% if forloop.index < 10 %}0{% endif %}{{ forloop.index }}</span> <span class="p1">{{ bs.title }}</span>
-                </a>
-              </li>
-            {% endfor %}
-          </ul>
+                  <a
+                    data-sections="{{ bs.section_id }}"
+                    data-title="{{ bs.title }}"
+                    data-tag="{{bs.section_id}}"
+                    href="#{{bs.section_id}}"
+                    rel="nofollow"
+                    class="nav-link-mobile nav-handler show-m-inline-block w-full nav-each nav-each-mobile pt-8 {%if forloop.first%}active{% endif %}"
+                  >
+                    <span class="p4 mr-8">
+                      {%- if forloop.index < 10 %}0{% endif -%}
+                      {{- forloop.index -}}
+                    </span>
+                    <span class="p1">{{ bs.title }}</span>
+                  </a>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-</section>
+  </section>
 {% endif %}
 
 <script>

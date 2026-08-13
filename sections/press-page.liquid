@@ -190,8 +190,12 @@
               {% if block.settings.image != blank %}
                 <div
                   class="pp-cell"
-                  {% if i > 1 %}aria-hidden="true"{% endif %}
-                  {% if i == 1 %}{{ block.shopify_attributes }}{% endif %}
+                  {% if i > 1 %}
+                    aria-hidden="true"
+                  {% endif %}
+                  {% if i == 1 %}
+                    {{- block.shopify_attributes -}}
+                  {% endif %}
                 >
                   {{ block.settings.image | image_url: height: 200 | image_tag: loading: 'lazy' }}
                 </div>
@@ -217,7 +221,8 @@
       {% if entries.size == 0 %}
         {% if request.design_mode %}
           <p class="p2 c-label">
-            No "{{ mo_type }}" metaobject entries found. Add entries with title, provider, year and url fields in Admin &gt; Content &gt; Metaobjects.
+            No "{{ mo_type }}" metaobject entries found. Add entries with title, provider, year and url fields in Admin
+            &gt; Content &gt; Metaobjects.
           </p>
         {% endif %}
       {% else %}
@@ -233,7 +238,9 @@
             <li class="pp-item{% if forloop.index > per_load %} pp-item--hidden{% endif %}">
               <{{ row_tag }}
                 class="pp-row"
-                {% if press_url != blank %}href="{{ press_url }}" target="_blank" rel="noopener"{% endif %}
+                {% if press_url != blank %}
+                  href="{{ press_url }}" target="_blank" rel="noopener"
+                {% endif %}
               >
                 <span class="pp-year p3 c-label">{{ entry.year.value }}</span>
                 <span class="pp-main">
@@ -253,7 +260,9 @@
         </ul>
         {% if entries.size > per_load %}
           <div class="pp-pagination">
-            <button type="button" class="pp-load-more p2 c-green">{{ ss.load_more_label | default: 'Load More' }}</button>
+            <button type="button" class="pp-load-more p2 c-green">
+              {{ ss.load_more_label | default: 'Load More' }}
+            </button>
           </div>
         {% endif %}
       {% endif %}
@@ -517,12 +526,7 @@
   "presets": [
     {
       "name": "Press Page",
-      "blocks": [
-        { "type": "logo" },
-        { "type": "logo" },
-        { "type": "logo" },
-        { "type": "logo" }
-      ]
+      "blocks": [{ "type": "logo" }, { "type": "logo" }, { "type": "logo" }, { "type": "logo" }]
     }
   ]
 }

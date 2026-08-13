@@ -1,225 +1,225 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'marquee-text' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    render 'section-padding', el_id: el_id, section: section
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'marquee-text' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
 %}
 
 <style>
-    #{{ el_id }} {
-        background-color: {{ section.settings.bg_color }};
-    }
-    
-    #{{ el_id }} .marquee {
-        width: 100%;
-        overflow: hidden;
-        white-space: nowrap;
-        box-sizing: border-box;
-        color: #333;
-    }
-    #{{ el_id }} .marquee span {
-        display: inline-block;
-        padding-left: 100%;
-        animation: marquee {{ section.settings.duration }}s linear infinite;
-    }
+      #{{ el_id }} {
+          background-color: {{ section.settings.bg_color }};
+      }
 
-    @media screen and (min-width: 1024px){
-    
-}
-    @keyframes marquee {
-        0%   { transform: translateX(0%); }
-        100% { transform: translateX(-100%); }
-    }
+      #{{ el_id }} .marquee {
+          width: 100%;
+          overflow: hidden;
+          white-space: nowrap;
+          box-sizing: border-box;
+          color: #333;
+      }
+      #{{ el_id }} .marquee span {
+          display: inline-block;
+          padding-left: 100%;
+          animation: marquee {{ section.settings.duration }}s linear infinite;
+      }
+
+      @media screen and (min-width: 1024px){
+
+  }
+      @keyframes marquee {
+          0%   { transform: translateX(0%); }
+          100% { transform: translateX(-100%); }
+      }
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'marquee-text-figma.png' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'marquee-text-figma.png' | asset_url }}" width="100%" height="100%" />
 {% else %}
-    <div id="{{ el_id }}">
-        <div class="marquee pb-24 d-pb-32 pt-24 d-pt-32">
-            <span class="{{ section.settings.text_size }} no-anim c-main">{{ section.settings.text }}</span>
-        </div>
+  <div id="{{ el_id }}">
+    <div class="marquee pb-24 d-pb-32 pt-24 d-pt-32">
+      <span class="{{ section.settings.text_size }} no-anim c-main">{{ section.settings.text }}</span>
     </div>
+  </div>
 {% endif %}
 
 {% schema %}
 {
-    "name": "Split Hero Sticky",
-    "settings": [
-        {
-            "type": "header",
-            "content": "General Settings"
-        },
-        {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
-        },
-        {
-            "type": "textarea",
-            "id": "text",
-            "label": "Text"
-        },
-        {
-            "type": "number",
-            "id": "duration",
-            "label": "Duration (seconds)",
-            "default": 20
-        },
-        {
-            "type": "select",
-            "id": "text_size",
-            "label": "Text Size",
-            "options": [
-                { "value": "h1", "label": "H1" },
-                { "value": "h2", "label": "H2" },
-                { "value": "h3", "label": "H3" },
-                { "value": "h4", "label": "H4" }
-            ],
-            "default": "h1"
-        },
-        {
-            "type": "header",
-            "content": "Section Paddings"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_m",
-            "label": "Top padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_m",
-            "label": "Bottom padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_t",
-            "label": "Top padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_t",
-            "label": "Bottom padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding",
-            "label": "Top padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding",
-            "label": "Bottom padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hd",
-            "label": "Top padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hd",
-            "label": "Bottom padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hhd",
-            "label": "Top padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hhd",
-            "label": "Bottom padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        }
-    ],
-    "presets": [
-        {
-            "name": "Marquee Text",
-            "blocks": []
-        }
-    ]
+  "name": "Split Hero Sticky",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "number",
+      "id": "duration",
+      "label": "Duration (seconds)",
+      "default": 20
+    },
+    {
+      "type": "select",
+      "id": "text_size",
+      "label": "Text Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h1"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Marquee Text",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

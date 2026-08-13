@@ -1,20 +1,20 @@
 {%- comment -%}
-Soilboy
+  Soilboy
 
-Sticky category filter bar + Grid/List view toggle for installation-list.
+  Sticky category filter bar + Grid/List view toggle for installation-list.
 
-The "active" pill/button is intentionally NOT set here. Which category and
-view are actually active depends on the URL's ?category=/?view_mode= or a
-remembered localStorage choice, none of which Liquid can read server-side —
-guessing here (e.g. always marking "All"/"Grid" active) would flash the
-wrong pill before JS's first render() corrects it. JS runs synchronously
-immediately after this markup, so it sets the real is-active state before
-the neutral one is ever noticeably visible.
+  The "active" pill/button is intentionally NOT set here. Which category and
+  view are actually active depends on the URL's ?category=/?view_mode= or a
+  remembered localStorage choice, none of which Liquid can read server-side —
+  guessing here (e.g. always marking "All"/"Grid" active) would flash the
+  wrong pill before JS's first render() corrects it. JS runs synchronously
+  immediately after this markup, so it sets the real is-active state before
+  the neutral one is ever noticeably visible.
 
-Variables:
-- el_id: String. Parent section's element id
-- categories: Array of installation_category metaobject entries, sorted by
-  display_order
+  Variables:
+  - el_id: String. Parent section's element id
+  - categories: Array of installation_category metaobject entries, sorted by
+    display_order
 {%- endcomment -%}
 <div class="ill-filter flex ai-center jc-between" data-ill-filter>
   <div class="ill-filter-pills flex ai-center" role="tablist">
@@ -22,8 +22,14 @@ Variables:
       All<span class="ill-pill-dot"></span>
     </button>
     {% for cat in categories %}
-      <button type="button" class="ill-pill p2 c-green flex ai-center" data-ill-pill data-category="{{ cat.system.handle }}">
-        {{ cat.name.value }}<span class="ill-pill-dot"></span>
+      <button
+        type="button"
+        class="ill-pill p2 c-green flex ai-center"
+        data-ill-pill
+        data-category="{{ cat.system.handle }}"
+      >
+        {{ cat.name.value -}}
+        <span class="ill-pill-dot"></span>
       </button>
     {% endfor %}
   </div>

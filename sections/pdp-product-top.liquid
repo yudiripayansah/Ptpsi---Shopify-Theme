@@ -1,856 +1,952 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'pdp-product-top-' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    render 'section-padding', el_id: el_id, section: section
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'pdp-product-top-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
 %}
 {% assign first_available = product.variants | where: 'available', true | first %}
 {%- assign variant = product.selected_or_first_available_variant -%}
 <style>
-    #{{ el_id }} {
-        overflow: hidden;
-        background: #FFF9F2;
-    }
-    #{{ el_id }} .all-variants-wrapper {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    #{{ el_id }} .cursor-pointer {
-        cursor: pointer;
-    }
-    #{{ el_id }} .swiper-main {
-        overflow: visible;
-    }
-    #{{ el_id }} .c-red {
-        color: #ac1e15;
-    }
-    #{{ el_id }} .product-form-wrapper {
-        height: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: space-between;
-    }
-    .pdp-top-atc-sticky-wrapper.active {
-        opacity: 1;
-        visibility: visible;
-    }
-    #{{ el_id }} .icon-zoom {
-        top: 0;
-        left: 0;
-        width: 50px;
-        height: 50px;
-        padding: 16px;
-        z-index: 2;
-        transition: 0.3s ease all;
-    }
-    .swiper-button-disabled {
-        opacity: 0.5;
-    }
-    .pdp-top-atc-sticky-wrapper {
-        opacity: 0;
-        visibility: hidden;
-        position: fixed;
-        bottom: 0;
-        left: 0;
-        width: 100%;
-        z-index: 1000;
-        transition: 0.3s ease all;
-        background: #FFF9F2;
-    }
-    #{{ el_id }} .icon-zoom svg {
-        width: 100%;
-        height: 100%;
-    }
-    #{{ el_id }} .disabled-option {
-        pointer-events: none;
-        opacity: 0.5;
-    }
-    /* --- Out-of-stock (OOS) states, per Figma "PRODUCT PAGE - SOLD OUT" --- */
-    /* OOS text options (Colour, generic options): greyed placeholder + strikethrough. */
-    #{{ el_id }} .pdpb-color.oos p,
-    #{{ el_id }} .pdpb-option.oos p {
-        color: #A4A399;
-        text-decoration: line-through;
-    }
-    /* OOS icon options (Planter, Saucer): dim the pot outline + diagonal slash across it. */
-    #{{ el_id }} .pdpb-planter.oos span svg,
-    #{{ el_id }} .pdpb-saucer.oos span svg {
-        opacity: 0.45;
-    }
-    #{{ el_id }} .pdpb-planter.oos::after,
-    #{{ el_id }} .pdpb-saucer.oos::after {
-        content: '';
-        display: block;
-        position: absolute;
-        left: 12%;
-        right: 12%;
-        top: 50%;
-        height: 1px;
-        background: #19341E;
-        transform: rotate(-45deg);
-        transform-origin: center;
-        pointer-events: none;
-    }
-    /* OOS options are not selectable. */
-    #{{ el_id }} .oos {
-        pointer-events: none;
-    }
-    /* Sold-out CTA: solid grey inactive state (disableButton adds .disabled + "Sold Out"). */
-    #{{ el_id }} .pdp-top-atc.disabled {
-        background: #A4A399;
-    }
-    #{{ el_id }} .row *:before,
-    #{{ el_id }} .row *:after {
-        display: none;
-    }
+  #{{ el_id }} {
+      overflow: hidden;
+      background: #FFF9F2;
+  }
+  #{{ el_id }} .all-variants-wrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+  #{{ el_id }} .cursor-pointer {
+      cursor: pointer;
+  }
+  #{{ el_id }} .swiper-main {
+      overflow: visible;
+  }
+  #{{ el_id }} .c-red {
+      color: #ac1e15;
+  }
+  #{{ el_id }} .product-form-wrapper {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+  }
+  .pdp-top-atc-sticky-wrapper.active {
+      opacity: 1;
+      visibility: visible;
+  }
+  #{{ el_id }} .icon-zoom {
+      top: 0;
+      left: 0;
+      width: 50px;
+      height: 50px;
+      padding: 16px;
+      z-index: 2;
+      transition: 0.3s ease all;
+  }
+  .swiper-button-disabled {
+      opacity: 0.5;
+  }
+  .pdp-top-atc-sticky-wrapper {
+      opacity: 0;
+      visibility: hidden;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      width: 100%;
+      z-index: 1000;
+      transition: 0.3s ease all;
+      background: #FFF9F2;
+  }
+  #{{ el_id }} .icon-zoom svg {
+      width: 100%;
+      height: 100%;
+  }
+  #{{ el_id }} .disabled-option {
+      pointer-events: none;
+      opacity: 0.5;
+  }
+  /* --- Out-of-stock (OOS) states, per Figma "PRODUCT PAGE - SOLD OUT" --- */
+  /* OOS text options (Colour, generic options): greyed placeholder + strikethrough. */
+  #{{ el_id }} .pdpb-color.oos p,
+  #{{ el_id }} .pdpb-option.oos p {
+      color: #A4A399;
+      text-decoration: line-through;
+  }
+  /* OOS icon options (Planter, Saucer): dim the pot outline + diagonal slash across it. */
+  #{{ el_id }} .pdpb-planter.oos span svg,
+  #{{ el_id }} .pdpb-saucer.oos span svg {
+      opacity: 0.45;
+  }
+  #{{ el_id }} .pdpb-planter.oos::after,
+  #{{ el_id }} .pdpb-saucer.oos::after {
+      content: '';
+      display: block;
+      position: absolute;
+      left: 12%;
+      right: 12%;
+      top: 50%;
+      height: 1px;
+      background: #19341E;
+      transform: rotate(-45deg);
+      transform-origin: center;
+      pointer-events: none;
+  }
+  /* OOS options are not selectable. */
+  #{{ el_id }} .oos {
+      pointer-events: none;
+  }
+  /* Sold-out CTA: solid grey inactive state (disableButton adds .disabled + "Sold Out"). */
+  #{{ el_id }} .pdp-top-atc.disabled {
+      background: #A4A399;
+  }
+  #{{ el_id }} .row *:before,
+  #{{ el_id }} .row *:after {
+      display: none;
+  }
 
-    #{{ el_id }} .arrow-container,
-    .arrow-container-popup {
-        column-gap: 8px;
-    }
-    #{{ el_id }} .arrow-container .left,
-    #{{ el_id }} .arrow-container .left svg,
-    #{{ el_id }} .arrow-container .right,
-    #{{ el_id }} .arrow-container .right svg,
-    .arrow-container-popup .left,
-    .arrow-container-popup .left svg,
-    .arrow-container-popup .right,
-    .arrow-container-popup .right svg {
-        width: 18px;
-        height: 18px;
-        cursor: pointer;
-    }
-    .product-top-slider-popup {
-        position: fixed;
-        background: #FFF9F2;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        z-index: 10000;
-        opacity: 0;
-        visibility: hidden;
-        transition: 0.3s ease all;
-    }
-    .product-top-slider-popup.show,
-    .pdp-top-overlay.show {
-        opacity: 1;
-        visibility: visible;
-    }
-    .product-top-slider-popup .swiper,
-    .product-top-slider-popup .swiper .global-image-wrapper,
-    .product-top-slider-popup .swiper img {
-        height: 100%;
-    }
-    .product-top-slider-popup .swiper .global-image-wrapper {
-        padding-bottom: 0 !important;
-    }
-    .product-top-slider-popup .swiper img {
-        object-fit: cover;
-    }
-    .product-top-slider-popup .popup-close {
-        display: flex;
-        cursor: pointer;
-        align-items: center;
-        justify-content: center;
-        width: 58px;
-        height: 58px;
-        z-index: 2;
-    }
-    .no-scroll {
-        overflow: hidden;
-        height: 100%;
-    }
-    #{{ el_id }} .pdpb-item {
-        cursor: pointer;
-        transition: 0.3s ease all;
-    }
-    #{{ el_id }} .pdpb-item .icon,
-    #{{ el_id }} .pdpb-item svg {
-        width: 16px;
-        height: 16px;
-    }
-    #{{ el_id }} .pdpb-item.open .icon {
-        transform: rotate(180deg);
-    }
-    #{{ el_id }} .pdpb-item .right {
-        column-gap: 4px;
-    }
-    #{{ el_id }} .pdpb-item.size-guide {
-        cursor: pointer;
-    }
-    .pdp-top-overlay {
-        background: #000000;
-        position: fixed;
-        top: 0;
-        left: 0;
-        background-color:rgba(0, 0, 0, 0.7);
-        z-index: 10000;
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: flex-end;
-        opacity: 0;
-        visibility: hidden;
-        transition: 0.3s ease all;
-    }
-    .pdp-top-overlay .pdp-top-overlay-size {
-        background-color: #FFF9F2;
-        width: 100%;
-        height: 100%;
-        padding: 0 16px 20px;
-        overflow-x: auto;
-        transform: translate(100%, 0);
-        transition: 0.5s ease all;
-    }
-    .pdp-top-overlay.show .pdp-top-overlay-size {
-        transform: translate(0, 0);
-    }
-    .pdp-top-overlay-size .size-close,
-    .pdp-top-overlay-size svg {
-        width: 20px;
-        height: 20px;
-        cursor: pointer;
-    }
-    .pdpos-item {
-        width: 100%;
-        column-gap: 16px;
-    }
-    .pdpos-item .image {
-        width: 60px;
-        height: 60px;
-    }
-    #{{ el_id }} .accordion-wrapper {
-        cursor: pointer;
-    }
-    #{{ el_id }} .accordion-wrapper .pdpb-item-content {
-        cursor: default;
-        display: flex;
-        justify-content: flex-end;
-    }
-    #{{ el_id }} .pdpb-planters {
-        gap: 8px 16px;
-        display: flex;
-        justify-content: flex-end;
-        max-width: 332px;
-        flex-wrap: wrap;
-    }
-    #{{ el_id }} .pdpb-list {
-        display: flex;
-        width: 42px;
-        height:42px;
-        padding-left: 6px;
-        padding-right: 6px;
-        cursor: pointer;
-    }
-    #{{ el_id }} .pdpb-list svg {
-        width: 30px;
-        height:auto;
-    }
-    #{{ el_id }} .pdpb-list:hover svg path {
-        fill: #19341E;
-    }
-    #{{ el_id }} .pdpb-list.active svg path {
-        fill: #19341E;
-    }
-    #{{ el_id }} .pdpb-list .absolute {
-        display: none;
-    }
-    #{{ el_id }} .planter-image-holder svg path,
-    #{{ el_id }} .saucer-image-holder svg path {
-        stroke: #19341E;
-    }
-    #{{ el_id }} .planter-image-holder,
-    #{{ el_id }} .planter-image-holder svg {
-        width: 14px;
-        height:  14px;
-    }
-    #{{ el_id }} .product-details-wrapper h4 {
-        visibility: visible;
-    }
-    .pdp-top-sticky-mini {
-        display: none;
-    }
-    .pdp-top-atc span,
-    .pdp-top-atc-dum span {
-        line-height: unset !important;
-    }
-    .pdp-top-atc.disabled {
-        background-color: #A4A399;
-    }
-    #{{ el_id }} .pdpb-color.hidden,
-    #{{ el_id }} .pdpb-gc.hidden {
-        display: none;
-    }
-    #{{ el_id }} .pdpb-color p {
-        cursor: pointer;
-    }
-    #{{ el_id }} .accordion-color {
-        max-height: 150px;
-    }
-    #{{ el_id }} .gc-form-message,
-    #{{ el_id }} .gc-form-date {
-        padding-right: 0;
-    }
-    #{{ el_id }} .gc-form-date {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='17' viewBox='0 0 16 17' fill='none'%3E%3Cpath d='M1.4375 5.25712H14.5625M3.13393 0V1.37159M12.6875 0V1.37142M15.5 3.77142V13.6C15.5 14.9255 14.3807 16 13 16H3C1.61929 16 0.5 14.9255 0.5 13.6V3.77142C0.5 2.44594 1.61929 1.37142 3 1.37142H13C14.3807 1.37142 15.5 2.44594 15.5 3.77142Z' stroke='%2319341E'/%3E%3C/svg%3E");
-        background-repeat: no-repeat;
-        background-position: right 1px;
-        background-size: 16px;
-        color: #19341e;
-    }
-    #{{ el_id }} .gc-form-date::-webkit-calendar-picker-indicator {
-        opacity: 0;     /* hides default icon */
-        cursor: pointer;
-    }
-    @media screen and (max-width: 1023px) {
-        #{{ el_id }} .m-t-pt-26 {
-            padding-top: 26px;
-        }
-    }
-    @media screen and (min-width: 1024px) {
-        #{{ el_id }} {
-            overflow: unset;
-        }
-        #{{ el_id }} .icon-zoom:hover {
-            opacity: 1;
-        }
-        #{{ el_id }} .swiper-main {
-            overflow: hidden;
-        }
-        #{{ el_id }} .icon-zoom svg {
-            width: 100%;
-            height: 100%;
-        }
-        #{{ el_id }} .icon-zoom {
-            transition: none;
-            will-change: transform;
-        }
-        .product-top-slider-popup .popup-close {
-            width: 62px;
-            height: 62px;
-        }
-        .pdp-top-overlay {
-        }
-        .pdp-top-overlay .pdp-top-overlay-size {
-            width: 600px;
-            padding: 0 24px 24px;
-        }
-        .pdpos-items .pdpos-item:nth-child(odd) {
-            width: calc(50% + 10px);
-            padding-right: 20px;
-        }
-        .pdpos-items .pdpos-item:nth-child(even) {
-            width: calc(50% - 10px);
-        }
-        #{{ el_id }} .pdpb-item.accordion {
-            height: 20px;
-        }
-        #{{ el_id }} .pdpb-list .absolute {
-            width: max-content;
-            max-width: 100px;
-            min-width: 100px;
-            color: var(--white);
-            bottom: 57px;
-            left: 50%;
-            {% comment %} left: -34px; {% endcomment %}
-            transform: translateX(-50%);
-        }
-        #{{ el_id }} .pdpb-list:nth-child(6) .absolute,
-        #{{ el_id }} .pdpb-list:last-child .absolute {
-            left: unset;
-            transform: unset;
-            right: 0;
-        }
-        #{{ el_id }} .pdpb-list:hover .absolute {
-            display: block;
-        }
-        #{{ el_id }} .icon-zoom {
-            position: fixed;
-            left: 0;
-            top: 0;
-            width: 60px;
-            height: 60px;
-            padding: 14px;
-            will-change: transform;
-            z-index: 2;
-            display: none;
-            transform: translate(-9999px, -9999px);
-        }
-        #{{ el_id }} .pdpb-list .absolute:after {
-            content: '';
-            display: block;
-            width: 24px;
-            height: 14px;
-            position: absolute;
-            background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='11' viewBox='0 0 21 11' fill='none'%3E%3Cpath d='M10.3926 10.5L0.000271761 0L20.7849 0L10.3926 10.5Z' fill='%23304835'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-size: contain;
-            {% comment %} left: 43px; {% endcomment %}
-            left: 50%;
-            transform: translateX(-50%);
-            bottom: -13px;
-        }
-        #{{ el_id }} .pdpb-list:nth-child(6) .absolute:after,
-        #{{ el_id }} .pdpb-list:last-child .absolute:after {
-            right: 9px;
-            left: unset;
-            transform: unset;
-        }
-        #{{ el_id }} .product-top-slider {
-            position: sticky;
-            top: 0;
-        }
-        .pdp-top-sticky-mini {
-            display: flex;
-            bottom: 24px;
-            right: 24px;
-            position: fixed;
-            z-index: 10;
-            background: #FFF9F2;
-            border: 1px solid #E4D7C8;
-            column-gap: 12px;
-            padding: 12px;
-            align-items: center;
-            opacity: 0;
-            visibility: hidden;
-            transition: 0.3s ease all;
-        }
-        .pdp-top-sticky-mini.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        .pdp-top-sticky-mini .ptsm-image {
-            width: 35px;
-        }
-        .pdp-top-sticky-mini a {
-            padding: 12px 24px;
-        }
-        .pdp-top-atc-sticky-wrapper {
-            display: none;
-        }
-    }
+  #{{ el_id }} .arrow-container,
+  .arrow-container-popup {
+      column-gap: 8px;
+  }
+  #{{ el_id }} .arrow-container .left,
+  #{{ el_id }} .arrow-container .left svg,
+  #{{ el_id }} .arrow-container .right,
+  #{{ el_id }} .arrow-container .right svg,
+  .arrow-container-popup .left,
+  .arrow-container-popup .left svg,
+  .arrow-container-popup .right,
+  .arrow-container-popup .right svg {
+      width: 18px;
+      height: 18px;
+      cursor: pointer;
+  }
+  .product-top-slider-popup {
+      position: fixed;
+      background: #FFF9F2;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      z-index: 10000;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease all;
+  }
+  .product-top-slider-popup.show,
+  .pdp-top-overlay.show {
+      opacity: 1;
+      visibility: visible;
+  }
+  .product-top-slider-popup .swiper,
+  .product-top-slider-popup .swiper .global-image-wrapper,
+  .product-top-slider-popup .swiper img {
+      height: 100%;
+  }
+  .product-top-slider-popup .swiper .global-image-wrapper {
+      padding-bottom: 0 !important;
+  }
+  .product-top-slider-popup .swiper img {
+      object-fit: cover;
+  }
+  .product-top-slider-popup .popup-close {
+      display: flex;
+      cursor: pointer;
+      align-items: center;
+      justify-content: center;
+      width: 58px;
+      height: 58px;
+      z-index: 2;
+  }
+  .no-scroll {
+      overflow: hidden;
+      height: 100%;
+  }
+  #{{ el_id }} .pdpb-item {
+      cursor: pointer;
+      transition: 0.3s ease all;
+  }
+  #{{ el_id }} .pdpb-item .icon,
+  #{{ el_id }} .pdpb-item svg {
+      width: 16px;
+      height: 16px;
+  }
+  #{{ el_id }} .pdpb-item.open .icon {
+      transform: rotate(180deg);
+  }
+  #{{ el_id }} .pdpb-item .right {
+      column-gap: 4px;
+  }
+  #{{ el_id }} .pdpb-item.size-guide {
+      cursor: pointer;
+  }
+  .pdp-top-overlay {
+      background: #000000;
+      position: fixed;
+      top: 0;
+      left: 0;
+      background-color:rgba(0, 0, 0, 0.7);
+      z-index: 10000;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      justify-content: flex-end;
+      opacity: 0;
+      visibility: hidden;
+      transition: 0.3s ease all;
+  }
+  .pdp-top-overlay .pdp-top-overlay-size {
+      background-color: #FFF9F2;
+      width: 100%;
+      height: 100%;
+      padding: 0 16px 20px;
+      overflow-x: auto;
+      transform: translate(100%, 0);
+      transition: 0.5s ease all;
+  }
+  .pdp-top-overlay.show .pdp-top-overlay-size {
+      transform: translate(0, 0);
+  }
+  .pdp-top-overlay-size .size-close,
+  .pdp-top-overlay-size svg {
+      width: 20px;
+      height: 20px;
+      cursor: pointer;
+  }
+  .pdpos-item {
+      width: 100%;
+      column-gap: 16px;
+  }
+  .pdpos-item .image {
+      width: 60px;
+      height: 60px;
+  }
+  #{{ el_id }} .accordion-wrapper {
+      cursor: pointer;
+  }
+  #{{ el_id }} .accordion-wrapper .pdpb-item-content {
+      cursor: default;
+      display: flex;
+      justify-content: flex-end;
+  }
+  #{{ el_id }} .pdpb-planters {
+      gap: 8px 16px;
+      display: flex;
+      justify-content: flex-end;
+      max-width: 332px;
+      flex-wrap: wrap;
+  }
+  #{{ el_id }} .pdpb-list {
+      display: flex;
+      width: 42px;
+      height:42px;
+      padding-left: 6px;
+      padding-right: 6px;
+      cursor: pointer;
+  }
+  #{{ el_id }} .pdpb-list svg {
+      width: 30px;
+      height:auto;
+  }
+  #{{ el_id }} .pdpb-list:hover svg path {
+      fill: #19341E;
+  }
+  #{{ el_id }} .pdpb-list.active svg path {
+      fill: #19341E;
+  }
+  #{{ el_id }} .pdpb-list .absolute {
+      display: none;
+  }
+  #{{ el_id }} .planter-image-holder svg path,
+  #{{ el_id }} .saucer-image-holder svg path {
+      stroke: #19341E;
+  }
+  #{{ el_id }} .planter-image-holder,
+  #{{ el_id }} .planter-image-holder svg {
+      width: 14px;
+      height:  14px;
+  }
+  #{{ el_id }} .product-details-wrapper h4 {
+      visibility: visible;
+  }
+  .pdp-top-sticky-mini {
+      display: none;
+  }
+  .pdp-top-atc span,
+  .pdp-top-atc-dum span {
+      line-height: unset !important;
+  }
+  .pdp-top-atc.disabled {
+      background-color: #A4A399;
+  }
+  #{{ el_id }} .pdpb-color.hidden,
+  #{{ el_id }} .pdpb-gc.hidden {
+      display: none;
+  }
+  #{{ el_id }} .pdpb-color p {
+      cursor: pointer;
+  }
+  #{{ el_id }} .accordion-color {
+      max-height: 150px;
+  }
+  #{{ el_id }} .gc-form-message,
+  #{{ el_id }} .gc-form-date {
+      padding-right: 0;
+  }
+  #{{ el_id }} .gc-form-date {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='17' viewBox='0 0 16 17' fill='none'%3E%3Cpath d='M1.4375 5.25712H14.5625M3.13393 0V1.37159M12.6875 0V1.37142M15.5 3.77142V13.6C15.5 14.9255 14.3807 16 13 16H3C1.61929 16 0.5 14.9255 0.5 13.6V3.77142C0.5 2.44594 1.61929 1.37142 3 1.37142H13C14.3807 1.37142 15.5 2.44594 15.5 3.77142Z' stroke='%2319341E'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1px;
+      background-size: 16px;
+      color: #19341e;
+  }
+  #{{ el_id }} .gc-form-date::-webkit-calendar-picker-indicator {
+      opacity: 0;     /* hides default icon */
+      cursor: pointer;
+  }
+  @media screen and (max-width: 1023px) {
+      #{{ el_id }} .m-t-pt-26 {
+          padding-top: 26px;
+      }
+  }
+  @media screen and (min-width: 1024px) {
+      #{{ el_id }} {
+          overflow: unset;
+      }
+      #{{ el_id }} .icon-zoom:hover {
+          opacity: 1;
+      }
+      #{{ el_id }} .swiper-main {
+          overflow: hidden;
+      }
+      #{{ el_id }} .icon-zoom svg {
+          width: 100%;
+          height: 100%;
+      }
+      #{{ el_id }} .icon-zoom {
+          transition: none;
+          will-change: transform;
+      }
+      .product-top-slider-popup .popup-close {
+          width: 62px;
+          height: 62px;
+      }
+      .pdp-top-overlay {
+      }
+      .pdp-top-overlay .pdp-top-overlay-size {
+          width: 600px;
+          padding: 0 24px 24px;
+      }
+      .pdpos-items .pdpos-item:nth-child(odd) {
+          width: calc(50% + 10px);
+          padding-right: 20px;
+      }
+      .pdpos-items .pdpos-item:nth-child(even) {
+          width: calc(50% - 10px);
+      }
+      #{{ el_id }} .pdpb-item.accordion {
+          height: 20px;
+      }
+      #{{ el_id }} .pdpb-list .absolute {
+          width: max-content;
+          max-width: 100px;
+          min-width: 100px;
+          color: var(--white);
+          bottom: 57px;
+          left: 50%;
+          {% comment %} left: -34px; {% endcomment %}
+          transform: translateX(-50%);
+      }
+      #{{ el_id }} .pdpb-list:nth-child(6) .absolute,
+      #{{ el_id }} .pdpb-list:last-child .absolute {
+          left: unset;
+          transform: unset;
+          right: 0;
+      }
+      #{{ el_id }} .pdpb-list:hover .absolute {
+          display: block;
+      }
+      #{{ el_id }} .icon-zoom {
+          position: fixed;
+          left: 0;
+          top: 0;
+          width: 60px;
+          height: 60px;
+          padding: 14px;
+          will-change: transform;
+          z-index: 2;
+          display: none;
+          transform: translate(-9999px, -9999px);
+      }
+      #{{ el_id }} .pdpb-list .absolute:after {
+          content: '';
+          display: block;
+          width: 24px;
+          height: 14px;
+          position: absolute;
+          background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='21' height='11' viewBox='0 0 21 11' fill='none'%3E%3Cpath d='M10.3926 10.5L0.000271761 0L20.7849 0L10.3926 10.5Z' fill='%23304835'/%3E%3C/svg%3E");
+          background-repeat: no-repeat;
+          background-size: contain;
+          {% comment %} left: 43px; {% endcomment %}
+          left: 50%;
+          transform: translateX(-50%);
+          bottom: -13px;
+      }
+      #{{ el_id }} .pdpb-list:nth-child(6) .absolute:after,
+      #{{ el_id }} .pdpb-list:last-child .absolute:after {
+          right: 9px;
+          left: unset;
+          transform: unset;
+      }
+      #{{ el_id }} .product-top-slider {
+          position: sticky;
+          top: 0;
+      }
+      .pdp-top-sticky-mini {
+          display: flex;
+          bottom: 24px;
+          right: 24px;
+          position: fixed;
+          z-index: 10;
+          background: #FFF9F2;
+          border: 1px solid #E4D7C8;
+          column-gap: 12px;
+          padding: 12px;
+          align-items: center;
+          opacity: 0;
+          visibility: hidden;
+          transition: 0.3s ease all;
+      }
+      .pdp-top-sticky-mini.active {
+          opacity: 1;
+          visibility: visible;
+      }
+      .pdp-top-sticky-mini .ptsm-image {
+          width: 35px;
+      }
+      .pdp-top-sticky-mini a {
+          padding: 12px 24px;
+      }
+      .pdp-top-atc-sticky-wrapper {
+          display: none;
+      }
+  }
 </style>
 
 {% if request.visual_preview_mode %}
   <img src="{{ 'pdp-product-top.PNG' | asset_url }}" width="100%" height="100%">
 {% else %}
-<div id="{{ el_id }}">
+  <div id="{{ el_id }}">
     <div class="container">
-        <div class="row flex flex-wrap m-t-pt-26">
-            <div class="col-12 col-d-8">
-                <div class="product-top-slider">
-                    <div class="swiper swiper-main relative">
-                        <div class="absolute icon-zoom">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                <path d="M13.7781 10.2219L20 4.00002M20 4.00002L15.4286 4M20 4.00002L19.9999 8.57122M10.2226 13.7778L4.00039 20M4.00039 20L8.57178 20M4.00039 20L4.00045 15.4288M13.7781 13.7778L20 19.9996M20 19.9996L20 15.4283M20 19.9996L15.4287 19.9995M10.2226 10.2226L4.00002 4.00002M4.00002 4.00002L4 8.57131M4.00002 4.00002L8.57133 4.00008" stroke="#19341E" stroke-linecap="round" stroke-linejoin="round"/>
-                            </svg>
-                        </div>
-                        <div class="swiper-wrapper swiper-wrapper-main">
-                            {%- for media in product.media -%}
-                                    {% assign ids = '' %}
-                                    {% for v in product.variants %}
-                                        {% if v.featured_image and v.featured_image.src == media.src %}
-                                            {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
-                                            {% assign ids = ids | append: v.id %}
-                                        {% endif %}
-                                    {% endfor %}
-                                    {% assign slide_planter = '' %}
-                                    {% assign slide_color = '' %}
-                                    {% if media.alt contains 'planter:' %}
-                                        {% assign slide_planter = media.alt | split: 'planter:' | last | split: '|' | first | strip %}
-                                        {% if media.alt contains 'color:' %}
-                                            {% assign slide_color = media.alt | split: 'color:' | last | split: '|' | first | strip %}
-                                        {% endif %}
-                                    {% endif %}
-                                {% if media.media_type == 'image' %}
-                                    <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
-                                    {%- render 'global-image-wrapper',
-                                        image: media,
-                                        preload: true
-                                    -%}
-                                    </div>
-                                {% elsif media.media_type == 'video' %}
-                                    <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
-                                        <div class="video-wrapper">
-                                            {{ media | video_tag: muted: true, controls: false, image_size: '1500x', autoplay: true, loop: true }}
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                        <div class="flex jc-between flex ai-center pt-12">
-                            <p class="p4 c-label js-gallery-count" data-total="{{ product.images.size }}">01 - {% if product.images.size < 10 %}0{% endif %}{{ product.images.size }}</p>
-                            <div class="arrow-container flex ai-center">
-                                <div class="left">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                        <path d="M8.125 4.5L3.75 9M3.75 9L8.125 13.5M3.75 9L14.25 9" stroke="#19341E" stroke-linecap="square"/>
-                                    </svg>
-                                </div>
-                                <div class="right">
-                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                        <path d="M9.875 4.5L14.25 9M14.25 9L9.875 13.5M14.25 9L3.75 9" stroke="#19341E" stroke-linecap="square"/>
-                                    </svg>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-                <div class="col-12 col-d-4 flex flex-column jc-between">
-                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
-                        <form @submit.prevent="addToCartGC($event)" class="product-form-wrapper pdp-top-gift-form" novalidate>
-                    {%- endif -%}
-                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
-                        <div>
-                        <div class="pt-32 d-pt-0">
-                            <h4 class="h4 product-title{% if product.available == true %} available{% endif %}">{{ product.title }}
-                                {% unless product.available %}
-                                    <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
-                                {% else %}
-                                    {% assign tags = product.tags | join: ',' | downcase %}
-                                    {% if tags contains 'new' %}
-                                        <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
-                                    {% endif %}
-                                {% endunless %}
-                            </h4>
-                            <div class="rte p2 mt-12">
-                                {{ product.description }}
-                            </div>
-                            {% if product.metafields.custom.small_label != blank %}
-                                <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
-                            {% endif %}
-                            {%- if settings.pg_enable_labels -%}
-                                <div class="labels-con flex">
-                                    {% assign first = true %}
-                                    {%- for i in (1..10) -%}
-                                        {%- assign tag = "pg_tag_" | append: i -%}
-                                        {%- assign bg_color = "pg_tag_bg_" | append: i -%}
-                                        {%- assign text_color = "pg_tag_color_" | append: i -%}
-
-                                        {%- if product.tags contains settings[tag] -%}
-                                            {%- assign tag_text = settings[tag] | split: ':' | last -%}
-                                            {% unless first %} <div class="p4 c-label mt-16">&nbsp;-&nbsp;</div> {% endunless %}
-                                            <div class="p4 mt-16" style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}">{{ tag_text }}</div>
-                                            {% assign first = false %}
-                                        {%- endif -%}
-                                    {%- endfor -%}
-                                    {% comment %} <div class="p5 c-label">Imported From Japan - Seasonal</div> {% endcomment %}
-                                </div>
-                            {%- endif -%}
-                        </div>
-                        <div class="giftcard-message-wrapper d-mt-32 mt-24 relative w-full">
-                            <div class="form-wrapper">
-                                <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="on">
-                                <div class="form-group pt-8">
-                                    <input
-                                        type="email"
-                                        @change="isValidEmail"
-                                        name="properties[Recipient email]"
-                                        placeholder="{{ 'products.product.recipient_email' | t }}"
-                                        class="global-input bb-1 b-border p2"
-                                    >
-                                    <div class="pt-8">
-                                        <div class="error-message pb-4 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.recipient_email' | t }}</div>
-                                        <p class="p3">Only 1 email per gift card.</p>
-                                    </div>
-                                </div>
-                                <div class="form-group pt-8 mt-12">
-                                    <input
-                                    type="text"
-                                    name="properties[Sender name]"
-                                    placeholder="{{ 'products.product.sender_name' | t }}"
-                                    class="global-input bb-1 b-border p2"
-                                    >
-                                    <div class="error-message mt-8 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.sender_name' | t }}</div>
-                                </div>
-                                <div class="form-group pt-8 mt-12">
-                                    <input
-                                    type="text"
-                                    name="properties[Recipient name]"
-                                    placeholder="{{ 'products.product.recipient_name' | t }}"
-                                    class="global-input bb-1 b-border p2"
-                                    >
-                                    <div class="error-message mt-8 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.recipient_name' | t }}</div>
-                                </div>
-                                <div class="form-group pt-8 mt-12 relative">
-                                    <div class="relative">
-                                        <textarea
-                                            name="properties[Message]"
-                                            placeholder="{{ 'products.product.gift_card_msg' | t }}"
-                                            class="global-input bb-1 b-border block gc-form-message p2"
-                                            rows="3"
-                                            maxlength="200"
-                                            onkeyup="updateCharacterCount(this, 200)"
-                                        ></textarea>
-                                        <div class="absolute bottom-0 right-0 p5 pb-8"><span class="p5 char-count">0</span>/200</div>
-                                    </div>
-                                    <div class="error-message mt-8 p3 c-red hide-m">{{ 'products.product.please_enter' | t }} {{ 'products.product.message' | t }}</div>
-                                </div>
-                                <div class="from-date pt-8 mt-12">
-                                    <div class="from-group">
-                                        <input type="date" name="properties[Send on]" class="global-input p2 bb-1 b-green uppercase gc-form-date c-placeholder">
-                                    </div>
-                                    <div class="p5 mt-8">{{'products.product.send_date_info'|t}}</div>
-                                </div>
-                            </div>
-                        </div>
-                        </div>
+      <div class="row flex flex-wrap m-t-pt-26">
+        <div class="col-12 col-d-8">
+          <div class="product-top-slider">
+            <div class="swiper swiper-main relative">
+              <div class="absolute icon-zoom">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">
+                  <path d="M13.7781 10.2219L20 4.00002M20 4.00002L15.4286 4M20 4.00002L19.9999 8.57122M10.2226 13.7778L4.00039 20M4.00039 20L8.57178 20M4.00039 20L4.00045 15.4288M13.7781 13.7778L20 19.9996M20 19.9996L20 15.4283M20 19.9996L15.4287 19.9995M10.2226 10.2226L4.00002 4.00002M4.00002 4.00002L4 8.57131M4.00002 4.00002L8.57133 4.00008" stroke="#19341E" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+              </div>
+              <div class="swiper-wrapper swiper-wrapper-main">
+                {%- for media in product.media -%}
+                  {% assign ids = '' %}
+                  {% for v in product.variants %}
+                    {% if v.featured_image and v.featured_image.src == media.src %}
+                      {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
+                      {% assign ids = ids | append: v.id %}
                     {% endif %}
-                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
-                        <input type="hidden" name="id" value="{{ variant.id }}" class="pdp-top-variant-id">
-                        <div class="gift_var_wrapper pt-8 d-pt-0">
-                            <div class="pt-16 pb-16 d-pt-12 d-pb-12 mb-16 d-mb-12 accordion-wrapper bb-1 b-main w-full">
-                                <div class="pdpb-item accordion w-full overflow">
-                                    <div class="pdpb-item-header w-full flex ai-center jc-between">
-                                        <p class="p4 c-label">Card Value</p>
-                                        <div class="flex flex-row ai-center right">
-                                            <p class="p2 gc-title-holder">{{ product.metafields.custom.size_label.value }}</p>
-                                            <div class="icon">
-                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
-                                                    <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
-                                                </svg>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="pdpb-item-content">
-                                        <div class="pdpb-planters cursor-pointer pt-4">
-                                            {% for variant in product.variants %}
-                                                <div class="pdpb-gc tr w-full relative pr-20" data-variant-id="{{ variant.id }}" data-variant-title="{{ variant.title }}" onclick="selectGiftVariant(event, true)">
-                                                    <p class="p2">S{{ variant.title }}</p>
-                                                </div>
-                                            {% endfor %}
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <button onclick="pdpProductTop.addToCartGC(event)" class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center" data-available="false" data-select-options="true">
-                                <span>Add to Cart</span>
-                                <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
-                            </button>
-                        </div>
-                    {% else -%}
-                        <div class="all-variants-wrapper">
-                            <div class="pt-32 d-pt-0">
-                                <{{section.settings.title_dom_type }} class="h4 product-title{% if product.available == true %} available{% endif %}">
-                                    {% comment %} {{ product.title }} {% endcomment %}
-                                    {% assign title_parts = product.title | split: '-' %}
-                                    {% if title_parts.size > 1 %}
-                                        {% assign clean_title = title_parts[0] %}
-                                        {{ clean_title }}
-                                    {% else %}
-                                        {{ product.title }}
-                                    {% endif %}
-                                    {% unless product.available %}
-                                        <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
-                                    {% else %}
-                                        {% assign tags = product.tags | join: ',' | downcase %}
-                                        {% if tags contains 'new' %}
-                                            <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
-                                        {% endif %}
-                                    {% endunless %}
-                                </{{section.settings.title_dom_type }}>
-                                <div class="rte p2 mt-12">
-                                    {{ product.description }}
-                                </div>
-                                {% if product.metafields.custom.small_label != blank %}
-                                    <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
-                                {% endif %}
-                                {%- if settings.pg_enable_labels -%}
-                                    <div class="labels-con flex">
-                                        {% assign first = true %}
-                                        {%- for i in (1..10) -%}
-                                            {%- assign tag = "pg_tag_" | append: i -%}
-                                            {%- assign bg_color = "pg_tag_bg_" | append: i -%}
-                                            {%- assign text_color = "pg_tag_color_" | append: i -%}
-
-                                            {%- if product.tags contains settings[tag] -%}
-                                                {%- assign tag_text = settings[tag] | split: ':' | last -%}
-                                                {% unless first %} <div class="p4 c-label mt-16">&nbsp;-&nbsp;</div> {% endunless %}
-                                                <div class="p4 mt-16" style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}">{{ tag_text }}</div>
-                                                {% assign first = false %}
-                                            {%- endif -%}
-                                        {%- endfor -%}
-                                        {% comment %} <div class="p5 c-label">Imported From Japan - Seasonal</div> {% endcomment %}
-                                    </div>
-                                {%- endif -%}
-                            </div>
-                            {%- render 'product-variant-soil', product: product, workshop_note: section.settings.workshop_atc_note -%}
-                        </div>
-                    {%- endif -%}
-                    {%- if product.gift_card? or product.type == 'Gift Card' -%}
-                        </form>
-                    {%- endif -%}
+                  {% endfor %}
+                  {% assign slide_planter = '' %}
+                  {% assign slide_color = '' %}
+                  {% if media.alt contains 'planter:' %}
+                    {% assign slide_planter = media.alt | split: 'planter:' | last | split: '|' | first | strip %}
+                    {% if media.alt contains 'color:' %}
+                      {% assign slide_color = media.alt | split: 'color:' | last | split: '|' | first | strip %}
+                    {% endif %}
+                  {% endif %}
+                  {% if media.media_type == 'image' %}
+                    <div
+                      class="swiper-slide"
+                      data-variant-ids="{{ ids }}"
+                      data-planter="{{ slide_planter | escape }}"
+                      data-color="{{ slide_color | escape }}"
+                    >
+                      {%- render 'global-image-wrapper', image: media, preload: true -%}
+                    </div>
+                  {% elsif media.media_type == 'video' %}
+                    <div
+                      class="swiper-slide"
+                      data-variant-ids="{{ ids }}"
+                      data-planter="{{ slide_planter | escape }}"
+                      data-color="{{ slide_color | escape }}"
+                    >
+                      <div class="video-wrapper">
+                        {{
+                          media
+                          | video_tag: muted: true, controls: false, image_size: '1500x', autoplay: true, loop: true
+                        }}
+                      </div>
+                    </div>
+                  {% endif %}
+                {% endfor %}
+              </div>
+              <div class="flex jc-between flex ai-center pt-12">
+                <p class="p4 c-label js-gallery-count" data-total="{{ product.images.size }}">
+                  01 - {% if product.images.size < 10 %}0{% endif -%}
+                  {{- product.images.size }}
+                </p>
+                <div class="arrow-container flex ai-center">
+                  <div class="left">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path d="M8.125 4.5L3.75 9M3.75 9L8.125 13.5M3.75 9L14.25 9" stroke="#19341E" stroke-linecap="square"/>
+                    </svg>
+                  </div>
+                  <div class="right">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                      <path d="M9.875 4.5L14.25 9M14.25 9L9.875 13.5M14.25 9L3.75 9" stroke="#19341E" stroke-linecap="square"/>
+                    </svg>
+                  </div>
                 </div>
+              </div>
+            </div>
+          </div>
         </div>
-        <Teleport to="body">
-            <div class="product-top-slider-popup" data-section="{{ el_id }}">
-                <div class="swiper swiper-popup relative overflow">
-                    <div class="popup-close absolute top-0 right-0">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                            <path d="M15.8327 4.16699L4.16602 15.8337M15.8327 15.8337L4.16602 4.16699" stroke="#19341E"/>
+        <div class="col-12 col-d-4 flex flex-column jc-between">
+          {%- if product.gift_card? or product.type == 'Gift Card' -%}
+            <form @submit.prevent="addToCartGC($event)" class="product-form-wrapper pdp-top-gift-form" novalidate>
+          {%- endif -%}
+          {%- if product.gift_card? or product.type == 'Gift Card' -%}
+            <div>
+              <div class="pt-32 d-pt-0">
+                <h4 class="h4 product-title{% if product.available == true %} available{% endif %}">
+                  {{ product.title }}
+                  {% unless product.available %}
+                    <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
+                  {% else %}
+                    {% assign tags = product.tags | join: ',' | downcase %}
+                    {% if tags contains 'new' %}
+                      <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
+                    {% endif %}
+                  {% endunless %}
+                </h4>
+                <div class="rte p2 mt-12">
+                  {{ product.description }}
+                </div>
+                {% if product.metafields.custom.small_label != blank %}
+                  <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
+                {% endif %}
+                {%- if settings.pg_enable_labels -%}
+                  <div class="labels-con flex">
+                    {% assign first = true %}
+                    {%- for i in (1..10) -%}
+                      {%- assign tag = 'pg_tag_' | append: i -%}
+                      {%- assign bg_color = 'pg_tag_bg_' | append: i -%}
+                      {%- assign text_color = 'pg_tag_color_' | append: i -%}
+
+                      {%- if product.tags contains settings[tag] -%}
+                        {%- assign tag_text = settings[tag] | split: ':' | last -%}
+                        {% unless first %}
+                          <div class="p4 c-label mt-16">&nbsp;-&nbsp;</div>
+                        {% endunless %}
+                        <div
+                          class="p4 mt-16"
+                          style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}"
+                        >
+                          {{ tag_text }}
+                        </div>
+                        {% assign first = false %}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {% comment %} <div class="p5 c-label">Imported From Japan - Seasonal</div> {% endcomment %}
+                  </div>
+                {%- endif -%}
+              </div>
+              <div class="giftcard-message-wrapper d-mt-32 mt-24 relative w-full">
+                <div class="form-wrapper">
+                  <input type="hidden" name="properties[__shopify_send_gift_card_to_recipient]" value="on">
+                  <div class="form-group pt-8">
+                    <input
+                      type="email"
+                      @change="isValidEmail"
+                      name="properties[Recipient email]"
+                      placeholder="{{ 'products.product.recipient_email' | t }}"
+                      class="global-input bb-1 b-border p2"
+                    >
+                    <div class="pt-8">
+                      <div class="error-message pb-4 p3 c-red hide-m">
+                        {{ 'products.product.please_enter' | t }}
+                        {{ 'products.product.recipient_email' | t }}
+                      </div>
+                      <p class="p3">Only 1 email per gift card.</p>
+                    </div>
+                  </div>
+                  <div class="form-group pt-8 mt-12">
+                    <input
+                      type="text"
+                      name="properties[Sender name]"
+                      placeholder="{{ 'products.product.sender_name' | t }}"
+                      class="global-input bb-1 b-border p2"
+                    >
+                    <div class="error-message mt-8 p3 c-red hide-m">
+                      {{ 'products.product.please_enter' | t }}
+                      {{ 'products.product.sender_name' | t }}
+                    </div>
+                  </div>
+                  <div class="form-group pt-8 mt-12">
+                    <input
+                      type="text"
+                      name="properties[Recipient name]"
+                      placeholder="{{ 'products.product.recipient_name' | t }}"
+                      class="global-input bb-1 b-border p2"
+                    >
+                    <div class="error-message mt-8 p3 c-red hide-m">
+                      {{ 'products.product.please_enter' | t }}
+                      {{ 'products.product.recipient_name' | t }}
+                    </div>
+                  </div>
+                  <div class="form-group pt-8 mt-12 relative">
+                    <div class="relative">
+                      <textarea
+                        name="properties[Message]"
+                        placeholder="{{ 'products.product.gift_card_msg' | t }}"
+                        class="global-input bb-1 b-border block gc-form-message p2"
+                        rows="3"
+                        maxlength="200"
+                        onkeyup="updateCharacterCount(this, 200)"
+                      ></textarea>
+                      <div class="absolute bottom-0 right-0 p5 pb-8"><span class="p5 char-count">0</span>/200</div>
+                    </div>
+                    <div class="error-message mt-8 p3 c-red hide-m">
+                      {{ 'products.product.please_enter' | t }}
+                      {{ 'products.product.message' | t }}
+                    </div>
+                  </div>
+                  <div class="from-date pt-8 mt-12">
+                    <div class="from-group">
+                      <input
+                        type="date"
+                        name="properties[Send on]"
+                        class="global-input p2 bb-1 b-green uppercase gc-form-date c-placeholder"
+                      >
+                    </div>
+                    <div class="p5 mt-8">{{ 'products.product.send_date_info' | t }}</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          {% endif %}
+          {%- if product.gift_card? or product.type == 'Gift Card' -%}
+            <input type="hidden" name="id" value="{{ variant.id }}" class="pdp-top-variant-id">
+            <div class="gift_var_wrapper pt-8 d-pt-0">
+              <div class="pt-16 pb-16 d-pt-12 d-pb-12 mb-16 d-mb-12 accordion-wrapper bb-1 b-main w-full">
+                <div class="pdpb-item accordion w-full overflow">
+                  <div class="pdpb-item-header w-full flex ai-center jc-between">
+                    <p class="p4 c-label">Card Value</p>
+                    <div class="flex flex-row ai-center right">
+                      <p class="p2 gc-title-holder">{{ product.metafields.custom.size_label.value }}</p>
+                      <div class="icon">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                          <path d="M4 6L8.00065 10L12 6" stroke="#19341E"/>
                         </svg>
+                      </div>
                     </div>
-                    <div class="swiper-wrapper">
-                        {%- for media in product.media -%}
-                            {% assign ids = '' %}
-                            {% for v in product.variants %}
-                                {% if v.featured_image and v.featured_image.src == media.src %}
-                                    {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
-                                    {% assign ids = ids | append: v.id %}
-                                {% endif %}
-                            {% endfor %}
-                            {% assign slide_planter = '' %}
-                            {% assign slide_color = '' %}
-                            {% if media.alt contains 'planter:' %}
-                                {% assign slide_planter = media.alt | split: 'planter:' | last | split: '|' | first | strip %}
-                                {% if media.alt contains 'color:' %}
-                                    {% assign slide_color = media.alt | split: 'color:' | last | split: '|' | first | strip %}
-                                {% endif %}
-                            {% endif %}
-                            {% if media.media_type == 'image' %}
-                                <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
-                                {%- render 'global-image-wrapper',
-                                    image: media,
-                                    preload: true
-                                -%}
-                                </div>
-                            {% elsif media.media_type == 'video' %}
-                                <div class="swiper-slide" data-variant-ids="{{ ids }}" data-planter="{{ slide_planter | escape }}" data-color="{{ slide_color | escape }}">
-                                    <div class="video-wrapper">
-                                        {{ media | video_tag: controls: false, image_size: '1500x', autoplay: true, loop: true }}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                    <div class="absolute w-full left-0 bottom-0 z-2">
-                        <div class="container pt-16 pb-16 d-pt-25 d-pb-25">
-                            <div class="flex ai-center jc-between">
-                                <p class="p4 c-label js-gallery-count" data-total="{{ product.images.size }}">01 - {% if product.images.size < 10 %}0{% endif %}{{ product.images.size }}</p>
-                                <div class="arrow-container-popup flex ai-center">
-                                    <div class="left">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                            <path d="M8.125 4.5L3.75 9M3.75 9L8.125 13.5M3.75 9L14.25 9" stroke="#19341E" stroke-linecap="square"/>
-                                        </svg>
-                                    </div>
-                                    <div class="right">
-                                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
-                                            <path d="M9.875 4.5L14.25 9M14.25 9L9.875 13.5M14.25 9L3.75 9" stroke="#19341E" stroke-linecap="square"/>
-                                        </svg>
-                                    </div>
-                                </div>
-                            </div>
+                  </div>
+                  <div class="pdpb-item-content">
+                    <div class="pdpb-planters cursor-pointer pt-4">
+                      {% for variant in product.variants %}
+                        <div
+                          class="pdpb-gc tr w-full relative pr-20"
+                          data-variant-id="{{ variant.id }}"
+                          data-variant-title="{{ variant.title }}"
+                          onclick="selectGiftVariant(event, true)"
+                        >
+                          <p class="p2">S{{ variant.title }}</p>
                         </div>
+                      {% endfor %}
                     </div>
+                  </div>
                 </div>
+              </div>
+              <button
+                onclick="pdpProductTop.addToCartGC(event)"
+                class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center"
+                data-available="false"
+                data-select-options="true"
+              >
+                <span>Add to Cart</span>
+                <span class="atc-button-price" data-price="{{ variant.price }}"
+                  >S${{ variant.price | money_without_currency -}}
+                </span>
+              </button>
             </div>
-            {% assign size_guide_data = shop.metaobjects["size_guide"].values | first %}
-            <div class="pdp-top-overlay">
-                <div class="pdp-top-overlay-size">
-                    <div class="flex flex-column jc-between h-full">
-                    <div>
-                        <div class="pt-20 pb-12 d-pt-16 bb-1 b-main flex jc-between flex-row ai-center">
-                            <p class="p1">{{ size_guide_data.header_title }}</p>
-                            <div class="size-close">
-                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
-                                    <path d="M15.8337 4.16699L4.16699 15.8337M15.8337 15.8337L4.16699 4.16699" stroke="#19341E"/>
-                                </svg>
-                            </div>
-                        </div>
-                        <div class="pt-16 pb-20 d-pb-0 flex">
-                            {%- assign size_main_alt = size_guide_data.main_image.alt | escape_once -%}
-                            {%- if size_main_alt == blank -%}
-                                {%- assign size_main_alt = size_guide_data.main_image | image_url | split: '/' | last | split: '.jpg' | first | split: '.png' | first | escape_once -%}
-                            {%- endif -%}
-                            <img src="{{ size_guide_data.main_image | image_url }}" alt="{{ size_main_alt }}">
-                        </div>
-                        <div class="pdpos-items flex flex-wrap">
-                            {% for i in (1..6) %}
-                                {% assign title_key = "title_" | append: i %}
-                                {% assign image_key = "image_" | append: i %}
-                                {% assign size_key = "size_" | append: i %}
-                                {% assign tag_key = "tag_" | append: i %}
-                                {% assign description_key = "description_" | append: i %}
-                                {% assign check_tag = true %}
-                                {% if size_guide_data[tag_key] != blank %}
-                                    {% assign check_tag = false %}
-                                    {% for tag in product.tags %}
-                                        {% if tag == size_guide_data[tag_key] %}
-                                            {% assign check_tag = true %}
-                                        {% endif %}
-                                    {% endfor %}
-                                {% endif %}
-                                {% if size_guide_data[title_key] != blank and check_tag == true %}
-                                    <div class="pdpos-item b-main flex pb-16 d-pb-24 d-pt-24{% unless forloop.first %} pt-16{% endunless %}{% unless i > 4 %} bb-1{% endunless %}">
-                                        <div class="image">
-                                            {%- assign size_child_alt_image_obj = size_guide_data[image_key] -%}
-                                            {%- assign size_child_alt = size_child_alt_image_obj.alt | escape_once -%}
-                                            {%- if size_child_alt == blank -%}
-                                                {%- assign size_child_alt = size_child_alt_image_obj | image_url | split: '/' | last | split: '.jpg' | first | split: '.png' | first | escape_once -%}
-                                            {%- endif -%}
-                                            <img src="{{ size_child_alt_image_obj | image_url }}" alt="{{ size_child_alt }}">
-                                        </div>
-                                        <div class="text">
-                                            <p class="p2">{{ size_guide_data[title_key] }}</p>
-                                            <p class="p3 pt-4">{{ size_guide_data[size_key] }}</p>
-                                            <p class="p3">{{ size_guide_data[description_key] }}</p>
-                                        </div>
-                                    </div>
-                                {% endif %}
-                            {% endfor %}
-                        </div>
-                    </div>
-                    <p class="p3">{{ size_guide_data.disclaimer }}</p>
+          {% else -%}
+            <div class="all-variants-wrapper">
+              <div class="pt-32 d-pt-0">
+                <{{ section.settings.title_dom_type }} class="h4 product-title{% if product.available == true %} available{% endif %}">
+                  {% comment %} {{ product.title }} {% endcomment %}
+                  {% assign title_parts = product.title | split: '-' %}
+                  {% if title_parts.size > 1 %}
+                    {% assign clean_title = title_parts[0] %}
+                    {{ clean_title }}
+                  {% else %}
+                    {{ product.title }}
+                  {% endif %}
+                  {% unless product.available %}
+                    <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">Sold Out</span>
+                  {% else %}
+                    {% assign tags = product.tags | join: ',' | downcase %}
+                    {% if tags contains 'new' %}
+                      <span class="p5 c-label" style="white-space:nowrap;vertical-align:text-top;">New</span>
+                    {% endif %}
+                  {% endunless %}
+                </{{ section.settings.title_dom_type }}>
+                <div class="rte p2 mt-12">
+                  {{ product.description }}
                 </div>
-                </div>
+                {% if product.metafields.custom.small_label != blank %}
+                  <p class="p4 c-label mt-16">{{ product.metafields.custom.small_label }}</p>
+                {% endif %}
+                {%- if settings.pg_enable_labels -%}
+                  <div class="labels-con flex">
+                    {% assign first = true %}
+                    {%- for i in (1..10) -%}
+                      {%- assign tag = 'pg_tag_' | append: i -%}
+                      {%- assign bg_color = 'pg_tag_bg_' | append: i -%}
+                      {%- assign text_color = 'pg_tag_color_' | append: i -%}
+
+                      {%- if product.tags contains settings[tag] -%}
+                        {%- assign tag_text = settings[tag] | split: ':' | last -%}
+                        {% unless first %}
+                          <div class="p4 c-label mt-16">&nbsp;-&nbsp;</div>
+                        {% endunless %}
+                        <div
+                          class="p4 mt-16"
+                          style="color: {{ settings[text_color] }}; background-color: {{ settings[bg_color] }}"
+                        >
+                          {{ tag_text }}
+                        </div>
+                        {% assign first = false %}
+                      {%- endif -%}
+                    {%- endfor -%}
+                    {% comment %} <div class="p5 c-label">Imported From Japan - Seasonal</div> {% endcomment %}
+                  </div>
+                {%- endif -%}
+              </div>
+              {%- render 'product-variant-soil', product: product, workshop_note: section.settings.workshop_atc_note -%}
             </div>
-            <div class="pdp-top-sticky-components">
-            <div class="pdp-top-sticky-mini">
-                <div class="ptsm-image">
-                    {%- render 'global-image-wrapper',
-                        image: product.images[0]
+          {%- endif -%}
+          {%- if product.gift_card? or product.type == 'Gift Card' -%}
+            </form>
+          {%- endif -%}
+        </div>
+      </div>
+      <Teleport to="body">
+        <div class="product-top-slider-popup" data-section="{{ el_id }}">
+          <div class="swiper swiper-popup relative overflow">
+            <div class="popup-close absolute top-0 right-0">
+              <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                <path d="M15.8327 4.16699L4.16602 15.8337M15.8327 15.8337L4.16602 4.16699" stroke="#19341E"/>
+              </svg>
+            </div>
+            <div class="swiper-wrapper">
+              {%- for media in product.media -%}
+                {% assign ids = '' %}
+                {% for v in product.variants %}
+                  {% if v.featured_image and v.featured_image.src == media.src %}
+                    {% if ids != '' %}{% assign ids = ids | append: '|' %}{% endif %}
+                    {% assign ids = ids | append: v.id %}
+                  {% endif %}
+                {% endfor %}
+                {% assign slide_planter = '' %}
+                {% assign slide_color = '' %}
+                {% if media.alt contains 'planter:' %}
+                  {% assign slide_planter = media.alt | split: 'planter:' | last | split: '|' | first | strip %}
+                  {% if media.alt contains 'color:' %}
+                    {% assign slide_color = media.alt | split: 'color:' | last | split: '|' | first | strip %}
+                  {% endif %}
+                {% endif %}
+                {% if media.media_type == 'image' %}
+                  <div
+                    class="swiper-slide"
+                    data-variant-ids="{{ ids }}"
+                    data-planter="{{ slide_planter | escape }}"
+                    data-color="{{ slide_color | escape }}"
+                  >
+                    {%- render 'global-image-wrapper', image: media, preload: true -%}
+                  </div>
+                {% elsif media.media_type == 'video' %}
+                  <div
+                    class="swiper-slide"
+                    data-variant-ids="{{ ids }}"
+                    data-planter="{{ slide_planter | escape }}"
+                    data-color="{{ slide_color | escape }}"
+                  >
+                    <div class="video-wrapper">
+                      {{ media | video_tag: controls: false, image_size: '1500x', autoplay: true, loop: true }}
+                    </div>
+                  </div>
+                {% endif %}
+              {% endfor %}
+            </div>
+            <div class="absolute w-full left-0 bottom-0 z-2">
+              <div class="container pt-16 pb-16 d-pt-25 d-pb-25">
+                <div class="flex ai-center jc-between">
+                  <p class="p4 c-label js-gallery-count" data-total="{{ product.images.size }}">
+                    01 - {% if product.images.size < 10 %}0{% endif -%}
+                    {{- product.images.size }}
+                  </p>
+                  <div class="arrow-container-popup flex ai-center">
+                    <div class="left">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M8.125 4.5L3.75 9M3.75 9L8.125 13.5M3.75 9L14.25 9" stroke="#19341E" stroke-linecap="square"/>
+                      </svg>
+                    </div>
+                    <div class="right">
+                      <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 18 18" fill="none">
+                        <path d="M9.875 4.5L14.25 9M14.25 9L9.875 13.5M14.25 9L3.75 9" stroke="#19341E" stroke-linecap="square"/>
+                      </svg>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        {% assign size_guide_data = shop.metaobjects.size_guide.values | first %}
+        <div class="pdp-top-overlay">
+          <div class="pdp-top-overlay-size">
+            <div class="flex flex-column jc-between h-full">
+              <div>
+                <div class="pt-20 pb-12 d-pt-16 bb-1 b-main flex jc-between flex-row ai-center">
+                  <p class="p1">{{ size_guide_data.header_title }}</p>
+                  <div class="size-close">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 20 20" fill="none">
+                      <path d="M15.8337 4.16699L4.16699 15.8337M15.8337 15.8337L4.16699 4.16699" stroke="#19341E"/>
+                    </svg>
+                  </div>
+                </div>
+                <div class="pt-16 pb-20 d-pb-0 flex">
+                  {%- assign size_main_alt = size_guide_data.main_image.alt | escape_once -%}
+                  {%- if size_main_alt == blank -%}
+                    {%- assign size_main_alt = size_guide_data.main_image
+                      | image_url
+                      | split: '/'
+                      | last
+                      | split: '.jpg'
+                      | first
+                      | split: '.png'
+                      | first
+                      | escape_once
                     -%}
+                  {%- endif -%}
+                  <img src="{{ size_guide_data.main_image | image_url }}" alt="{{ size_main_alt }}">
                 </div>
-                <div>
-                    <p class="p2">{{ product.title }}</p>
-                    <p class="p2 mt-2"><span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span></p>
+                <div class="pdpos-items flex flex-wrap">
+                  {% for i in (1..6) %}
+                    {% assign title_key = 'title_' | append: i %}
+                    {% assign image_key = 'image_' | append: i %}
+                    {% assign size_key = 'size_' | append: i %}
+                    {% assign tag_key = 'tag_' | append: i %}
+                    {% assign description_key = 'description_' | append: i %}
+                    {% assign check_tag = true %}
+                    {% if size_guide_data[tag_key] != blank %}
+                      {% assign check_tag = false %}
+                      {% for tag in product.tags %}
+                        {% if tag == size_guide_data[tag_key] %}
+                          {% assign check_tag = true %}
+                        {% endif %}
+                      {% endfor %}
+                    {% endif %}
+                    {% if size_guide_data[title_key] != blank and check_tag == true %}
+                      <div class="pdpos-item b-main flex pb-16 d-pb-24 d-pt-24{% unless forloop.first %} pt-16{% endunless %}{% unless i > 4 %} bb-1{% endunless %}">
+                        <div class="image">
+                          {%- assign size_child_alt_image_obj = size_guide_data[image_key] -%}
+                          {%- assign size_child_alt = size_child_alt_image_obj.alt | escape_once -%}
+                          {%- if size_child_alt == blank -%}
+                            {%- assign size_child_alt = size_child_alt_image_obj
+                              | image_url
+                              | split: '/'
+                              | last
+                              | split: '.jpg'
+                              | first
+                              | split: '.png'
+                              | first
+                              | escape_once
+                            -%}
+                          {%- endif -%}
+                          <img src="{{ size_child_alt_image_obj | image_url }}" alt="{{ size_child_alt }}">
+                        </div>
+                        <div class="text">
+                          <p class="p2">{{ size_guide_data[title_key] }}</p>
+                          <p class="p3 pt-4">{{ size_guide_data[size_key] }}</p>
+                          <p class="p3">{{ size_guide_data[description_key] }}</p>
+                        </div>
+                      </div>
+                    {% endif %}
+                  {% endfor %}
                 </div>
-                {% if product.variants.size == 1 and product.metafields.custom.planter.value == blank %}
-                    <button onclick="pdpProductTop.submitForm(event)" class="bg-green c-white p2 pt-12 pb-12 pr-24 pl-24 p2">
-                        Add to Cart
-                    </button>
-                {% else %}
-                    <a href="#" rel="nofollow" class="bg-green c-white p2">
-                        Select Options
-                    </a>
-                {% endif %}
+              </div>
+              <p class="p3">{{ size_guide_data.disclaimer }}</p>
             </div>
-            <div class="pdp-top-atc-sticky-wrapper pt-16 pb-16 pl-16 pr-16 bt-1 b-background">
-                {% if product.gift_card? or product.type == 'Gift Card' %}
-                <button onclick="pdpProductTop.addToCartGC(event)" class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center" data-available="false" data-select-options="true">
-                    <span>Add to Cart</span>
-                    <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
-                </button>
-                {% else %}
-                <button onclick="pdpProductTop.submitForm(event)" class="pdp-top-atc pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white jc-between ai-center hidden{% if product.tags contains 'plants' %} hide-m{% else %} flex{% endif %}">
-                    <span>Add to Cart</span>
-                    <span class="atc-button-price" data-price="{{ variant.price }}">S${{ variant.price | money_without_currency }}</span>
-                </button>
-                {% if product.tags contains 'plants' %}
+          </div>
+        </div>
+        <div class="pdp-top-sticky-components">
+          <div class="pdp-top-sticky-mini">
+            <div class="ptsm-image">
+              {%- render 'global-image-wrapper', image: product.images[0] -%}
+            </div>
+            <div>
+              <p class="p2">{{ product.title }}</p>
+              <p class="p2 mt-2">
+                <span class="atc-button-price" data-price="{{ variant.price }}"
+                  >S${{ variant.price | money_without_currency -}}
+                </span>
+              </p>
+            </div>
+            {% if product.variants.size == 1 and product.metafields.custom.planter.value == blank %}
+              <button onclick="pdpProductTop.submitForm(event)" class="bg-green c-white p2 pt-12 pb-12 pr-24 pl-24 p2">
+                Add to Cart
+              </button>
+            {% else %}
+              <a href="#" rel="nofollow" class="bg-green c-white p2"> Select Options </a>
+            {% endif %}
+          </div>
+          <div class="pdp-top-atc-sticky-wrapper pt-16 pb-16 pl-16 pr-16 bt-1 b-background">
+            {% if product.gift_card? or product.type == 'Gift Card' %}
+              <button
+                onclick="pdpProductTop.addToCartGC(event)"
+                class="pdp-top-atc bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-between ai-center"
+                data-available="false"
+                data-select-options="true"
+              >
+                <span>Add to Cart</span>
+                <span class="atc-button-price" data-price="{{ variant.price }}"
+                  >S${{ variant.price | money_without_currency -}}
+                </span>
+              </button>
+            {% else %}
+              <button
+                onclick="pdpProductTop.submitForm(event)"
+                class="pdp-top-atc pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white jc-between ai-center hidden{% if product.tags contains 'plants' %} hide-m{% else %} flex{% endif %}"
+              >
+                <span>Add to Cart</span>
+                <span class="atc-button-price" data-price="{{ variant.price }}"
+                  >S${{ variant.price | money_without_currency -}}
+                </span>
+              </button>
+              {% if product.tags contains 'plants' %}
                 <button class="pdp-top-atc-dum pdp-top-atc-sticky bg-green w-full pt-12 pb-12 pr-24 pl-24 p2 c-white flex jc-center ai-center hidden">
-                    <span>Select Options</span>
+                  <span>Select Options</span>
                 </button>
-                {% endif %}
-                {% endif %}
-            </div>
-            </div>
-        </Teleport>
+              {% endif %}
+            {% endif %}
+          </div>
+        </div>
+      </Teleport>
     </div>
-</div>
+  </div>
 {% endif %}
 
 <script>
@@ -3414,226 +3510,226 @@
 
 {% schema %}
 {
-    "name": "PDP - Product Top",
-    "settings": [
+  "name": "PDP - Product Top",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "title",
+      "label": "Title"
+    },
+    {
+      "type": "select",
+      "id": "title_dom_type",
+      "label": "Title DOM Type",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" },
+        { "value": "h5", "label": "H5" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "select",
+      "id": "title_size",
+      "label": "Title Size",
+      "options": [
+        { "value": "h1", "label": "H1" },
+        { "value": "h2", "label": "H2" },
+        { "value": "h3", "label": "H3" },
+        { "value": "h4", "label": "H4" }
+      ],
+      "default": "h2"
+    },
+    {
+      "type": "textarea",
+      "id": "text",
+      "label": "Text"
+    },
+    {
+      "type": "textarea",
+      "id": "workshop_atc_note",
+      "label": "Workshop note above Add to Cart",
+      "info": "WORKSHOP PRODUCTS ONLY. Shows directly above the Add to Cart button, and only when the product title contains \"Workshop\". Leave blank to hide it. Each new line becomes a new line on the page."
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "entry",
+      "name": "Entry",
+      "settings": [
         {
-            "type": "header",
-            "content": "General Settings"
+          "type": "image_picker",
+          "id": "image",
+          "label": "Size Image"
         },
         {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
+          "type": "text",
+          "id": "title",
+          "label": "Size Title"
         },
         {
-            "type": "textarea",
-            "id": "title",
-            "label": "Title"
+          "type": "text",
+          "id": "size",
+          "label": "Size"
         },
         {
-            "type": "select",
-            "id": "title_dom_type",
-            "label": "Title DOM Type",
-            "options": [
-                {"value":"h1","label":"H1"},
-                {"value":"h2","label":"H2"},
-                {"value":"h3","label":"H3"},
-                {"value":"h4","label":"H4"},
-                {"value":"h5","label":"H5"}
-            ],
-            "default": "h2"
-        },
-        {
-            "type": "select",
-            "id": "title_size",
-            "label": "Title Size",
-            "options": [
-                { "value": "h1", "label": "H1" },
-                { "value": "h2", "label": "H2" },
-                { "value": "h3", "label": "H3" },
-                { "value": "h4", "label": "H4" }
-            ],
-            "default": "h2"
-        },
-        {
-            "type": "textarea",
-            "id": "text",
-            "label": "Text"
-        },
-        {
-            "type": "textarea",
-            "id": "workshop_atc_note",
-            "label": "Workshop note above Add to Cart",
-            "info": "WORKSHOP PRODUCTS ONLY. Shows directly above the Add to Cart button, and only when the product title contains \"Workshop\". Leave blank to hide it. Each new line becomes a new line on the page."
-        },
-        {
-            "type": "header",
-            "content": "Section Paddings"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_m",
-            "label": "Top padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_m",
-            "label": "Bottom padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_t",
-            "label": "Top padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_t",
-            "label": "Bottom padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding",
-            "label": "Top padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding",
-            "label": "Bottom padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hd",
-            "label": "Top padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hd",
-            "label": "Bottom padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hhd",
-            "label": "Top padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hhd",
-            "label": "Bottom padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
+          "type": "textarea",
+          "id": "description",
+          "label": "Size Description"
         }
-    ],
-    "blocks": [
-        {
-            "type": "entry",
-            "name": "Entry",
-            "settings": [
-                {
-                    "type": "image_picker",
-                    "id": "image",
-                    "label": "Size Image"
-                },
-                {
-                    "type": "text",
-                    "id": "title",
-                    "label": "Size Title"
-                },
-                {
-                    "type": "text",
-                    "id": "size",
-                    "label": "Size"
-                },
-                {
-                    "type": "textarea",
-                    "id": "description",
-                    "label": "Size Description"
-                }
-            ]
-        }
-    ],
-    "presets": [
-        {
-            "name": "PDP - Product Top",
-            "blocks": []
-        }
-    ]
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "PDP - Product Top",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}

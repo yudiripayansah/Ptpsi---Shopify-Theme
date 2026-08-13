@@ -1,359 +1,376 @@
 {% comment %} Soilboy {% endcomment %}
 {% liquid
-    assign fn = section.id | replace: '-', ''
-    assign el_id = 'split-image-header-' | append: section.id
-    assign ss = section.settings
-    assign sb = section.blocks
-    render 'section-padding', el_id: el_id, section: section
+  assign fn = section.id | replace: '-', ''
+  assign el_id = 'split-image-header-' | append: section.id
+  assign ss = section.settings
+  assign sb = section.blocks
+  render 'section-padding', el_id: el_id, section: section
 %}
 
 <style>
-    #{{ el_id }} {
-        background-color: {{ section.settings.bg_color }};
-    }
-    #{{ el_id }} .sih-header-link {
-        display: flex;
-        flex-direction: column;
-        row-gap: 8px;
-    }
-    #{{ el_id }} .sih-header-link a {
-        width: 100%;
-    }
-    #{{ el_id }} .sih-header-link:before,
-    #{{ el_id }} .sih-header-link:after {
-        display: none;
-    }
-    #{{ el_id }} .placeholder-height-subtitle {
-        opacity: 0;
-        visibility: hidden;
-        max-width: 1px;
-        overflow: hidden;
-        padding: 0;
-        margin: 0;
-    }
-    @media screen and (min-width: 1024px){
-        #{{ el_id }} .sih-header-link a {
-            width: fit-content;
-            color: #A4A399;
-            transition: all .3s ease;
-        }
-        #{{ el_id }} .sih-header-link a.active {
-            color: #19341E;
-        }
-        #{{ el_id }} .sih-header-link {
-            flex-wrap: wrap;
-            flex-direction: row;
-            column-gap: 24px;
-            row-gap: 8px;
-        }
-        #{{ el_id }} .sih-image {
-            opacity: 0;
-            visibility: hidden;
-            transition: opacity .5s ease;
-        }
-        #{{ el_id }} .sih-image.active {
-            opacity: 1;
-            visibility: visible;
-        }
-        #{{ el_id }} .sih-image-description {
-            width: 100%;
-        }
-    }
+  #{{ el_id }} {
+      background-color: {{ section.settings.bg_color }};
+  }
+  #{{ el_id }} .sih-header-link {
+      display: flex;
+      flex-direction: column;
+      row-gap: 8px;
+  }
+  #{{ el_id }} .sih-header-link a {
+      width: 100%;
+  }
+  #{{ el_id }} .sih-header-link:before,
+  #{{ el_id }} .sih-header-link:after {
+      display: none;
+  }
+  #{{ el_id }} .placeholder-height-subtitle {
+      opacity: 0;
+      visibility: hidden;
+      max-width: 1px;
+      overflow: hidden;
+      padding: 0;
+      margin: 0;
+  }
+  @media screen and (min-width: 1024px){
+      #{{ el_id }} .sih-header-link a {
+          width: fit-content;
+          color: #A4A399;
+          transition: all .3s ease;
+      }
+      #{{ el_id }} .sih-header-link a.active {
+          color: #19341E;
+      }
+      #{{ el_id }} .sih-header-link {
+          flex-wrap: wrap;
+          flex-direction: row;
+          column-gap: 24px;
+          row-gap: 8px;
+      }
+      #{{ el_id }} .sih-image {
+          opacity: 0;
+          visibility: hidden;
+          transition: opacity .5s ease;
+      }
+      #{{ el_id }} .sih-image.active {
+          opacity: 1;
+          visibility: visible;
+      }
+      #{{ el_id }} .sih-image-description {
+          width: 100%;
+      }
+  }
 </style>
 
 {% if request.visual_preview_mode %}
-    <img src="{{ 'split-image-header-figma.PNG' | asset_url }}" width="100%" height="100%" />
+  <img src="{{ 'split-image-header-figma.PNG' | asset_url }}" width="100%" height="100%" />
 {% else %}
-    <div id="{{ el_id }}">
-        <div class="container">
-            <div class="row">
-                <div class="col-12 col-d-1">
-                    <div class="flex">
-                        <p class="p3 c-label flex ai-center">{{ ss.subtitle }}</p>
-                        <p class="h2 placeholder-height-subtitle">1</p>
-                    </div>
-                </div>
-                <div class="col-12 col-d-7 sih-header-link mt-16 d-mt-0">
-                    {% for block in sb %}
-                        {% assign bs = block.settings %}
-                        <a href="{{bs.url}}" class="h1 hide-d c-green{% if forloop.first %} active{% endif %}" data-link-trigger="{{ forloop.index }}">{{ bs.title }}</a>
-                        <a href="{{bs.url}}" class="h2 hide-m show-d c-green{% if forloop.first %} active{% endif %}" data-link-trigger="{{ forloop.index }}">{{ bs.title }}</a>
-                    {% endfor %}
-                </div>
-            </div>
-            <div class="row hide-m show-d mt-32">
-                <div class="col-12 col-d-9">
-                    <div class="image-area">
-                        {% for block in sb %}
-                            {% assign bs = block.settings %}
-                            {% if bs.big_image != blank %}
-                                <div class="{% if forloop.first %}relative active{%else%}absolute{% endif %} w-full top-0 sih-image" data-image-trigger="{{ forloop.index }}">
-                                    {%- render 'global-image-wrapper',
-                                        image: bs.big_image
-                                    -%}
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-                <div class="col-12 col-d-3">
-                    <div class="image-area">
-                        {% for block in sb %}
-                            {% assign bs = block.settings %}
-                            {% if bs.small_image != blank %}
-                                <div class="{% if forloop.first %}relative active{%else%}absolute{% endif %} w-full top-0 sih-image" data-image-trigger="{{ forloop.index }}">
-                                    {%- render 'global-image-wrapper',
-                                        image: bs.small_image
-                                    -%}
-                                </div>
-                            {% endif %}
-                            {% if bs.image_label_1 != blank or bs.image_label_2 != blank %}
-                                <div class="sih-image-description mt-8{% unless forloop.first %} hide-m{% endunless %}" data-image-trigger="{{ forloop.index }}">
-                                    <div class="row">
-                                    {% if bs.image_label_1 != blank %}
-                                        <p class="col-4 code p4 c-label">{{ bs.image_label_1 }}</p>
-                                    {% endif %}
-                                    {% if bs.image_label_2 != blank %}
-                                        <p class="col-8 name p4 c-label">{{ bs.image_label_2 }}</p>
-                                    {% endif %}
-                                    </div>
-                                </div>
-                            {% endif %}
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
+  <div id="{{ el_id }}">
+    <div class="container">
+      <div class="row">
+        <div class="col-12 col-d-1">
+          <div class="flex">
+            <p class="p3 c-label flex ai-center">{{ ss.subtitle }}</p>
+            <p class="h2 placeholder-height-subtitle">1</p>
+          </div>
         </div>
+        <div class="col-12 col-d-7 sih-header-link mt-16 d-mt-0">
+          {% for block in sb %}
+            {% assign bs = block.settings %}
+            <a
+              href="{{bs.url}}"
+              class="h1 hide-d c-green{% if forloop.first %} active{% endif %}"
+              data-link-trigger="{{ forloop.index }}"
+            >
+              {{- bs.title -}}
+            </a>
+            <a
+              href="{{bs.url}}"
+              class="h2 hide-m show-d c-green{% if forloop.first %} active{% endif %}"
+              data-link-trigger="{{ forloop.index }}"
+            >
+              {{- bs.title -}}
+            </a>
+          {% endfor %}
+        </div>
+      </div>
+      <div class="row hide-m show-d mt-32">
+        <div class="col-12 col-d-9">
+          <div class="image-area">
+            {% for block in sb %}
+              {% assign bs = block.settings %}
+              {% if bs.big_image != blank %}
+                <div
+                  class="{% if forloop.first %}relative active{%else%}absolute{% endif %} w-full top-0 sih-image"
+                  data-image-trigger="{{ forloop.index }}"
+                >
+                  {%- render 'global-image-wrapper', image: bs.big_image -%}
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+        <div class="col-12 col-d-3">
+          <div class="image-area">
+            {% for block in sb %}
+              {% assign bs = block.settings %}
+              {% if bs.small_image != blank %}
+                <div
+                  class="{% if forloop.first %}relative active{%else%}absolute{% endif %} w-full top-0 sih-image"
+                  data-image-trigger="{{ forloop.index }}"
+                >
+                  {%- render 'global-image-wrapper', image: bs.small_image -%}
+                </div>
+              {% endif %}
+              {% if bs.image_label_1 != blank or bs.image_label_2 != blank %}
+                <div
+                  class="sih-image-description mt-8{% unless forloop.first %} hide-m{% endunless %}"
+                  data-image-trigger="{{ forloop.index }}"
+                >
+                  <div class="row">
+                    {% if bs.image_label_1 != blank %}
+                      <p class="col-4 code p4 c-label">{{ bs.image_label_1 }}</p>
+                    {% endif %}
+                    {% if bs.image_label_2 != blank %}
+                      <p class="col-8 name p4 c-label">{{ bs.image_label_2 }}</p>
+                    {% endif %}
+                  </div>
+                </div>
+              {% endif %}
+            {% endfor %}
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 {% endif %}
 
 <script>
-    const linksUrl = document.querySelectorAll('.sih-header-link a');
-    const bigImages = document.querySelectorAll('.sih-image');
-    const descs = document.querySelectorAll('.sih-image-description');
-    linksUrl.forEach(function(link){
-        link.addEventListener('mouseover', () => {
-            linksUrl.forEach(function(other){
-                other.classList.remove('active');
-            });
-            bigImages.forEach(function(image){
-                image.classList.remove('active');
-                image.classList.remove('relative');
-                image.classList.remove('absolute');
-                if(image.getAttribute('data-image-trigger') === link.getAttribute('data-link-trigger')) {
-                    image.classList.add('active');
-                    image.classList.add('relative');
-                } else {
-                    image.classList.add('absolute');
-                }
-            });
-            descs.forEach(function(desc){
-                desc.classList.add('hide-m');
-                if(desc.getAttribute('data-image-trigger') === link.getAttribute('data-link-trigger')) {
-                    desc.classList.remove('hide-m');
-                }
-            });
-            link.classList.add('active');
-        });
+  const linksUrl = document.querySelectorAll('.sih-header-link a');
+  const bigImages = document.querySelectorAll('.sih-image');
+  const descs = document.querySelectorAll('.sih-image-description');
+  linksUrl.forEach(function (link) {
+    link.addEventListener('mouseover', () => {
+      linksUrl.forEach(function (other) {
+        other.classList.remove('active');
+      });
+      bigImages.forEach(function (image) {
+        image.classList.remove('active');
+        image.classList.remove('relative');
+        image.classList.remove('absolute');
+        if (image.getAttribute('data-image-trigger') === link.getAttribute('data-link-trigger')) {
+          image.classList.add('active');
+          image.classList.add('relative');
+        } else {
+          image.classList.add('absolute');
+        }
+      });
+      descs.forEach(function (desc) {
+        desc.classList.add('hide-m');
+        if (desc.getAttribute('data-image-trigger') === link.getAttribute('data-link-trigger')) {
+          desc.classList.remove('hide-m');
+        }
+      });
+      link.classList.add('active');
     });
+  });
 </script>
 
 {% schema %}
 {
-    "name": "Split Image Header",
-    "settings": [
+  "name": "Split Image Header",
+  "settings": [
+    {
+      "type": "header",
+      "content": "General Settings"
+    },
+    {
+      "type": "color",
+      "id": "bg_color",
+      "label": "Background Color"
+    },
+    {
+      "type": "textarea",
+      "id": "subtitle",
+      "label": "Subtitle"
+    },
+    {
+      "type": "header",
+      "content": "Section Paddings"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_m",
+      "label": "Top padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_m",
+      "label": "Bottom padding (Mobile)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_t",
+      "label": "Top padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_t",
+      "label": "Bottom padding (Tablet)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding",
+      "label": "Top padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding",
+      "label": "Bottom padding (Desktop)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hd",
+      "label": "Top padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hd",
+      "label": "Bottom padding (HD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "top_padding_hhd",
+      "label": "Top padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    },
+    {
+      "type": "select",
+      "id": "bottom_padding_hhd",
+      "label": "Bottom padding (HHD)",
+      "options": [
+        { "value": "nopadding", "label": "No padding" },
+        { "value": "extrasmall", "label": "Extra Small" },
+        { "value": "small", "label": "Small" },
+        { "value": "medium", "label": "Medium" },
+        { "value": "large", "label": "Large" }
+      ],
+      "default": "medium"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "range",
+      "name": "Entry",
+      "settings": [
         {
-            "type": "header",
-            "content": "General Settings"
+          "type": "image_picker",
+          "id": "big_image",
+          "label": "Big Image"
         },
         {
-            "type": "color",
-            "id": "bg_color",
-            "label": "Background Color"
+          "type": "image_picker",
+          "id": "small_image",
+          "label": "Small Image"
         },
         {
-            "type": "textarea",
-            "id": "subtitle",
-            "label": "Subtitle"
+          "type": "text",
+          "id": "title",
+          "label": "Title"
         },
         {
-            "type": "header",
-            "content": "Section Paddings"
+          "type": "url",
+          "id": "url",
+          "label": "Collection URL"
         },
         {
-            "type": "select",
-            "id": "top_padding_m",
-            "label": "Top padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
+          "type": "text",
+          "id": "image_label_1",
+          "label": "Label for image description 1"
         },
         {
-            "type": "select",
-            "id": "bottom_padding_m",
-            "label": "Bottom padding (Mobile)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_t",
-            "label": "Top padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_t",
-            "label": "Bottom padding (Tablet)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding",
-            "label": "Top padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding",
-            "label": "Bottom padding (Desktop)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hd",
-            "label": "Top padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hd",
-            "label": "Bottom padding (HD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "top_padding_hhd",
-            "label": "Top padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
-        },
-        {
-            "type": "select",
-            "id": "bottom_padding_hhd",
-            "label": "Bottom padding (HHD)",
-            "options": [
-                { "value": "nopadding", "label": "No padding" },
-                { "value": "extrasmall", "label": "Extra Small" },
-                { "value": "small", "label": "Small" },
-                { "value": "medium", "label": "Medium" },
-                { "value": "large", "label": "Large" }
-            ],
-            "default": "medium"
+          "type": "text",
+          "id": "image_label_2",
+          "label": "Label for image description 2"
         }
-    ],
-    "blocks": [
-        {
-            "type": "range",
-            "name": "Entry",
-            "settings": [
-                {
-                    "type": "image_picker",
-                    "id": "big_image",
-                    "label": "Big Image"
-                },
-                {
-                    "type": "image_picker",
-                    "id": "small_image",
-                    "label": "Small Image"
-                },
-                {
-                    "type": "text",
-                    "id": "title",
-                    "label": "Title"
-                },
-                {
-                    "type": "url",
-                    "id": "url",
-                    "label": "Collection URL"
-                },
-                {
-                    "type": "text",
-                    "id": "image_label_1",
-                    "label": "Label for image description 1"
-                },
-                {
-                    "type": "text",
-                    "id": "image_label_2",
-                    "label": "Label for image description 2"
-                }
-            ]
-        }
-    ],
-    "presets": [
-        {
-            "name": "Split Image Header",
-            "blocks": []
-        }
-    ]
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Split Image Header",
+      "blocks": []
+    }
+  ]
 }
 {% endschema %}
