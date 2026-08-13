@@ -1,0 +1,37 @@
+// Page Layout
+// ===========
+
+// Typography
+// ==========
+
+
+//'adobe-garamond-pro', 'adriane',
+$base: 1rem;
+$base-line-height: 1.4;
+
+//Essentials
+
+// Default Transition Settings
+// ===========================
+$default-transition-duration: 0.125s;
+$default-transition-easing: ease-in;
+$default-transition-delay: 0s;
+
+// Screen sizes
+// ============
+
+// Essentials
+$gutter : 8px;
+$gutter_t : 8px;
+$gutter_d : 12px;
+
+$container_padding: 16px;
+$container_padding_t: 20px;
+$container_padding_d: 24px;
+$container_padding_max: 24px; 
+$container_padding_hd: 24px;
+$container_padding_hhd: 24px;
+
+// Retina DPI threshold
+// ==================
+$retina-dpi: 144;

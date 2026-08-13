@@ -1,0 +1,34 @@
+.grid-flex{
+    display:flex;
+    width:100%;
+    flex-wrap:wrap;
+    >*{
+        width:100%;
+    }
+    &.m-2{
+        >*{
+            width:50%;
+        }
+    }
+    @for $i from 1 through 5 {
+        &.t-#{$i}{
+            >*{
+                @include on(tablet){
+                    width:100% / $i;
+                }
+                
+            }
+        }
+    }
+
+    @for $i from 1 through 5 {
+        &.d-#{$i}{
+            >*{
+                @include on(desktop){
+                    width:100% / $i;
+                }
+                
+            }
+        }
+    }
+}

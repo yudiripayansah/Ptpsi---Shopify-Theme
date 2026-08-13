@@ -1,0 +1,60 @@
+.h-full { 
+    height: 100%; 
+}
+.h-auto { 
+    height: auto; 
+}
+
+@include on(middle) {
+    .middle-h-full { 
+        height: 100%; 
+    }
+    .middle-h-auto { 
+        height: auto; 
+    }
+}
+
+@include on(tablet) {
+    .t-h-full { 
+        height: 100%; 
+    }
+    .t-h-auto { 
+        height: auto; 
+    }
+}
+
+@include on(desktop) {
+    .d-h-full { 
+        height: 100%; 
+    }
+    .d-h-auto { 
+        height: auto; 
+    }
+}
+
+@include on(max) {
+    .max-h-full { 
+        height: 100%; 
+    }
+    .max-h-auto { 
+        height: auto; 
+    }
+}
+
+@include on(hd) {
+    .hd-h-full { 
+        height: 100%; 
+    }
+    .hd-h-auto { 
+        height: auto; 
+    }
+}
+
+@include on(hhd) {
+    .hhd-h-full { 
+        height: 100%; 
+    }
+    .hhd-h-auto { 
+        height: auto; 
+    }
+}

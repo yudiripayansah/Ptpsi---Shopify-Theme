@@ -1,0 +1,10 @@
+$rounded_max:200;
+$rounded_step:1;
+$rounded_min:0;
+$roundeds: ();
+@while $rounded_max >= $rounded_min {
+	$roundeds : join($roundeds,$rounded_max);
+	$rounded_max: $rounded_max - $rounded_step;
+}
+
+$rte-spacing: rem(15);

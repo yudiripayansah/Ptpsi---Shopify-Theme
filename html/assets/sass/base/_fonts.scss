@@ -1,0 +1,19 @@
+@font-face {
+    font-family: 'PP Object Sans';
+    src: url('PPObjectSans-Light.woff2') format('woff2'),
+        url('PPObjectSans-Light.woff') format('woff'),
+        url('PPObjectSans-Light.eot') format('embedded-opentype');
+    font-weight: 300;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'PP Object Sans';
+    src: url('PPObjectSans-Regular.woff2') format('woff2'),
+        url('PPObjectSans-Regular.woff') format('woff'),
+        url('PPObjectSans-Regular.eot') format('embedded-opentype');
+    font-weight: normal;
+    font-style: normal;
+    font-display: swap;
+}

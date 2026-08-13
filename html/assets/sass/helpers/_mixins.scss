@@ -1,0 +1,201 @@
+// Grid Item
+// =========
+// Example use of $grid-settings:
+//
+// $grid-settings: (
+// 	respond-to: (smallest, small, medium),
+// 	columns: (2, 4, 5),
+// 	margin: (5%, 2.5%, 2%),
+// );
+
+// Helper function for calculating the width of each column
+@function _width($_margin, $_columns) {
+	@return (100% - ($_margin * ($_columns - 1))) / $_columns;
+}
+
+@mixin grid-item($grid-settings) {
+	// Pull value lists from config map
+	$respond-to: map-get($grid-settings, respond-to);
+	$columns: map-get($grid-settings, columns);
+	$margin: map-get($grid-settings, margin);
+	$vertical-margin: map-get($grid-settings, vertical-margin);
+
+	// Set values for the margin and columns at current screen size
+	$_margin: nth($margin, 1);
+	$_vertical-margin: nth($vertical-margin, 1);
+	$_columns: nth($columns, 1);
+
+	// Apply styles
+	float: left;
+	margin-left: $_margin;
+	margin-bottom: $_vertical-margin;
+	width: _width($_margin, $_columns);
+
+	// Remove left margin from the last item in the row and clear floats
+	&:nth-child(#{$_columns}n+1) {
+		margin-left: 0;
+		clear: both;
+	}
+
+	// Check if the grid is responsive
+	@if length($respond-to) > 1 {
+
+		// Loop through the different remaining screen sizes that the grid responds to
+		@for $i from 2 through length($respond-to) {
+
+			@include on(nth($respond-to, $i)) {
+				// Set values for the margin and columns at current screen size
+				$_margin: nth($margin, $i);
+				$_vertical-margin: nth($vertical-margin, $i);
+				$_columns: nth($columns, $i);
+
+				margin-left: $_margin;
+				margin-bottom: $_vertical-margin;
+				width: _width($_margin, $_columns);
+
+				// Reset rules from previous nth-child declarations
+				@for $p from 1 through ($i - 1) {
+					$_columns-previous: nth($columns, $p);
+
+					&:nth-child(#{$_columns-previous}n+1) {
+						margin-left: $_margin;
+						clear: none;
+					}
+				}
+
+				// Remove left margin from the last item in the row and clear floats
+				&:nth-child(#{$_columns}n+1) {
+					margin-left: 0;
+					clear: both;
+				}
+			}
+		}
+	}
+}
+
+// Transition
+// ==========
+@mixin transition($properties: all, $duration: $default-transition-duration, $easing: $default-transition-easing, $delay: $default-transition-delay) {
+	transition: $properties $duration $easing $delay;
+}
+
+// Generate Backgrounds
+// ====================
+@mixin generate-backgrounds($class-prefix: "", $format: ".png", $items...) {
+	@each $item in $item {
+		.#{$prefix}#{$item} {
+			background-image: url(../img/#{$prefix}#{$item}#{$format});
+		}
+	}
+}
+
+// Distribute Children
+// ===================
+@mixin distribute-children($child-width) {
+
+	@if unitless($child-width) {
+		$child-width: $child-width + 0%;
+	}
+
+	text-align: justify;
+	font-size: 0;
+
+	& > * {
+		display: inline-block;
+		width: $child-width;
+	}
+
+	&:after {
+		content: "";
+		display: inline-block;
+		width: 100%;
+	}
+}
+
+// Constrain
+// =========
+@mixin constrain($numerator, $denominator) {
+	padding-bottom: ((100 / $numerator) * $denominator) * 1%;
+	height: 0;
+}
+
+// Media Queries
+// =============
+@mixin on($query) {
+
+	// Width-based queries
+	// ==================
+
+	// Set to 'max-width' for smallest screen size in $sizes.
+	@if $query == smallest {
+
+		$smallest-size: nth(map-values($screen-sizes), 1);
+
+		@each $value in map-values($screen-sizes) {
+			@if $value < $smallest-size {
+				$smallest-size: $value;
+			}
+		}
+
+		@media (max-width: $smallest-size) {
+			@content;
+		}
+
+	}
+
+	// Set to 'min-width' for known sizes in $screen-sizes
+	@else if map-has-key($screen-sizes, $query) {
+
+		@media (min-width: map-get($screen-sizes, $query)) {
+			@content;
+		}
+
+	}
+
+	// Screen resolution based queries
+	// ===============================
+	@else if $query == hi-res {
+
+		@media (-webkit-min-device-pixel-ratio: $retina-dpi/96), (min-resolution: $retina-dpi + "dpi") {
+			@content;
+		}
+	}
+
+	// Custom queries
+	// ============
+	@else {
+		@media #{$query} {
+			@content;
+		}
+	}
+
+}
+
+@mixin upper($size){
+	text-transform:uppercase;
+	letter-spacing:$size + px;
+}
+
+@mixin linearGradient($top, $bottom, $top-percentage,$bottom-percentage){
+    background: $top; /* Old browsers */
+    background: -moz-linear-gradient(top,  $top $top-percentage, $bottom $bottom-percentage); /* FF3.6+ */
+    background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,$top), color-stop(100%,$bottom)); /* Chrome,Safari4+ */
+    background: -webkit-linear-gradient(top,  $top $top-percentage,$bottom $bottom-percentage); /* Chrome10+,Safari5.1+ */
+    background: -o-linear-gradient(top,  $top $top-percentage,$bottom $bottom-percentage); /* Opera 11.10+ */
+    background: -ms-linear-gradient(top,  $top $top-percentage,$bottom $bottom-percentage); /* IE10+ */
+    background: linear-gradient(to bottom,  $top $top-percentage,$bottom $bottom-percentage); /* W3C */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+
+
+@mixin HlinearGradient($left, $right, $left-percentage,$right-percentage){
+	background: $left; /* Old browsers */
+	background: -moz-linear-gradient(left,  $left $left-percentage, $right $right-percentage); /* FF3.6+ */
+	background: -webkit-gradient(linear, left top, right top, color-stop(0%,$left), color-stop(100%,$right)); /* Chrome,Safari4+ */
+	background: -webkit-linear-gradient(left,  $left $left-percentage,$right $right-percentage); /* Chrome10+,Safari5.1+ */
+	background: -o-linear-gradient(left, $left $left-percentage,$right $right-percentage); /* Opera 11.10+ */
+	background: -ms-linear-gradient(left,  $left $left-percentage,$right $right-percentage); /* IE10+ */
+	background: linear-gradient(to right, $left $left-percentage,$right $right-percentage); /* W3C */
+	filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#ffffff', endColorstr='#000000',GradientType=0 ); /* IE6-9 */
+}
+

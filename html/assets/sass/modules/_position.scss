@@ -1,0 +1,725 @@
+.relative{
+    position: relative;
+}
+.absolute {
+    position: absolute;
+}
+.sticky {
+    position: sticky;
+}
+.fixed {
+    position: fixed;
+}
+.ab-middle { 
+    position: absolute; 
+    top: 50%; 
+    left: 50%; 
+    transform: translate(-50%, -50%);
+}
+.ab-middle-left { 
+    position: absolute; 
+    top: 50%; 
+    left: 0; 
+    transform: translate(0, -50%);
+}
+.ab-middle-right { 
+    position: absolute; 
+    top: 50%; 
+    right: 0;
+    transform: translate(0, -50%);
+}
+.ab-top { 
+    position: absolute; 
+    top: 0; 
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.ab-top-left { 
+    position: absolute; 
+    top: 0; 
+    left: 0;
+    transform: translate(0, 0);
+}
+.ab-top-right { 
+    position: absolute; 
+    top: 0; 
+    right: 0;
+    transform: translate(0, 0);
+}
+.ab-bottom { 
+    position: absolute; 
+    bottom: 0; 
+    left: 50%;
+    transform: translate(-50%, 0);
+}
+.ab-bottom-left { 
+    position: absolute; 
+    bottom: 0; 
+    left: 0;
+    transform: translate(0, 0);
+}
+.ab-bottom-right { 
+    position: absolute; 
+    bottom: 0; 
+    right: 0;
+    transform: translate(0, 0);
+}
+.top-auto {
+    top: auto;
+}
+.bottom-auto {
+    bottom: auto;
+}
+.left-auto {
+    left: auto;
+}
+.right-auto {
+    right: auto;
+}
+@for $i from 1 through 10 {
+    $z_index: '';
+    @for $num from 1 through $i {
+        $z_index: #{$z_index} + 9
+    }
+    .zi-#{$i} {
+        z-index: $z_index;
+    }
+}
+@for $i from 0 through 20 {
+    .top-#{$i * 5} {
+        top: #{$i * 5}px;
+    }
+    .bottom-#{$i * 5} {
+        bottom: #{$i * 5}px;
+    }
+    .left-#{$i * 5} {
+        left: #{$i * 5}px;
+    }
+    .right-#{$i * 5} {
+        right: #{$i * 5}px;
+    }
+}
+
+@include on(middle) {
+    .middle-relative {
+        position: relative;
+    }
+    .middle-absolute {
+        position: absolute;
+    }
+    .middle-sticky {
+        position: sticky;
+    }
+    .middle-fixed {
+        position: fixed;
+    }
+    .middle-ab-middle { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .middle-ab-middle-left { 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        transform: translate(0, -50%);
+    }
+    .middle-ab-middle-right { 
+        position: absolute; 
+        top: 50%; 
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    .middle-ab-top { 
+        position: absolute; 
+        top: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .middle-ab-top-left { 
+        position: absolute; 
+        top: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .middle-ab-top-right { 
+        position: absolute; 
+        top: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .middle-ab-bottom { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .middle-ab-bottom-left { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .middle-ab-bottom-right { 
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .middle-top-auto {
+        top: auto;
+    }
+    .middle-bottom-auto {
+        bottom: auto;
+    }
+    .middle-left-auto {
+        left: auto;
+    }
+    .middle-right-auto {
+        right: auto;
+    }
+    @for $i from 1 through 10 {
+        $z_index: '';
+        @for $num from 1 through $i {
+            $z_index: #{$z_index} + 9
+        }
+        .middle-zi-#{$i} {
+            z-index: $z_index;
+        }
+    }
+    @for $i from 0 through 20 {
+        .middle-top-#{$i * 5} {
+            top: #{$i * 5}px;
+        }
+        .middle-bottom-#{$i * 5} {
+            bottom: #{$i * 5}px;
+        }
+        .middle-left-#{$i * 5} {
+            left: #{$i * 5}px;
+        }
+        .middle-right-#{$i * 5} {
+            right: #{$i * 5}px;
+        }
+    }
+}
+
+@include on(tablet) {
+    .t-relative {
+        position: relative;
+    }
+    .t-absolute {
+        position: absolute;
+    }
+    .t-sticky {
+        position: sticky;
+    }
+    .t-fixed {
+        position: fixed;
+    }
+    .t-ab-middle { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .t-ab-middle-left { 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        transform: translate(0, -50%);
+    }
+    .t-ab-middle-right { 
+        position: absolute; 
+        top: 50%; 
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    .t-ab-top { 
+        position: absolute; 
+        top: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .t-ab-top-left { 
+        position: absolute; 
+        top: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .t-ab-top-right { 
+        position: absolute; 
+        top: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .t-ab-bottom { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .t-ab-bottom-left { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .t-ab-bottom-right { 
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .t-top-auto {
+        top: auto;
+    }
+    .t-bottom-auto {
+        bottom: auto;
+    }
+    .t-left-auto {
+        left: auto;
+    }
+    .t-right-auto {
+        right: auto;
+    }
+    @for $i from 1 through 10 {
+        $z_index: '';
+        @for $num from 1 through $i {
+            $z_index: #{$z_index} + 9
+        }
+        .t-zi-#{$i} {
+            z-index: $z_index;
+        }
+    }
+    @for $i from 0 through 20 {
+        .t-top-#{$i * 5} {
+            top: #{$i * 5}px;
+        }
+        .t-bottom-#{$i * 5} {
+            bottom: #{$i * 5}px;
+        }
+        .t-left-#{$i * 5} {
+            left: #{$i * 5}px;
+        }
+        .t-right-#{$i * 5} {
+            right: #{$i * 5}px;
+        }
+    }
+}
+
+@include on(desktop) {
+    .d-relative {
+        position: relative;
+    }
+    .d-absolute {
+        position: absolute;
+    }
+    .d-sticky {
+        position: sticky;
+    }
+    .d-fixed {
+        position: fixed;
+    }
+    .d-ab-middle { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .d-ab-middle-left { 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        transform: translate(0, -50%);
+    }
+    .d-ab-middle-right { 
+        position: absolute; 
+        top: 50%; 
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    .d-ab-top { 
+        position: absolute; 
+        top: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .d-ab-top-left { 
+        position: absolute; 
+        top: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .d-ab-top-right { 
+        position: absolute; 
+        top: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .d-ab-bottom { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .d-ab-bottom-left { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .d-ab-bottom-right { 
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .d-top-auto {
+        top: auto;
+    }
+    .d-bottom-auto {
+        bottom: auto;
+    }
+    .d-left-auto {
+        left: auto;
+    }
+    .d-right-auto {
+        right: auto;
+    }
+    @for $i from 1 through 10 {
+        $z_index: '';
+        @for $num from 1 through $i {
+            $z_index: #{$z_index} + 9
+        }
+        .d-zi-#{$i} {
+            z-index: $z_index;
+        }
+    }
+    @for $i from 0 through 20 {
+        .d-top-#{$i * 5} {
+            top: #{$i * 5}px;
+        }
+        .d-bottom-#{$i * 5} {
+            bottom: #{$i * 5}px;
+        }
+        .d-left-#{$i * 5} {
+            left: #{$i * 5}px;
+        }
+        .d-right-#{$i * 5} {
+            right: #{$i * 5}px;
+        }
+    }
+}
+
+@include on(max) {
+    .max-relative {
+        position: relative;
+    }
+    .max-absolute {
+        position: absolute;
+    }
+    .max-sticky {
+        position: sticky;
+    }
+    .max-fixed {
+        position: fixed;
+    }
+    .max-ab-middle { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .max-ab-middle-left { 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        transform: translate(0, -50%);
+    }
+    .max-ab-middle-right { 
+        position: absolute; 
+        top: 50%; 
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    .max-ab-top { 
+        position: absolute; 
+        top: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .max-ab-top-left { 
+        position: absolute; 
+        top: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .max-ab-top-right { 
+        position: absolute; 
+        top: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .max-ab-bottom { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .max-ab-bottom-left { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .max-ab-bottom-right { 
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .max-top-auto {
+        top: auto;
+    }
+    .max-bottom-auto {
+        bottom: auto;
+    }
+    .max-left-auto {
+        left: auto;
+    }
+    .max-right-auto {
+        right: auto;
+    }
+    @for $i from 1 through 10 {
+        $z_index: '';
+        @for $num from 1 through $i {
+            $z_index: #{$z_index} + 9
+        }
+        .max-zi-#{$i} {
+            z-index: $z_index;
+        }
+    }
+    @for $i from 0 through 20 {
+        .max-top-#{$i * 5} {
+            top: #{$i * 5}px;
+        }
+        .max-bottom-#{$i * 5} {
+            bottom: #{$i * 5}px;
+        }
+        .max-left-#{$i * 5} {
+            left: #{$i * 5}px;
+        }
+        .max-right-#{$i * 5} {
+            right: #{$i * 5}px;
+        }
+    }
+}
+
+@include on(hd) {
+    .hd-relative {
+        position: relative;
+    }
+    .hd-absolute {
+        position: absolute;
+    }
+    .hd-sticky {
+        position: sticky;
+    }
+    .hd-fixed {
+        position: fixed;
+    }
+    .hd-ab-middle { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .hd-ab-middle-left { 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        transform: translate(0, -50%);
+    }
+    .hd-ab-middle-right { 
+        position: absolute; 
+        top: 50%; 
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    .hd-ab-top { 
+        position: absolute; 
+        top: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .hd-ab-top-left { 
+        position: absolute; 
+        top: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .hd-ab-top-right { 
+        position: absolute; 
+        top: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .hd-ab-bottom { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .hd-ab-bottom-left { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .hd-ab-bottom-right { 
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .hd-top-auto {
+        top: auto;
+    }
+    .hd-bottom-auto {
+        bottom: auto;
+    }
+    .hd-left-auto {
+        left: auto;
+    }
+    .hd-right-auto {
+        right: auto;
+    }
+    @for $i from 1 through 10 {
+        $z_index: '';
+        @for $num from 1 through $i {
+            $z_index: #{$z_index} + 9
+        }
+        .hd-zi-#{$i} {
+            z-index: $z_index;
+        }
+    }
+    @for $i from 0 through 20 {
+        .hd-top-#{$i * 5} {
+            top: #{$i * 5}px;
+        }
+        .hd-bottom-#{$i * 5} {
+            bottom: #{$i * 5}px;
+        }
+        .hd-left-#{$i * 5} {
+            left: #{$i * 5}px;
+        }
+        .hd-right-#{$i * 5} {
+            right: #{$i * 5}px;
+        }
+    }
+}
+
+@include on(hhd) {
+    .hhd-relative {
+        position: relative;
+    }
+    .hhd-absolute {
+        position: absolute;
+    }
+    .hhd-sticky {
+        position: sticky;
+    }
+    .hhd-fixed {
+        position: fixed;
+    }
+    .hhd-ab-middle { 
+        position: absolute; 
+        top: 50%; 
+        left: 50%; 
+        transform: translate(-50%, -50%);
+    }
+    .hhd-ab-middle-left { 
+        position: absolute; 
+        top: 50%; 
+        left: 0; 
+        transform: translate(0, -50%);
+    }
+    .hhd-ab-middle-right { 
+        position: absolute; 
+        top: 50%; 
+        right: 0;
+        transform: translate(0, -50%);
+    }
+    .hhd-ab-top { 
+        position: absolute; 
+        top: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .hhd-ab-top-left { 
+        position: absolute; 
+        top: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .hhd-ab-top-right { 
+        position: absolute; 
+        top: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .hhd-ab-bottom { 
+        position: absolute; 
+        bottom: 0; 
+        left: 50%;
+        transform: translate(-50%, 0);
+    }
+    .hhd-ab-bottom-left { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0;
+        transform: translate(0, 0);
+    }
+    .hhd-ab-bottom-right { 
+        position: absolute; 
+        bottom: 0; 
+        right: 0;
+        transform: translate(0, 0);
+    }
+    .hhd-top-auto {
+        top: auto;
+    }
+    .hhd-bottom-auto {
+        bottom: auto;
+    }
+    .hhd-left-auto {
+        left: auto;
+    }
+    .hhd-right-auto {
+        right: auto;
+    }
+    @for $i from 1 through 10 {
+        $z_index: '';
+        @for $num from 1 through $i {
+            $z_index: #{$z_index} + 9
+        }
+        .hhd-zi-#{$i} {
+            z-index: $z_index;
+        }
+    }
+    @for $i from 0 through 20 {
+        .hhd-top-#{$i * 5} {
+            top: #{$i * 5}px;
+        }
+        .hhd-bottom-#{$i * 5} {
+            bottom: #{$i * 5}px;
+        }
+        .hhd-left-#{$i * 5} {
+            left: #{$i * 5}px;
+        }
+        .hhd-right-#{$i * 5} {
+            right: #{$i * 5}px;
+        }
+    }
+}

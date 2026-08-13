@@ -1,0 +1,240 @@
+// Rich Text Editor (RTE)
+// =======
+.regular-400 {
+	font:{
+		weight: 400 !important;
+	};
+}
+
+.medium-500 {
+	font:{
+		weight: 500 !important;
+	};
+}
+
+.semibold-600 {
+	font:{
+		weight: 600 !important;
+	};
+}
+
+.hover-underline,
+.hover-underline-grey {
+	position: relative;
+
+	&::before {
+		content: '';
+		position: absolute;
+		width: 100%;
+		height: 0.5px;
+		transform-origin: left;
+		transition: 0.3s ease all;
+		transform: scaleX(0);
+		background: var(--black);
+		left: 0;
+		bottom: -2px; 
+	}
+
+	&:hover,
+	&.active {
+		&::before {
+			transform: scaleX(1);
+		}
+	}
+
+	&.reverse {
+		&::before {
+			transform: scaleX(1);
+		}
+
+		&:hover {
+			&::before {
+				transform: scaleX(0);
+			}
+		}
+	}
+}
+
+.hover-underline-grey {
+	&::before {
+		background: var(--grey);
+	}
+}
+
+.link1, .link2, .link3, .link4 {
+	position: relative;
+	border-bottom: 0 !important;
+}
+
+.link2 {
+	&::before {
+		background: var(--white);
+	}
+}
+
+@keyframes link-animation {
+	0% {
+		transform: scaleX(0);
+	}
+
+	100% {
+		transform: scaleX(1);
+	}
+}
+
+
+.lh-1{ line-height: 1; }
+.lh-0{ line-height: 0; }
+
+
+.underline{ text-decoration: underline; }
+.uppercase {text-transform: uppercase;}
+.capitalize {text-transform: capitalize;}
+.rte{
+	counter-reset: ol-counter;
+	
+	a {
+		color: inherit;
+		position: relative;
+		text-decoration: underline;
+		display: inline-block;
+	}
+
+	.link1, .link2, .link3, .link4 {
+		padding-bottom: 0;
+
+		&::before {
+			bottom: 0;
+		}
+	}
+
+	em{
+		font:{
+			style:italic;
+		}
+	}
+	
+	p{
+		padding:{
+			bottom: $rte-spacing;
+		}
+
+		&:last-child{
+			padding:{
+				bottom: 0;
+			}
+		}
+	}
+
+	strong {
+		font:{
+			weight: 600;
+		};
+	}
+
+	ul{
+		list-style-type: none;
+		padding-bottom: $rte-spacing;
+
+		&:last-child {
+			padding-bottom: 0;
+		}
+
+		li {
+			position: relative;
+			margin-bottom: rem(10);
+			padding-left: rem(12);
+
+			&:before {
+				content: "";
+				display: inline-block;
+				width: rem(3);
+				height: rem(3);
+				border-radius: 50%;
+				position: absolute;
+				top: 0.7rem;
+    			margin-top: -1.5px;
+				left: 0;
+				background-color: var(--black);
+			}
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+
+	ol{
+		list-style-type: none;
+		padding-bottom: $rte-spacing;
+
+		&:last-child {
+			padding-bottom: 0;
+		}
+
+		li {
+			position: relative;
+			margin-bottom: rem(10);
+			padding-left: rem(12);
+
+			&:before {
+				counter-increment: ol-counter;
+				content: counter(ol-counter) ". ";
+				position: absolute;
+				top: 0;
+				left: 0;
+			}
+
+			&:last-child {
+				margin-bottom: 0;
+			}
+		}
+	}
+}
+
+.tl { text-align: left; }
+.tr { text-align: right; }
+.tc { text-align: center; }
+.tj { text-align: justify; }
+
+@include on(middle) {
+	.middle-tl { text-align: left; }
+  	.middle-tr { text-align: right; }
+  	.middle-tc { text-align: center; }
+  	.middle-tj { text-align: justify; }
+}
+
+@include on(tablet) {
+	.t-tl { text-align: left; }
+  	.t-tr { text-align: right; }
+  	.t-tc { text-align: center; }
+  	.t-tj { text-align: justify; }
+}
+
+@include on(desktop) {
+	.d-tl { text-align: left; }
+  	.d-tr { text-align: right; }
+  	.d-tc { text-align: center; }
+  	.d-tj { text-align: justify; }
+}
+
+@include on(max) {
+	.max-tl { text-align: left; }
+  	.max-tr { text-align: right; }
+  	.max-tc { text-align: center; }
+  	.max-tj { text-align: justify; }
+}
+
+@include on(hd) {
+	.hd-tl { text-align: left; }
+  	.hd-tr { text-align: right; }
+  	.hd-tc { text-align: center; }
+  	.hd-tj { text-align: justify; }
+}
+
+@include on(hhd) {
+	.hhd-tl { text-align: left; }
+  	.hhd-tr { text-align: right; }
+  	.hhd-tc { text-align: center; }
+  	.hhd-tj { text-align: justify; }
+}

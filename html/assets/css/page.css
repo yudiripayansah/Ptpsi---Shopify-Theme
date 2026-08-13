@@ -1,0 +1,610 @@
+.contact-banner .text-con.with-image {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 100%;
+}
+
+.contact-form .contact-form-list li {
+  padding-left: 5px;
+  padding-left: 0.3125rem;
+  padding-right: 5px;
+  padding-right: 0.3125rem;
+  margin-bottom: 10px;
+  margin-bottom: 0.625rem;
+}
+
+.faq-content-right-each .arrow {
+  transform: rotate(0deg);
+}
+.faq-content-right-each .arrow svg {
+  max-width: 10px;
+}
+.faq-content-right-each .plus .arrow {
+  transform: rotate(180deg);
+}
+
+/** Ring builder **/
+#ring-builder h1.h7 {
+  margin: 0;
+}
+#ring-builder .pb-3 {
+  padding-bottom: 3px;
+}
+#ring-builder .personalise-message .form-message[data-font] {
+  font-size: 16px;
+}
+#ring-builder [data-font=font-chinese-shao],
+#ring-builder [data-class=font-chinese-shao] {
+  font-family: "Shao";
+}
+#ring-builder [data-font=font-times-new-roman],
+#ring-builder [data-class=font-times-new-roman] {
+  font-family: "Times New Roman";
+}
+#ring-builder [data-font=font-pristina],
+#ring-builder [data-class=font-pristina] {
+  font-family: "Pristina";
+}
+#ring-builder [data-font=font-monotype-corsiva],
+#ring-builder [data-class=font-monotype-corsiva] {
+  font-family: "Monotype Corsiva";
+}
+#ring-builder [data-font=font-freestyle-script],
+#ring-builder [data-class=font-freestyle-script] {
+  font-family: "Freestyle Script";
+}
+#ring-builder [data-font=font-courier-new],
+#ring-builder [data-class=font-courier-new] {
+  font-family: "Courier New";
+}
+#ring-builder [data-font=font-century-gothic],
+#ring-builder [data-class=font-century-gothic] {
+  font-family: "Century Gothic";
+}
+#ring-builder [data-font=font-bradley-hand-itc],
+#ring-builder [data-class=font-bradley-hand-itc] {
+  font-family: "BradleyHand ITC";
+}
+#ring-builder [data-font=font-berlin-sans-fb],
+#ring-builder [data-class=font-berlin-sans-fb] {
+  font-family: "Berlin Sans FB";
+}
+#ring-builder [data-font=font-arial],
+#ring-builder [data-class=font-arial] {
+  font-family: "Arial";
+}
+#ring-builder [data-font=font-agency-fb],
+#ring-builder [data-class=font-agency-fb] {
+  font-family: "Agency";
+}
+#ring-builder .loading-image {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  width: 70px;
+  height: 70px;
+  z-index: 1;
+}
+#ring-builder .step-main-wrapper.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+  min-height: calc(100vh - 180px);
+}
+#ring-builder .step-main-wrapper.disabled .left-side {
+  height: 100%;
+}
+#ring-builder .step-main-wrapper .swiper-custom-arrow.right {
+  right: 24px;
+}
+#ring-builder .step-main-wrapper .swiper-custom-arrow.left {
+  left: 24px;
+}
+@media (min-width: 1024px) {
+  #ring-builder .step-wrapper .carousel-wrapper {
+    position: sticky;
+    top: 0;
+    min-height: 90vh;
+  }
+}
+#ring-builder .step-wrapper .ring-builder-step-6 .gallery-wrapper-mobile {
+  width: calc(100% + 50px);
+  margin-left: -25px;
+}
+@media (min-width: 600px) {
+  #ring-builder .step-wrapper .ring-builder-step-6 .gallery-wrapper-mobile {
+    width: calc(100% + 60px);
+    margin-left: -30px;
+  }
+}
+@media (min-width: 1024px) {
+  #ring-builder .step-wrapper .ring-builder-step-6 .carousel-wrapper {
+    position: relative;
+    top: unset;
+  }
+  #ring-builder .step-wrapper .ring-builder-step-6 .outer-wrapper {
+    position: sticky;
+    top: 120px;
+    display: flex;
+    flex-direction: column;
+  }
+}
+#ring-builder component {
+  display: none;
+}
+#ring-builder .usp-icons-wrapper .inner-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+}
+@media (min-width: 600px) {
+  #ring-builder .usp-icons-wrapper .inner-wrapper {
+    flex-wrap: nowrap;
+    justify-content: center;
+  }
+}
+#ring-builder .usp-icons-wrapper .inner-wrapper .usp-each {
+  width: 100%;
+}
+@media (min-width: 600px) {
+  #ring-builder .usp-icons-wrapper .inner-wrapper .usp-each {
+    width: auto;
+  }
+}
+#ring-builder .usp-icons-wrapper .inner-wrapper .usp-each .icon {
+  display: inline-flex;
+  width: 18px;
+  height: 18px;
+  font-size: 0;
+}
+#ring-builder .usp-icons-wrapper .inner-wrapper .usp-each .icon svg {
+  width: 18px;
+  height: 18px;
+}
+#ring-builder .usp-icons-wrapper .inner-wrapper .usp-each .text {
+  width: 100%;
+}
+@media (min-width: 600px) {
+  #ring-builder .usp-icons-wrapper .inner-wrapper .usp-each .text {
+    width: 150px;
+  }
+}
+@media (min-width: 1024px) {
+  #ring-builder .usp-icons-wrapper .inner-wrapper .usp-each .text {
+    width: 110px;
+  }
+}
+@media (min-width: 1200px) {
+  #ring-builder .usp-icons-wrapper .inner-wrapper .usp-each .text {
+    width: 140px;
+  }
+}
+#ring-builder .bottom-section {
+  position: fixed;
+  width: 100%;
+  z-index: 100;
+  bottom: 0;
+  left: 0;
+  background: #fff;
+  box-shadow: 0px -3px 6px rgba(0, 0, 0, 0.0509803922);
+}
+@media (min-width: 1024px) {
+  #ring-builder .bottom-section {
+    border-top: 1px solid var(--silver);
+    box-shadow: unset;
+  }
+}
+#ring-builder .bottom-section .btn1, #ring-builder .bottom-section .btn3 {
+  width: 80px;
+  text-align: center;
+  padding: 17px 22px 17px 23px;
+  border: 1px solid var(--light-green);
+  font-size: 10px;
+}
+#ring-builder .bottom-section .btn1:hover, #ring-builder .bottom-section .btn3:hover {
+  border: 1px solid var(--mid-green);
+}
+@media (min-width: 1024px) {
+  #ring-builder .bottom-section .btn1, #ring-builder .bottom-section .btn3 {
+    font-size: 11px;
+    width: 150px;
+    padding: 20px 30px;
+  }
+}
+@media (min-width: 1200px) {
+  #ring-builder .bottom-section .btn1, #ring-builder .bottom-section .btn3 {
+    width: 160px;
+  }
+}
+#ring-builder .bottom-section .btn1.preview-ring, #ring-builder .bottom-section .btn3.preview-ring {
+  width: calc(100% - 180px);
+  white-space: nowrap;
+}
+@media (min-width: 1024px) {
+  #ring-builder .bottom-section .btn1.preview-ring, #ring-builder .bottom-section .btn3.preview-ring {
+    display: none;
+  }
+}
+#ring-builder .bottom-section .btn1.close-preview, #ring-builder .bottom-section .btn3.close-preview {
+  width: 100%;
+}
+@media screen and (max-width: 1023px) {
+  #ring-builder .bottom-section .btn1.next-step-button:hover, #ring-builder .bottom-section .btn3.next-step-button:hover {
+    background: var(--light-green);
+    color: var(--black);
+    border: 1px solid var(--light-green);
+  }
+}
+#ring-builder .bottom-section .back-step-button.disabled,
+#ring-builder .bottom-section .next-step-button.disabled {
+  pointer-events: none;
+  opacity: 0.5;
+}
+#ring-builder .bottom-section .back-step-button.hide-m,
+#ring-builder .bottom-section .step-5-back.hide-m {
+  display: none;
+}
+#ring-builder .bottom-section .selected-text {
+  width: 65%;
+}
+#ring-builder .bottom-section .total-price {
+  width: 35%;
+}
+@media (min-width: 1200px) {
+  #ring-builder .bottom-section .selected-text {
+    width: 70%;
+  }
+  #ring-builder .bottom-section .total-price {
+    width: 30%;
+  }
+}
+#ring-builder .diamond-shape-wrapper .row {
+  margin: 0 -5px;
+}
+@media (min-width: 1024px) {
+  #ring-builder .diamond-shape-wrapper .row {
+    margin: -10px;
+  }
+}
+#ring-builder .diamond-shape-wrapper .row .col-4 {
+  padding-left: 5px;
+  padding-right: 5px;
+}
+@media (min-width: 1024px) {
+  #ring-builder .diamond-shape-wrapper .row .col-4 {
+    padding-left: 10px;
+    padding-right: 10px;
+  }
+}
+#ring-builder .product-each {
+  transition: 0.3s ease all;
+  justify-content: unset;
+}
+#ring-builder .product-each:hover {
+  opacity: 0.8;
+}
+#ring-builder .product-each .image-wrapper {
+  transition: 0.3s ease all;
+  border: 1px solid transparent;
+}
+#ring-builder .product-each .text-wrapper .select-handler {
+  padding-right: 10px;
+}
+@media screen and (max-width: 767px) {
+  #ring-builder .product-each .text-wrapper .select-handler p {
+    line-height: 1.4;
+  }
+}
+#ring-builder .product-each.selected .image-wrapper {
+  border: 1px solid var(--black);
+}
+#ring-builder .product-each.unselected {
+  opacity: 0.4;
+}
+#ring-builder .product-each .icon {
+  flex: 0 0 16px;
+  font-size: 0;
+}
+#ring-builder .help-choose-choices .btn3 {
+  text-transform: unset;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+@media (min-width: 1024px) {
+  #ring-builder .help-choose-choices .btn3 {
+    padding-left: 60px;
+    padding-right: 60px;
+  }
+}
+#ring-builder .help-choose-choices .btn3 .desc {
+  text-transform: unset;
+  transition: 0.2s ease all;
+}
+#ring-builder .help-choose-choices .btn3:hover .desc {
+  color: #fff;
+}
+#ring-builder #help-choose-drawer {
+  position: relative;
+  z-index: 20000000000;
+}
+#ring-builder #help-choose-drawer .close-drawer-trigger {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+  left: 0;
+  top: 0;
+  z-index: 1;
+}
+#ring-builder #help-choose-drawer .select-d-preference,
+#ring-builder #help-choose-drawer .select-p-preference {
+  transition: 0.3s ease all;
+}
+#ring-builder #help-choose-drawer .select-d-preference.selected,
+#ring-builder #help-choose-drawer .select-p-preference.selected {
+  border: 1px solid var(--black);
+}
+#ring-builder #help-choose-drawer .overlay-wrapper {
+  position: fixed;
+  display: flex;
+  justify-content: flex-end;
+  width: 100%;
+  height: 100%;
+  z-index: 20000000;
+  top: 0;
+  left: 0;
+  background: rgba(108, 108, 108, 0.8);
+  opacity: 0;
+  visibility: hidden;
+  transition: 0.3s ease all;
+}
+#ring-builder #help-choose-drawer .overlay-wrapper.show {
+  opacity: 1;
+  visibility: visible;
+}
+#ring-builder #help-choose-drawer .content-wrapper {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  overflow-y: auto;
+  background: var(--light-grey);
+  transition: 0.5s ease all;
+  transform: translateX(100%);
+  z-index: 2;
+}
+#ring-builder #help-choose-drawer .content-wrapper.show {
+  transform: translateX(0);
+}
+#ring-builder #help-choose-drawer .close-help-choose-drawer {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  font-size: 0;
+  right: 20px;
+  top: 20px;
+  z-index: 2;
+}
+#ring-builder #help-choose-drawer .close-help-choose-drawer svg {
+  display: block;
+  width: 15px;
+  height: 15px;
+}
+@media (min-width: 1024px) {
+  #ring-builder #help-choose-drawer .content-wrapper {
+    width: 480px;
+    background: var(--light-grey);
+  }
+  #ring-builder #help-choose-drawer .close-help-choose-drawer {
+    right: 30px;
+    top: 30px;
+  }
+}
+#ring-builder #product-diamond-filter #price-slider.noUi-target {
+  border: 0;
+  border-radius: 0;
+  box-shadow: unset;
+  background: var(--silver);
+}
+#ring-builder #product-diamond-filter #price-slider.noUi-target.noUi-horizontal {
+  height: 3px;
+}
+#ring-builder #product-diamond-filter #price-slider .noUi-connects {
+  border-radius: 0;
+}
+#ring-builder #product-diamond-filter #price-slider .noUi-handle {
+  width: 11px;
+  height: 11px;
+  border: 0;
+  border-radius: 50%;
+  background: var(--mid-green);
+  right: -5.5px;
+  top: -4px;
+  box-shadow: unset;
+  cursor: pointer;
+}
+#ring-builder #product-diamond-filter #price-slider .noUi-handle::after, #ring-builder #product-diamond-filter #price-slider .noUi-handle::before {
+  display: none;
+}
+#ring-builder #product-diamond-filter #price-slider .noUi-handle.noUi-handle-lower {
+  right: -11px;
+}
+#ring-builder #product-diamond-filter #price-slider .noUi-handle.noUi-handle-upper {
+  right: 0;
+}
+#ring-builder #product-diamond-filter #price-slider .noUi-connect {
+  background: var(--mid-green);
+}
+#ring-builder #product-diamond-filter .price-inputs input {
+  width: 60px;
+}
+#ring-builder #product-diamond-filter .results-wrapper .result-each {
+  transition: 0.3s ease all;
+}
+#ring-builder #product-diamond-filter .results-wrapper .result-each.unselected {
+  opacity: 0.5;
+}
+#ring-builder #product-diamond-filter .results-wrapper .result-each.active {
+  opacity: 1;
+}
+@media (min-width: 1440px) {
+  #ring-builder #product-diamond-filter .results-wrapper .result-each {
+    padding-right: 0;
+  }
+  #ring-builder #product-diamond-filter .results-wrapper .result-each .text-container .image-wrapper {
+    flex: 1;
+    padding-left: 0;
+  }
+  #ring-builder #product-diamond-filter .results-wrapper .result-each .text-container .info-each-wrapper .info-each {
+    flex: 1;
+    padding-left: 0;
+    padding-right: 0;
+  }
+}
+#ring-builder #product-diamond-filter .filter-each-check {
+  width: 100%;
+  display: none;
+}
+#ring-builder #product-diamond-filter .filter-each-check.selectable {
+  display: inline-flex;
+}
+@media (min-width: 1024px) {
+  #ring-builder #product-diamond-filter .filter-each-check {
+    width: 130px;
+  }
+}
+#ring-builder .engraving-wrapper .checkbox-handler .box {
+  position: relative;
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
+  width: 16px;
+  height: 16px;
+  border: 1px solid var(--grey);
+  background: transparent;
+  transition: 0.3s ease all;
+}
+#ring-builder .engraving-wrapper .checkbox-handler .box svg {
+  display: block;
+  width: 14px;
+  height: 14px;
+  transition: 0.3s ease all;
+  opacity: 0;
+}
+#ring-builder .engraving-wrapper .checkbox-handler.active .box {
+  background: var(--mid-green);
+  border: 1px solid var(--mid-green);
+}
+#ring-builder .engraving-wrapper .checkbox-handler.active .box svg {
+  opacity: 1;
+}
+#ring-builder .engraving-wrapper .font-nav-handler {
+  transition: 0.3s ease all;
+  padding-bottom: 2px;
+  opacity: 0.5;
+  border-bottom: 1px solid transparent;
+}
+#ring-builder .engraving-wrapper .font-nav-handler.active {
+  opacity: 1;
+  border-bottom: 1px solid var(--silver);
+}
+#ring-builder .engraving-wrapper .font-picker-each {
+  transition: 0.3s ease all;
+}
+#ring-builder .engraving-wrapper .font-picker-each:hover {
+  color: var(--black);
+}
+#ring-builder .engraving-wrapper .font-picker-each.unselected {
+  color: var(--silver);
+}
+#ring-builder .engraving-wrapper .font-picker-each.selected {
+  border: 1px solid var(--black);
+}
+#ring-builder .ring-size-wrapper .variant-each-button {
+  transition: 0.3s ease all;
+  width: 48px;
+  text-align: center;
+}
+#ring-builder .ring-size-wrapper .variant-each-button.active {
+  border: 1px solid var(--black);
+}
+#ring-builder .atc-wrapper .payment-icons .image-each {
+  width: 35px;
+  height: auto;
+}
+#ring-builder .add-to-cart {
+  transition: 0.3s ease all;
+}
+#ring-builder .add-to-cart.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+#ring-builder .product-icons .icons-wrapper {
+  flex-wrap: wrap;
+  column-gap: 500px;
+}
+@media (min-width: 600px) {
+  #ring-builder .product-icons .icons-wrapper {
+    flex-wrap: nowrap;
+    column-gap: 60px;
+  }
+}
+@media (min-width: 1024px) {
+  #ring-builder .product-icons .icons-wrapper {
+    column-gap: 60px;
+  }
+}
+@media (min-width: 1200px) {
+  #ring-builder .product-icons .icons-wrapper {
+    column-gap: 120px;
+  }
+}
+#ring-builder .product-icons .icon-each .icon {
+  font-size: 0;
+  width: 30px;
+  flex: 0 0 30px;
+  height: auto;
+  display: inline-block;
+}
+#ring-builder .product-icons .icon-each .icon svg {
+  display: block;
+  height: auto;
+}
+#ring-builder .product-icons .icon-each .text {
+  width: 230px;
+}
+@media (min-width: 600px) {
+  #ring-builder .product-icons .icon-each .text {
+    width: auto;
+    max-width: 145px;
+  }
+}
+@media (min-width: 1024px) {
+  #ring-builder .product-icons .icon-each .text {
+    max-width: unset;
+  }
+}
+#ring-builder .product-icons .icon-each:first-child {
+  margin-top: 0;
+}
+#ring-builder .product-faq .accordion .accordion-title {
+  align-items: flex-start;
+}
+#ring-builder .product-faq .accordion .accordion-title .icon-wrapper {
+  display: inline-block;
+  margin-top: 3px;
+}
+#ring-builder .product-faq .accordion .accordion-title .title {
+  display: flex;
+  padding-right: 10px;
+}
+#ring-builder .product-faq .accordion .title-icon .icon {
+  width: 10px;
+  height: 10px;
+}
+#ring-builder .product-faq .accordion .title-icon .icon svg {
+  display: block;
+  height: 10px;
+  height: 10px;
+}
+

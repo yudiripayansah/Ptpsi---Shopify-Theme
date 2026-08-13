@@ -1,0 +1,89 @@
+.swiper-button-prev ,
+.swiper-button-next {
+    width: 40px;
+    height: 40px;
+    z-index: 3;
+
+    &::after {
+        display: none;
+    }
+}
+
+.swiper-slide {
+    height: auto;
+}
+
+.swiper-button-next {
+    right: 25px;
+}
+
+.swiper-button-prev {
+    left: 25px;
+}
+
+.swiper-pagination-bullets {
+    &.white {
+        &.swiper-pagination-horizontal {
+            .swiper-pagination-bullet {
+                background-color: rgba(255, 255, 255, 0.5);
+
+                &.swiper-pagination-bullet-active {
+                    background: #ffffff;
+                }
+            }
+        }
+    }
+
+    &.swiper-pagination-horizontal {
+        bottom: 0;
+        line-height: 0;
+    }
+
+    .swiper-pagination-bullet {
+        border-radius: 4px;
+    }
+}
+.swiper {
+    .note-overlay {
+        position: absolute;
+        bottom: 10%;
+        left: 10px;
+        z-index: 10;
+        @include on (tablet){
+            bottom: 10%;
+            left: 20px;
+        }
+        @include on(desktop) {
+            bottom: 10%;
+            left: 30px;
+        }
+    }
+    .note-overlay2 {
+        position: absolute;
+        bottom: 42%;
+        left: 10px;
+        z-index: 10;
+        @include on (tablet){
+            bottom: 20%;
+            left: 20px;
+        }
+        @include on(desktop) {
+            bottom: 13%;
+            left: 30px;
+        }
+    }
+    .note-overlay3 {
+        position: absolute;
+        bottom: 35%;
+        left: 10px;
+        z-index: 10;
+        @include on (tablet){
+            bottom: 16%;
+            left: 20px;
+        }
+        @include on(desktop) {
+            bottom: 10%;
+            left: 30px;
+        }
+    }
+}

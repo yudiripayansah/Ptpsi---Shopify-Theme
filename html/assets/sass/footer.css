@@ -1,0 +1,75 @@
+.site-footer .up-arrow {
+  width: 13px;
+  height: 16px;
+}
+@media (min-width: 1024px) {
+  .site-footer .right-side::before, .site-footer .right-side::after {
+    display: none;
+  }
+}
+
+.currency-selector .icon-globe {
+  display: inline-block;
+  width: 13px;
+  height: 13px;
+  font-size: 0;
+  margin-right: 5px;
+}
+.currency-selector .icon-globe svg {
+  width: 13px;
+  height: 13px;
+}
+.currency-selector #currency-select-trigger .text {
+  margin-right: 5px;
+}
+.currency-selector #currency-select-trigger .icon,
+.currency-selector #currency-select-trigger svg {
+  width: 8px;
+  height: 4px;
+}
+.currency-selector #currency-select-dropdown {
+  position: absolute;
+  bottom: calc(100% + 15px);
+  left: 0;
+  min-width: 150px;
+  width: 100%;
+  max-height: 150px;
+  overflow: auto;
+  background-color: #fff;
+  border: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  z-index: 1;
+  transition: all 0.3s ease;
+  opacity: 0;
+  visibility: hidden;
+  text-align: left;
+}
+@media (min-width: 1024px) {
+  .currency-selector #currency-select-dropdown {
+    min-width: 200px;
+  }
+}
+.currency-selector #currency-select-dropdown .currency-each {
+  position: relative;
+}
+.currency-selector #currency-select-dropdown .currency-each::before {
+  content: "";
+  display: none;
+  width: 5px;
+  height: 5px;
+  margin-right: 8px;
+  transform: translateY(-25%);
+  background-color: var(--black);
+}
+.currency-selector #currency-select-dropdown .currency-each.active::before, .currency-selector #currency-select-dropdown .currency-each:hover::before {
+  display: inline-block;
+}
+.currency-selector.active #currency-select-dropdown,
+.currency-selector.active #language-select-dropdown {
+  opacity: 1;
+  visibility: visible;
+}
+.currency-selector.active span svg, .currency-selector.active div svg {
+  transform: rotate(180deg);
+}/*# sourceMappingURL=footer.css.map */

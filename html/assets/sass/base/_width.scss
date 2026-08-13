@@ -1,0 +1,167 @@
+/* This defines the minimum, maximum and step for the widths */
+/* PLEASE UPDATE style-guide/width.php IF YOU CHANGE VALUES */
+.w-full { 
+	width: 100%; 
+}
+.w-auto {
+	width: auto;
+}
+.w-max-cont {
+	width: max-content;
+}
+$width_max:1250;
+$width_step:5;
+$width_min:5;
+@while $width_max >= $width_min {
+	.max-#{$width_max} {
+		max-width:rem($width_max);
+	}
+	$width_max: $width_max - $width_step;
+}
+.max-unset {
+	max-width: unset;
+}
+
+@include on(middle) {
+	.middle-w-full { 
+		width: 100%; 
+	}
+	.middle-w-auto {
+		width: auto;
+	}
+	.middle-w-max-cont {
+		width: max-content;
+	}
+	$width_max:1250;
+	$width_step:5;
+	$width_min:5;
+	@while $width_max >= $width_min {
+		.middle-max-#{$width_max} {
+			max-width:rem($width_max);
+		}
+		$width_max: $width_max - $width_step;
+	}
+	.middle-max-unset {
+		max-width: unset;
+	}
+}
+
+@include on(tablet) {
+	.t-w-full { 
+		width: 100%; 
+	}
+	.t-w-auto {
+		width: auto;
+	}
+	.t-w-max-cont {
+		width: max-content;
+	}
+	$width_max:1250;
+	$width_step:5;
+	$width_min:5;
+	@while $width_max >= $width_min {
+		.t-max-#{$width_max} {
+			max-width:rem($width_max);
+		}
+		$width_max: $width_max - $width_step;
+	}
+	.t-max-unset {
+		max-width: unset;
+	}
+}
+
+@include on(desktop) {
+	.d-w-full { 
+		width: 100%; 
+	}
+	.d-w-auto {
+		width: auto;
+	}
+	.d-w-max-cont {
+		width: max-content;
+	}
+	$width_max:1250;
+	$width_step:5;
+	$width_min:5;
+	@while $width_max >= $width_min {
+		.d-max-#{$width_max} {
+			max-width:rem($width_max);
+		}
+		$width_max: $width_max - $width_step;
+	}
+	.d-max-unset {
+		max-width: unset;
+	}
+}
+
+@include on(max) {
+	.max-w-full { 
+		width: 100%; 
+	}
+	.max-w-auto {
+		width: auto;
+	}
+	.max-w-max-cont {
+		width: max-content;
+	}
+	$width_max:1250;
+	$width_step:5;
+	$width_min:5;
+	@while $width_max >= $width_min {
+		.max-max-#{$width_max} {
+			max-width:rem($width_max);
+		}
+		$width_max: $width_max - $width_step;
+	}
+	.max-max-unset {
+		max-width: unset;
+	}
+}
+
+@include on(hd) {
+	.hd-w-full { 
+		width: 100%; 
+	}
+	.hd-w-auto {
+		width: auto;
+	}
+	.hd-w-max-cont {
+		width: max-content;
+	}
+	$width_max:1250;
+	$width_step:5;
+	$width_min:5;
+	@while $width_max >= $width_min {
+		.hd-max-#{$width_max} {
+			max-width:rem($width_max);
+		}
+		$width_max: $width_max - $width_step;
+	}
+	.hd-max-unset {
+		max-width: unset;
+	}
+}
+
+@include on(hhd) {
+	.hhd-w-full { 
+		width: 100%; 
+	}
+	.hhd-w-auto {
+		width: auto;
+	}
+	.hhd-w-max-cont {
+		width: max-content;
+	}
+	$width_max:1250;
+	$width_step:5;
+	$width_min:5;
+	@while $width_max >= $width_min {
+		.hhd-max-#{$width_max} {
+			max-width:rem($width_max);
+		}
+		$width_max: $width_max - $width_step;
+	}
+	.hhd-max-unset {
+		max-width: unset;
+	}
+}

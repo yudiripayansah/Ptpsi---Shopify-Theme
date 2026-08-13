@@ -1,0 +1,15 @@
+.product-price {
+    .strike {
+        opacity: 0.5;
+        position: relative;
+
+        &::before {
+            content: '';
+			border-bottom: 1px solid #000;
+			width: 100%;
+			position: absolute;
+			right: 0;
+			top: 70%;
+        }
+    }
+}

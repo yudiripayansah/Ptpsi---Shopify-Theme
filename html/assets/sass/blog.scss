@@ -1,0 +1,18 @@
+@import "helpers/functions";
+@import "helpers/config";
+@import "helpers/mixins";
+
+@import "base/breakpoints";
+
+.articles-tags{
+	@include on(tablet){
+		text-align:center;
+	}
+	li{
+		@include on(tablet){
+			display:inline-block;
+			margin-left:rem(10);
+			margin-right:rem(10);
+		}
+	}
+}

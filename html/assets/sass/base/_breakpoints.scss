@@ -1,0 +1,27 @@
+// Grid Containers
+$middle-container: 500px;
+$tablet-container: 600px;
+$desktop-container: 1024px;
+$max-container: 1200px;
+$hd-container: 1440px;
+$hhd-container:	1920px; 
+
+$max-width: 100%;
+
+// Responsive Breakpoints
+$middle-breakpoint:  ($middle-container);
+$tablet-breakpoint:  ($tablet-container);
+$desktop-breakpoint: ($desktop-container);
+$max-breakpoint: ($max-container);
+$hd-breakpoint: ($hd-container);
+$hhd-breakpoint: ($hhd-container);
+
+$screen-sizes: (
+	tiny: em(0),
+	middle: $middle-container,
+	tablet: $tablet-container,
+	desktop: $desktop-container,
+	max: $max-container,
+	hd: $hd-container,
+	hhd: $hhd-container
+);

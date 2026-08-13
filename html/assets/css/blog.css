@@ -1,0 +1,15 @@
+@media (min-width: 600px) {
+  .articles-tags {
+    text-align: center;
+  }
+}
+@media (min-width: 600px) {
+  .articles-tags li {
+    display: inline-block;
+    margin-left: 10px;
+    margin-left: 0.625rem;
+    margin-right: 10px;
+    margin-right: 0.625rem;
+  }
+}
+

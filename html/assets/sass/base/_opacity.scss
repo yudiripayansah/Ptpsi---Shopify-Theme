@@ -1,0 +1,53 @@
+@for $i from 1 through 10 {
+    .opacity-#{$i} {
+        opacity: #{$i / 10};
+    }
+}
+
+@include on(middle) {
+    @for $i from 1 through 10 {
+        .middle-opacity-#{$i} {
+            opacity: #{$i / 10};
+        }
+    }
+}
+
+@include on(tablet) {
+    @for $i from 1 through 10 {
+        .t-opacity-#{$i} {
+            opacity: #{$i / 10};
+        }
+    }
+}
+
+@include on(desktop) {
+    @for $i from 1 through 10 {
+        .d-opacity-#{$i} {
+            opacity: #{$i / 10};
+        }
+    }
+}
+
+@include on(max) {
+    @for $i from 1 through 10 {
+        .max-opacity-#{$i} {
+            opacity: #{$i / 10};
+        }
+    }
+}
+
+@include on(hd) {
+    @for $i from 1 through 10 {
+        .hd-opacity-#{$i} {
+            opacity: #{$i / 10};
+        }
+    }
+}
+
+@include on(hhd) {
+    @for $i from 1 through 10 {
+        .hhd-opacity-#{$i} {
+            opacity: #{$i / 10};
+        }
+    }
+}

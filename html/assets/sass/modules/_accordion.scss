@@ -1,0 +1,68 @@
+.accordion {
+    &.icon-rotate {
+        .title-icon {
+            &.active {
+                .icon {
+                    &.icon-plus {
+                        display: flex;
+                        transform: rotate(45deg);
+                    }
+        
+                    &.icon-minus {
+                        display: none;
+                    }
+                }
+            }
+
+            .icon {
+                &.icon-plus {
+                    display: flex;
+                    transform: rotate(0deg);
+                    transition: all 0.3s linear;
+                }
+            }
+        }
+    }
+
+    .title-icon {
+        &.active {
+            .icon {
+                width: 10px;
+                height: 10px;
+
+                &.icon-plus {
+                    display: none;
+                }
+    
+                &.icon-minus {
+                    display: flex;
+                }
+            }
+        }
+
+        .icon {
+            width: 10px;
+            height: 10px;
+
+            svg {
+                display: block;
+                width: 10px;
+                height: 10px;
+            }
+
+            &.icon-plus {
+                display: flex;
+            }
+
+            &.icon-minus {
+                display: none;
+            }
+        }
+    } 
+
+    .accordion-title {
+        .title {
+            padding-right: 10px;
+        }
+    }
+}

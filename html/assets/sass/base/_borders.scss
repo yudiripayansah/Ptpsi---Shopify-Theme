@@ -1,0 +1,10 @@
+/* This defines the minimum, maximum and step for borders / padding */
+/* PLEASE UPDATE style-guide/borders.php IF YOU CHANGE THE VALUES HERE */
+$border_max:5;
+$border_step:1;
+$border_min:0;
+$borders: ();
+@while $border_max >= $border_min {
+	$borders : join($borders,$border_max);
+	$border_max: $border_max - $border_step;
+}

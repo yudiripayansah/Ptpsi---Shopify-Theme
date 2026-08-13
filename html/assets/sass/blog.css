@@ -1,0 +1,12 @@
+@media (min-width: 600px) {
+  .articles-tags {
+    text-align: center;
+  }
+}
+@media (min-width: 600px) {
+  .articles-tags li {
+    display: inline-block;
+    margin-left: 0.625rem;
+    margin-right: 0.625rem;
+  }
+}/*# sourceMappingURL=blog.css.map */

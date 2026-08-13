@@ -1,0 +1,60 @@
+// ==========================================================================
+// Base – Helpers
+// ==========================================================================
+
+// General Resets
+// .left{ float: left; }
+// .right{ float: right; }
+.no-float { float: none; }
+.no-bg { background: transparent; }
+.no-border { border: 0; }
+.vertical-top{ vertical-align: top; }
+.cursor{ cursor:pointer; }
+.overflow { overflow: hidden; }
+.b-radius-5 { border-radius: 5px }
+.spacing-1 {
+	letter-spacing: 1.2px !important;
+}
+.spacing-2 {
+	letter-spacing: 1.5px !important;
+	@include on(desktop) {
+		letter-spacing: 2.2px !important; 
+	}
+}
+.spacing-3 {
+	letter-spacing: 1.7px !important;
+	@include on(desktop) {
+		letter-spacing: 2.9px !important;
+	}
+} 
+
+.transition{
+	@include transition(all,0.3s,ease-in-out);
+}
+.dont-break {
+  white-space: nowrap;
+}
+.block{display:block;}
+
+.background-cover{
+	background:{
+		repeat:no-repeat;
+		size:cover;
+		position:center;
+	}
+}
+svg{ width: 100%; }
+
+.hover-c-grey {
+	transition: 0.3s ease all;
+
+	&:hover {
+		color: var(--grey);
+	}
+}
+
+/** hide wishlist button **/
+.swym-button-bar,
+#swym-anchor {
+	display: none !important;
+}

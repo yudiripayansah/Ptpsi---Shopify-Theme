@@ -1,0 +1,214 @@
+@each $item in $roundeds{
+	$i: rem($item);
+	$c: percentage($item / 100);
+	.rounded-#{$item} {
+		border-radius:$i;
+		overflow: hidden;
+	}
+	.rounded-#{$item}c {
+		border-radius:$c;
+		overflow: hidden;
+	}
+	.rounded-tl-#{$item} {
+		border-top-left-radius: $i;
+		overflow: hidden;
+	}
+	.rounded-tr-#{$item} {
+		border-top-right-radius: $i;
+		overflow: hidden;
+	}
+	.rounded-bl-#{$item} {
+		border-bottom-left-radius: $i;
+		overflow: hidden;
+	}
+	.rounded-br-#{$item} {
+		border-bottom-right-radius: $i;
+		overflow: hidden;
+	}
+}
+
+@include on(middle) {
+    @each $item in $roundeds {
+        $i: rem($item);
+        $c: percentage($item / 100);
+        .middle-rounded-#{$item} {
+            border-radius:$i;
+            overflow: hidden;
+        }
+        .middle-rounded-#{$item}c {
+            border-radius:$c;
+            overflow: hidden;
+        }
+        .middle-rounded-tl-#{$item} {
+            border-top-left-radius: $i;
+            overflow: hidden;
+        }
+        .middle-rounded-tr-#{$item} {
+            border-top-right-radius: $i;
+            overflow: hidden;
+        }
+        .middle-rounded-bl-#{$item} {
+            border-bottom-left-radius: $i;
+            overflow: hidden;
+        }
+        .middle-rounded-br-#{$item} {
+            border-bottom-right-radius: $i;
+            overflow: hidden;
+        }
+    }
+}
+
+@include on(tablet) {
+    @each $item in $roundeds {
+        $i: rem($item);
+        $c: percentage($item / 100);
+        .t-rounded-#{$item} {
+            border-radius:$i;
+            overflow: hidden;
+        }
+        .t-rounded-#{$item}c {
+            border-radius:$c;
+            overflow: hidden;
+        }
+        .t-rounded-tl-#{$item} {
+            border-top-left-radius: $i;
+            overflow: hidden;
+        }
+        .t-rounded-tr-#{$item} {
+            border-top-right-radius: $i;
+            overflow: hidden;
+        }
+        .t-rounded-bl-#{$item} {
+            border-bottom-left-radius: $i;
+            overflow: hidden;
+        }
+        .t-rounded-br-#{$item} {
+            border-bottom-right-radius: $i;
+            overflow: hidden;
+        }
+    }
+}
+
+@include on(desktop) {
+    @each $item in $roundeds {
+        $i: rem($item);
+        $c: percentage($item / 100);
+        .d-rounded-#{$item} {
+            border-radius:$i;
+            overflow: hidden;
+        }
+        .d-rounded-#{$item}c {
+            border-radius:$c;
+            overflow: hidden;
+        }
+        .d-rounded-tl-#{$item} {
+            border-top-left-radius: $i;
+            overflow: hidden;
+        }
+        .d-rounded-tr-#{$item} {
+            border-top-right-radius: $i;
+            overflow: hidden;
+        }
+        .d-rounded-bl-#{$item} {
+            border-bottom-left-radius: $i;
+            overflow: hidden;
+        }
+        .d-rounded-br-#{$item} {
+            border-bottom-right-radius: $i;
+            overflow: hidden;
+        }
+    }
+}
+
+@include on(max) {
+    @each $item in $roundeds {
+        $i: rem($item);
+        $c: percentage($item / 100);
+        .max-rounded-#{$item} {
+            border-radius:$i;
+            overflow: hidden;
+        }
+        .max-rounded-#{$item}c {
+            border-radius:$c;
+            overflow: hidden;
+        }
+        .max-rounded-tl-#{$item} {
+            border-top-left-radius: $i;
+            overflow: hidden;
+        }
+        .max-rounded-tr-#{$item} {
+            border-top-right-radius: $i;
+            overflow: hidden;
+        }
+        .max-rounded-bl-#{$item} {
+            border-bottom-left-radius: $i;
+            overflow: hidden;
+        }
+        .max-rounded-br-#{$item} {
+            border-bottom-right-radius: $i;
+            overflow: hidden;
+        }
+    }
+}
+
+@include on(hd) {
+    @each $item in $roundeds {
+        $i: rem($item);
+        $c: percentage($item / 100);
+        .hd-rounded-#{$item} {
+            border-radius:$i;
+            overflow: hidden;
+        }
+        .hd-rounded-#{$item}c {
+            border-radius:$c;
+            overflow: hidden;
+        }
+        .hd-rounded-tl-#{$item} {
+            border-top-left-radius: $i;
+            overflow: hidden;
+        }
+        .hd-rounded-tr-#{$item} {
+            border-top-right-radius: $i;
+            overflow: hidden;
+        }
+        .hd-rounded-bl-#{$item} {
+            border-bottom-left-radius: $i;
+            overflow: hidden;
+        }
+        .hd-rounded-br-#{$item} {
+            border-bottom-right-radius: $i;
+            overflow: hidden;
+        }
+    }
+}
+
+@include on(hhd) {
+    @each $item in $roundeds {
+        $i: rem($item);
+        $c: percentage($item / 100);
+        .hhd-rounded-#{$item} {
+            border-radius:$i;
+            overflow: hidden;
+        }
+        .hhd-rounded-#{$item}c {
+            border-radius:$c;
+            overflow: hidden;
+        }
+        .hhd-rounded-tl-#{$item} {
+            border-top-left-radius: $i;
+            overflow: hidden;
+        }
+        .hhd-rounded-tr-#{$item} {
+            border-top-right-radius: $i;
+            overflow: hidden;
+        }
+        .hhd-rounded-bl-#{$item} {
+            border-bottom-left-radius: $i;
+            overflow: hidden;
+        }
+        .hhd-rounded-br-#{$item} {
+            border-bottom-right-radius: $i;
+            overflow: hidden;
+        }
+    }
+}

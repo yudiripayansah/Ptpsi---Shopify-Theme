@@ -1,0 +1,51 @@
+// Fonts
+@import "base/fonts";
+
+// Import Helpers
+// ==============
+@import "helpers/functions";
+@import "helpers/config";
+@import "helpers/mixins";
+
+// Import Base
+// ===========
+@import "base/breakpoints";
+@import "base/reset";
+@import "base/margins";
+@import "base/colors";
+@import "base/borders";
+@import "base/width";
+@import "base/height";
+@import "base/base";
+@import "base/buttons";
+@import "base/typography";
+@import "base/roundeds";
+@import "base/opacity";
+@import "base/animations";
+
+// Import 3rd party css
+@import "../../node_modules/swiper/swiper-bundle.css";
+
+// Import Modules
+// ==============
+@import "modules/utilities";
+@import "modules/global";
+@import "modules/grid";
+@import "modules/grid-flex";
+@import "modules/flexbox";
+@import "modules/position";
+@import "modules/header";
+@import "modules/datepicker";
+@import "footer"; 
+@import "modules/pagination";
+@import "modules/product-price";
+@import "modules/swiper-custom";
+@import "modules/accordion";
+@import "modules/link-icon";
+@import "modules/banners";
+@import "modules/juxtapose";
+@import "modules/rounded";
+
+// To override current CSS so this is the last!
+// ===========
+@import "helpers/helpers";

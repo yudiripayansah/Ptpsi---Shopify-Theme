@@ -1,0 +1,134 @@
+#cart-content .items-wrapper {
+  width: calc(100% + 50px);
+  margin-left: -25px;
+}
+@media (min-width: 600px) {
+  #cart-content .items-wrapper {
+    width: calc(100% + 60px);
+    margin-left: -30px;
+  }
+}
+@media (min-width: 1024px) {
+  #cart-content .items-wrapper {
+    width: 100%;
+    margin-left: 0;
+  }
+}
+@media (min-width: 600px) {
+  #cart-content .cart-left .items .each:last-child {
+    margin-bottom: 0;
+  }
+}
+#cart-content .cart-left .items .each .image-con {
+  width: 85px;
+}
+@media (min-width: 1024px) {
+  #cart-content .cart-left .items .each .image-con {
+    width: 140px;
+  }
+}
+#cart-content .cart-left .items .each .details-con {
+  flex: 1;
+}
+@media (min-width: 1024px) {
+  #cart-content .cart-left .items .each .details-con .left-side {
+    width: 70%;
+  }
+}
+@media (min-width: 1024px) {
+  #cart-content .cart-left .items .each .details-con .left-side .text-con {
+    width: 100%;
+  }
+}
+#cart-content .cart-left .items .each .details-con .left-side .text-con .global-form-qty {
+  flex: 1;
+}
+@media (min-width: 1024px) {
+  #cart-content .cart-left .items .each .details-con .right-side {
+    flex: 1;
+  }
+}
+#cart-content .cart-left .items .each .close {
+  position: relative;
+  transform: translateY(-1px);
+}
+#cart-content .cart-left .items .each .close::after {
+  content: "";
+  position: absolute;
+  width: 100%;
+  height: 1px;
+  background: var(--silver);
+  bottom: -2px;
+  left: 0;
+}
+@media (min-width: 1024px) {
+  #cart-content .cart-left .items .each .close {
+    transform: translateY(2px);
+  }
+}
+#cart-content .cart-left .items .each .item-price {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: flex-end;
+}
+#cart-content .cart-left .items .each .item-price strike {
+  order: 2;
+}
+#cart-content .cart-left .items .each .item-price span {
+  order: 1;
+}
+@media (min-width: 600px) {
+  #cart-content .cart-left .items .each .item-price {
+    flex-wrap: nowrap;
+  }
+  #cart-content .cart-left .items .each .item-price strike {
+    order: 1;
+  }
+  #cart-content .cart-left .items .each .item-price span {
+    order: 2;
+  }
+}
+#cart-content .cart-right {
+  margin-top: 30px;
+}
+@media (min-width: 1024px) {
+  #cart-content .cart-right {
+    margin-top: 55px;
+  }
+}
+#cart-content .cart-right .inner {
+  transition: 0.3s ease all;
+}
+@media (min-width: 600px) {
+  #cart-content .cart-right .inner {
+    top: 50px;
+  }
+}
+#cart-content .cart-right .btn-checkout {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+#cart-content .cart-right .btn-checkout .icon {
+  font-size: 0;
+  width: 12px;
+  height: 12px;
+  margin-right: 8px;
+}
+#cart-content .cart-right .btn-checkout .icon svg {
+  display: inline-block;
+  width: 12px;
+  height: 12px;
+}
+#cart-content .cart-right .btn-checkout .icon svg * {
+  transition: 0.3s linear all;
+}
+#cart-content .cart-right .btn-checkout:hover .icon svg * {
+  stroke: #ffffff;
+  fill: #ffffff;
+}
+#cart-content .cart-right .payment-icons {
+  margin-left: -5px;
+  margin-right: -5px;
+}
+

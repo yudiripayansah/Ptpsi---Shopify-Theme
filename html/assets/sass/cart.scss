@@ -1,0 +1,164 @@
+@import "helpers/functions";
+@import "helpers/config";
+@import "helpers/mixins";
+
+@import "base/breakpoints";
+
+#cart-content {
+	.items-wrapper {
+		width: calc(100% + 50px);
+		margin-left: -25px;
+
+		@include on(tablet) {
+			width: calc(100% + 60px);
+			margin-left: -30px;
+		}
+		@include on(desktop) {
+			width: 100%;
+			margin-left: 0;
+		}
+	}
+
+	.cart-left {
+		.items {
+			.each {
+				&:last-child {
+					@include on(tablet) {
+						margin-bottom: 0;
+					}
+				}
+
+				.image-con {
+					width: 85px;
+
+					@include on(desktop) {
+						width: 140px;
+					}
+				}
+
+				.details-con {
+					flex: 1;
+
+					.left-side {
+						@include on(desktop) {
+							width: 70%;
+						}
+
+						.text-con {
+							@include on(desktop) {
+								width: 100%;
+							}
+
+							.global-form-qty {
+								flex: 1;
+							}
+						}
+					}
+
+					.right-side {
+						@include on(desktop) {
+							flex: 1;
+						}
+					}
+				}
+
+				.close {
+					position: relative;
+					transform: translateY(-1px);
+
+					&::after {
+						content: '';
+						position: absolute;
+						width: 100%;
+						height: 1px;
+						background: var(--silver);
+						bottom: -2px;
+						left: 0;
+					}
+
+					@include on(desktop) {
+						transform: translateY(2px);
+					}
+				}
+
+				.item-price {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: flex-end;
+
+					strike {
+						order: 2;
+					}
+					span {
+						order: 1;
+					}
+
+					@include on(tablet) {
+						flex-wrap: nowrap;
+
+						strike {
+							order: 1;
+						}
+						span {
+							order: 2;
+						}
+					}
+				}
+			}
+		}
+	}
+
+	.cart-right {
+		margin-top: 30px;
+
+		@include on(desktop) {
+			margin-top: 55px;
+		}
+
+		.inner {
+			transition: 0.3s ease all;
+			@include on(tablet) {
+				top: 50px;
+			}
+		}
+
+		.btn-checkout {
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+
+			.icon {
+				font-size: 0;
+				width: 12px;
+				height: 12px;
+				margin-right: 8px;
+
+				svg {
+					display: inline-block;
+					width: 12px;
+					height: 12px;
+
+					* {
+						transition: 0.3s linear all;
+					}
+				}
+			}
+
+			&:hover {
+				.icon {
+					svg {
+						* {
+							stroke: #ffffff;
+							fill: #ffffff;
+						}
+					}
+				}
+			}
+		}
+
+		.payment-icons {
+			margin-left: -5px;
+			margin-right: -5px;
+		}
+	}
+}

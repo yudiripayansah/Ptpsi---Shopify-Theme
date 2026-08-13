@@ -1,0 +1,51 @@
+* {
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+	outline:0;
+}
+
+html {
+	-webkit-font-smoothing: antialiased;
+	height:100%;
+}
+
+body {
+	.global-content-top-margin {
+		transition: 0.3s ease all;
+	}
+}
+
+a {
+	text-decoration:none;
+}
+
+button, input, textarea {
+	appearance: none;
+	border: none;
+	background: none;
+	resize: none;
+	padding: 0;
+	margin: 0;
+	border-radius: 0;
+
+	&:active, &:focus {
+		outline: none;
+	}
+}
+
+button, input[type=submit] {
+	cursor: pointer;
+	-webkit-appearance: none;
+}
+
+img, video, audio, table, embed, applet {
+	max-width: 100%;
+}
+
+.p1 b, .p1 strong, .p2 b, .p2 strong {
+	font-weight: 600;
+}
+.pointer {
+	cursor: pointer;
+}
