@@ -14,6 +14,9 @@
       >
     {%- endif -%}
 
+    <script src="{{ 'tailwind.js' | asset_url }}" defer></script>
+    {{ 'montserrat.css' | asset_url | stylesheet_tag }}
+
     {% comment %}
       Opt into cross-document (MPA) view transitions and hold first paint until #MainContent
       parses, so the transition runs consistently.

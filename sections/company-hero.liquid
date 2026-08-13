@@ -1,0 +1,147 @@
+{% comment %}
+  Company-profile hero: full-bleed background image/color, headline, subheading and up to two CTA buttons.
+{% endcomment %}
+
+<section class="company-hero relative isolate flex min-h-[85svh] w-full items-end overflow-hidden bg-neutral-900 sm:min-h-[92svh] sm:items-center">
+  {%- if section.settings.background_image != blank -%}
+    <div class="absolute inset-0 -z-10">
+      {{
+        section.settings.background_image
+        | image_url: width: 1800
+        | image_tag: widths: '750,1100,1500,1800', sizes: '100vw', class: 'h-full w-full object-cover', loading: 'eager', fetchpriority: 'high'
+      }}
+    </div>
+  {%- endif -%}
+
+  <div class="absolute inset-0 -z-10 bg-gradient-to-t from-neutral-950 via-neutral-950/60 to-neutral-950/20"></div>
+
+  <div class="relative mx-auto w-full max-w-5xl px-5 pb-14 pt-28 sm:px-8 sm:pb-24 sm:pt-32">
+    {%- if section.settings.eyebrow != blank -%}
+      <p class="company-hero__in mb-4 text-xs font-semibold uppercase tracking-[0.2em] text-white/70 sm:text-sm">
+        {{ section.settings.eyebrow }}
+      </p>
+    {%- endif -%}
+
+    <h1 class="company-hero__in company-hero__in--1 max-w-3xl text-3xl font-bold leading-tight tracking-tight text-white sm:text-5xl lg:text-6xl">
+      {{ section.settings.heading }}
+    </h1>
+
+    {%- if section.settings.subheading != blank -%}
+      <p class="company-hero__in company-hero__in--2 mt-5 max-w-2xl text-base leading-relaxed text-white/80 sm:text-lg">
+        {{ section.settings.subheading }}
+      </p>
+    {%- endif -%}
+
+    <div class="company-hero__in company-hero__in--3 mt-8 flex flex-col gap-3 sm:flex-row sm:items-center">
+      {%- if section.settings.primary_button_label != blank -%}
+        <a
+          href="{{ section.settings.primary_button_link | default: '#' }}"
+          class="inline-flex items-center justify-center rounded-full bg-white px-6 py-3 text-sm font-semibold text-neutral-900 transition duration-200 hover:-translate-y-0.5 hover:shadow-lg hover:shadow-black/20 sm:text-base"
+        >
+          {{ section.settings.primary_button_label }}
+        </a>
+      {%- endif -%}
+
+      {%- if section.settings.secondary_button_label != blank -%}
+        <a
+          href="{{ section.settings.secondary_button_link | default: '#' }}"
+          class="inline-flex items-center justify-center rounded-full border border-white/30 px-6 py-3 text-sm font-semibold text-white transition duration-200 hover:border-white/60 hover:bg-white/10 sm:text-base"
+        >
+          {{ section.settings.secondary_button_label }}
+        </a>
+      {%- endif -%}
+    </div>
+  </div>
+</section>
+
+{% stylesheet %}
+  .company-hero__in {
+    opacity: 0;
+    transform: translateY(14px);
+    animation: company-hero-in 0.7s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+  .company-hero__in--1 {
+    animation-delay: 0.05s;
+  }
+  .company-hero__in--2 {
+    animation-delay: 0.15s;
+  }
+  .company-hero__in--3 {
+    animation-delay: 0.25s;
+  }
+
+  @keyframes company-hero-in {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .company-hero__in {
+      animation: none;
+      opacity: 1;
+      transform: none;
+    }
+  }
+{% endstylesheet %}
+
+{% schema %}
+{
+  "name": "Company hero",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "image_picker",
+      "id": "background_image",
+      "label": "Background image"
+    },
+    {
+      "type": "text",
+      "id": "eyebrow",
+      "label": "Eyebrow text",
+      "default": "PSI"
+    },
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Meeting the demands of today's discerning consumer"
+    },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "We source, distribute and champion quality, niche products that reflect the values and lifestyle of the modern consumer."
+    },
+    {
+      "type": "text",
+      "id": "primary_button_label",
+      "label": "Primary button label",
+      "default": "Explore our portfolio"
+    },
+    {
+      "type": "url",
+      "id": "primary_button_link",
+      "label": "Primary button link"
+    },
+    {
+      "type": "text",
+      "id": "secondary_button_label",
+      "label": "Secondary button label",
+      "default": "Talk to our team"
+    },
+    {
+      "type": "url",
+      "id": "secondary_button_link",
+      "label": "Secondary button link"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Company hero"
+    }
+  ]
+}
+{% endschema %}

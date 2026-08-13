@@ -1,0 +1,17 @@
+{% doc %}
+  Renders one client/partner logo tile for the logo wall or marquee.
+
+  @param {image} [image] - Logo image; falls back to a placeholder
+  @param {string} [alt] - Accessible name for the logo
+
+  @example
+  {% render 'company-logo-item', image: section.settings.logo_1_image, alt: 'Acme Hotels' %}
+{% enddoc %}
+
+<div class="flex h-16 w-32 shrink-0 items-center justify-center sm:h-20 sm:w-40">
+  {%- if image != blank -%}
+    {{ image | image_url: width: 240 | image_tag: class: 'max-h-full max-w-full object-contain', loading: 'lazy', alt: alt }}
+  {%- else -%}
+    {{ 'image' | placeholder_svg_tag: 'h-full w-full text-neutral-300' }}
+  {%- endif -%}
+</div>

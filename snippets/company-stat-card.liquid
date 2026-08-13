@@ -1,0 +1,16 @@
+{% doc %}
+  Renders one key-statistic: a large bold figure in the accent color, muted label underneath.
+  Matches the reference's plain (no card chrome) red-number stat treatment.
+
+  @param {string} value - The headline figure, e.g. "3,000+"
+  @param {string} label - What the figure represents, e.g. "Active accounts"
+  @param {string} [accent_color] - Color of the figure (defaults to brand red)
+
+  @example
+  {% render 'company-stat-card', value: '23', label: 'Provinces served' %}
+{% enddoc %}
+
+<div class="flex min-w-[8.5rem] flex-1 flex-col items-center gap-1 text-center sm:min-w-0">
+  <span class="font-[Montserrat,sans-serif] text-2xl font-extrabold sm:text-3xl" style="color: {{ accent_color | default: '#d00507' }};">{{ value }}</span>
+  <span class="text-xs font-bold uppercase tracking-wide opacity-60 sm:text-sm">{{ label }}</span>
+</div>

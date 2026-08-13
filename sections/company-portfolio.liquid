@@ -1,0 +1,90 @@
+{% comment %}
+  Full-bleed portfolio band: background photo with a solid-color tint, centered copy + CTA —
+  matches the reference's tinted bottle-photo "PORTFOLIO" band.
+{% endcomment %}
+
+<section class="company-portfolio relative isolate w-full overflow-hidden">
+  {%- if section.settings.background_image != blank -%}
+    <div class="absolute inset-0 -z-20">
+      {{
+        section.settings.background_image
+        | image_url: width: 1800
+        | image_tag: widths: '750,1100,1500,1800', sizes: '100vw', class: 'h-full w-full object-cover', loading: 'lazy'
+      }}
+    </div>
+  {%- endif -%}
+  <div
+    class="absolute inset-0 -z-10"
+    style="background-color: {{ section.settings.background_color }}; opacity: {{ section.settings.tint_opacity | default: 85 | divided_by: 100.0 }};"
+  ></div>
+
+  <div
+    data-reveal
+    class="relative mx-auto max-w-2xl px-5 py-16 text-center sm:px-8 sm:py-24"
+    style="color: {{ section.settings.text_color }};"
+  >
+    <h2 class="font-[Montserrat,sans-serif] text-2xl font-extrabold uppercase tracking-wide sm:text-3xl">
+      {{ section.settings.heading }}
+    </h2>
+    {%- if section.settings.body != blank -%}
+      <div class="mx-auto mt-5 max-w-xl text-base leading-relaxed sm:text-lg" style="opacity: 0.9;">
+        {{ section.settings.body }}
+      </div>
+    {%- endif -%}
+    {%- if section.settings.button_label != blank -%}
+      <div class="mt-8 flex justify-center">
+        {% render 'company-button', label: section.settings.button_label, url: section.settings.button_link, bg: section.settings.text_color, color: section.settings.background_color %}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-ready [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+<script src="{{ 'scroll-reveal.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Portfolio",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "image_picker", "id": "background_image", "label": "Background image" },
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Portfolio" },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>We knew little about the F&amp;B industry, but we had an innate appreciation for the finer things in life from around the world. We simply wanted to have these products available in our market, and we knew we weren't alone.</p>"
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Explore now" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "color", "id": "background_color", "label": "Tint / background color", "default": "#6b0001" },
+    { "type": "range", "id": "tint_opacity", "label": "Tint opacity over image", "min": 0, "max": 100, "step": 5, "unit": "%", "default": 85 },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" }
+  ],
+  "presets": [
+    {
+      "name": "Portfolio"
+    }
+  ]
+}
+{% endschema %}

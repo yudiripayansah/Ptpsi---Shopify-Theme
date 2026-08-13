@@ -1,0 +1,77 @@
+{% comment %}
+  Solid-color value-proposition band directly under the hero — mirrors the reference's
+  "Quality Lifestyle Choices..." maroon panel: heading, copy, single CTA.
+{% endcomment %}
+
+<section
+  class="company-value-band w-full px-5 py-14 sm:px-8 sm:py-20"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+>
+  <div class="mx-auto max-w-3xl">
+    <h2 class="font-[Montserrat,sans-serif] text-2xl font-extrabold leading-snug sm:text-4xl">
+      {{ section.settings.heading }}
+    </h2>
+
+    {%- if section.settings.body != blank -%}
+      <div class="mt-6 max-w-2xl text-base leading-relaxed sm:text-lg" style="opacity: 0.9;">
+        {{ section.settings.body }}
+      </div>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="mt-8">
+        {% render 'company-button', label: section.settings.button_label, url: section.settings.button_link, bg: section.settings.text_color, color: section.settings.background_color %}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% schema %}
+{
+  "name": "Value proposition band",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "Quality lifestyle choices for an increasingly sophisticated palate."
+    },
+    {
+      "type": "richtext",
+      "id": "body",
+      "label": "Body",
+      "default": "<p>Consumers today are increasingly more connected and educated. As a result, they demand quality and niche products that reflect their values, lifestyles, and widening interests.</p><p>At <strong>PSI</strong>, we are here to serve.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "Discover PSI"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#6b0001"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "presets": [
+    {
+      "name": "Value proposition band"
+    }
+  ]
+}
+{% endschema %}

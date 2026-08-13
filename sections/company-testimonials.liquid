@@ -1,0 +1,121 @@
+{% comment %}
+  Full-bleed dark testimonial carousel, built on Swiper — matches the reference's solid
+  maroon band with rotating partner quotes. Testimonials are classic section blocks.
+{% endcomment %}
+
+<section
+  class="company-testimonials w-full px-5 py-16 sm:px-8 sm:py-24"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+>
+  {%- if section.settings.heading != blank -%}
+    <h2 class="font-[Montserrat,sans-serif] text-center text-2xl font-extrabold sm:text-3xl">
+      {{ section.settings.heading }}
+    </h2>
+  {%- endif -%}
+
+  <swiper-carousel
+    class="company-testimonials__carousel mt-10 block sm:mt-14"
+    data-loop="true"
+    data-autoplay="true"
+    data-autoplay-delay="6000"
+    data-space-between="20"
+    data-prev-label="{{ 'accessibility.slideshow_previous' | t }}"
+    data-next-label="{{ 'accessibility.slideshow_next' | t }}"
+  >
+    <div class="relative">
+      <div class="swiper overflow-hidden">
+        <div class="swiper-wrapper items-stretch">
+          {%- for block in section.blocks -%}
+            <div class="swiper-slide flex h-auto items-center py-1" {{ block.shopify_attributes }}>
+              {% render 'company-testimonial-card', quote: block.settings.quote, name: block.settings.name, role: block.settings.role, image: block.settings.image %}
+            </div>
+          {%- endfor -%}
+        </div>
+      </div>
+
+      <div class="mt-8 flex items-center justify-center gap-4">
+        <button
+          type="button"
+          class="swiper-button-prev static m-0 flex h-10 w-10 shrink-0 translate-y-0 items-center justify-center rounded-full border transition after:hidden hover:opacity-70"
+          style="border-color: {{ section.settings.text_color }}; color: {{ section.settings.text_color }}; opacity: 0.6;"
+          aria-label="{{ 'accessibility.slideshow_previous' | t }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+            <path d="M15 18l-6-6 6-6" />
+          </svg>
+        </button>
+        <div class="swiper-pagination static w-auto"></div>
+        <button
+          type="button"
+          class="swiper-button-next static m-0 flex h-10 w-10 shrink-0 translate-y-0 items-center justify-center rounded-full border transition after:hidden hover:opacity-70"
+          style="border-color: {{ section.settings.text_color }}; color: {{ section.settings.text_color }}; opacity: 0.6;"
+          aria-label="{{ 'accessibility.slideshow_next' | t }}"
+        >
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="h-4 w-4" aria-hidden="true">
+            <path d="M9 18l6-6-6-6" />
+          </svg>
+        </button>
+      </div>
+    </div>
+  </swiper-carousel>
+</section>
+
+{% stylesheet %}
+  .company-testimonials__carousel .swiper-pagination-bullet {
+    background: currentColor;
+    opacity: 0.35;
+  }
+  .company-testimonials__carousel .swiper-pagination-bullet-active {
+    opacity: 1;
+  }
+{% endstylesheet %}
+
+{{ 'swiper-bundle.min.css' | asset_url | stylesheet_tag }}
+<script src="{{ 'swiper-bundle.min.js' | asset_url }}" defer></script>
+<script src="{{ 'swiper-carousel.js' | asset_url }}" type="module" defer></script>
+
+{% schema %}
+{
+  "name": "Testimonials",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "text",
+      "id": "heading",
+      "label": "Heading",
+      "default": "What our partners say"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#6b0001"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#ffffff"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "testimonial",
+      "name": "Testimonial",
+      "settings": [
+        { "type": "textarea", "id": "quote", "label": "Quote", "default": "A truly professional partner that understands our brand and grows it the right way." },
+        { "type": "text", "id": "name", "label": "Name", "default": "Jane Doe" },
+        { "type": "text", "id": "role", "label": "Role", "default": "Brand Director" },
+        { "type": "image_picker", "id": "image", "label": "Photo" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Testimonials",
+      "blocks": [{ "type": "testimonial" }]
+    }
+  ]
+}
+{% endschema %}

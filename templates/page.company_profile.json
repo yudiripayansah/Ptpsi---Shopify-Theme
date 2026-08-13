@@ -1,0 +1,193 @@
+{
+  "sections": {
+    "hero": {
+      "type": "company-hero",
+      "settings": {}
+    },
+    "value-band": {
+      "type": "company-value-band",
+      "settings": {}
+    },
+    "value-pillars": {
+      "type": "company-value-pillars",
+      "blocks": {
+        "passion": {
+          "type": "pillar",
+          "settings": {
+            "icon": "passion",
+            "title": "Passion"
+          }
+        },
+        "service": {
+          "type": "pillar",
+          "settings": {
+            "icon": "service",
+            "title": "Service excellence"
+          }
+        },
+        "loyalty": {
+          "type": "pillar",
+          "settings": {
+            "icon": "loyalty",
+            "title": "Loyalty"
+          }
+        },
+        "reliability": {
+          "type": "pillar",
+          "settings": {
+            "icon": "reliability",
+            "title": "Reliability"
+          }
+        },
+        "leadership": {
+          "type": "pillar",
+          "settings": {
+            "icon": "leadership",
+            "title": "Market leader"
+          }
+        }
+      },
+      "block_order": [
+        "passion",
+        "service",
+        "loyalty",
+        "reliability",
+        "leadership"
+      ],
+      "settings": {}
+    },
+    "stats": {
+      "type": "company-stats",
+      "blocks": {
+        "accounts": {
+          "type": "stat",
+          "settings": {
+            "value": "3,000+",
+            "label": "Active accounts"
+          }
+        },
+        "provinces": {
+          "type": "stat",
+          "settings": {
+            "value": "23",
+            "label": "Provinces served"
+          }
+        },
+        "skus": {
+          "type": "stat",
+          "settings": {
+            "value": "600+",
+            "label": "Current SKUs"
+          }
+        },
+        "growth": {
+          "type": "stat",
+          "settings": {
+            "value": "+29.7%",
+            "label": "Avg. sales growth"
+          }
+        },
+        "quota": {
+          "type": "stat",
+          "settings": {
+            "value": "1.6B",
+            "label": "Litres p.a. quota"
+          }
+        }
+      },
+      "block_order": [
+        "accounts",
+        "provinces",
+        "skus",
+        "growth",
+        "quota"
+      ],
+      "settings": {}
+    },
+    "testimonials": {
+      "type": "company-testimonials",
+      "blocks": {
+        "testimonial-1": {
+          "type": "testimonial",
+          "settings": {
+            "quote": "A truly professional partner that understands our brand and grows it the right way.",
+            "name": "Jane Doe",
+            "role": "Brand Director"
+          }
+        }
+      },
+      "block_order": [
+        "testimonial-1"
+      ],
+      "settings": {}
+    },
+    "team": {
+      "type": "company-team",
+      "blocks": {
+        "member-1": {
+          "type": "member",
+          "settings": {
+            "name": "Jane Doe",
+            "role": "Managing Director"
+          }
+        }
+      },
+      "block_order": [
+        "member-1"
+      ],
+      "settings": {}
+    },
+    "distribution": {
+      "type": "company-distribution",
+      "settings": {}
+    },
+    "portfolio": {
+      "type": "company-portfolio",
+      "settings": {}
+    },
+    "logo-wall": {
+      "type": "company-logo-wall",
+      "blocks": {
+        "logo-1": {
+          "type": "logo",
+          "settings": {}
+        },
+        "logo-2": {
+          "type": "logo",
+          "settings": {}
+        },
+        "logo-3": {
+          "type": "logo",
+          "settings": {}
+        },
+        "logo-4": {
+          "type": "logo",
+          "settings": {}
+        }
+      },
+      "block_order": [
+        "logo-1",
+        "logo-2",
+        "logo-3",
+        "logo-4"
+      ],
+      "settings": {}
+    },
+    "cta-band": {
+      "type": "company-cta-band",
+      "settings": {}
+    }
+  },
+  "order": [
+    "hero",
+    "value-band",
+    "value-pillars",
+    "stats",
+    "testimonials",
+    "team",
+    "distribution",
+    "portfolio",
+    "logo-wall",
+    "cta-band"
+  ]
+}

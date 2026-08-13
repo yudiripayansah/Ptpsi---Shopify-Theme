@@ -1,0 +1,76 @@
+{% comment %}
+  Closing CTA band before the footer — gives the page one last, explicit call to action
+  instead of trailing off after the logo wall. Sharp-cornered panel, matching the brand's
+  button/panel language rather than the rounded-pill look this started with.
+{% endcomment %}
+
+<section class="company-cta-band mx-auto w-full max-w-6xl px-5 py-14 sm:px-8 sm:py-20">
+  <div
+    data-reveal
+    class="relative isolate overflow-hidden px-6 py-12 text-center sm:px-16 sm:py-16"
+    style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+  >
+    <h2 class="font-[Montserrat,sans-serif] mx-auto max-w-xl text-2xl font-extrabold tracking-tight sm:text-3xl lg:text-4xl">
+      {{ section.settings.heading }}
+    </h2>
+    {%- if section.settings.subheading != blank -%}
+      <p class="mx-auto mt-4 max-w-lg text-sm leading-relaxed sm:text-base" style="opacity: 0.75;">
+        {{ section.settings.subheading }}
+      </p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="mt-8 flex justify-center">
+        {% render 'company-button', label: section.settings.button_label, url: section.settings.button_link, bg: section.settings.text_color, color: section.settings.background_color %}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-ready [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+<script src="{{ 'scroll-reveal.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Company CTA band",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    { "type": "text", "id": "heading", "label": "Heading", "default": "Let's grow your brand in Indonesia" },
+    {
+      "type": "textarea",
+      "id": "subheading",
+      "label": "Subheading",
+      "default": "Talk to our team about distribution, partnership or carrying your brand with PSI."
+    },
+    { "type": "text", "id": "button_label", "label": "Button label", "default": "Contact our team" },
+    { "type": "url", "id": "button_link", "label": "Button link" },
+    { "type": "color", "id": "background_color", "label": "Background color", "default": "#6b0001" },
+    { "type": "color", "id": "text_color", "label": "Text color", "default": "#ffffff" }
+  ],
+  "presets": [
+    {
+      "name": "Company CTA band"
+    }
+  ]
+}
+{% endschema %}

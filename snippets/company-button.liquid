@@ -1,0 +1,21 @@
+{% doc %}
+  Renders the brand's signature CTA button: sharp corners, bold uppercase, letter-spaced —
+  matching the reference site's button language (no rounded pill).
+
+  @param {string} label - Button text
+  @param {string} url - Destination link
+  @param {string} [bg] - Background color (CSS color value); defaults to currentColor's inverse via inline style
+  @param {string} [color] - Text color (CSS color value)
+  @param {string} [class] - Extra utility classes (e.g. margin) appended to the button
+
+  @example
+  {% render 'company-button', label: 'See more', url: '/pages/about', bg: '#880001', color: '#ffffff' %}
+{% enddoc %}
+
+<a
+  href="{{ url | default: '#' }}"
+  style="background-color: {{ bg | default: '#880001' }}; color: {{ color | default: '#ffffff' }};"
+  class="group inline-flex w-fit items-center justify-center gap-2 px-7 py-3.5 text-sm font-bold uppercase tracking-wider transition duration-200 hover:-translate-y-0.5 hover:shadow-xl hover:shadow-black/15 {{ class }}"
+>
+  {{ label }}
+</a>

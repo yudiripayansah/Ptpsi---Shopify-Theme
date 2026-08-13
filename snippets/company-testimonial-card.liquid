@@ -1,0 +1,31 @@
+{% doc %}
+  Renders one partner-testimonial slide for the dark full-bleed carousel: centered quote,
+  headshot, name and role — no card box, sits directly on the section's own background.
+
+  @param {string} quote - The testimonial text
+  @param {string} name - Person's name
+  @param {string} role - Person's role and/or company
+  @param {image} [image] - Optional headshot; falls back to a placeholder
+
+  @example
+  {% render 'company-testimonial-card', quote: 'Great partner.', name: 'Jane Doe', role: 'CEO, Acme' %}
+{% enddoc %}
+
+<figure class="mx-auto flex max-w-2xl flex-col items-center gap-6 text-center">
+  <blockquote class="text-lg font-medium leading-relaxed sm:text-xl">
+    <p>&ldquo;{{ quote }}&rdquo;</p>
+  </blockquote>
+  <figcaption class="flex flex-col items-center gap-3">
+    <span class="h-12 w-12 shrink-0 overflow-hidden rounded-full bg-white/10">
+      {%- if image != blank -%}
+        {{ image | image_url: width: 96 | image_tag: width: 48, height: 48, class: 'h-full w-full object-cover', loading: 'lazy' }}
+      {%- else -%}
+        {{ 'lifestyle-1' | placeholder_svg_tag: 'h-full w-full opacity-50' }}
+      {%- endif -%}
+    </span>
+    <span class="flex flex-col">
+      <span class="font-[Montserrat,sans-serif] text-sm font-bold">{{ name }}</span>
+      <span class="text-xs opacity-70">{{ role }}</span>
+    </span>
+  </figcaption>
+</figure>

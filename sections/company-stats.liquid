@@ -1,0 +1,132 @@
+{% comment %}
+  Key-statistics row on a plain background (matches the reference: numbers sit directly
+  under the pillars, not in a dark band), closing with a summary line + CTA. Horizontally
+  swipeable on mobile via native CSS scroll-snap — a mobile-first improvisation the
+  reference (desktop-first) doesn't need.
+{% endcomment %}
+
+<section
+  class="company-stats w-full px-5 py-12 sm:py-16"
+  style="background-color: {{ section.settings.background_color }}; color: {{ section.settings.text_color }};"
+>
+  <div class="mx-auto w-full max-w-6xl">
+    <div
+      data-reveal
+      class="company-stats__row flex snap-x snap-mandatory gap-3 overflow-x-auto pb-2 sm:grid sm:grid-cols-5 sm:gap-4 sm:overflow-visible sm:pb-0"
+    >
+      {%- for block in section.blocks -%}
+        <div class="snap-center" {{ block.shopify_attributes }}>
+          {% render 'company-stat-card', value: block.settings.value, label: block.settings.label, accent_color: section.settings.accent_color %}
+        </div>
+      {%- endfor -%}
+    </div>
+
+    {%- if section.settings.summary != blank -%}
+      <p class="mx-auto mt-10 max-w-3xl text-center text-sm leading-relaxed opacity-70 sm:mt-14 sm:text-base">
+        {{ section.settings.summary }}
+      </p>
+    {%- endif -%}
+
+    {%- if section.settings.button_label != blank -%}
+      <div class="mt-8 flex justify-center">
+        {% render 'company-button', label: section.settings.button_label, url: section.settings.button_link, bg: section.settings.accent_color, color: '#ffffff' %}
+      </div>
+    {%- endif -%}
+  </div>
+</section>
+
+{% stylesheet %}
+  .reveal-ready [data-reveal] {
+    opacity: 0;
+    transform: translateY(16px);
+    transition: opacity 0.6s cubic-bezier(0.16, 1, 0.3, 1), transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+  .reveal-ready [data-reveal].is-revealed {
+    opacity: 1;
+    transform: translateY(0);
+  }
+
+  .company-stats__row {
+    scrollbar-width: none;
+  }
+  .company-stats__row::-webkit-scrollbar {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .reveal-ready [data-reveal] {
+      opacity: 1;
+      transform: none;
+      transition: none;
+    }
+  }
+{% endstylesheet %}
+
+<script src="{{ 'scroll-reveal.js' | asset_url }}" defer></script>
+
+{% schema %}
+{
+  "name": "Company stats",
+  "tag": "section",
+  "class": "section",
+  "settings": [
+    {
+      "type": "richtext",
+      "id": "summary",
+      "label": "Summary",
+      "default": "<p>With all these assets, PSI now holds a sizeable share of the Indonesian market and continues to meet our yearly goals. This is a result of the consistency, trust and integrity we built throughout the years with our partners.</p>"
+    },
+    {
+      "type": "text",
+      "id": "button_label",
+      "label": "Button label",
+      "default": "See more"
+    },
+    {
+      "type": "url",
+      "id": "button_link",
+      "label": "Button link"
+    },
+    {
+      "type": "color",
+      "id": "background_color",
+      "label": "Background color",
+      "default": "#ffffff"
+    },
+    {
+      "type": "color",
+      "id": "text_color",
+      "label": "Text color",
+      "default": "#1a1a1a"
+    },
+    {
+      "type": "color",
+      "id": "accent_color",
+      "label": "Figure accent color",
+      "default": "#d00507"
+    }
+  ],
+  "blocks": [
+    {
+      "type": "stat",
+      "name": "Stat",
+      "settings": [
+        { "type": "text", "id": "value", "label": "Value", "default": "3,000+" },
+        { "type": "text", "id": "label", "label": "Label", "default": "Active accounts" }
+      ]
+    }
+  ],
+  "presets": [
+    {
+      "name": "Company stats",
+      "blocks": [
+        { "type": "stat", "settings": { "value": "3,000+", "label": "Active accounts" } },
+        { "type": "stat", "settings": { "value": "23", "label": "Provinces served" } },
+        { "type": "stat", "settings": { "value": "600+", "label": "Current SKUs" } },
+        { "type": "stat", "settings": { "value": "+29.7%", "label": "Avg. sales growth" } },
+        { "type": "stat", "settings": { "value": "1.6B", "label": "Litres p.a. quota" } }
+      ]
+    }
+  ]
+}
+{% endschema %}
